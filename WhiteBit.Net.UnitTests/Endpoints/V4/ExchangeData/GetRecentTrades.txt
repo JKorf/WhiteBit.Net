@@ -1,0 +1,21 @@
+GET
+/api/v4/public/trades/ETH_USDT
+false
+[
+  {
+    "tradeID": 158056419,      
+    "price": "9186.13",          
+    "quote_volume": "0.0021",    
+    "base_volume": "9186.13",      
+    "trade_timestamp": 1594391747,
+    "type": "sell"               
+  },
+  {
+    "tradeID": 158056416,
+    "price": "9186.13",
+    "base_volume": "9186.13",
+    "quote_volume": "0.002751",
+    "trade_timestamp": 1594391746,
+    "type": "sell"
+  }
+]

@@ -1,0 +1,1449 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WhiteBit.Net</name>
+    </assembly>
+    <members>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api">
+            <inheritdoc cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api" />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.Account">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.ExchangeData">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.Trading">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.ExchangeName">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CreateAccessor">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CreateSerializer">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CreateAuthenticationProvider(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetServerTimestampAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetTimeSyncInfo">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetTimeOffset">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.SharedClient">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetMainBalancesAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetDepositAddressAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetServerTimeAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetSymbolsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetSystemStatusAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetTickersAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetAssetsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetOrderBookAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetRecentTradesAsync(System.String,System.Nullable{WhiteBit.Net.Enums.OrderSide},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetDepositWithdrawalInfoAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetCollateralSymbolsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetFuturesSymbolsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api">
+            <summary>
+            Client providing access to the WhiteBit V4 websocket Api
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.#ctor(Microsoft.Extensions.Logging.ILogger,WhiteBit.Net.Objects.Options.WhiteBitSocketOptions)">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateAccessor">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateSerializer">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateAuthenticationProvider(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToXXXUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitModel}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetAuthenticationRequest(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SharedClient">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.WhiteBitRestClient">
+            <inheritdoc cref="T:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient" />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.WhiteBitRestClient.V4Api">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.#ctor(System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions})">
+            <summary>
+            Create a new instance of the WhiteBitRestClient using provided options
+            </summary>
+            <param name="optionsDelegate">Option configuration delegate</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILoggerFactory,System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions})">
+            <summary>
+            Create a new instance of the WhiteBitRestClient using provided options
+            </summary>
+            <param name="optionsDelegate">Option configuration delegate</param>
+            <param name="loggerFactory">The logger factory</param>
+            <param name="httpClient">Http client for this client</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.SetDefaultOptions(System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions})">
+            <summary>
+            Set the default options to be used when creating new clients
+            </summary>
+            <param name="optionsDelegate">Option configuration delegate</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.WhiteBitSocketClient">
+            <inheritdoc cref="T:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient" />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.WhiteBitSocketClient.V4Api">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.#ctor(Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Create a new instance of WhiteBitSocketClient
+            </summary>
+            <param name="loggerFactory">The logger factory</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.#ctor(System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions})">
+            <summary>
+            Create a new instance of WhiteBitSocketClient
+            </summary>
+            <param name="optionsDelegate">Option configuration delegate</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.#ctor(System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions},Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Create a new instance of WhiteBitSocketClient
+            </summary>
+            <param name="loggerFactory">The logger factory</param>
+            <param name="optionsDelegate">Option configuration delegate</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetDefaultOptions(System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions})">
+            <summary>
+            Set the default options to be used when creating new clients
+            </summary>
+            <param name="optionsDelegate">Option configuration delegate</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Enums.OrderSide">
+            <summary>
+            Order side
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderSide.Buy">
+            <summary>
+            Buy
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderSide.Sell">
+            <summary>
+            Sell
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.ProductType">
+            <summary>
+            Product type
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ProductType.Futures">
+            <summary>
+            Delivery futures
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ProductType.Perpetual">
+            <summary>
+            Perpetual
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ProductType.Options">
+            <summary>
+            Options
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.SymbolType">
+            <summary>
+            Type of symbol
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.SymbolType.Spot">
+            <summary>
+            Spot symbol
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.SymbolType.Futures">
+            <summary>
+            Futures symbol
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.SystemStatus">
+            <summary>
+            Status of the system
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.SystemStatus.Operational">
+            <summary>
+            System operational
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.SystemStatus.Maintenance">
+            <summary>
+            System maintenance
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.ExtensionMethods.WhiteBitExtensionMethods">
+            <summary>
+            Extension methods specific to using the WhiteBit API
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient">
+            <summary>
+            Client for accessing the WhiteBit Rest API. 
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient.V4Api">
+            <summary>
+            V4 API endpoints
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <summary>
+            Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.
+            </summary>
+            <param name="credentials">The credentials to set</param>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient">
+            <summary>
+            Client for accessing the WhiteBit websocket API
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient.V4Api">
+            <summary>
+            V4 API endpoints
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <summary>
+            Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.
+            </summary>
+            <param name="credentials">The credentials to set</param>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api">
+            <summary>
+            WhiteBit V4 API endpoints
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.Account">
+            <summary>
+            Endpoints related to account settings, info or actions
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.ExchangeData">
+            <summary>
+            Endpoints related to retrieving market and system data
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.Trading">
+            <summary>
+            Endpoints related to orders and trades
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.SharedClient">
+            <summary>
+            Get the shared rest requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount">
+            <summary>
+            WhiteBit V4 account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetMainBalancesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get main account balances
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#main-balance" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetDepositAddressAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get deposit address
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#main-balance" /></para>
+            </summary>
+            <param name="asset">The asset</param>
+            <param name="network">Network to use</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData">
+            <summary>
+            WhiteBit V4 exchange data endpoints. Exchange data includes market data (tickers, order books, etc) and system status.
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetServerTimeAsync(System.Threading.CancellationToken)">
+            <summary>
+            
+            <para><a href="XXX" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetSymbolsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get symbols list
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-info" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetSystemStatusAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get system/platform status
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-info" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetTickersAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get tickers
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetAssetsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get asset information
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetOrderBookAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get the order book for a symbol
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            </summary>
+            <param name="symbol">The symbol, for example `ETH_USDT`</param>
+            <param name="limit">The order book depth</param>
+            <param name="mergeLevel">Aggregation level</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetRecentTradesAsync(System.String,System.Nullable{WhiteBit.Net.Enums.OrderSide},System.Threading.CancellationToken)">
+            <summary>
+            Get the most recent 100 trades
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            </summary>
+            <param name="symbol">The symbol, for example `ETHUSDT`</param>
+            <param name="side">Filter by trade side</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetDepositWithdrawalInfoAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get withdrawal/deposit limits and fees
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetCollateralSymbolsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get collateral symbols
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetFuturesSymbolsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get futures symbols
+            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiShared">
+            <summary>
+            Shared interface for V4 rest API usage
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading">
+            <summary>
+            WhiteBit V4 trading endpoints, placing and managing orders.
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api">
+            <summary>
+            WhiteBit V4 streams
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToXXXUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitModel}},System.Threading.CancellationToken)">
+            <summary>
+            
+            <para><a href="XXX" /></para>
+            </summary>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SharedClient">
+            <summary>
+            Get the shared socket requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4ApiShared">
+            <summary>
+            Shared interface for TP_RP_API_NAME socket API usage
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.IWhiteBitOrderBookFactory">
+            <summary>
+            WhiteBit local order book factory
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.IWhiteBitOrderBookFactory.V4">
+            <summary>
+            V4 order book factory methods
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitOrderBookFactory.Create(CryptoExchange.Net.SharedApis.SharedSymbol,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions})">
+            <summary>
+            Create a SymbolOrderBook for the symbol
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="options">Book options</param>
+            <returns></returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitOrderBookFactory.CreateV4(System.String,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions})">
+            <summary>
+            Create a new V4 local order book instance
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory">
+            <summary>
+            Tracker factory
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <summary>
+            Create a new kline tracker
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="interval">Kline interval</param>
+            <param name="limit">The max amount of klines to retain</param>
+            <param name="period">The max period the data should be retained</param>
+            <returns></returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <summary>
+            Create a new trade tracker for a symbol
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="limit">The max amount of klines to retain</param>
+            <param name="period">The max period the data should be retained</param>
+            <returns></returns>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAsset">
+            <summary>
+            Asset info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.UnifiedCryptoassetId">
+            <summary>
+            Unified cryptoasset id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.CanWithdraw">
+            <summary>
+            Can withdraw
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.CanDeposit">
+            <summary>
+            Can deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.MinWithdraw">
+            <summary>
+            Min withdraw
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.MaxWithdraw">
+            <summary>
+            Max withdraw
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.MakerFee">
+            <summary>
+            Maker fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.TakerFee">
+            <summary>
+            Taker fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.MinDeposit">
+            <summary>
+            Min deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.MaxDeposit">
+            <summary>
+            Max deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.AssetPrecision">
+            <summary>
+            Asset precision
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.IsMemo">
+            <summary>
+            Is memo
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.Networks">
+            <summary>
+            Networks
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.Limits">
+            <summary>
+            Limits
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAsset.Confirmations">
+            <summary>
+            Confirmations
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAssetNetworks">
+            <summary>
+            Deposit/withdrawal network info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAssetNetworks.Deposits">
+            <summary>
+            Deposits
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAssetNetworks.Withdraws">
+            <summary>
+            Withdraws
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAssetNetworks.Default">
+            <summary>
+            Default
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAssetLimits">
+            <summary>
+            Asset limits
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAssetLimits.Deposit">
+            <summary>
+            Deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAssetLimits.Withdraw">
+            <summary>
+            Withdraw
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAssetLimit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAssetLimit.Min">
+            <summary>
+            Min
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositAddressInfo">
+            <summary>
+            Deposit address info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositAddressInfo.Account">
+            <summary>
+            Account
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositAddressInfo.FeeInfo">
+            <summary>
+            Fee info
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositAddress">
+            <summary>
+            Address info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositAddress.Address">
+            <summary>
+            Address
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositAddress.Memo">
+            <summary>
+            Memo
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdraw">
+            <summary>
+            Deposit/withdrawal info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdraw.CryptoInfo">
+            <summary>
+            Crypto info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdraw.FiatInfo">
+            <summary>
+            Fiat infos
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo">
+            <summary>
+            Deposit/withdrawal info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo.Providers">
+            <summary>
+            Providers
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo.IsDepositable">
+            <summary>
+            Is depositable
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo.IsWithdrawable">
+            <summary>
+            Is withdrawable
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo.IsApiWithdrawable">
+            <summary>
+            Is withdrawal via API allowed
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfo.IsApiDepositable">
+            <summary>
+            Is deposit via API allowed
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalCrypto">
+            <summary>
+            Crypto deposit/withdrawal info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalCrypto.Deposit">
+            <summary>
+            Deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalCrypto.Withdraw">
+            <summary>
+            Withdraw
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalFiat">
+            <summary>
+            Crypto deposit/withdrawal info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalFiat.Deposit">
+            <summary>
+            Deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalFiat.Withdraw">
+            <summary>
+            Withdraw
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawDetails">
+            <summary>
+            Withdrawal/deposit limits/fees details
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawDetails.MinQuantity">
+            <summary>
+            Min quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawDetails.MaxQuantity">
+            <summary>
+            Max quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawDetails.Fixed">
+            <summary>
+            Fixed
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawDetails.Flex">
+            <summary>
+            Flex fees
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails">
+            <summary>
+            Provider
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.MinQuantity">
+            <summary>
+            Min quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.MaxQuantity">
+            <summary>
+            Max quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.Fixed">
+            <summary>
+            Fixed
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.Flex">
+            <summary>
+            Flex
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.IsDepositable">
+            <summary>
+            Is depositable
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.IsApiDepositable">
+            <summary>
+            Is api depositable
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.IsWithdrawable">
+            <summary>
+            Is withdrawable
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.IsApiWithdrawable">
+            <summary>
+            Is api withdrawable
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawProviderDetails.Ticker">
+            <summary>
+            Ticker
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfoFlex">
+            <summary>
+            Flex fee info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfoFlex.MinFee">
+            <summary>
+            Min fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfoFlex.MaxFee">
+            <summary>
+            Max fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawInfoFlex.Percent">
+            <summary>
+            Percent
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.Symbol">
+            <summary>
+            Symbol name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.BaseAsset">
+            <summary>
+            Base asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.QuoteAsset">
+            <summary>
+            Quote asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.LastPrice">
+            <summary>
+            Last price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.BaseVolume">
+            <summary>
+            Base asset volume
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.QuoteVolume">
+            <summary>
+            Quote asset volume
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.BestBidPrice">
+            <summary>
+            Best bid price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.BestAskPrice">
+            <summary>
+            Best ask price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.HighPrice">
+            <summary>
+            High price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.LowPrice">
+            <summary>
+            Low price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.ProductType">
+            <summary>
+            Product type
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.OpenInterest">
+            <summary>
+            Open interest
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.IndexPrice">
+            <summary>
+            Index price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.IndexName">
+            <summary>
+            Index name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.IndexAsset">
+            <summary>
+            Index asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.FundingRate">
+            <summary>
+            Funding rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.NextFundingRateTime">
+            <summary>
+            Next funding rate timestamp
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.Brackets">
+            <summary>
+            Brackets
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol.MaxLeverage">
+            <summary>
+            Max leverage
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitMainBalance">
+            <summary>
+            Balance
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMainBalance.MainBalance">
+            <summary>
+            Main balance
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrderBook">
+            <summary>
+            Order book
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBook.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBook.Timestamp">
+            <summary>
+            Timestamp
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBook.Asks">
+            <summary>
+            Asks list
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBook.Bids">
+            <summary>
+            Bids list
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrderBookEntry">
+            <summary>
+            Order book entry
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBookEntry.Price">
+            <summary>
+            The price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBookEntry.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSymbol">
+            <summary>
+            Symbol info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.BaseAsset">
+            <summary>
+            Base asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.QuoteAsset">
+            <summary>
+            Quote asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.BaseAssetPrecision">
+            <summary>
+            Base asset precision
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.QuoteAssetPrecision">
+            <summary>
+            Quote asset precision
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.FeePrecision">
+            <summary>
+            Fee precision
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.MakerFee">
+            <summary>
+            Maker fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.TakerFee">
+            <summary>
+            Taker fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.MinOrderQuantity">
+            <summary>
+            Min order quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.MinOrderValue">
+            <summary>
+            Min order value
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.MaxOrderValue">
+            <summary>
+            Max order value
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.TradingEnabled">
+            <summary>
+            If trading is enabled
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.IsMarginEnabled">
+            <summary>
+            Is margin trading enabled
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSymbol.SymbolType">
+            <summary>
+            Type of symbol
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSystemStatus">
+            <summary>
+            System status
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSystemStatus.SystemStatus">
+            <summary>
+            Status of the platform
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitTicker">
+            <summary>
+            Ticker info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.Symbol">
+            <summary>
+            Symbol name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.BaseId">
+            <summary>
+            Base id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.QuoteId">
+            <summary>
+            Quote id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.LastPrice">
+            <summary>
+            Last trade price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.QuoteVolume">
+            <summary>
+            Quote volume
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.BaseVolume">
+            <summary>
+            Base volume
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.IsFrozen">
+            <summary>
+            Is frozen
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTicker.ChangePercentage">
+            <summary>
+            Change percentage
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitTime">
+            <summary>
+            Server time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTime.Timestamp">
+            <summary>
+            Timestamp
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitTrade">
+            <summary>
+            Trade info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTrade.TradeId">
+            <summary>
+            Trade id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTrade.Price">
+            <summary>
+            Price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTrade.QuoteVolume">
+            <summary>
+            Quote volume
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTrade.BaseVolume">
+            <summary>
+            Base volume
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTrade.Timestamp">
+            <summary>
+            Trade timestamp
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTrade.Side">
+            <summary>
+            Trade side
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions">
+            <summary>
+            Options for the WhiteBit SymbolOrderBook
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions.Default">
+            <summary>
+            Default options for new clients
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions.Limit">
+            <summary>
+            The top amount of results to keep in sync. If for example limit=10 is used, the order book will contain the 10 best bids and 10 best asks. Leaving this null will sync the full order book
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions.InitialDataTimeout">
+            <summary>
+            After how much time we should consider the connection dropped if no data is received for this time after the initial subscriptions
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Options.WhiteBitRestOptions">
+            <summary>
+            Options for the WhiteBitRestClient
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitRestOptions.Default">
+            <summary>
+            Default options for new clients
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitRestOptions.V4Options">
+            <summary>
+            V4 API options
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions">
+            <summary>
+            Options for the WhiteBitSocketClient
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.Default">
+            <summary>
+            Default options for new clients
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.V4Options">
+            <summary>
+            V4 API options
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.ListenerIdentifiers">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.#ctor(Microsoft.Extensions.Logging.ILogger,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{`0}},System.Boolean)">
+            <summary>
+            ctor
+            </summary>
+            <param name="logger"></param>
+            <param name="topics"></param>
+            <param name="handler"></param>
+            <param name="auth"></param>
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetUnsubQuery">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Objects.WhiteBitApiAddresses">
+            <summary>
+            Api addresses
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.WhiteBitApiAddresses.RestClientAddress">
+            <summary>
+            The address used by the WhiteBitRestClient for the API
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.WhiteBitApiAddresses.SocketClientAddress">
+            <summary>
+            The address used by the WhiteBitSocketClient for the websocket API
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Objects.WhiteBitApiAddresses.Default">
+            <summary>
+            The default addresses to connect to the WhiteBit API
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.SymbolOrderBooks.WhiteBitOrderBookFactory">
+            <summary>
+            WhiteBit order book factory
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitOrderBookFactory.#ctor(System.IServiceProvider)">
+            <summary>
+            ctor
+            </summary>
+            <param name="serviceProvider">Service provider for resolving logging and clients</param>
+        </member>
+        <member name="P:WhiteBit.Net.SymbolOrderBooks.WhiteBitOrderBookFactory.V4">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitOrderBookFactory.Create(CryptoExchange.Net.SharedApis.SharedSymbol,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions})">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitOrderBookFactory.CreateV4(System.String,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions})">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.SymbolOrderBooks.WhiteBitV4SymbolOrderBook">
+            <summary>
+            Implementation for a synchronized order book. After calling Start the order book will sync itself and keep up to date with new data. It will automatically try to reconnect and resync in case of a lost/interrupted connection.
+            Make sure to check the State property to see if the order book is synced.
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitV4SymbolOrderBook.#ctor(System.String,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions})">
+            <summary>
+            Create a new order book instance
+            </summary>
+            <param name="symbol">The symbol the order book is for</param>
+            <param name="optionsDelegate">Option configuration delegate</param>
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitV4SymbolOrderBook.#ctor(System.String,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions},Microsoft.Extensions.Logging.ILoggerFactory,WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient,WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient)">
+            <summary>
+            Create a new order book instance
+            </summary>
+            <param name="symbol">The symbol the order book is for</param>
+            <param name="optionsDelegate">Option configuration delegate</param>
+            <param name="logger">Logger</param>
+            <param name="restClient">Rest client instance</param>
+            <param name="socketClient">Socket client instance</param>
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitV4SymbolOrderBook.DoStartAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitV4SymbolOrderBook.DoReset">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitV4SymbolOrderBook.DoResyncAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitV4SymbolOrderBook.Dispose(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitEnvironment">
+            <summary>
+            WhiteBit environments
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitEnvironment.RestClientAddress">
+            <summary>
+            Rest API address
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitEnvironment.SocketClientAddress">
+            <summary>
+            Socket API address
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitEnvironment.Live">
+            <summary>
+            Live environment
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitEnvironment.CreateCustom(System.String,System.String,System.String)">
+            <summary>
+            Create a custom environment
+            </summary>
+            <param name="name"></param>
+            <param name="spotRestAddress"></param>
+            <param name="spotSocketStreamsAddress"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitExchange">
+            <summary>
+            WhiteBit exchange information and configuration
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.ExchangeName">
+            <summary>
+            Exchange name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.Url">
+            <summary>
+            Url to the main website
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.ApiDocsUrl">
+            <summary>
+            Urls to the API documentation
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitExchange.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
+            <summary>
+            Format a base and quote asset to an WhiteBit recognized symbol 
+            </summary>
+            <param name="baseAsset">Base asset</param>
+            <param name="quoteAsset">Quote asset</param>
+            <param name="tradingMode">Trading mode</param>
+            <param name="deliverTime">Delivery time for delivery futures</param>
+            <returns></returns>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.RateLimiter">
+            <summary>
+            Rate limiter configuration for the WhiteBit API
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitRateLimiters">
+            <summary>
+            Rate limiter configuration for the WhiteBit API
+            </summary>
+        </member>
+        <member name="E:WhiteBit.Net.WhiteBitRateLimiters.RateLimitTriggered">
+            <summary>
+            Event for when a rate limit is triggered
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitTrackerFactory">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.#ctor(System.IServiceProvider)">
+            <summary>
+            ctor
+            </summary>
+            <param name="serviceProvider">Service provider for resolving logging and clients</param>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="T:CryptoExchange.Net.Interfaces.CryptoClientExtensions">
+            <summary>
+            Extensions for the ICryptoRestClient and ICryptoSocketClient interfaces
+            </summary>
+        </member>
+        <member name="M:CryptoExchange.Net.Interfaces.CryptoClientExtensions.WhiteBit(CryptoExchange.Net.Interfaces.ICryptoRestClient)">
+            <summary>
+            Get the WhiteBit REST Api client
+            </summary>
+            <param name="baseClient"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CryptoExchange.Net.Interfaces.CryptoClientExtensions.WhiteBit(CryptoExchange.Net.Interfaces.ICryptoSocketClient)">
+            <summary>
+            Get the WhiteBit Websocket Api client
+            </summary>
+            <param name="baseClient"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions">
+            <summary>
+            Extensions for DI
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions},System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions},System.Nullable{Microsoft.Extensions.DependencyInjection.ServiceLifetime})">
+            <summary>
+            Add the IWhiteBitRestClient and IWhiteBitSocketClient to the sevice collection so they can be injected
+            </summary>
+            <param name="services">The service collection</param>
+            <param name="defaultRestOptionsDelegate">Set default options for the rest client</param>
+            <param name="defaultSocketOptionsDelegate">Set default options for the socket client</param>
+            <param name="socketClientLifeTime">The lifetime of the IWhiteBitSocketClient for the service collection. Defaults to Singleton.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

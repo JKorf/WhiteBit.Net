@@ -1,0 +1,19 @@
+GET
+/api/v4/public/orderbook/ETH_USDT
+false
+{
+  "ticker_id": "ETH_USDT", 
+  "timestamp": 1594391413, 
+  "asks": [               
+    [
+      "9184.41",          
+      "0.773162"        
+    ]
+  ],
+  "bids": [             
+    [
+      "9181.19",   
+      "0.010873"       
+    ]
+  ]
+}

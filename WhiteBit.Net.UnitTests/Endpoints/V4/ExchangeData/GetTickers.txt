@@ -1,0 +1,14 @@
+GET
+/api/v4/public/ticker
+false
+{
+  "BTC_USDT": {
+    "base_id": 1,                   
+    "quote_id": 825,                   
+    "last_price": "9164.09",          
+    "quote_volume": "43341942.90416876",
+    "base_volume": "4723.286463",   
+    "isFrozen": false,               
+    "change": "0.57"               
+  }
+}

@@ -1,0 +1,4 @@
+GET
+/api/v4/public/collateral/markets
+false
+[]

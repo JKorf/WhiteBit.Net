@@ -1,0 +1,43 @@
+GET
+/api/v4/public/assets
+false
+{
+  "BTC": {
+    "name": "Bitcoin",       
+    "unified_cryptoasset_id": 1, 
+    "can_withdraw": true,      
+    "can_deposit": true,       
+    "min_withdraw": "0.001",  
+    "max_withdraw": "2",     
+    "maker_fee": "0.1",         
+    "taker_fee": "0.1",        
+    "min_deposit": "0.0001",   
+    "max_deposit": "0",        
+    "currency_precision": 18,    
+    "is_memo": false,           
+    "networks": {                
+      "deposits": [          
+        "BTC"
+      ],
+      "withdraws": [             
+        "BTC"
+      ],
+      "default": "BTC"           
+    },
+    "limits": {                 
+      "deposit": {             
+        "BTC": {             
+          "min": "0.001"        
+        }
+      },
+      "withdraw": {      
+        "BTC": {                
+          "min": "0.002"
+        }
+      }
+    },
+    "confirmations": {          
+      "BTC": 2
+    }
+  }
+}

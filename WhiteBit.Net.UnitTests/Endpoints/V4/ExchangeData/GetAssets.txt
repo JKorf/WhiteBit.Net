@@ -1,0 +1,21 @@
+GET
+/api/v4/public/markets
+false
+[
+    {
+      "name": "SON_USD",    
+      "stock": "SON",         
+      "money": "USD",       
+      "stockPrec": "3",       
+      "moneyPrec": "2",    
+      "feePrec": "4",           
+      "makerFee": "0.001",     
+      "takerFee": "0.001", 
+      "minAmount": "0.001",  
+      "minTotal": "0.001",      
+      "maxTotal": "10000000000",
+      "tradesEnabled": true,  
+      "isCollateral": true,    
+      "type": "spot"
+    }
+]

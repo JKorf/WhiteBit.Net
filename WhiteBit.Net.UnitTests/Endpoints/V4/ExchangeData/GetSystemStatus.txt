@@ -1,0 +1,6 @@
+GET
+/api/v4/public/platform/status
+false
+{
+  "status": "1"  
+}
