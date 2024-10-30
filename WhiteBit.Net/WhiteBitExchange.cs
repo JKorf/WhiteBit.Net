@@ -73,10 +73,15 @@ namespace WhiteBit.Net
         {
             WhiteBit = new RateLimitGate("WhiteBit");
             WhiteBit.RateLimitTriggered += (x) => RateLimitTriggered?.Invoke(x);
+
+            WhiteBitSocket = new RateLimitGate("WhiteBit Socket")
+                .AddGuard(new RateLimitGuard(RateLimitGuard.PerConnection, new LimitItemTypeFilter(RateLimitItemType.Request), 200, TimeSpan.FromMinutes(1), RateLimitWindowType.Sliding))
+                .AddGuard(new RateLimitGuard(RateLimitGuard.PerHost, new LimitItemTypeFilter(RateLimitItemType.Connection), 1000, TimeSpan.FromMinutes(1), RateLimitWindowType.Sliding));
         }
 
 
         internal IRateLimitGate WhiteBit { get; private set; }
+        internal IRateLimitGate WhiteBitSocket { get; private set; }
 
     }
 }

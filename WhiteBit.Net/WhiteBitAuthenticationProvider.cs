@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
-using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
+using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net
 {
@@ -42,8 +40,7 @@ namespace WhiteBit.Net
             bodyParameters ??= new Dictionary<string, object>();
             bodyParameters.Add("request", uri.AbsolutePath);
             bodyParameters.Add("nonce", nonce);
-            bodyParameters.Add("nonceWindow", false);
-#warning Add nonce window setting to options
+            bodyParameters.Add("nonceWindow", ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow);
             headers.Add("X-TXC-APIKEY", ApiKey);
 
             var payload = GetSerializedBody(_serializer, bodyParameters);

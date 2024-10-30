@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CryptoExchange.Net.Objects;
@@ -7,6 +8,7 @@ using CryptoExchange.Net.OrderBook;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Interfaces.Clients;
+using WhiteBit.Net.Objects.Models;
 using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net.SymbolOrderBooks
@@ -53,10 +55,10 @@ namespace WhiteBit.Net.SymbolOrderBooks
                 optionsDelegate(options);
             Initialize(options);
 
-            _strictLevels = false;
+            _strictLevels = true;
             _sequencesAreConsecutive = options?.Limit == null;
 
-            Levels = options?.Limit;
+            Levels = options?.Limit ?? 20;
             _initialDataTimeout = options?.InitialDataTimeout ?? TimeSpan.FromSeconds(30);
             _clientOwner = socketClient == null;
             _socketClient = socketClient ?? new WhiteBitSocketClient();
@@ -66,9 +68,35 @@ namespace WhiteBit.Net.SymbolOrderBooks
         /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStartAsync(CancellationToken ct)
         {
-            // XXX
-            throw new NotImplementedException();
+            var result = await _socketClient.V4Api.SubscribeToOrderBookUpdatesAsync(Symbol, Levels!.Value, ProcessUpdate).ConfigureAwait(false);
+            if (!result)
+                return result;
+
+            if (ct.IsCancellationRequested)
+            {
+                await result.Data.CloseAsync().ConfigureAwait(false);
+                return result.AsError<UpdateSubscription>(new CancellationRequestedError());
+            }
+
+            Status = OrderBookStatus.Syncing;
+
+            var setResult = await WaitForSetOrderBookAsync(_initialDataTimeout, ct).ConfigureAwait(false);
+            return setResult ? result : new CallResult<UpdateSubscription>(setResult.Error!);
         }
+
+
+        private void ProcessUpdate(DataEvent<WhiteBitBookUpdate> data)
+        {
+            if (data.Data.Snapshot)
+            {
+                SetInitialOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks);
+            }
+            else
+            {
+                UpdateOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks);
+            }
+        }
+
 
         /// <inheritdoc />
         protected override void DoReset()
@@ -78,8 +106,7 @@ namespace WhiteBit.Net.SymbolOrderBooks
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResyncAsync(CancellationToken ct)
         {
-            // XXX
-            throw new NotImplementedException();
+            return await WaitForSetOrderBookAsync(_initialDataTimeout, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

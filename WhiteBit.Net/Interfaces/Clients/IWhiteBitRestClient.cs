@@ -8,13 +8,11 @@ namespace WhiteBit.Net.Interfaces.Clients
     /// Client for accessing the WhiteBit Rest API. 
     /// </summary>
     public interface IWhiteBitRestClient : IRestClient
-    {
-        
+    {        
         /// <summary>
         /// V4 API endpoints
         /// </summary>
         public IWhiteBitRestClientV4Api V4Api { get; }
-
 
         /// <summary>
         /// Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.

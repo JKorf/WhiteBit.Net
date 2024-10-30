@@ -45,9 +45,7 @@ namespace WhiteBit.Net.Clients
                 optionsDelegate(options);
             Initialize(options);
 
-            
             V4Api = AddApiClient(new WhiteBitRestClientV4Api(_logger, httpClient, options));
-
         }
 
         #endregion
@@ -66,9 +64,7 @@ namespace WhiteBit.Net.Clients
         /// <inheritdoc />
         public void SetApiCredentials(ApiCredentials credentials)
         {
-            
             V4Api.SetApiCredentials(credentials);
-
         }
     }
 }

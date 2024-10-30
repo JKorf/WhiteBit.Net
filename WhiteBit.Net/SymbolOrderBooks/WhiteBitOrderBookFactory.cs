@@ -25,15 +25,11 @@ namespace WhiteBit.Net.SymbolOrderBooks
         {
             _serviceProvider = serviceProvider;
             
-            
             V4 = new OrderBookFactory<WhiteBitOrderBookOptions>(CreateV4, Create);
-
         }
-
-        
+                
          /// <inheritdoc />
         public IOrderBookFactory<WhiteBitOrderBookOptions> V4 { get; }
-
 
         /// <inheritdoc />
         public ISymbolOrderBook Create(SharedSymbol symbol, Action<WhiteBitOrderBookOptions>? options = null)
@@ -41,15 +37,13 @@ namespace WhiteBit.Net.SymbolOrderBooks
             var symbolName = WhiteBitExchange.FormatSymbol(symbol.BaseAsset, symbol.QuoteAsset, symbol.TradingMode, symbol.DeliverTime);
             return CreateV4(symbolName, options);
         }
-
-        
+                
          /// <inheritdoc />
         public ISymbolOrderBook CreateV4(string symbol, Action<WhiteBitOrderBookOptions>? options = null)
             => new WhiteBitV4SymbolOrderBook(symbol, options, 
                                                           _serviceProvider.GetRequiredService<ILoggerFactory>(),
                                                           _serviceProvider.GetRequiredService<IWhiteBitRestClient>(),
                                                           _serviceProvider.GetRequiredService<IWhiteBitSocketClient>());
-
 
     }
 }

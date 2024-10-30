@@ -36,6 +36,7 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("trade_timestamp")]
         public DateTime Timestamp { get; set; }
+
         /// <summary>
         /// Trade side
         /// </summary>

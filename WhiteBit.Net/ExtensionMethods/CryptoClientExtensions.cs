@@ -1,4 +1,3 @@
-using CryptoExchange.Net.Interfaces;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Interfaces.Clients;
 

@@ -8,13 +8,11 @@ namespace WhiteBit.Net.Interfaces.Clients
     /// Client for accessing the WhiteBit websocket API
     /// </summary>
     public interface IWhiteBitSocketClient : ISocketClient
-    {
-        
+    {        
         /// <summary>
         /// V4 API endpoints
         /// </summary>
         public IWhiteBitSocketClientV4Api V4Api { get; }
-
 
         /// <summary>
         /// Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.

@@ -24,12 +24,12 @@ namespace WhiteBit.Net.UnitTests
                 "/api/v3/order",
                 (uriParams, bodyParams, headers) =>
                 {
-                    return bodyParams["signature"].ToString();
+                    return headers["X-TXC-SIGNATURE"].ToString();
                 },
-                "c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71",
+                "e164832d38f40692420d44786f8dbc98a46af816ed6c30dbc5d6178e71e63f491a4b6dbfea93c887f50c570d4b403dd61fe2432908754f49f904d06c51c84680",
                 new Dictionary<string, object>
                 {
-                    { "symbol", "LTCBTC" },
+                    { "market", "ETH_USDT" },
                 },
                 DateTimeConverter.ParseFromLong(1499827319559),
                 true,

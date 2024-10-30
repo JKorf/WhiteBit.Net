@@ -1,3 +1,4 @@
+using CryptoExchange.Net;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
@@ -5,53 +6,75 @@ using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitSubscription<T> : Subscription<WhiteBitModel, WhiteBitModel>
+    internal class WhiteBitSubscription<T> : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
         /// <inheritdoc />
         public override HashSet<string> ListenerIdentifiers { get; set; }
 
         private readonly Action<DataEvent<T>> _handler;
 
+        private string _topic;
+        private string[]? _symbols;
+
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(T);
+            return typeof(WhiteBitSocketUpdate<T>);
         }
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="topics"></param>
+        /// <param name="topic"></param>
+        /// <param name="symbols"></param>
         /// <param name="handler"></param>
         /// <param name="auth"></param>
-        public WhiteBitSubscription(ILogger logger, string[] topics, Action<DataEvent<T>> handler, bool auth) : base(logger, auth)
+        public WhiteBitSubscription(ILogger logger, string topic, string[]? symbols, Action<DataEvent<T>> handler, bool auth) : base(logger, auth)
         {
             _handler = handler;
-            ListenerIdentifiers = new HashSet<string>(topics);
+            _topic = topic;
+            _symbols = symbols;
+            ListenerIdentifiers = symbols?.Any() == true ? new HashSet<string>(symbols.Select(x => topic + "_update." + x)) : new HashSet<string> { topic };
         }
 
         /// <inheritdoc />
         public override Query? GetSubQuery(SocketConnection connection)
         {
-            throw new NotImplementedException();
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = _topic + "_subscribe",
+                Request = _symbols
+            }, false);
         }
 
         /// <inheritdoc />
         public override Query? GetUnsubQuery()
         {
-            throw new NotImplementedException();
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = _topic + "_unsubscribe",
+                Request = _symbols
+            }, false);
         }
 
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            _handler.Invoke(message.As((T)message.Data!, null, null, SocketUpdateType.Update));
+            var data = (WhiteBitSocketUpdate<T>)message.Data;
+
+#warning always first update is snapshot?
+
+            _handler.Invoke(message.As(data.Data, data.Method, null, ConnectionInvocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
             return new CallResult(null);
         }
     }

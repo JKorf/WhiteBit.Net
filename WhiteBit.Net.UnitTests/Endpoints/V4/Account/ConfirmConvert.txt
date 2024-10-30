@@ -1,0 +1,7 @@
+POST
+/api/v4/convert/confirm
+true
+{
+  "finalGive": "0.00002901",
+  "finalReceive": "1"
+}

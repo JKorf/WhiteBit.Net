@@ -16,11 +16,9 @@ namespace WhiteBit.Net.Clients
         #endregion
 
         #region Api clients
-
-        
+                
          /// <inheritdoc />
         public IWhiteBitSocketClientV4Api V4Api { get; }
-
 
         #endregion
 
@@ -51,10 +49,8 @@ namespace WhiteBit.Net.Clients
             var options = WhiteBitSocketOptions.Default.Copy();
             optionsDelegate?.Invoke(options);
             Initialize(options);
-
-            
+                        
             V4Api = AddApiClient(new WhiteBitSocketClientV4Api(_logger, options));
-
         }
         #endregion
 
@@ -72,9 +68,7 @@ namespace WhiteBit.Net.Clients
         /// <inheritdoc />
         public void SetApiCredentials(ApiCredentials credentials)
         {
-            
             V4Api.SetApiCredentials(credentials);
-
         }
     }
 }

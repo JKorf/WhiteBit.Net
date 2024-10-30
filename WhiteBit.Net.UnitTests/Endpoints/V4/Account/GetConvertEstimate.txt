@@ -1,0 +1,12 @@
+POST
+/api/v4/convert/estimate
+true
+{
+  "id": "123",
+  "from": "BTC",
+  "to": "USDT",
+  "give": "50",
+  "receive": "1714988.41577452",
+  "rate": "34299.76831549",
+  "expireAt": 1699016476
+}

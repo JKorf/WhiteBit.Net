@@ -1,0 +1,20 @@
+POST
+/api/v4/trade-account/order
+true
+{
+  "records": [
+    {
+      "time": 1593342324.613711,  
+      "fee": "0.00000419198",      
+      "price": "0.00000701",      
+      "amount": "598",         
+      "id": 149156519,            
+      "dealOrderId": 3134995325,    
+      "clientOrderId": "customId11",
+      "role": 2,                     
+      "deal": "0.00419198"           
+    }
+  ],
+  "offset": 0,
+  "limit": 100
+}
