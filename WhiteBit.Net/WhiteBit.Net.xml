@@ -4,10 +4,89 @@
         <name>WhiteBit.Net</name>
     </assembly>
     <members>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting">
+            <summary>
+            Withdrawal/deposit settings
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.CanDeposit">
+            <summary>
+            Can deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.CanWithdraw">
+            <summary>
+            Can withdraw
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Deposit">
+            <summary>
+            Deposit info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Withdraw">
+            <summary>
+            Withdraw info
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails">
+            <summary>
+            Details
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MinFlex">
+            <summary>
+            Min fee amount when flex fee is enabled
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MaxFlex">
+            <summary>
+            Max fee amount when flex fee is enabled
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.PercentFlex">
+            <summary>
+            Flex fee percentage
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.Fixed">
+            <summary>
+            Fixed fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MinQuantity">
+            <summary>
+            Min quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MaxQuantity">
+            <summary>
+            Max quantity
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api">
             <inheritdoc cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api" />
         </member>
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.Account">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.Convert">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.Codes">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.SubAccount">
             <inheritdoc />
         </member>
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.ExchangeData">
@@ -55,13 +134,52 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetTradingBalancesAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetConvertEstimateAsync(System.String,System.String,System.Decimal,System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetFiatDepositAddressAsync(System.String,System.String,System.Decimal,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.ConfirmConvertAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.Nullable{System.Boolean},System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetConvertHistoryAsync(System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.TransferAsync(WhiteBit.Net.Enums.AccountType,WhiteBit.Net.Enums.AccountType,System.String,System.Decimal,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetDepositWithdrawalHistoryAsync(System.Nullable{WhiteBit.Net.Enums.TransactionType},System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.CreateDepositAddressAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetDepositWithdrawalSettingsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetMiningRewardHistoryAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes.CreateCodeAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes.ApplyCodeAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes.GetCreatedCodesAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes.GetCodeHistoryAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiConvert">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiConvert.GetConvertEstimateAsync(System.String,System.String,System.Decimal,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiConvert.ConfirmConvertAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiConvert.GetConvertHistoryAsync(System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData">
@@ -97,10 +215,40 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetFuturesSymbolsAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.CreateSubAccountAsync(System.String,System.String,System.Nullable{System.Boolean},System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.DeleteSubAccountAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.EditSubAccountAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.GetSubAccountsAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.SubaccountTransferAsync(System.String,WhiteBit.Net.Enums.SubTransferDirection,System.String,System.Decimal,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.BlockSubaccountAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.UnblockSubaccountAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.GetSubaccountBalancesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount.GetSubaccountTransferHistoryAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.OrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceMultipleOrdersAsync(System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitOrderRequest},System.Threading.CancellationToken)">
@@ -152,10 +300,16 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateAuthenticationProvider(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetTradeHistoryAsync(System.String,System.Int32,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTradeUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTradeUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetLastPriceAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToLastPriceUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitLastPriceUpdate}},System.Threading.CancellationToken)">
@@ -164,16 +318,61 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToLastPriceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitLastPriceUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetTickerAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTickerUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTickerUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetKlinesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.DateTime,System.DateTime,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToKlineUpdatesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate}}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetOrderBookAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetSpotBalancesAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToSpotBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.Dictionary{System.String,WhiteBit.Net.Objects.Models.WhiteBitTradeBalance}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetMarginBalancesAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToMarginBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetOpenOrdersAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToOpenOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetClosedOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToClosedOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},WhiteBit.Net.Enums.ClosedOrderFilter,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetUserTradesAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToUserTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToPositionUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitPositions}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBorrowUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBorrow}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
@@ -250,6 +449,46 @@
         </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Enums.AccountType">
+            <summary>
+            Account type
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.AccountType.Main">
+            <summary>
+            Main account
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.AccountType.Spot">
+            <summary>
+            Spot account
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.AccountType.Collateral">
+            <summary>
+            Collateral account
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.ClosedOrderFilter">
+            <summary>
+            Closed order filter
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ClosedOrderFilter.LimitAndMarket">
+            <summary>
+            Limit and market orders
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ClosedOrderFilter.Limit">
+            <summary>
+            Only limit orders
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ClosedOrderFilter.Market">
+            <summary>
+            Only market orders
+            </summary>
         </member>
         <member name="T:WhiteBit.Net.Enums.ClosedOrderStatus">
             <summary>
@@ -346,6 +585,51 @@
             One month
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Enums.NewOrderType">
+            <summary>
+            Order type
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.NewOrderType.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.NewOrderType.Market">
+            <summary>
+            Market
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.NewOrderType.StopLimit">
+            <summary>
+            Stop limit
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.NewOrderType.StopMarket">
+            <summary>
+            Stop market
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.OrderEvent">
+            <summary>
+            Order update event
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderEvent.New">
+            <summary>
+            New order
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderEvent.Update">
+            <summary>
+            Update
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderEvent.Finished">
+            <summary>
+            Finished
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Enums.OrderProductType">
             <summary>
             Order product type
@@ -396,6 +680,11 @@
             Market
             </summary>
         </member>
+        <member name="F:WhiteBit.Net.Enums.OrderType.MarketBase">
+            <summary>
+            Market order with quantity in base asset
+            </summary>
+        </member>
         <member name="F:WhiteBit.Net.Enums.OrderType.StopLimit">
             <summary>
             Stop limit
@@ -404,6 +693,31 @@
         <member name="F:WhiteBit.Net.Enums.OrderType.StopMarket">
             <summary>
             Stop market
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderType.MarginLimit">
+            <summary>
+            Margin limit
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderType.MarginMarket">
+            <summary>
+            Margin limit
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderType.MarginStopLimit">
+            <summary>
+            Margin limit
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderType.MarginTriggerStopMarket">
+            <summary>
+            Margin limit
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.OrderType.MarginNormalization">
+            <summary>
+            Margin limit
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Enums.ProductType">
@@ -424,6 +738,21 @@
         <member name="F:WhiteBit.Net.Enums.ProductType.Options">
             <summary>
             Options
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.SubTransferDirection">
+            <summary>
+            Sub account transfer direction
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.SubTransferDirection.FromSubAccount">
+            <summary>
+            From sub account to main
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.SubTransferDirection.ToSubAccount">
+            <summary>
+            From main to sub account
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Enums.SymbolType">
@@ -469,6 +798,61 @@
         <member name="F:WhiteBit.Net.Enums.TradeRole.Taker">
             <summary>
             Taker
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.TransactionStatus">
+            <summary>
+            Transaction status
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.Pending">
+            <summary>
+            Pending
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.Success">
+            <summary>
+            Success
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.Canceled">
+            <summary>
+            Canceled
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.UnconfirmedByUser">
+            <summary>
+            Unconfirmed by user
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.Frozen">
+            <summary>
+            Frozen
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.Uncredited">
+            <summary>
+            Uncredited
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.PartialSuccess">
+            <summary>
+            Partial success
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.TransactionType">
+            <summary>
+            Transaction type
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionType.Deposit">
+            <summary>
+            Deposit
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionType.Withdrawal">
+            <summary>
+            Withdrawal
             </summary>
         </member>
         <member name="T:WhiteBit.Net.ExtensionMethods.WhiteBitExtensionMethods">
@@ -518,6 +902,21 @@
             Endpoints related to account settings, info or actions
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.Convert">
+            <summary>
+            Convert endpoints
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.Codes">
+            <summary>
+            Code endpoints
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.SubAccount">
+            <summary>
+            Subaccount endpoints
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.ExchangeData">
             <summary>
             Endpoints related to retrieving market and system data
@@ -548,7 +947,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetDepositAddressAsync(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Get deposit address
-            <para><a href="https://docs.whitebit.com/private/http-main-v4/#main-balance" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-cryptocurrency-deposit-address" /></para>
             </summary>
             <param name="asset">The asset</param>
             <param name="network">Network to use</param>
@@ -562,10 +961,157 @@
             <param name="asset">Filter by asset</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetConvertEstimateAsync(System.String,System.String,System.Decimal,System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetFiatDepositAddressAsync(System.String,System.String,System.Decimal,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get fiat deposit url, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-fiat-deposit-address" /></para>
+            </summary>
+            <param name="asset">The asset</param>
+            <param name="provider">The provider</param>
+            <param name="quantity">The quantity</param>
+            <param name="clientOrderId">Client order id</param>
+            <param name="successLink">Success redirect link</param>
+            <param name="failureLink">Failure redirect link</param>
+            <param name="returnLink">Redirect link when user cancels</param>
+            <param name="customerFirstName">Customer first name</param>
+            <param name="customerLastName">Customer last name</param>
+            <param name="customerEmail">Customer email</param>
+            <param name="customerAddressLine1">Customer address line 1</param>
+            <param name="customerAddressLine2">Customer address line 2</param>
+            <param name="customerCity">Customer city</param>
+            <param name="customerZipCode">Customer zip code</param>
+            <param name="customerCountryCode">Customer country code</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.Nullable{System.Boolean},System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Withdraw fiat or crypto
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request-with-the-specific-withdraw-amount-fee-is-not-included" /></para>
+            </summary>
+            <param name="asset">The asset, for example `ETH`</param>
+            <param name="quantity">Quantity to withdraw</param>
+            <param name="address">Target address (wallet address for cryptocurrencies, identifier/card number for fiat currencies)</param>
+            <param name="uniqueId">Unique id</param>
+            <param name="deductFeeFromOutput">True: fee is deducted from the output amount, false: fee is deducted from the send amount</param>
+            <param name="memo">Memo</param>
+            <param name="provider">Provider name for fiat withdrawal</param>
+            <param name="network">Network for crypto withdrawal</param>
+            <param name="partialEnable">Partial enable for fiat withdrawal</param>
+            <param name="beneficiaryFirstName">Beneficiary first name for fiat withdrawal</param>
+            <param name="beneficiaryLastName">Beneficiary last name for fiat withdrawal</param>
+            <param name="beneficiaryTin">Beneficiary TAX payer number</param>
+            <param name="beneficiaryPhone">Beneficiary phone number</param>
+            <param name="beneficiaryEmail">Beneficiary email</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.TransferAsync(WhiteBit.Net.Enums.AccountType,WhiteBit.Net.Enums.AccountType,System.String,System.Decimal,System.Threading.CancellationToken)">
+            <summary>
+            Transfer between accounts
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#transfer-between-balances" /></para>
+            </summary>
+            <param name="fromAccount">From account</param>
+            <param name="toAccount">To account</param>
+            <param name="asset">The asset, for example `ETH`</param>
+            <param name="quantity">Quantity to transfer</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetDepositWithdrawalHistoryAsync(System.Nullable{WhiteBit.Net.Enums.TransactionType},System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get deposit/withdrawal history
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-depositwithdraw-history" /></para>
+            </summary>
+            <param name="type">Filter by type</param>
+            <param name="asset">Filter by asset</param>
+            <param name="address">Filter by address</param>
+            <param name="memo">Filter by memo</param>
+            <param name="addresses">Filter by multiple addresses</param>
+            <param name="uniqueId">Filter by uniqueId</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.CreateDepositAddressAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Create a new deposit address, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-new-address-for-deposit" /></para>
+            </summary>
+            <param name="asset">Asset name</param>
+            <param name="network">Asset network</param>
+            <param name="addressType">Address type for BTC/LTC: p2sh-segwit, bech32</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetDepositWithdrawalSettingsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get deposit/withdrawal settings
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#fees" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetMiningRewardHistoryAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get mining rewards history
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-rewards" /></para>
+            </summary>
+            <param name="accountName">Filter by account name</param>
+            <param name="startTime">Filter by start time</param>
+            <param name="endTime">Filter by end time</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes">
+            <summary>
+            WhiteBit V4 code endpoints
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes.CreateCodeAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Create a new WhiteBit Code for funds transfer
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-code" /></para>
+            </summary>
+            <param name="asset">The asset, for example `ETH`</param>
+            <param name="quantity">Quantity</param>
+            <param name="passphrase">Passphrase for applying the code</param>
+            <param name="description">Description</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes.ApplyCodeAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Apply a WhiteBit code
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#apply-code" /></para>
+            </summary>
+            <param name="code">The WhiteBit code</param>
+            <param name="passphrase">Code passphrase</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes.GetCreatedCodesAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get generated code history
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-my-codes" /></para>
+            </summary>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes.GetCodeHistoryAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get account code history
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-codes-history" /></para>
+            </summary>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiConvert">
+            <summary>
+            WhiteBit V4 convert endpoints
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiConvert.GetConvertEstimateAsync(System.String,System.String,System.Decimal,System.String,System.Threading.CancellationToken)">
             <summary>
             Get convert estimate
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert-estimate" /></para>
             </summary>
             <param name="fromAsset">From asset</param>
             <param name="toAsset">To asset</param>
@@ -573,18 +1119,18 @@
             <param name="fromOrToQuantity">Whether the quantity is specified in the fromAsset or toAsset</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.ConfirmConvertAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiConvert.ConfirmConvertAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Accept/confirm a convert estimate
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert-confirm" /></para>
             </summary>
             <param name="estimateId">Quote/estimate id</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetConvertHistoryAsync(System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiConvert.GetConvertHistoryAsync(System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get convert history
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert-history" /></para>
             </summary>
             <param name="fromAsset">Filter by from asset</param>
             <param name="toAsset">Filter by to asset</param>
@@ -602,8 +1148,8 @@
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetServerTimeAsync(System.Threading.CancellationToken)">
             <summary>
-            
-            <para><a href="XXX" /></para>
+            Get the current server time
+            <para><a href="https://docs.whitebit.com/public/http-v4/#server-time" /></para>
             </summary>
             <param name="ct">Cancellation token</param>
             <returns></returns>
@@ -618,7 +1164,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetSystemStatusAsync(System.Threading.CancellationToken)">
             <summary>
             Get system/platform status
-            <para><a href="https://docs.whitebit.com/public/http-v4/#market-info" /></para>
+            <para><a href="https://docs.whitebit.com/public/http-v4/#maintenance-status" /></para>
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
@@ -632,14 +1178,14 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetAssetsAsync(System.Threading.CancellationToken)">
             <summary>
             Get asset information
-            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            <para><a href="https://docs.whitebit.com/public/http-v4/#asset-status-list" /></para>
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetOrderBookAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get the order book for a symbol
-            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            <para><a href="https://docs.whitebit.com/public/http-v4/#orderbook" /></para>
             </summary>
             <param name="symbol">The symbol, for example `ETH_USDT`</param>
             <param name="limit">The order book depth</param>
@@ -649,7 +1195,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetRecentTradesAsync(System.String,System.Nullable{WhiteBit.Net.Enums.OrderSide},System.Threading.CancellationToken)">
             <summary>
             Get the most recent 100 trades
-            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            <para><a href="https://docs.whitebit.com/public/http-v4/#recent-trades" /></para>
             </summary>
             <param name="symbol">The symbol, for example `ETHUSDT`</param>
             <param name="side">Filter by trade side</param>
@@ -658,21 +1204,21 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetDepositWithdrawalInfoAsync(System.Threading.CancellationToken)">
             <summary>
             Get withdrawal/deposit limits and fees
-            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            <para><a href="https://docs.whitebit.com/public/http-v4/#fee" /></para>
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetCollateralSymbolsAsync(System.Threading.CancellationToken)">
             <summary>
             Get collateral symbols
-            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            <para><a href="https://docs.whitebit.com/public/http-v4/#collateral-markets-list" /></para>
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetFuturesSymbolsAsync(System.Threading.CancellationToken)">
             <summary>
             Get futures symbols
-            <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+            <para><a href="https://docs.whitebit.com/public/http-v4/#available-futures-markets-list" /></para>
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
@@ -681,15 +1227,108 @@
             Shared interface for V4 rest API usage
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount">
+            <summary>
+            WhiteBit V4 sub account endpoints
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.CreateSubAccountAsync(System.String,System.String,System.Nullable{System.Boolean},System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Create a new sub account
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-sub-account" /></para>
+            </summary>
+            <param name="alias">Account name</param>
+            <param name="email">If provided an invitation email will be send</param>
+            <param name="shareKyc">If KYC is shared with main account</param>
+            <param name="spotEnabled">Whether spot trading is enabled</param>
+            <param name="collateralEnabled">Whether collateral trading is enabled</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.DeleteSubAccountAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete a sub account
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#delete-sub-account" /></para>
+            </summary>
+            <param name="id">Sub account id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.EditSubAccountAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Edit a sub account
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /></para>
+            </summary>
+            <param name="id">Sub account id</param>
+            <param name="alias">Sub account alias</param>
+            <param name="spotEnabled">Spot trading enabled</param>
+            <param name="collateralEnabled">Collateral trading enabled</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.GetSubAccountsAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get sub account list
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /></para>
+            </summary>
+            <param name="search">Search string</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.SubaccountTransferAsync(System.String,WhiteBit.Net.Enums.SubTransferDirection,System.String,System.Decimal,System.Threading.CancellationToken)">
+            <summary>
+            Transfer to or from sub account
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-transfer" /></para>
+            </summary>
+            <param name="subaccountId">Sub account id</param>
+            <param name="direction">Transfer direction</param>
+            <param name="asset">The asset, for example `ETH`</param>
+            <param name="quantity">Quantity</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.BlockSubaccountAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Block a sub account
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#block-sub-account" /></para>
+            </summary>
+            <param name="id">Sub account id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.UnblockSubaccountAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Unblock a sub account
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#unblock-sub-account" /></para>
+            </summary>
+            <param name="id">Sub account id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.GetSubaccountBalancesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get sub account balances
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-balances" /></para>
+            </summary>
+            <param name="id">Sub account id</param>
+            <param name="asset">Asset name</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount.GetSubaccountTransferHistoryAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get sub account transfer history
+            <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-sub-account-transfer-history" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading">
             <summary>
             WhiteBit V4 trading endpoints, placing and managing orders.
             </summary>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.OrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Place a new order
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#trading-balance" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-limit-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-buy-stock-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-limit-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-market-order" /></para>
             </summary>
             <param name="symbol">Symbol</param>
             <param name="side">Order side</param>
@@ -708,6 +1347,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.PlaceMultipleOrdersAsync(System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitOrderRequest},System.Threading.CancellationToken)">
             <summary>
             Place multiple order in a single call. Only supports limit orders. Check the response data for individual order placement results
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#bulk-limit-order" /></para>
             </summary>
             <param name="requests">Orders to place</param>
             <param name="ct">Cancellation token</param>
@@ -715,7 +1355,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.CancelOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
             <summary>
             Cancel an order
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-order" /></para>
             </summary>
             <param name="symbol">The symbol, for example `ETH_USDT`</param>
             <param name="id">The order id</param>
@@ -724,7 +1364,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.CancelAllOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderProductType},System.Threading.CancellationToken)">
             <summary>
             Cancel all orders
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-all-orders" /></para>
             </summary>
             <param name="symbol">Filter by symbol</param>
             <param name="orderProductTypes">Filter by order product types</param>
@@ -733,7 +1373,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetOpenOrdersAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get list of currently open orders
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-orders" /></para>
             </summary>
             <param name="symbol">Filter symbol, for example `ETH_USDT`</param>
             <param name="orderId">Filter by order id</param>
@@ -745,7 +1385,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get list of closed orders per symbol
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-orders" /></para>
             </summary>
             <param name="symbol">Filter by symbol, for example `ETH_USDT`</param>
             <param name="orderId">Filter by order id</param>
@@ -758,7 +1398,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetUserTradesAsync(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get user trade history
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-history" /></para>
             </summary>
             <param name="symbol">Filter by symbol, for example `ETH_USDT`</param>
             <param name="clientOrderId">Filter by client order id</param>
@@ -769,7 +1409,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetOrderTradesAsync(System.Int64,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get trades for a specific order
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-deals" /></para>
             </summary>
             <param name="orderId">The order id</param>
             <param name="limit">Max number of results</param>
@@ -803,7 +1443,7 @@
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetKillSwitchStatusAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Get the status of enabled kill switches
-            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#sync-kill-switch-timer" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#status-kill-switch-timer" /></para>
             </summary>
             <param name="symbol">Filter by symbol</param>
             <param name="ct">Cancellation token</param>
@@ -812,6 +1452,16 @@
             <summary>
             WhiteBit V4 streams
             </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetTradeHistoryAsync(System.String,System.Int32,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+            Get trades for a symbol
+            <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-16" /></para>
+            </summary>
+            <param name="symbol">Symbol name</param>
+            <param name="limit">Max number of results</param>
+            <param name="fromId">Filter by returning results later than the trade with this id</param>
+            <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTradeUpdate}},System.Threading.CancellationToken)">
             <summary>
@@ -829,6 +1479,221 @@
             <para><a href="https://docs.whitebit.com/public/websocket/#-update-events-5" /></para>
             </summary>
             <param name="symbols">Symbols to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetLastPriceAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get the last price for a symbol
+            <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-7" /></para>
+            </summary>
+            <param name="symbol">Symbol name</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToLastPriceUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitLastPriceUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to order book updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-1" /></para>
+            </summary>
+            <param name="symbol">Symbol to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToLastPriceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitLastPriceUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to order book updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-1" /></para>
+            </summary>
+            <param name="symbols">Symbols to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetTickerAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get the ticker for a symbol
+            <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-10" /></para>
+            </summary>
+            <param name="symbol">Symbol name</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTickerUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to order book updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-2" /></para>
+            </summary>
+            <param name="symbol">Symbol to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTickerUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to order book updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-2" /></para>
+            </summary>
+            <param name="symbols">Symbols to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetKlinesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.DateTime,System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+            Get klines for a symbol
+            <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-4" /></para>
+            </summary>
+            <param name="symbol">Symbol name</param>
+            <param name="interval">Interval</param>
+            <param name="startTime">Filter by start time</param>
+            <param name="endTime">Filter by end time</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToKlineUpdatesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate}}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to order book updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#subscribe" /></para>
+            </summary>
+            <param name="symbol">Symbol to subscribe</param>
+            <param name="interval">The interval</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetOrderBookAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get the ticker for a symbol
+            <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-19" /></para>
+            </summary>
+            <param name="symbol">Symbol name</param>
+            <param name="depth">Order book depth, max 100</param>
+            <param name="priceInterval">0 - no interval default. Available values: "0.00000001", "0.0000001", "0.000001", "0.00001", "0.0001", "0.001", "0.01", "0.1"</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to order book updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#-update-events-6" /></para>
+            </summary>
+            <param name="symbol">Symbol to subscribe</param>
+            <param name="depth">The depth of the order book, 1, 5, 10, 20, 30, 50 or 100</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetSpotBalancesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get spot balances
+            <para><a href="https://docs.whitebit.com/private/websocket/#balance-spot" /></para>
+            </summary>
+            <param name="ct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToSpotBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.Dictionary{System.String,WhiteBit.Net.Objects.Models.WhiteBitTradeBalance}}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to spot balance updates
+            <para><a href="https://docs.whitebit.com/private/websocket/#balance-spot" /></para>
+            </summary>
+            <param name="assets">Assets to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetMarginBalancesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get margin balances
+            <para><a href="https://docs.whitebit.com/private/websocket/#balance-margin" /></para>
+            </summary>
+            <param name="ct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToMarginBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance}}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to margin balance updates
+            <para><a href="https://docs.whitebit.com/private/websocket/#balance-margin" /></para>
+            </summary>
+            <param name="assets">Assets to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetOpenOrdersAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get open orders
+            <para><a href="https://docs.whitebit.com/private/websocket/#orders-pending" /></para>
+            </summary>
+            <param name="symbol">Symbol</param>
+            <param name="limit">Max number of results, max 100</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToOpenOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to open order updates
+            <para><a href="https://docs.whitebit.com/private/websocket/#orders-pending" /></para>
+            </summary>
+            <param name="symbols"></param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetClosedOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get closed orders
+            <para><a href="https://docs.whitebit.com/private/websocket/#orders-executed" /></para>
+            </summary>
+            <param name="symbol">Symbol</param>
+            <param name="orderTypes">Order types filter</param>
+            <param name="limit">Max number of results, max 100</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToClosedOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},WhiteBit.Net.Enums.ClosedOrderFilter,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder}}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to closed order updates
+            <para><a href="https://docs.whitebit.com/private/websocket/#orders-executed" /></para>
+            </summary>
+            <param name="symbols">Symbols to subscribe</param>
+            <param name="filter">Order type filter</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetUserTradesAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get user trades
+            <para><a href="https://docs.whitebit.com/private/websocket/#deals" /></para>
+            </summary>
+            <param name="symbol">Symbol</param>
+            <param name="limit">Max number of results, max 100</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToUserTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to user trade updates
+            <para><a href="https://docs.whitebit.com/private/websocket/#deals" /></para>
+            </summary>
+            <param name="symbols">Symbols to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToPositionUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitPositions}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to position updates
+            <para><a href="https://docs.whitebit.com/private/websocket/#positions" /></para>
+            </summary>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToBorrowUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBorrow}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to borrow updates
+            <para><a href="https://docs.whitebit.com/private/websocket/#borrows" /></para>
+            </summary>
             <param name="onMessage">The event handler for the received data</param>
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
@@ -1040,6 +1905,101 @@
             Symbol
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitBorrows">
+            <summary>
+            Borrows result
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrows.Total">
+            <summary>
+            Total
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrows.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitBorrow">
+            <summary>
+            Borrow info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrow.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrow.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrow.UpdateTime">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrow.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrow.UnrealizedFunding">
+            <summary>
+            Unrealized funding
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBorrow.LiquidationPrice">
+            <summary>
+            Liquidation price
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitCode">
+            <summary>
+            WhiteBit code
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCode.Code">
+            <summary>
+            Generated WhiteBit code
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCode.Message">
+            <summary>
+            Message
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCode.ExternalId">
+            <summary>
+            External id
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitCodeResult">
+            <summary>
+            Code application result
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCodeResult.Message">
+            <summary>
+            Message
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCodeResult.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCodeResult.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCodeResult.ExternalId">
+            <summary>
+            External id
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitConvertEstimate">
             <summary>
             Conversion estimate
@@ -1203,6 +2163,176 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositAddress.Memo">
             <summary>
             Memo
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositUrl">
+            <summary>
+            Fiat deposit url
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositUrl.Url">
+            <summary>
+            The deposit url
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawals">
+            <summary>
+            Deposit/withdrawal history
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawals.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawals.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawals.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawals.Total">
+            <summary>
+            Total number of results
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal">
+            <summary>
+            Deposit/withdrawal info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Address">
+            <summary>
+            Address
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.UniqueId">
+            <summary>
+            Unique id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.CreateTime">
+            <summary>
+            Creation time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.AssetName">
+            <summary>
+            Asset name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.TransactionType">
+            <summary>
+            Transaction type
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Memo">
+            <summary>
+            Memo
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Fee">
+            <summary>
+            Fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.TransactionStatus">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Network">
+            <summary>
+            Network
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.TransactionHash">
+            <summary>
+            Transaction hash
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.TransactionId">
+            <summary>
+            Transaction id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Details">
+            <summary>
+            Details
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawal.Confirmations">
+            <summary>
+            Confirmations
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalDetails">
+            <summary>
+            Details
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalDetails.Partial">
+            <summary>
+            Partial
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalPartial">
+            <summary>
+            Partial
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalPartial.RequestQuantity">
+            <summary>
+            Request quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalPartial.ProcessedQuantity">
+            <summary>
+            Processed quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalPartial.ProcessedFee">
+            <summary>
+            Processed fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalPartial.NormalizeTransaction">
+            <summary>
+            Normalize transaction
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalConfirmations">
+            <summary>
+            Confirmations
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalConfirmations.Actual">
+            <summary>
+            Actual
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalConfirmations.Required">
+            <summary>
+            Required
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdraw">
@@ -1510,6 +2640,66 @@
             Max leverage
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCodes">
+            <summary>
+            Generated codes history
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCodes.Total">
+            <summary>
+            Total results
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCodes.Data">
+            <summary>
+            Data
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCodes.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCodes.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCode">
+            <summary>
+            Generated code
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCode.Quantity">
+            <summary>
+            Quantity, positive means code is applied, negative means code was created
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCode.Code">
+            <summary>
+            Code
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCode.CreateTime">
+            <summary>
+            Creation time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCode.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCode.Asset">
+            <summary>
+            Asset name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitGeneratedCode.ExternalId">
+            <summary>
+            External id
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitKillSwitch">
             <summary>
             Kill switch info
@@ -1610,6 +2800,121 @@
             Main balance
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitMarginBalance">
+            <summary>
+            Margin balance
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMarginBalance.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMarginBalance.Balance">
+            <summary>
+            Balance
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMarginBalance.Borrow">
+            <summary>
+            Borrow
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMarginBalance.AvailableWithoutBorrow">
+            <summary>
+            Available without borrow
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMarginBalance.AvailableWithBorrow">
+            <summary>
+            Available with borrow
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitMiningRewards">
+            <summary>
+            Mining reward history
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningRewards.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningRewards.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningRewards.Data">
+            <summary>
+            Data
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitMiningReward">
+            <summary>
+            Reward info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.AccountName">
+            <summary>
+            Mining account name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.TotalReward">
+            <summary>
+            Total reward
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.Reward">
+            <summary>
+            Reward
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.Fee">
+            <summary>
+            Fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.FppsRate">
+            <summary>
+            Fpps rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.HashRate">
+            <summary>
+            Hash rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.Timestamp">
+            <summary>
+            Timestamp
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrders">
+            <summary>
+            Orders
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrders.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrders.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrders.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrders.Total">
+            <summary>
+            Total
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrder">
             <summary>
             Order info
@@ -1698,6 +3003,31 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrder.TriggerPrice">
             <summary>
             Trigger price
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitClosedOrders">
+            <summary>
+            Orders
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitClosedOrders.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitClosedOrders.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitClosedOrders.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitClosedOrders.Total">
+            <summary>
+            Total
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitClosedOrder">
@@ -1815,6 +3145,116 @@
             Order result
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate">
+            <summary>
+            Order update
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate.Event">
+            <summary>
+            Event
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate.Order">
+            <summary>
+            Order info
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositions">
+            <summary>
+            Positions
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositions.Total">
+            <summary>
+            Total
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositions.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPosition">
+            <summary>
+            Position info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.updateTime">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Quantity">
+            <summary>
+            Position quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Value">
+            <summary>
+            Position value
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.BasePrice">
+            <summary>
+            Base price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.UnrealizedPnl">
+            <summary>
+            Profit and loss
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.LiquidationPrice">
+            <summary>
+            Liquidation price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.LiquidationStage">
+            <summary>
+            Liquidation stage
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.UnrealizedFunding">
+            <summary>
+            Unrealized funding
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Funding">
+            <summary>
+            Funding
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Margin">
+            <summary>
+            Margin
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.FreeMargin">
+            <summary>
+            Free margin
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.RealizedPnl">
+            <summary>
+            Realized profit and loss
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSocketTicker">
             <summary>
             Ticker
@@ -1888,6 +3328,171 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSocketTrade.Side">
             <summary>
             Trade side
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSubAccount">
+            <summary>
+            Sub account info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.Alias">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.UserId">
+            <summary>
+            User id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.Color">
+            <summary>
+            Color
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.Kyc">
+            <summary>
+            Kyc
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccount.Permissions">
+            <summary>
+            Permissions
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSubAccountKyc">
+            <summary>
+            Kyc info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccountKyc.ShareKyc">
+            <summary>
+            Share kyc
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccountKyc.KycStatus">
+            <summary>
+            Kyc status
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSubAccountPermissions">
+            <summary>
+            Permissions
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccountPermissions.SpotEnabled">
+            <summary>
+            Spot enabled
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccountPermissions.CollateralEnabled">
+            <summary>
+            Collateral enabled
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSubAccounts">
+            <summary>
+            Sub account list
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccounts.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccounts.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubAccounts.Data">
+            <summary>
+            Data
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferHistory">
+            <summary>
+            Transfer history
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferHistory.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferHistory.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferHistory.Data">
+            <summary>
+            Data
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferEntry">
+            <summary>
+            Transfer entry
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferEntry.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferEntry.Direction">
+            <summary>
+            Transfer direction
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferEntry.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferEntry.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferEntry.CreateTime">
+            <summary>
+            Creation time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubBalances.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubBalances.Main">
+            <summary>
+            Main
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubBalances.Spot">
+            <summary>
+            Spot
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubBalances.Collateral">
+            <summary>
+            Collateral
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSymbol">
@@ -2115,9 +3720,34 @@
             Trades
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitUserTrades">
+            <summary>
+            User trades
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrades.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrades.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrades.Total">
+            <summary>
+            Total 
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrades.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitUserTrade">
             <summary>
-            
+            User trade
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrade.Id">
@@ -2168,6 +3798,56 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrade.Fee">
             <summary>
             Fee
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate">
+            <summary>
+            User trade
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.Id">
+            <summary>
+            Trade id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.Time">
+            <summary>
+            Trade time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.OrderId">
+            <summary>
+            Order id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.Price">
+            <summary>
+            Price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.Fee">
+            <summary>
+            Fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.ClientOrderId">
+            <summary>
+            Client order id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate.OrderSide">
+            <summary>
+            Side
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions">
@@ -2248,6 +3928,29 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
             <inheritdoc />
         </member>
+        <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.ListenerIdentifiers">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder}}})">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetUnsubQuery">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription">
             <inheritdoc />
         </member>
@@ -2280,7 +3983,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.#ctor(Microsoft.Extensions.Logging.ILogger,System.String,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{`0}},System.Boolean)">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.#ctor(Microsoft.Extensions.Logging.ILogger,System.String,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{`0}},System.Boolean,System.Boolean)">
             <summary>
             ctor
             </summary>
@@ -2297,6 +4000,29 @@
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.ListenerIdentifiers">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}}})">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetUnsubQuery">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.WhiteBitApiAddresses">

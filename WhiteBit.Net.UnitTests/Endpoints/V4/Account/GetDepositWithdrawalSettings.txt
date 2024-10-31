@@ -1,0 +1,27 @@
+POST
+/api/v4/main-account/fee
+true
+[
+  {
+    "ticker": "BTC",        
+    "name": "Bitcoin",       
+    "can_deposit": "0",     
+    "can_withdraw": "0",    
+    "deposit": {             
+      "minFlex": "0",        
+      "maxFlex": "0",        
+      "percentFlex": "0",  
+      "fixed": "0",          
+      "minAmount": "0.0005",
+      "maxAmount": "0"       
+    },
+    "withdraw": {          
+      "minFlex": "0",       
+      "maxFlex": "0",      
+      "percentFlex": "0",   
+      "fixed": "0.0004",    
+      "minAmount": "0.001",  
+      "maxAmount": "0"       
+    }
+  }
+]

@@ -1,0 +1,38 @@
+POST
+/api/v4/main-account/history
+true
+{
+    "limit": 100,
+    "offset": 0,
+    "records": [
+        {
+            "address": "3ApEASLcrQtZpg1TsssFgYF5V5YQJAKvuE",                                       
+            "uniqueId": null,                                                                       
+            "createdAt": 1593437922,                                                               
+            "currency": "Bitcoin",                                                              
+            "ticker": "BTC",                                                                     
+            "method": 1,                                                                         
+            "amount": "0.0006",                                                               
+            "description": "",                                                                   
+            "memo": "",                                                                        
+            "fee": "0",                                                                           
+            "status": 15,                                                                        
+            "network": null,                                                                       
+            "transactionHash": "a275a514013e4e0f927fd0d1bed215e7f6f2c4c6ce762836fe135ec22529d886",
+            "transactionId": "5e112b38-9652-11ed-a1eb-0242ac120002",                                
+            "details": {
+                "partial": {                                                                        
+                    "requestAmount": "50000",                                                      
+                    "processedAmount": "39000",                                                  
+                    "processedFee": "273",                                                          
+                    "normalizeTransaction": ""                                                      
+                }
+            },
+            "confirmations": {                                                                      
+                "actual": 1,                                                                        
+                "required": 2                                                                       
+            }
+        }
+    ],
+    "total": 300                                                                                    
+}

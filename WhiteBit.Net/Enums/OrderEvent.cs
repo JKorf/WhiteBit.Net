@@ -6,19 +6,24 @@ using System.Text;
 namespace WhiteBit.Net.Enums
 {
     /// <summary>
-    /// Order side
+    /// Order update event
     /// </summary>
-    public enum OrderSide
+    public enum OrderEvent
     {
         /// <summary>
-        /// Buy
+        /// New order
         /// </summary>
-        [Map("buy", "2")]
-        Buy,
+        [Map("1")]
+        New,
         /// <summary>
-        /// Sell
+        /// Update
         /// </summary>
-        [Map("sell", "1")]
-        Sell
+        [Map("2")]
+        Update,
+        /// <summary>
+        /// Finished
+        /// </summary>
+        [Map("3")]
+        Finished
     }
 }

@@ -1,0 +1,6 @@
+POST
+/api/v4/main-account/fiat-deposit-url
+true
+{
+  "url": "https://someaddress.com"
+}

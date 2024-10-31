@@ -30,6 +30,12 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public IWhiteBitRestClientV4ApiAccount Account { get; }
         /// <inheritdoc />
+        public IWhiteBitRestClientV4ApiConvert Convert { get; }
+        /// <inheritdoc />
+        public IWhiteBitRestClientV4ApiCodes Codes { get; }
+        /// <inheritdoc />
+        public IWhiteBitRestClientV4ApiSubAccount SubAccount { get; }
+        /// <inheritdoc />
         public IWhiteBitRestClientV4ApiExchangeData ExchangeData { get; }
         /// <inheritdoc />
         public IWhiteBitRestClientV4ApiTrading Trading { get; }
@@ -42,6 +48,9 @@ namespace WhiteBit.Net.Clients.V4Api
             : base(logger, httpClient, options.Environment.RestClientAddress, options, options.V4Options)
         {
             Account = new WhiteBitRestClientV4ApiAccount(this);
+            Convert = new WhiteBitRestClientV4ApiConvert(this);
+            Codes = new WhiteBitRestClientV4ApiCodes(this);
+            SubAccount = new WhiteBitRestClientV4ApiSubAccount(this);
             ExchangeData = new WhiteBitRestClientV4ApiExchangeData(logger, this);
             Trading = new WhiteBitRestClientV4ApiTrading(logger, this);
         }

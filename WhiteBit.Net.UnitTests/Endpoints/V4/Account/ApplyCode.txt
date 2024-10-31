@@ -1,0 +1,9 @@
+POST
+/api/v4/main-account/codes/apply
+true
+{
+  "message": "Code was successfully applied",
+  "ticker": "ETH",
+  "amount": "0.002",
+  "external_id": "be08a482-5faf-11ed-9b6a-0242ac120002"
+}

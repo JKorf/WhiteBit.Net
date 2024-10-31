@@ -1,0 +1,8 @@
+POST
+/api/v4/main-account/codes
+true
+{
+  "code": "WBe11f4fce-2a53-4edc-b195-66b693bd77e3ETH",
+  "message": "Code was successfully created",
+  "external_id": "be08a482-5faf-11ed-9b6a-0242ac120002"
+}

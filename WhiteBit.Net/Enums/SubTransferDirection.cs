@@ -6,19 +6,19 @@ using System.Text;
 namespace WhiteBit.Net.Enums
 {
     /// <summary>
-    /// Order side
+    /// Sub account transfer direction
     /// </summary>
-    public enum OrderSide
+    public enum SubTransferDirection
     {
         /// <summary>
-        /// Buy
+        /// From sub account to main
         /// </summary>
-        [Map("buy", "2")]
-        Buy,
+        [Map("sub_to_main")]
+        FromSubAccount,
         /// <summary>
-        /// Sell
+        /// From main to sub account
         /// </summary>
-        [Map("sell", "1")]
-        Sell
+        [Map("main_to_sub")]
+        ToSubAccount
     }
 }

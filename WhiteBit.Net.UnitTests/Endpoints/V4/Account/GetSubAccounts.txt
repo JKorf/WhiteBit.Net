@@ -1,0 +1,25 @@
+POST
+/api/v4/sub-account/list
+true
+{
+  "offset": 0,
+  "limit": 10,
+  "data": [
+    {
+      "id": "8e667b4a-0b71-4988-8af5-9474dbfaeb51",     
+      "alias": "training",
+      "userId": "0d7b66ff-1909-4938-ab7a-d16d9a64dcd5",
+      "email": "e***@g***m",
+      "status": "active",
+      "color": "#FF0000",
+      "kyc" : {
+        "shareKyc": true,
+        "kycStatus": "shared"
+      },
+      "permissions": {
+        "spotEnabled": true,
+        "collateralEnabled": false
+      }
+    }
+  ]
+}

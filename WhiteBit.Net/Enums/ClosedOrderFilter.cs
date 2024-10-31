@@ -6,24 +6,24 @@ using System.Text;
 namespace WhiteBit.Net.Enums
 {
     /// <summary>
-    /// Status of a closed order
+    /// Closed order filter
     /// </summary>
-    public enum ClosedOrderStatus
+    public enum ClosedOrderFilter
     {
         /// <summary>
-        /// All, for filtering
+        /// Limit and market orders
         /// </summary>
-        [Map("All")]
-        All,
+        [Map("0")]
+        LimitAndMarket = 0,
         /// <summary>
-        /// Canceled
+        /// Only limit orders
         /// </summary>
-        [Map("Canceled", "2")]
-        Canceled,
+        [Map("1")]
+        Limit = 1,
         /// <summary>
-        /// Filled
+        /// Only market orders
         /// </summary>
-        [Map("Filled", "1")]
-        Filled
+        [Map("2")]
+        Market = 2
     }
 }

@@ -1,0 +1,16 @@
+POST
+/api/v4/sub-account/transfer/history
+true
+{
+  "offset": 0,
+  "limit": 30,
+  "data": [
+    {
+      "id": "0d7b66ff-1909-4938-ab7a-d16d9a64dcd5",
+      "direction": "main_to_sub",
+      "currency": "USDT",
+      "amount": "3.14",
+      "createdAt": 1715339355
+    }
+  ]
+}

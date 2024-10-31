@@ -6,24 +6,24 @@ using System.Text;
 namespace WhiteBit.Net.Enums
 {
     /// <summary>
-    /// Status of a closed order
+    /// Account type
     /// </summary>
-    public enum ClosedOrderStatus
+    public enum AccountType
     {
         /// <summary>
-        /// All, for filtering
+        /// Main account
         /// </summary>
-        [Map("All")]
-        All,
+        [Map("main")]
+        Main,
         /// <summary>
-        /// Canceled
+        /// Spot account
         /// </summary>
-        [Map("Canceled", "2")]
-        Canceled,
+        [Map("spot")]
+        Spot,
         /// <summary>
-        /// Filled
+        /// Collateral account
         /// </summary>
-        [Map("Filled", "1")]
-        Filled
+        [Map("collateral")]
+        Collateral
     }
 }

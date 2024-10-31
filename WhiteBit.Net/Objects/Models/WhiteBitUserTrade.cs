@@ -7,7 +7,34 @@ using WhiteBit.Net.Enums;
 namespace WhiteBit.Net.Objects.Models
 {
     /// <summary>
-    /// 
+    /// User trades
+    /// </summary>
+    public record WhiteBitUserTrades
+    {
+        /// <summary>
+        /// Limit
+        /// </summary>
+        [JsonPropertyName("limit")]
+        public int Limit { get; set; }
+        /// <summary>
+        /// Offset
+        /// </summary>
+        [JsonPropertyName("offset")]
+        public int Offset { get; set; }
+        /// <summary>
+        /// Total 
+        /// </summary>
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+        /// <summary>
+        /// Records
+        /// </summary>
+        [JsonPropertyName("record")]
+        public IEnumerable<WhiteBitUserTrade> Records { get; set; } = Array.Empty<WhiteBitUserTrade>();
+    }
+
+    /// <summary>
+    /// User trade
     /// </summary>
     public record WhiteBitUserTrade
     {
@@ -23,11 +50,13 @@ namespace WhiteBit.Net.Objects.Models
         public long OrderId { get; set; }
         [JsonInclude, JsonPropertyName("orderId")]
         internal long OrderIdInt { set { OrderId = value; } }
+        [JsonInclude, JsonPropertyName("deal_order_id")]
+        internal long OrderIdInt2 { set { OrderId = value; } }
         /// <summary>
         /// Client order id
         /// </summary>
         [JsonPropertyName("clientOrderId")]
-        public string ClientOrderId { get; set; } = string.Empty;
+        public string? ClientOrderId { get; set; }
         /// <summary>
         /// Trade time
         /// </summary>

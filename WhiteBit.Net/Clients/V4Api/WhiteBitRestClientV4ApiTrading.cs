@@ -12,6 +12,7 @@ using System.Linq;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using WhiteBit.Net.Objects.Internal;
 using CryptoExchange.Net;
+using CryptoExchange.Net.RateLimiting.Guards;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -34,7 +35,7 @@ namespace WhiteBit.Net.Clients.V4Api
         public async Task<WebCallResult<WhiteBitOrder>> PlaceOrderAsync(
             string symbol,
             OrderSide side,
-            OrderType type,
+            NewOrderType type,
             decimal? quantity = null, 
             decimal? quoteQuantity = null, 
             decimal? price = null,
@@ -45,7 +46,7 @@ namespace WhiteBit.Net.Clients.V4Api
             string? clientOrderId = null,
             CancellationToken ct = default)
         {
-            if (quoteQuantity != null && type != OrderType.Market && side != OrderSide.Buy)
+            if (quoteQuantity != null && type != NewOrderType.Market && side != OrderSide.Buy)
                 return new WebCallResult<WhiteBitOrder>(new ArgumentError("quoteQuantity parameter only supported for buy market orders"));
 
             var parameters = new ParameterCollection();
@@ -60,9 +61,9 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptionalString("activationPrice", triggerPrice);
 
             string path;
-            if (type == OrderType.Limit)
+            if (type == NewOrderType.Limit)
                 path = "/api/v4/order/new";
-            else if (type == OrderType.Market)
+            else if (type == NewOrderType.Market)
             {
                 // Buy market orders with base asset, stock endpoint
                 // Buy market orders with quote asset, normal endpoint
@@ -73,14 +74,15 @@ namespace WhiteBit.Net.Clients.V4Api
                 else
                     path = "/api/v4/order/market";
             }
-            else if (type == OrderType.StopLimit)
+            else if (type == NewOrderType.StopLimit)
                 path = "/api/v4/order/stop_limit";
-            else if (type == OrderType.StopMarket)
+            else if (type == NewOrderType.StopMarket)
                 path = "/api/v4/order/stop_market";
             else
                 throw new ArgumentException("Unknown path for order type");
 
-            var request = _definitions.GetOrCreate(HttpMethod.Post, path, WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, path, WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -112,7 +114,8 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new ParameterCollection();
             parameters.Add("market", symbol);
             parameters.Add("orderId", id);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -127,7 +130,8 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
             parameters.AddOptional("type", orderProductTypes?.Select(EnumConverter.GetString));
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel/all", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel/all", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -145,7 +149,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptional("clientOrderId", clientOrderId);
             parameters.AddOptional("limit", limit);
             parameters.AddOptional("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/orders", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/orders", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<IEnumerable<WhiteBitOrder>>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -164,7 +169,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptionalEnum("status", status);
             parameters.AddOptional("limit", limit);
             parameters.AddOptional("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, IEnumerable<WhiteBitClosedOrder>>>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -181,7 +187,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptional("clientOrderId", clientOrderId);
             parameters.AddOptional("limit", limit);
             parameters.AddOptional("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/executed-history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/executed-history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, IEnumerable<WhiteBitUserTrade>>>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -197,7 +204,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("orderId", orderId);
             parameters.AddOptional("limit", limit);
             parameters.AddOptional("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOffsetResult<WhiteBitUserTrade>>(request, parameters, ct).ConfigureAwait(false);
             return result.As<IEnumerable<WhiteBitUserTrade>>(result.Data?.Records);
         }
@@ -217,7 +225,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptionalString("price", price);
             parameters.AddOptionalString("activationPrice", triggerPrice);
             parameters.AddOptional("clientOrderId", clientOrderId);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/modify", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/modify", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -235,7 +244,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("timeout", timeout == 0 ? null : timeout.ToString());
 #pragma warning restore CS8604 // Possible null reference argument.
             parameters.AddOptional("types", orderProductTypes?.Select(EnumConverter.GetString));
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/kill-switch", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/kill-switch", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -249,7 +259,8 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/kill-switch/status", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/kill-switch/status", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<IEnumerable<WhiteBitKillSwitch>>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }

@@ -1,0 +1,27 @@
+POST
+/api/v4/main-account/codes/history
+true
+{
+    "total": 29,
+    "data": [
+        {
+            "amount": "+0.002",                                 
+            "code": "WBe11f4fce-2a53-4edc-b195-66b693bd77e3ETH", 
+            "date": 1598296734,                                   
+            "status": "Activated",                                
+            "ticker": "ETH",                                      
+            "external_id": "cf7c3ff8-5eb0-11ed-9b6a-0242ac120002" 
+        },
+        {
+            "amount": "-0.002",                                  
+            "code": "WBe11f4fce-2a53-4edc-b195-66b693bd77e3ETH",  
+            "date": 1598296332,                                   
+            "status": "Activated",                               
+            "ticker": "ETH",                                     
+            "external_id": "52995812-5eb1-11ed-9b6a-0242ac120002" 
+        }
+    ],
+    "limit": 100,
+    "offset": 0
+}
+ 

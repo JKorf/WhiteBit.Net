@@ -15,6 +15,21 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         public IWhiteBitRestClientV4ApiAccount Account { get; }
 
         /// <summary>
+        /// Convert endpoints
+        /// </summary>
+        public IWhiteBitRestClientV4ApiConvert Convert { get; }
+
+        /// <summary>
+        /// Code endpoints
+        /// </summary>
+        public IWhiteBitRestClientV4ApiCodes Codes { get; }
+
+        /// <summary>
+        /// Subaccount endpoints
+        /// </summary>
+        public IWhiteBitRestClientV4ApiSubAccount SubAccount { get; }
+
+        /// <summary>
         /// Endpoints related to retrieving market and system data
         /// </summary>
         public IWhiteBitRestClientV4ApiExchangeData ExchangeData { get; }

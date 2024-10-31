@@ -7,44 +7,38 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitSubscription<T> : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitClosedOrderSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
         /// <inheritdoc />
         public override HashSet<string> ListenerIdentifiers { get; set; }
 
-        private readonly Action<DataEvent<T>> _handler;
+        private readonly Action<DataEvent<IEnumerable<WhiteBitClosedOrder>>> _handler;
 
-        private bool _firstUpdateSnapshot;
-        private string _topic;
-        private string[]? _symbols;
+        private readonly int _orderFilter;
+        private IEnumerable<string> _symbols;
 
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(WhiteBitSocketUpdate<T>);
+            return typeof(WhiteBitSocketUpdate<IEnumerable<WhiteBitClosedOrder>>);
         }
 
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="topic"></param>
-        /// <param name="symbols"></param>
-        /// <param name="handler"></param>
-        /// <param name="auth"></param>
-        public WhiteBitSubscription(ILogger logger, string topic, string[]? symbols, Action<DataEvent<T>> handler, bool auth, bool firstUpdateSnapshot) : base(logger, auth)
+        public WhiteBitClosedOrderSubscription(ILogger logger, IEnumerable<string> symbols, int orderFilter, Action<DataEvent<IEnumerable<WhiteBitClosedOrder>>> handler) : base(logger, true)
         {
             _handler = handler;
-            _topic = topic;
-            _firstUpdateSnapshot = firstUpdateSnapshot;
             _symbols = symbols;
-            ListenerIdentifiers = symbols?.Any() == true ? new HashSet<string>(symbols.Select(x => topic + "_update." + x)) : new HashSet<string> { topic + "_update" };
+            _orderFilter = orderFilter;
+            ListenerIdentifiers =  new HashSet<string> { "ordersExecuted_update" };
         }
 
         /// <inheritdoc />
@@ -53,8 +47,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
-                Method = _topic + "_subscribe",
-                Request = _symbols
+                Method = "ordersExecuted_subscribe",
+                Request = [_symbols, _orderFilter]
             }, false);
         }
 
@@ -64,17 +58,17 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
-                Method = _topic + "_unsubscribe",
-                Request = _symbols
+                Method = "ordersExecuted_unsubscribe",
+                Request = [_symbols, _orderFilter]
             }, false);
         }
 
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            var data = (WhiteBitSocketUpdate<T>)message.Data;
+            var data = (WhiteBitSocketUpdate<IEnumerable<WhiteBitClosedOrder>>)message.Data;
 
-            _handler.Invoke(message.As(data.Data, data.Method, null, (_firstUpdateSnapshot && ConnectionInvocations == 1) ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(data.Data, data.Method, data.Data.First().Symbol, SocketUpdateType.Update)!);
             return new CallResult(null);
         }
     }

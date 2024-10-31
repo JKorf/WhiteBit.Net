@@ -1,0 +1,19 @@
+POST
+/api/v4/main-account/create-new-address
+true
+{
+  "account": {
+    "address": "GDTSOI56XNVAKJNJBLJGRNZIVOCIZJRBIDKTWSCYEYNFAZEMBLN75RMN", 
+    "memo": "48565488244493"                                              
+  },
+  "required": {
+    "maxAmount": "0", 
+    "minAmount": "1", 
+    "fixedFee": "0",  
+    "flexFee": {      
+      "maxFee": "0",  
+      "minFee": "0",  
+      "percent": "0"
+    }
+  }
+}
