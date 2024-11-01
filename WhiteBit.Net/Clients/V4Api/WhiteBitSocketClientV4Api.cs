@@ -94,11 +94,12 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default)
         {
-            return await QueryAsync<decimal>(
+            var result = await QueryAsync<decimal?>(
                 "lastprice_request",
                 false,
                 ct,
                 symbol).ConfigureAwait(false);
+            return result.As(result.Data ?? default);
         }
 
         /// <inheritdoc />
