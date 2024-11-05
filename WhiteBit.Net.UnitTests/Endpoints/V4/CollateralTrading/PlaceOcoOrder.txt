@@ -1,0 +1,45 @@
+POST
+/api/v4/order/collateral/oco
+true
+{
+  "id": 117703764513,              
+  "stop_loss": {
+    "orderId": 117703764514,      
+    "clientOrderId": "",           
+    "market": "BTC_USDT",          
+    "side": "buy",                
+    "type": "stop limit",           
+    "timestamp": 1594605801.49815, 
+    "dealMoney": "0",              
+    "dealStock": "0",             
+    "amount": "2.241379",           
+    "takerFee": "0.001",            
+    "makerFee": "0.001",           
+    "left": "2.241379",            
+    "dealFee": "0",                
+    "post_only": false,            
+    "mtime": 1662478154.941582,   
+    "price": "19928.79",           
+    "activation_price": "29928.79",
+    "activation_condition": "gte", 
+    "activated": 0                
+  },
+  "take_profit": {
+    "orderId": 117703764515,     
+    "clientOrderId": "",         
+    "market": "BTC_USDT",      
+    "side": "buy",     
+    "type": "limit",              
+    "timestamp": 1662478154.941582, 
+    "dealMoney": "0",             
+    "dealStock": "0",           
+    "amount": "0.635709",       
+    "takerFee": "0.001",       
+    "makerFee": "0.001",           
+    "left": "0.635709",           
+    "dealFee": "0",               
+    "post_only": false,            
+    "mtime": 1662478154.941582,    
+    "price": "9928.79"             
+  }
+}

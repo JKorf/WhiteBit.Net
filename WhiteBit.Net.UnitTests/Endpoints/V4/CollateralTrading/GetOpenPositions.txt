@@ -1,0 +1,21 @@
+POST
+/api/v4/collateral-account/positions/open
+true
+[
+  {
+    "positionId": 527,                   
+    "market": "BTC_USDT",              
+    "openDate": 1651568067.789679,           
+    "modifyDate": 1651568067.789679,         
+    "amount": "0.1",                         
+    "basePrice": "45658.349",              
+    "liquidationPrice": null,                 
+    "liquidationState": null,               
+    "pnl": "-168.42",                        
+    "pnlPercent": "-0.43",                   
+    "margin": "8316.74",                      
+    "freeMargin": "619385.67",               
+    "funding": "0",                           
+    "unrealizedFunding": "0.0019142920201966" 
+  }
+]

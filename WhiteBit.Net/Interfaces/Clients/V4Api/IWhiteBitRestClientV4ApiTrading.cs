@@ -33,7 +33,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="clientOrderId"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        Task<WebCallResult<WhiteBitOrder>> PlaceOrderAsync(
+        Task<WebCallResult<WhiteBitOrder>> PlaceSpotOrderAsync(
             string symbol,
             OrderSide side,
             NewOrderType type,
@@ -53,7 +53,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="requests">Orders to place</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitOrderResponse>>> PlaceMultipleOrdersAsync(
+        Task<WebCallResult<IEnumerable<WhiteBitOrderResponse>>> PlaceSpotMultipleOrdersAsync(
             IEnumerable<WhiteBitOrderRequest> requests,
             CancellationToken ct = default);
 
@@ -85,7 +85,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitOrder>>> GetOpenOrdersAsync(string? symbol = null, string? orderId = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<WhiteBitOrder>>> GetOpenOrdersAsync(string? symbol = null, long? orderId = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get list of closed orders per symbol
@@ -109,7 +109,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<Dictionary<string, IEnumerable<WhiteBitUserTrade>>>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<WhiteBitUserTrade>>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get trades for a specific order

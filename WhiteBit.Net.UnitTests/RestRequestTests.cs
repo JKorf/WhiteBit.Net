@@ -32,6 +32,9 @@ namespace WhiteBit.Net.UnitTests
             await tester.ValidateAsync(client => client.V4Api.Account.CreateDepositAddressAsync("123"), "CreateDepositAddress");
             await tester.ValidateAsync(client => client.V4Api.Account.GetDepositWithdrawalSettingsAsync(), "GetDepositWithdrawalSettings");
             await tester.ValidateAsync(client => client.V4Api.Account.GetMiningRewardHistoryAsync(), "GetMiningRewardHistory");
+            await tester.ValidateAsync(client => client.V4Api.Account.GetCollateralBalanceSummaryAsync(), "GetCollateralBalanceSummary");
+            await tester.ValidateAsync(client => client.V4Api.Account.SetAccountLeverageAsync(123), "SetAccountLeverage");
+            await tester.ValidateAsync(client => client.V4Api.Account.GetCollateralAccountSummaryAsync(), "GetCollateralAccountSummary");
             await tester.ValidateAsync(client => client.V4Api.Codes.CreateCodeAsync("123", 0.1m), "CreateCode");
             await tester.ValidateAsync(client => client.V4Api.Codes.ApplyCodeAsync("123"), "ApplyCode");
             await tester.ValidateAsync(client => client.V4Api.Codes.GetCreatedCodesAsync(), "GetCreatedCodes");
@@ -73,6 +76,22 @@ namespace WhiteBit.Net.UnitTests
             var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Trading", "https://whitebit.com", IsAuthenticated, stjCompare: true);
             await tester.ValidateAsync(client => client.V4Api.Trading.GetUserTradesAsync(), "GetUserTrades");
             await tester.ValidateAsync(client => client.V4Api.Trading.GetOrderTradesAsync(123), "GetOrderTrades", nestedJsonProperty: "records");
+        }
+
+        [Test]
+        public async Task ValidateV4CollateralTradingCalls()
+        {
+            var client = new WhiteBitRestClient(opts =>
+            {
+                opts.AutoTimestamp = false;
+                opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
+            });
+            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/CollateralTrading", "https://whitebit.com", IsAuthenticated, stjCompare: true);
+            await tester.ValidateAsync(client => client.V4Api.CollateralTrading.GetOpenPositionsAsync("123"), "GetOpenPositions");
+            await tester.ValidateAsync(client => client.V4Api.CollateralTrading.GetPositionHistoryAsync(), "GetPositionHistory");
+            await tester.ValidateAsync(client => client.V4Api.CollateralTrading.GetOpenConditionalOrdersAsync("123"), "GetOpenConditionalOrders");
+            await tester.ValidateAsync(client => client.V4Api.CollateralTrading.PlaceOcoOrderAsync("123", OrderSide.Sell, 0.1m, 0.1m, 0.1m, 0.1m), "PlaceOcoOrder");
+            await tester.ValidateAsync(client => client.V4Api.CollateralTrading.CancelOcoOrderAsync("123", 123), "CancelOcoOrder");
         }
 
         private bool IsAuthenticated(WebCallResult result)

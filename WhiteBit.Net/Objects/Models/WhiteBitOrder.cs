@@ -143,6 +143,28 @@ namespace WhiteBit.Net.Objects.Models
     }
 
     /// <summary>
+    /// Conditional order
+    /// </summary>
+    public record WhiteBitConditionalOrder : WhiteBitOrder
+    {
+        /// <summary>
+        /// Update timestamp
+        /// </summary>
+        [JsonPropertyName("mtime")]
+        public DateTime? UpdateTime { get; set; }
+        /// <summary>
+        /// Trigger condition
+        /// </summary>
+        [JsonPropertyName("activation_condition")]
+        public ActivationCondition? TriggerCondition { get; set; }
+        /// <summary>
+        /// Activated
+        /// </summary>
+        [JsonPropertyName("activated")]
+        public bool? Activated { get; set; }
+    }
+
+    /// <summary>
     /// Orders
     /// </summary>
     public record WhiteBitClosedOrders

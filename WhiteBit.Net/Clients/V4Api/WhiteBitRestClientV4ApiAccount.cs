@@ -60,10 +60,10 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
-        #region Get Trading Balances
+        #region Get Spot Balances
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitTradeBalance>>> GetTradingBalancesAsync(string? asset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<WhiteBitTradeBalance>>> GetSpotBalancesAsync(string? asset = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("ticker", asset);
@@ -237,6 +237,63 @@ namespace WhiteBit.Net.Clients.V4Api
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/mining/rewards", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitMiningRewards>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        #endregion
+
+        #region Get Collateral Balances
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<Dictionary<string, decimal>>> GetCollateralBalancesAsync(string? asset = null, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.AddOptional("ticker", asset);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/balance", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+            var result = await _baseClient.SendAsync<Dictionary<string, decimal>>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        #endregion
+
+        #region Get Collateral Balance Summary
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<WhiteBitCollateralSummary>>> GetCollateralBalanceSummaryAsync(CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/balance-summary", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var result = await _baseClient.SendAsync<IEnumerable<WhiteBitCollateralSummary>>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        #endregion
+
+        #region Get Collateral Account Summary
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitCollateralAccountSummary>> GetCollateralAccountSummaryAsync(CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/summary", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+            var result = await _baseClient.SendAsync<WhiteBitCollateralAccountSummary>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        #endregion
+
+        #region Set Account Leverage
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitLeverage>> SetAccountLeverageAsync(int leverage, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.Add("leverage", leverage);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/leverage", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+            var result = await _baseClient.SendAsync<WhiteBitLeverage>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
 

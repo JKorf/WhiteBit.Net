@@ -42,8 +42,10 @@ namespace WhiteBit.Net
         /// <returns></returns>
         public static string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverTime = null)
         {
-            // SPOT
-            return baseAsset + "_" + quoteAsset;
+            if (tradingMode == TradingMode.Spot)
+                return baseAsset + "_" + quoteAsset;
+
+            return baseAsset + "_PERP";
         }
 
         /// <summary>

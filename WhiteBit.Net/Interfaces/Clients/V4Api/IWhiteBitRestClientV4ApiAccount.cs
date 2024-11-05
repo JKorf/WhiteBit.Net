@@ -30,12 +30,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebCallResult<WhiteBitDepositAddressInfo>> GetDepositAddressAsync(string asset, string? network = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get trading balances
+        /// Get spot trading balances
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#trading-balance" /></para>
         /// </summary>
         /// <param name="asset">Filter by asset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitTradeBalance>>> GetTradingBalancesAsync(string? asset = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<WhiteBitTradeBalance>>> GetSpotBalancesAsync(string? asset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get fiat deposit url, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
@@ -135,6 +135,36 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitMiningRewards>> GetMiningRewardHistoryAsync(string? accountName = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get collateral balances
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance" /></para>
+        /// </summary>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<Dictionary<string, decimal>>> GetCollateralBalancesAsync(string? asset = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get collateral balance summary
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance-summary" /></para>
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<IEnumerable<WhiteBitCollateralSummary>>> GetCollateralBalanceSummaryAsync(CancellationToken ct = default);
+        
+        /// <summary>
+        /// Get collateral account summary
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-summary" /></para>
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<WhiteBitCollateralAccountSummary>> GetCollateralAccountSummaryAsync(CancellationToken ct = default);
+
+        /// <summary>
+        /// Set leverage for the entire account, both spot margin and futures. Spot margin leverage is capped at x20.
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#change-collateral-account-leverage" /></para>
+        /// </summary>
+        /// <param name="leverage">New leverage setting</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<WhiteBitLeverage>> SetAccountLeverageAsync(int leverage, CancellationToken ct = default);
 
     }
 }

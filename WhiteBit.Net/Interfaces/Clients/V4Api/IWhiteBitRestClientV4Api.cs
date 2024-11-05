@@ -40,6 +40,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         public IWhiteBitRestClientV4ApiTrading Trading { get; }
 
         /// <summary>
+        /// Endpoints related to collateral (Futures and Spot Margin) orders and trades
+        /// </summary>
+        public IWhiteBitRestClientV4ApiCollateralTrading CollateralTrading { get; }
+
+        /// <summary>
         /// Get the shared rest requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
         /// </summary>
         public IWhiteBitRestClientV4ApiShared SharedClient { get; }

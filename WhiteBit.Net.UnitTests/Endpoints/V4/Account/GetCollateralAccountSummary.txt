@@ -1,0 +1,13 @@
+POST
+/api/v4/collateral-account/summary
+true
+{
+  "equity": "130970.8947456254113367",        
+  "margin": "456.58349",                           
+  "freeMargin": "129681.3285348840110099",      
+  "unrealizedFunding": "0.0292207414003268",       
+  "pnl": "-832.9535",                             
+  "leverage": 10,                            
+  "marginFraction": "6.2446758120916304",          
+  "maintenanceMarginFraction": "1.2446758120916304" 
+}

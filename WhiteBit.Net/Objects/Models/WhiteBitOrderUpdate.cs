@@ -18,6 +18,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Event
         /// </summary>
         [ArrayProperty(0)]
+        [JsonConverter(typeof(EnumConverter))]
         public OrderEvent Event { get; set; }
         /// <summary>
         /// Order info

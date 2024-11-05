@@ -30,12 +30,12 @@ namespace WhiteBit.Net.Objects.Models
         /// Base asset precision
         /// </summary>
         [JsonPropertyName("stockPrec")]
-        public decimal BaseAssetPrecision { get; set; }
+        public int BaseAssetPrecision { get; set; }
         /// <summary>
         /// Quote asset precision
         /// </summary>
         [JsonPropertyName("moneyPrec")]
-        public decimal QuoteAssetPrecision { get; set; }
+        public int QuoteAssetPrecision { get; set; }
         /// <summary>
         /// Fee precision
         /// </summary>

@@ -24,12 +24,14 @@ namespace WhiteBit.Net.Objects.Models
         /// <summary>
         /// Quote volume
         /// </summary>
-        [JsonPropertyName("quote_volume")]
+        [JsonPropertyName("base_volume")]
+        // THE VOLUME PROPERTIES ARE INCORRECTLY INVERSED IN THE API RESPONSE
         public decimal QuoteVolume { get; set; }
         /// <summary>
         /// Base volume
         /// </summary>
-        [JsonPropertyName("base_volume")]
+        // THE VOLUME PROPERTIES ARE INCORRECTLY INVERSED IN THE API RESPONSE
+        [JsonPropertyName("quote_volume")]
         public decimal BaseVolume { get; set; }
         /// <summary>
         /// Trade timestamp

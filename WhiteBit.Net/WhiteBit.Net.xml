@@ -25,6 +25,9 @@
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.Trading">
             <inheritdoc />
         </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CollateralTrading">
+            <inheritdoc />
+        </member>
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.ExchangeName">
             <inheritdoc />
         </member>
@@ -61,7 +64,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetDepositAddressAsync(System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetTradingBalancesAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetSpotBalancesAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetFiatDepositAddressAsync(System.String,System.String,System.Decimal,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
@@ -85,6 +88,18 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetMiningRewardHistoryAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetCollateralBalancesAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetCollateralBalanceSummaryAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetCollateralAccountSummaryAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.SetAccountLeverageAsync(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes">
             <inheritdoc />
         </member>
@@ -98,6 +113,33 @@
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes.GetCodeHistoryAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.GetOpenPositionsAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.GetPositionHistoryAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.GetOpenConditionalOrdersAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.PlaceOcoOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.CancelOcoOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.CancelConditionalOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.CancelOTOOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiConvert">
@@ -178,10 +220,10 @@
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceSpotOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceMultipleOrdersAsync(System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitOrderRequest},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceSpotMultipleOrdersAsync(System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitOrderRequest},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.CancelOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
@@ -190,7 +232,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.CancelAllOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderProductType},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetOpenOrdersAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetOpenOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -299,7 +341,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToUserTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToPositionUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitPositions}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToPositionUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitPositionsUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBorrowUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBorrow}},System.Threading.CancellationToken)">
@@ -400,6 +442,21 @@
             Collateral account
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Enums.ActivationCondition">
+            <summary>
+            Activation condition
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ActivationCondition.GreaterThanOrEqual">
+            <summary>
+            Price condition higher than x
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ActivationCondition.LessThanOrEqu">
+            <summary>
+            Price condition lower than x
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Enums.ClosedOrderFilter">
             <summary>
             Closed order filter
@@ -438,6 +495,21 @@
         <member name="F:WhiteBit.Net.Enums.ClosedOrderStatus.Filled">
             <summary>
             Filled
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.ConditionalOrderType">
+            <summary>
+            Conditional order type
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ConditionalOrderType.OneTriggersOther">
+            <summary>
+            OTO
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ConditionalOrderType.OneCancelsOther">
+            <summary>
+            OCO
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Enums.KlineInterval">
@@ -513,6 +585,21 @@
         <member name="F:WhiteBit.Net.Enums.KlineInterval.OneMonth">
             <summary>
             One month
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Enums.LiquidationStatus">
+            <summary>
+            Liquidation status
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.LiquidationStatus.MarginCall">
+            <summary>
+            Margin call
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.LiquidationStatus.Liquidation">
+            <summary>
+            Liquidation
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Enums.NewOrderType">
@@ -625,29 +712,29 @@
             Stop market
             </summary>
         </member>
-        <member name="F:WhiteBit.Net.Enums.OrderType.MarginLimit">
+        <member name="F:WhiteBit.Net.Enums.OrderType.CollateralLimit">
             <summary>
             Margin limit
             </summary>
         </member>
-        <member name="F:WhiteBit.Net.Enums.OrderType.MarginMarket">
+        <member name="F:WhiteBit.Net.Enums.OrderType.CollateralMarket">
             <summary>
-            Margin limit
+            Margin market
             </summary>
         </member>
-        <member name="F:WhiteBit.Net.Enums.OrderType.MarginStopLimit">
+        <member name="F:WhiteBit.Net.Enums.OrderType.CollateralStopLimit">
             <summary>
-            Margin limit
+            Margin stop limit
             </summary>
         </member>
-        <member name="F:WhiteBit.Net.Enums.OrderType.MarginTriggerStopMarket">
+        <member name="F:WhiteBit.Net.Enums.OrderType.CollateralTriggerStopMarket">
             <summary>
-            Margin limit
+            Margin trigger stop market
             </summary>
         </member>
-        <member name="F:WhiteBit.Net.Enums.OrderType.MarginNormalization">
+        <member name="F:WhiteBit.Net.Enums.OrderType.CollateralNormalization">
             <summary>
-            Margin limit
+            Margin normalization
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Enums.ProductType">
@@ -857,6 +944,11 @@
             Endpoints related to orders and trades
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.CollateralTrading">
+            <summary>
+            Endpoints related to collateral (Futures and Spot Margin) orders and trades
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.SharedClient">
             <summary>
             Get the shared rest requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
@@ -883,9 +975,9 @@
             <param name="network">Network to use</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetTradingBalancesAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetSpotBalancesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Get trading balances
+            Get spot trading balances
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#trading-balance" /></para>
             </summary>
             <param name="asset">Filter by asset</param>
@@ -990,6 +1082,36 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token</param>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetCollateralBalancesAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get collateral balances
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance" /></para>
+            </summary>
+            <param name="asset">Filter by asset, for example `ETH`</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetCollateralBalanceSummaryAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get collateral balance summary
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance-summary" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetCollateralAccountSummaryAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get collateral account summary
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-summary" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.SetAccountLeverageAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Set leverage for the entire account, both spot margin and futures. Spot margin leverage is capped at x20.
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#change-collateral-account-leverage" /></para>
+            </summary>
+            <param name="leverage">New leverage setting</param>
+            <param name="ct">Cancellation token</param>
+        </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes">
             <summary>
             WhiteBit V4 code endpoints
@@ -1031,6 +1153,106 @@
             </summary>
             <param name="limit">Max number of results</param>
             <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading">
+            <summary>
+            WhiteBit V4 collateral trading endpoints (Futures and Spot Margin), placing and managing orders.
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+            <summary>
+            Place a new order
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-limit-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-market-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-stop-limit-order" /></para>
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-trigger-market-order" /></para>
+            </summary>
+            <param name="symbol">Symbol</param>
+            <param name="side">Order side</param>
+            <param name="type">Order type</param>
+            <param name="quantity">Quantity of the order in base asset</param>
+            <param name="price"></param>
+            <param name="postOnly"></param>
+            <param name="immediateOrCancel"></param>
+            <param name="stopLossPrice"></param>
+            <param name="takeProfitPrice"></param>
+            <param name="bboRole"></param>
+            <param name="triggerPrice"></param>
+            <param name="clientOrderId"></param>
+            <param name="ct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.GetOpenPositionsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get open positions
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#open-positions" /></para>
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.GetPositionHistoryAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get position history
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#positions-history" /></para>
+            </summary>
+            <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
+            <param name="positionId">Filter by position id</param>
+            <param name="startTime">Filter by start time</param>
+            <param name="endTime">Filter by end time</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.GetOpenConditionalOrdersAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get open conditional orders
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-conditional-orders" /></para>
+            </summary>
+            <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.PlaceOcoOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Place a new OCO order
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-collateral-oco-order" /></para>
+            </summary>
+            <param name="symbol">The symbol, for example `ETH_PERP`</param>
+            <param name="orderSide">Order side</param>
+            <param name="quantity">Quantity</param>
+            <param name="price">Limit price</param>
+            <param name="triggerPrice">Trigger price</param>
+            <param name="stopLimitPrice">Stop limit price</param>
+            <param name="clientOrderId">Client order id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.CancelOcoOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Cancel an OCO order
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-oco-order" /></para>
+            </summary>
+            <param name="symbol">The symbol, for example `ETH_PERP`</param>
+            <param name="orderId">Order id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.CancelConditionalOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Cancel a conditional order
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /></para>
+            </summary>
+            <param name="symbol">The symbol, for example `ETH_PERP`</param>
+            <param name="orderId">Order id</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.CancelOTOOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Cancel an OTO order
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /></para>
+            </summary>
+            <param name="symbol">The symbol, for example `ETH_PERP`</param>
+            <param name="orderId">Order id</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiConvert">
@@ -1251,7 +1473,7 @@
             WhiteBit V4 trading endpoints, placing and managing orders.
             </summary>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.PlaceSpotOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Place a new order
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-limit-order" /></para>
@@ -1274,7 +1496,7 @@
             <param name="ct"></param>
             <returns></returns>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.PlaceMultipleOrdersAsync(System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitOrderRequest},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.PlaceSpotMultipleOrdersAsync(System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitOrderRequest},System.Threading.CancellationToken)">
             <summary>
             Place multiple order in a single call. Only supports limit orders. Check the response data for individual order placement results
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#bulk-limit-order" /></para>
@@ -1300,7 +1522,7 @@
             <param name="orderProductTypes">Filter by order product types</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetOpenOrdersAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetOpenOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get list of currently open orders
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-orders" /></para>
@@ -1610,7 +1832,7 @@
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToPositionUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitPositions}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToPositionUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitPositionsUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to position updates
             <para><a href="https://docs.whitebit.com/private/websocket/#positions" /></para>
@@ -1928,6 +2150,256 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCodeResult.ExternalId">
             <summary>
             External id
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary">
+            <summary>
+            Account summary
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.Equity">
+            <summary>
+            Total equity of collateral balance including lending funds in USDT
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.Margin">
+            <summary>
+            Amount of funds in open position USDT
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.FreeMargin">
+            <summary>
+            Free funds for trading
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.UnrealizedFunding">
+            <summary>
+            Funding that will be paid on next position stage change (order, liquidation, etc)
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.Pnl">
+            <summary>
+            Current profit and loss in USDT
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.Leverage">
+            <summary>
+            Current leverage of account which affect amount of lending funds
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.MarginFraction">
+            <summary>
+            Margin fraction
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralAccountSummary.MaintenanceMarginFraction">
+            <summary>
+            Maintenance margin fraction
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder">
+            <summary>
+            Collateral order info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.OrderId">
+            <summary>
+            Order id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.ClientOrderId">
+            <summary>
+            Client order id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.OrderSide">
+            <summary>
+            Order side
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.OrderType">
+            <summary>
+            Order type
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.Timestamp">
+            <summary>
+            Timestamp
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.QuoteQuantityFilled">
+            <summary>
+            Filled quantity in quote asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.QuantityFilled">
+            <summary>
+            Filled quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.Quantity">
+            <summary>
+            Order quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.TakerFee">
+            <summary>
+            Taker fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.MakerFee">
+            <summary>
+            Maker fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.Left">
+            <summary>
+            Left
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.DealFee">
+            <summary>
+            Deal fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.Price">
+            <summary>
+            Price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.PostOnly">
+            <summary>
+            Post only
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.ImmediateOrCancel">
+            <summary>
+            Immediate or cancel
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.OneTriggersOtherConfig">
+            <summary>
+            Take profit or stop loss configuration
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrderConfig">
+            <summary>
+            OTO config
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrderConfig.OtoId">
+            <summary>
+            OTO id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrderConfig.StopLossPrice">
+            <summary>
+            Stop loss price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrderConfig.TakeProfitPrice">
+            <summary>
+            Take profit price
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitCollateralSummary">
+            <summary>
+            Balance summary
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralSummary.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralSummary.Balance">
+            <summary>
+            Balance
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralSummary.Borrow">
+            <summary>
+            Borrow
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralSummary.AvailableWithoutBorrow">
+            <summary>
+            Available without borrow
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralSummary.AvailableWithBorrow">
+            <summary>
+            Available with borrow
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrdersResult">
+            <summary>
+            Conditional orders
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrdersResult.Limit">
+            <summary>
+            Limit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrdersResult.Offset">
+            <summary>
+            Offset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrdersResult.Total">
+            <summary>
+            Total results
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrdersResult.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders">
+            <summary>
+            Conditional order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders.ConditionalOrderType">
+            <summary>
+            Order type
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders.StopLossOrder">
+            <summary>
+            Stop loss order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders.TakeProfitOrder">
+            <summary>
+            Take profit order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders.StopLossPrice">
+            <summary>
+            Stop loss price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders.TakeProfitPrice">
+            <summary>
+            Take profit price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrders.ConditionalOrder">
+            <summary>
+            Conditional order
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitConvertEstimate">
@@ -2785,6 +3257,16 @@
             Last price
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitLeverage">
+            <summary>
+            Leverage setting
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitLeverage.Leverage">
+            <summary>
+            Leverage
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitMainBalance">
             <summary>
             Balance
@@ -2888,6 +3370,26 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitMiningReward.Timestamp">
             <summary>
             Timestamp
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOcoOrder">
+            <summary>
+            OCO order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOcoOrder.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOcoOrder.StopLossOrder">
+            <summary>
+            Stop loss order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOcoOrder.TakeProfitOrder">
+            <summary>
+            Take profit order
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrders">
@@ -3003,6 +3505,26 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrder.TriggerPrice">
             <summary>
             Trigger price
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrder">
+            <summary>
+            Conditional order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrder.UpdateTime">
+            <summary>
+            Update timestamp
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrder.TriggerCondition">
+            <summary>
+            Trigger condition
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitConditionalOrder.Activated">
+            <summary>
+            Activated
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitClosedOrders">
@@ -3160,29 +3682,14 @@
             Order info
             </summary>
         </member>
-        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositions">
-            <summary>
-            Positions
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositions.Total">
-            <summary>
-            Total
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositions.Records">
-            <summary>
-            Records
-            </summary>
-        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPosition">
             <summary>
             Position info
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Id">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.PositionId">
             <summary>
-            Id
+            Position id
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Symbol">
@@ -3190,24 +3697,19 @@
             Symbol
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.CreateTime">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.OpenTime">
             <summary>
-            Create time
+            Open timestamp
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.updateTime">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.UpdateTime">
             <summary>
-            Update time
+            Update timestamp
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Quantity">
             <summary>
-            Position quantity
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Value">
-            <summary>
-            Position value
+            Quantity
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.BasePrice">
@@ -3215,24 +3717,34 @@
             Base price
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.UnrealizedPnl">
-            <summary>
-            Profit and loss
-            </summary>
-        </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.LiquidationPrice">
             <summary>
             Liquidation price
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.LiquidationStage">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.LiquidationStatus">
             <summary>
-            Liquidation stage
+            Liquidation status
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.UnrealizedFunding">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Pnl">
             <summary>
-            Unrealized funding
+            Profit and loss
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.PnlPercent">
+            <summary>
+            Profit and loss percentage
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Margin">
+            <summary>
+            Amount of funds in open position
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.FreeMargin">
+            <summary>
+            Free funds
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Funding">
@@ -3240,17 +3752,192 @@
             Funding
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Margin">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.UnrealizedFunding">
+            <summary>
+            Unrealized funding
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.PositionId">
+            <summary>
+            Position id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.OpenTime">
+            <summary>
+            Open time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.ModifyDate">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.BasePrice">
+            <summary>
+            Base price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.RealizedFunding">
+            <summary>
+            Realized funding
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.LiquidationPrice">
+            <summary>
+            Liquidation price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.LiquidationStatus">
+            <summary>
+            Liquidation status
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory.OrderDetail">
+            <summary>
+            Order detail
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositionHistoryOrder">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistoryOrder.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistoryOrder.TradeQuantity">
+            <summary>
+            Trade quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistoryOrder.BasePrice">
+            <summary>
+            Base price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistoryOrder.TradeFee">
+            <summary>
+            Trade fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistoryOrder.FundingFee">
+            <summary>
+            Funding fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionHistoryOrder.RealizedPnl">
+            <summary>
+            Realized profit and loss
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositionsUpdate">
+            <summary>
+            Positions
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionsUpdate.Total">
+            <summary>
+            Total
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionsUpdate.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate">
+            <summary>
+            Position info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.CreateTime">
+            <summary>
+            Create time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.updateTime">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.Quantity">
+            <summary>
+            Position quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.Value">
+            <summary>
+            Position value
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.BasePrice">
+            <summary>
+            Base price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.UnrealizedPnl">
+            <summary>
+            Profit and loss
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.LiquidationPrice">
+            <summary>
+            Liquidation price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.LiquidationStage">
+            <summary>
+            Liquidation stage
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.UnrealizedFunding">
+            <summary>
+            Unrealized funding
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.Funding">
+            <summary>
+            Funding
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.Margin">
             <summary>
             Margin
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.FreeMargin">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.FreeMargin">
             <summary>
             Free margin
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.RealizedPnl">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.RealizedPnl">
             <summary>
             Realized profit and loss
             </summary>
@@ -3972,6 +4659,52 @@
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.ListenerIdentifiers">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance}}})">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetUnsubQuery">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.ListenerIdentifiers">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.Dictionary{System.String,WhiteBit.Net.Objects.Models.WhiteBitTradeBalance}}})">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetUnsubQuery">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1">

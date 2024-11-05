@@ -36,6 +36,10 @@ namespace WhiteBit.Net.Clients.V4Api
         private static readonly MessagePath _index0SymbolPath = MessagePath.Get().Property("params").Index(0);
         private static readonly MessagePath _index7SymbolPath = MessagePath.Get().Property("params").Index(0).Index(7);
         private static readonly MessagePath _index2SymbolPath = MessagePath.Get().Property("params").Index(2);
+        private static readonly MessagePath _ordersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("market");
+        private static readonly MessagePath _orderExecutedSymbolPath = MessagePath.Get().Property("params").Property("market");
+        
+
 
         private static readonly ConcurrentDictionary<string, CachedToken> _tokenCache = new();
         #endregion
@@ -214,7 +218,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToSpotBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<Dictionary<string, WhiteBitTradeBalance>>(_logger, "balanceSpot", assets.ToArray(), onMessage, true, false);
+            var subscription = new WhiteBitSpotBalanceSubscription(_logger, assets.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -241,7 +245,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<IEnumerable<WhiteBitMarginBalance>>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<IEnumerable<WhiteBitMarginBalance>>(_logger, "balanceMargin", assets.ToArray(), onMessage, true, false);
+            var subscription = new WhiteBitMarginBalanceSubscription(_logger, assets.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -318,9 +322,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Positions
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositions>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitPositions>(_logger, "positionsMargin", [], onMessage, true, true);
+            var subscription = new WhiteBitSubscription<WhiteBitPositionsUpdate>(_logger, "positionsMargin", [], onMessage, true, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -356,6 +360,11 @@ namespace WhiteBit.Net.Clients.V4Api
                 return method + "." + message.GetValue<string>(_index7SymbolPath);
             if (method.Equals("depth_update", StringComparison.Ordinal))
                 return method + "." + message.GetValue<string>(_index2SymbolPath);
+
+            if (method.Equals("ordersPending_update", StringComparison.Ordinal))
+                return method + "." + message.GetValue<string>(_ordersSymbolPath);
+            if (method.Equals("ordersExecuted_update", StringComparison.Ordinal))
+                return method + "." + message.GetValue<string>(_orderExecutedSymbolPath);
 
             return method;
         }

@@ -7,9 +7,9 @@ using WhiteBit.Net.Enums;
 namespace WhiteBit.Net.Objects.Models
 {
     /// <summary>
-    /// Position info
+    /// 
     /// </summary>
-    public record WhiteBitPosition
+    public record WhiteBitPositionHistory
     {
         /// <summary>
         /// Position id
@@ -22,15 +22,15 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Open timestamp
+        /// Open time
         /// </summary>
         [JsonPropertyName("openDate")]
         public DateTime OpenTime { get; set; }
         /// <summary>
-        /// Update timestamp
+        /// Update time
         /// </summary>
         [JsonPropertyName("modifyDate")]
-        public DateTime UpdateTime { get; set; }
+        public DateTime ModifyDate { get; set; }
         /// <summary>
         /// Quantity
         /// </summary>
@@ -40,47 +40,64 @@ namespace WhiteBit.Net.Objects.Models
         /// Base price
         /// </summary>
         [JsonPropertyName("basePrice")]
-        public decimal? BasePrice { get; set; }
+        public decimal BasePrice { get; set; }
+        /// <summary>
+        /// Realized funding
+        /// </summary>
+        [JsonPropertyName("realizedFunding")]
+        public decimal RealizedFunding { get; set; }
         /// <summary>
         /// Liquidation price
         /// </summary>
         [JsonPropertyName("liquidationPrice")]
-        public decimal? LiquidationPrice { get; set; }
+        public string? LiquidationPrice { get; set; }
         /// <summary>
         /// Liquidation status
         /// </summary>
         [JsonPropertyName("liquidationState")]
         public LiquidationStatus? LiquidationStatus { get; set; }
         /// <summary>
-        /// Profit and loss
+        /// Order detail
         /// </summary>
-        [JsonPropertyName("pnl")]
-        public decimal? Pnl { get; set; }
+        [JsonPropertyName("orderDetail")]
+        public WhiteBitPositionHistoryOrder OrderDetail { get; set; } = null!;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public record WhiteBitPositionHistoryOrder
+    {
         /// <summary>
-        /// Profit and loss percentage
+        /// Id
         /// </summary>
-        [JsonPropertyName("pnlPercent")]
-        public decimal? PnlPercent { get; set; }
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
         /// <summary>
-        /// Amount of funds in open position
+        /// Trade quantity
         /// </summary>
-        [JsonPropertyName("margin")]
-        public decimal Margin { get; set; }
+        [JsonPropertyName("tradeAmount")]
+        public decimal TradeQuantity { get; set; }
         /// <summary>
-        /// Free funds
+        /// Base price
         /// </summary>
-        [JsonPropertyName("freeMargin")]
-        public decimal FreeMargin { get; set; }
+        [JsonPropertyName("basePrice")]
+        public decimal BasePrice { get; set; }
         /// <summary>
-        /// Funding
+        /// Trade fee
         /// </summary>
-        [JsonPropertyName("funding")]
-        public decimal Funding { get; set; }
+        [JsonPropertyName("tradeFee")]
+        public decimal TradeFee { get; set; }
         /// <summary>
-        /// Unrealized funding
+        /// Funding fee
         /// </summary>
-        [JsonPropertyName("unrealizedFunding")]
-        public decimal UnrealizedFunding { get; set; }
+        [JsonPropertyName("fundingFee")]
+        public decimal? FundingFee { get; set; }
+        /// <summary>
+        /// Realized profit and loss
+        /// </summary>
+        [JsonPropertyName("realizedPnl")]
+        public decimal? RealizedPnl { get; set; }
     }
 
 

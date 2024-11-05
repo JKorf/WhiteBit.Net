@@ -1,0 +1,12 @@
+POST
+/api/v4/collateral-account/balance-summary
+true
+[
+  {
+    "asset": "BTC",
+    "balance": "0",
+    "borrow": "0",
+    "availableWithoutBorrow": "0",
+    "availableWithBorrow": "123.456"
+  }
+]

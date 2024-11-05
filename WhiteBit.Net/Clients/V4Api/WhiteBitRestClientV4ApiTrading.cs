@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrder>> PlaceOrderAsync(
+        public async Task<WebCallResult<WhiteBitOrder>> PlaceSpotOrderAsync(
             string symbol,
             OrderSide side,
             NewOrderType type,
@@ -93,7 +93,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Multiple Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitOrderResponse>>> PlaceMultipleOrdersAsync(
+        public async Task<WebCallResult<IEnumerable<WhiteBitOrderResponse>>> PlaceSpotMultipleOrdersAsync(
             IEnumerable<WhiteBitOrderRequest> requests,
             CancellationToken ct = default)
         {
@@ -141,7 +141,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Open Orders
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitOrder>>> GetOpenOrdersAsync(string? symbol = null, string? orderId = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<WhiteBitOrder>>> GetOpenOrdersAsync(string? symbol = null, long? orderId = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
@@ -180,7 +180,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get User Trades
 
         /// <inheritdoc />
-        public async Task<WebCallResult<Dictionary<string, IEnumerable<WhiteBitUserTrade>>>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<WhiteBitUserTrade>>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
@@ -189,7 +189,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptional("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/executed-history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
-            var result = await _baseClient.SendAsync<Dictionary<string, IEnumerable<WhiteBitUserTrade>>>(request, parameters, ct).ConfigureAwait(false);
+            var result = await _baseClient.SendAsync<IEnumerable<WhiteBitUserTrade>>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
 

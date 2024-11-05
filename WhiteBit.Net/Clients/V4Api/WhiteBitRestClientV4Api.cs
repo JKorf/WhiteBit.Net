@@ -41,6 +41,8 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public IWhiteBitRestClientV4ApiTrading Trading { get; }
         /// <inheritdoc />
+        public IWhiteBitRestClientV4ApiCollateralTrading CollateralTrading { get; }
+        /// <inheritdoc />
         public string ExchangeName => "WhiteBit";
         #endregion
 
@@ -54,6 +56,7 @@ namespace WhiteBit.Net.Clients.V4Api
             SubAccount = new WhiteBitRestClientV4ApiSubAccount(this);
             ExchangeData = new WhiteBitRestClientV4ApiExchangeData(logger, this);
             Trading = new WhiteBitRestClientV4ApiTrading(logger, this);
+            CollateralTrading = new WhiteBitRestClientV4ApiCollateralTrading(logger, this);
         }
         #endregion
 

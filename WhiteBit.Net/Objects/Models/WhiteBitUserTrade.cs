@@ -66,7 +66,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Side
         /// </summary>
         [JsonPropertyName("side")]
-        public OrderSide OrderSide { get; set; }
+        public OrderSide? OrderSide { get; set; }
         /// <summary>
         /// Role of the trade
         /// </summary>

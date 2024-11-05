@@ -15,12 +15,12 @@ namespace WhiteBit.Net.Objects.Models
         /// Limit
         /// </summary>
         [JsonPropertyName("limit")]
-        public decimal Limit { get; set; }
+        public int Limit { get; set; }
         /// <summary>
         /// Offset
         /// </summary>
         [JsonPropertyName("offset")]
-        public decimal Offset { get; set; }
+        public int Offset { get; set; }
         /// <summary>
         /// Records
         /// </summary>
@@ -30,7 +30,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Total number of results
         /// </summary>
         [JsonPropertyName("total")]
-        public decimal Total { get; set; }
+        public int Total { get; set; }
     }
 
     /// <summary>

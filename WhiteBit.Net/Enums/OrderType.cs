@@ -23,12 +23,12 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Market order with quantity in base asset
         /// </summary>
-        [Map("202", "market_stock")]
+        [Map("202", "market_stock", "stock market")]
         MarketBase = 202,
         /// <summary>
         /// Stop limit
         /// </summary>
-        [Map("3", "stop_limit")]
+        [Map("3", "stop_limit", "stop limit")]
         StopLimit = 3,
         /// <summary>
         /// Stop market
@@ -38,27 +38,27 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Margin limit
         /// </summary>
-        [Map("7")]
-        MarginLimit = 7,
+        [Map("7", "margin limit")]
+        CollateralLimit = 7,
         /// <summary>
-        /// Margin limit
+        /// Margin market
         /// </summary>
-        [Map("8")]
-        MarginMarket = 8,
+        [Map("8", "margin market")]
+        CollateralMarket = 8,
         /// <summary>
-        /// Margin limit
+        /// Margin stop limit
         /// </summary>
-        [Map("9")]
-        MarginStopLimit = 9,
+        [Map("9", "stop limit")]
+        CollateralStopLimit = 9,
         /// <summary>
-        /// Margin limit
+        /// Margin trigger stop market
         /// </summary>
-        [Map("10")]
-        MarginTriggerStopMarket = 10,
+        [Map("10", "trigger stop market")]
+        CollateralTriggerStopMarket = 10,
         /// <summary>
-        /// Margin limit
+        /// Margin normalization
         /// </summary>
         [Map("14")]
-        MarginNormalization = 14
+        CollateralNormalization = 14
     }
 }

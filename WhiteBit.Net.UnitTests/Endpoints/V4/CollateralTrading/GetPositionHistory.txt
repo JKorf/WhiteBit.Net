@@ -1,0 +1,25 @@
+POST
+/api/v4/collateral-account/positions/history
+true
+[
+ 
+  {
+      "positionId": 111,     
+      "market": "BTC_USDT",          
+      "openDate": 1650400589.882613,
+      "modifyDate": 1650400589.882613, 
+      "amount": "0.1",               
+      "basePrice": "45658.349",  
+      "realizedFunding": "0",         
+      "liquidationPrice": null,      
+      "liquidationState": null,       
+      "orderDetail": {                 
+        "id": 97067934,            
+        "tradeAmount": "0.1",         
+        "basePrice": "41507.59",     
+        "tradeFee": "415.07",          
+        "fundingFee": null,            
+        "realizedPnl": null            
+      }
+    }
+]
