@@ -4,76 +4,6 @@
         <name>WhiteBit.Net</name>
     </assembly>
     <members>
-        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting">
-            <summary>
-            Withdrawal/deposit settings
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Asset">
-            <summary>
-            Asset
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Name">
-            <summary>
-            Name
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.CanDeposit">
-            <summary>
-            Can deposit
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.CanWithdraw">
-            <summary>
-            Can withdraw
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Deposit">
-            <summary>
-            Deposit info
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSetting.Withdraw">
-            <summary>
-            Withdraw info
-            </summary>
-        </member>
-        <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails">
-            <summary>
-            Details
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MinFlex">
-            <summary>
-            Min fee amount when flex fee is enabled
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MaxFlex">
-            <summary>
-            Max fee amount when flex fee is enabled
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.PercentFlex">
-            <summary>
-            Flex fee percentage
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.Fixed">
-            <summary>
-            Fixed fee
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MinQuantity">
-            <summary>
-            Min quantity
-            </summary>
-        </member>
-        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitDepositWithdrawalSettingDetails.MaxQuantity">
-            <summary>
-            Max quantity
-            </summary>
-        </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api">
             <inheritdoc cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api" />
         </member>
@@ -2333,6 +2263,76 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalConfirmations.Required">
             <summary>
             Required
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSetting">
+            <summary>
+            Withdrawal/deposit settings
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSetting.Asset">
+            <summary>
+            Asset
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSetting.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSetting.CanDeposit">
+            <summary>
+            Can deposit
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSetting.CanWithdraw">
+            <summary>
+            Can withdraw
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSetting.Deposit">
+            <summary>
+            Deposit info
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSetting.Withdraw">
+            <summary>
+            Withdraw info
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSettingDetails">
+            <summary>
+            Details
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSettingDetails.MinFlex">
+            <summary>
+            Min fee amount when flex fee is enabled
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSettingDetails.MaxFlex">
+            <summary>
+            Max fee amount when flex fee is enabled
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSettingDetails.PercentFlex">
+            <summary>
+            Flex fee percentage
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSettingDetails.Fixed">
+            <summary>
+            Fixed fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSettingDetails.MinQuantity">
+            <summary>
+            Min quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdrawalSettingDetails.MaxQuantity">
+            <summary>
+            Max quantity
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitDepositWithdraw">

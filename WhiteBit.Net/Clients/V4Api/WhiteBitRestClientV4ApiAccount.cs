@@ -2,7 +2,6 @@ using CryptoExchange.Net.Objects;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
-using WhiteBit.Net.Clients.V4Api;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using System.Collections.Generic;
 using WhiteBit.Net.Objects.Models;

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using WhiteBit.Net.Objects.Models;
 using System;
 using WhiteBit.Net.Enums;
-using WhiteBit.Net.Clients.V4Api;
 
 namespace WhiteBit.Net.Interfaces.Clients.V4Api
 {

@@ -16,6 +16,7 @@ using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.SharedApis;
 using CryptoExchange.Net.Converters.MessageParsing;
+using System.Linq;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -90,13 +91,21 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
             var msg = accessor.GetValue<string>(MessagePath.Get().Property("message"));
-            if (msg == null)
-                return new ServerError(accessor.GetOriginalString());
+            var errors = accessor.GetValue<Dictionary<string, IEnumerable<string>>?>(MessagePath.Get().Property("errors"));
+            if (errors == null || !errors.Any())
+            {
+                if (msg == null)
+                    return new ServerError(accessor.GetOriginalString());
 
-            if (code == null)
-                return new ServerError(msg);
+                if (code == null)
+                    return new ServerError(msg);
 
-            return new ServerError(code.Value, msg);
+                return new ServerError(code.Value, msg);
+            }
+            else
+            {
+                return new ServerError(code!.Value, string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}")));
+            }
         }
 
         /// <inheritdoc />

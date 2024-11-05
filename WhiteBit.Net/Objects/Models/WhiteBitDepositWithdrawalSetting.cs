@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace WhiteBit.Net.Clients.V4Api
+namespace WhiteBit.Net.Objects.Models
 {
     /// <summary>
     /// Withdrawal/deposit settings
