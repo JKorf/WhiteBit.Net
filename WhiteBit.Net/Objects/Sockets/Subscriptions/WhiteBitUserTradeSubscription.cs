@@ -19,20 +19,20 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override HashSet<string> ListenerIdentifiers { get; set; }
 
-        private readonly Action<DataEvent<IEnumerable<WhiteBitUserTradeUpdate>>> _handler;
+        private readonly Action<DataEvent<WhiteBitUserTradeUpdate>> _handler;
 
         private IEnumerable<string> _symbols;
 
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(WhiteBitSocketUpdate<IEnumerable<WhiteBitUserTradeUpdate>>);
+            return typeof(WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>);
         }
 
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitUserTradeSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<IEnumerable<WhiteBitUserTradeUpdate>>> handler) : base(logger, true)
+        public WhiteBitUserTradeSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> handler) : base(logger, true)
         {
             _handler = handler;
             _symbols = symbols;
@@ -64,9 +64,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            var data = (WhiteBitSocketUpdate<IEnumerable<WhiteBitUserTradeUpdate>>)message.Data;
+            var data = (WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>)message.Data;
 
-            _handler.Invoke(message.As(data.Data, data.Method, data.Data.First().Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(data.Data, data.Method, data.Data!.Symbol, SocketUpdateType.Update)!);
             return new CallResult(null);
         }
     }

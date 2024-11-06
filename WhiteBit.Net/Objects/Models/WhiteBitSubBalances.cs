@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace WhiteBit.Net.Objects.Models
 {
+    /// <summary>
+    /// Sub balances
+    /// </summary>
     public record WhiteBitSubBalances
     {
         /// <summary>

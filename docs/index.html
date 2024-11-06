@@ -97,7 +97,7 @@
         <section id="idocs_intro">
 			<h1>WhiteBit.Net</h1>
 			
-		<p>WhiteBit.Net is a client library for accessing the <a href="WhiteBit" target="_blank">WhiteBit REST and Websocket API</a>. </p>
+		<p>WhiteBit.Net is a client library for accessing the <a href="https://docs.whitebit.com/" target="_blank">WhiteBit REST and Websocket API</a>. </p>
 		<h4>Features</h4>
 		<ul>
 			<li>Response data is mapped to descriptive models</li>
@@ -211,8 +211,71 @@ var socketClient = new WhiteBitSocketClient();</code></pre>
           
 		  <b id="idocs_example_symbols">Get Symbols</b><br />
 		  <p>Get a list of supported symbols on WhiteBit</p>
-		  <pre><code>await WhiteBitClient.SpotApi.ExchangeData.GetSymbolsAsync();</code></pre>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient();
+await whiteBitClient.V4Api.ExchangeData.GetSymbolsAsync();</code></pre>
+		  		  
+		  <b id="idocs_example_symbols">Get Symbol Ticker</b><br />
+		  <p>Get the 24h price ticker of multiple symbols</p>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient();
+var result = await whiteBitClient.V4Api.ExchangeData.GetTickersAsync();</code></pre>
 		  
+		  <b id="idocs_example_symbols">Get Recent Trades</b><br />
+		  <p>Get the most recent trades for a symbol</p>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient();
+
+var result = await whiteBitClient.V4Api.ExchangeData.GetRecentTradesAsync("ETH_USD");</code></pre>
+
+		  <b id="idocs_example_symbols">Get Balances</b><br />
+		  <p>Get spot trading balances</p>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient(options => {
+    options.ApiCredentials = new ApiCredentials("KEY", "SECRET");
+});
+
+var result = await whiteBitClient.V4Api.Account.GetSpotBalancesAsync();</code></pre>
+
+		  <b id="idocs_example_symbols">Place Limit Order</b><br />
+		  <p>Place a new limit order for buying 0.1 ETH at a price of 2000 USDT</p>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient(options => {
+    options.ApiCredentials = new ApiCredentials("KEY", "SECRET");
+});
+
+var result = await whiteBitClient.V4Api.Trading.PlaceSpotOrderAsync(
+    "ETH_USDT",
+    OrderSide.Buy,
+    NewOrderType.Limit,
+    0.1m,
+    price: 2000);</code></pre>
+
+		  <b id="idocs_example_symbols">Place Market Order</b><br />
+		  <p>Place a new market order for buying 50 USDT worth of ETH at the best available price</p>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient(options => {
+    options.ApiCredentials = new ApiCredentials("KEY", "SECRET");
+});
+
+var result = await whiteBitClient.V4Api.Trading.PlaceSpotOrderAsync(
+    "ETH_USDT",
+    OrderSide.Buy,
+    NewOrderType.Market,
+    quoteQuantity: 50);</code></pre>
+
+		  <b id="idocs_example_symbols">Get Order Info</b><br />
+		  <p>Retrieve order information for a specific order</p>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient(options => {
+    options.ApiCredentials = new ApiCredentials("KEY", "SECRET");
+});
+
+// Depending on the state of the order one of these will return the order info
+var resultOpen = await whiteBitClient.V4Api.Trading.GetOpenOrdersAsync(orderId: 123);
+var resultClosed = await whiteBitClient.V4Api.Trading.GetClosedOrdersAsync(orderId: 123);</code></pre>
+
+		  <b id="idocs_example_symbols">Cancel an order</b><br />
+		  <p>Cancel a currently active order</p>
+		  <pre><code>var whiteBitClient = new WhiteBitRestClient(options => {
+    options.ApiCredentials = new ApiCredentials("KEY", "SECRET");
+});
+
+var result = await whiteBitClient.V4Api.Trading.CancelOrderAsync("ETH_USDT", 123);</code></pre>
+
         </section>
         		
       </div>

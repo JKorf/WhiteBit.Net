@@ -1,0 +1,22 @@
+> { "id": "|1|", "method": "depth_subscribe", "params": ["ETH_USDT", 5, "0"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+    "id": null,
+    "method": "depth_update",
+    "params": [
+        false, 
+        {
+            "timestamp": 1689600180.5164471,
+            "asks": [
+                ["0.020861", "0"],     
+                ["0.020900", "2.5"]
+            ],
+            "bids": [
+                ["0.020844", "5.949"],
+                ["0.020800", "0"]
+            ]
+        },
+        "ETH_USDT" 
+    ]
+}

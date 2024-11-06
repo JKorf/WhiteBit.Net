@@ -1,0 +1,11 @@
+> { "id": "|1|", "method": "lastprice_subscribe", "params": ["ETH_USDT"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+  "id": null,
+  "method": "lastprice_update",
+  "params": [
+    "ETH_USDT",
+    "0.020683"
+  ]
+}

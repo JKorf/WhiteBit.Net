@@ -1,0 +1,19 @@
+> { "id": "|1|", "method": "trades_subscribe", "params": ["ETH_USDT"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+    "id": null,
+    "method": "trades_update",
+    "params": [
+        "ETH_USDT",                   
+         [                                
+             {
+                 "id": 41358530,          
+                 "time": 1580905394.70332, 
+                 "price": "0.020857",    
+                 "amount": "5.511",       
+                 "type": "sell"           
+             }
+         ]
+    ]
+}

@@ -172,6 +172,15 @@ namespace WhiteBit.Net.Clients.V4Api
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, IEnumerable<WhiteBitClosedOrder>>>(request, parameters, ct).ConfigureAwait(false);
+            if (!result)
+                return result;
+
+            foreach(var symbolOrders in result.Data)
+            {
+                foreach (var order in symbolOrders.Value)
+                    order.Symbol = symbolOrders.Key;
+            }
+            
             return result;
         }
 
@@ -189,8 +198,25 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptional("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/executed-history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
-            var result = await _baseClient.SendAsync<IEnumerable<WhiteBitUserTrade>>(request, parameters, ct).ConfigureAwait(false);
-            return result;
+            if (symbol != null)
+            {
+                var result = await _baseClient.SendAsync<IEnumerable<WhiteBitUserTrade>>(request, parameters, ct).ConfigureAwait(false);
+                return result;
+            }
+            else
+            {
+                var result = await _baseClient.SendAsync<Dictionary<string, IEnumerable<WhiteBitUserTrade>>>(request, parameters, ct).ConfigureAwait(false);
+                if (!result)
+                    return result.As<IEnumerable<WhiteBitUserTrade>>(default);
+
+                foreach(var item in result.Data)
+                {
+                    foreach (var x in item.Value)
+                        x.Symbol = item.Key;
+                }
+
+                return result.As<IEnumerable<WhiteBitUserTrade>>(result.Data.Values.SelectMany(x => x).OrderByDescending(x => x.Time).ToArray());
+            }
         }
 
         #endregion
@@ -252,7 +278,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
-        #region Set Kill Switch
+        #region Get Kill Switch
 
         /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<WhiteBitKillSwitch>>> GetKillSwitchStatusAsync(string? symbol = null, CancellationToken ct = default)

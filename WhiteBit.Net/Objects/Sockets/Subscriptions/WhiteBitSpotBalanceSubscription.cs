@@ -26,7 +26,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>>);
+            return typeof(WhiteBitSocketUpdate<IEnumerable<Dictionary<string, WhiteBitTradeBalance>>>);
         }
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            var data = (WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>>)message.Data;
+            var data = (WhiteBitSocketUpdate<IEnumerable<Dictionary<string, WhiteBitTradeBalance>>>)message.Data;
 
-            _handler.Invoke(message.As(data.Data, data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(data.Data.First(), data.Method, null, SocketUpdateType.Update)!);
             return new CallResult(null);
         }
     }

@@ -23,6 +23,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Trade time
         /// </summary>
         [ArrayProperty(1)]
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Time { get; set; }
         /// <summary>
         /// Symbol
@@ -58,6 +59,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Side
         /// </summary>
         [ArrayProperty(8)]
+        [JsonConverter(typeof(EnumConverter))]
         public OrderSide OrderSide { get; set; }
     }
 

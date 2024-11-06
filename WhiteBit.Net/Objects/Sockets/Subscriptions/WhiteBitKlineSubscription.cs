@@ -38,6 +38,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbol = symbol;
             _interval = interval;
+            Topic = "Klines";
             ListenerIdentifiers =  new HashSet<string> { "candles_update" + "." + symbol };
         }
 
@@ -68,9 +69,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         {
             var data = (WhiteBitSocketUpdate<IEnumerable<WhiteBitKlineUpdate>>)message.Data;
 
-#warning always first update is snapshot?
-
-            _handler.Invoke(message.As(data.Data, data.Method, data.Data.First().Symbol, ConnectionInvocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(data.Data, data.Method, data.Data.First().Symbol, SocketUpdateType.Update)!);
             return new CallResult(null);
         }
     }

@@ -1,0 +1,20 @@
+> { "id": "|1|", "method": "market_subscribe", "params": ["ETH_USDT"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+  "id": null,
+  "method": "market_update",
+  "params": [
+    "ETH_USDT",
+    {
+      "period": 86400,
+      "last": "0.020964", 
+      "open": "0.020349", 
+      "close": "0.020964",
+      "high": "0.020997", 
+      "low": "0.020281",
+      "volume": "135574.476",
+      "deal": "2784.413999488" 
+    }
+  ]
+}

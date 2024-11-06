@@ -1,0 +1,19 @@
+> { "id": "|1|", "method": "candles_subscribe", "params": ["ETH_USDT", 86400] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+  "id": null,
+  "method": "candles_update",
+  "params": [
+    [
+      1580895000, 
+      "0.020683", 
+      "0.020683", 
+      "0.020683",
+      "0.020666", 
+      "504.701", 
+      "10.433600491", 
+      "ETH_USDT" 
+    ]
+  ]
+}

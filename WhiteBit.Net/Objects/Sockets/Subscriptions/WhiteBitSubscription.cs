@@ -33,17 +33,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="topic"></param>
-        /// <param name="symbols"></param>
-        /// <param name="handler"></param>
-        /// <param name="auth"></param>
         public WhiteBitSubscription(ILogger logger, string topic, string[]? symbols, Action<DataEvent<T>> handler, bool auth, bool firstUpdateSnapshot) : base(logger, auth)
         {
             _handler = handler;
             _topic = topic;
             _firstUpdateSnapshot = firstUpdateSnapshot;
             _symbols = symbols;
+            Topic = topic;
             ListenerIdentifiers = symbols?.Any() == true ? new HashSet<string>(symbols.Select(x => topic + "_update." + x)) : new HashSet<string> { topic + "_update" };
         }
 

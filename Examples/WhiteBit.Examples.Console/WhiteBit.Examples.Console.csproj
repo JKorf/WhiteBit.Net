@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\WhiteBit.Net\WhiteBit.Net.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -3,8 +3,9 @@ using WhiteBit.Net.Clients;
 
 // REST
 var restClient = new WhiteBitRestClient();
-var ticker = await restClient.SpotApi.ExchangeData.GetTickerAsync("ETHUSDT");
-Console.WriteLine($"Rest client ticker price for ETHUSDT: {ticker.Data.List.First().LastPrice}");
+var tickers = await restClient.V4Api.ExchangeData.GetTickersAsync();
+var ticker = tickers.Data.Single(x => x.Symbol == "ETH_USDT");
+Console.WriteLine($"Rest client ticker price for ETH_USDT: {ticker.LastPrice}");
 
 Console.WriteLine();
 Console.WriteLine("Press enter to start websocket subscription");
@@ -12,9 +13,9 @@ Console.ReadLine();
 
 // Websocket
 var socketClient = new WhiteBitSocketClient();
-var subscription = await socketClient.SpotApi.SubscribeToTickerUpdatesAsync("ETHUSDT", update =>
+var subscription = await socketClient.V4Api.SubscribeToTickerUpdatesAsync("ETH_USDT", update =>
 {
-    Console.WriteLine($"Websocket client ticker price for ETHUSDT: {update.Data.LastPrice}");
+    Console.WriteLine($"Websocket client ticker price for ETH_USDT: {update.Data.Ticker.LastPrice}");
 });
 
 Console.ReadLine();

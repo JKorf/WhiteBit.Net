@@ -25,7 +25,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Base volume
         /// </summary>
         [JsonPropertyName("amount")]
-        public decimal BaseVolume { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// Trade timestamp
         /// </summary>

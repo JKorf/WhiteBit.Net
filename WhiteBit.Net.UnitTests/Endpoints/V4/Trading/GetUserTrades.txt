@@ -1,18 +1,16 @@
 POST
 /api/v4/trade-account/executed-history
 true
-{
-    "BTC_USDT": [
-        {
-            "id": 160305483,              
-            "clientOrderId": "customId11",
-            "time": 1594667731.724403,    
-            "side": "sell",               
-            "role": 2,                     
-            "amount": "0.000076",         
-            "price": "9264.21",            
-            "deal": "0.70407996",          
-            "fee": "0.00070407996"        
-        }
-    ]
-}
+ [
+    {
+        "id": 160305483,              
+        "clientOrderId": "customId11",
+        "time": 1594667731.724403,    
+        "side": "sell",               
+        "role": 2,                     
+        "amount": "0.000076",         
+        "price": "9264.21",            
+        "deal": "0.70407996",          
+        "fee": "0.00070407996"        
+    }
+]

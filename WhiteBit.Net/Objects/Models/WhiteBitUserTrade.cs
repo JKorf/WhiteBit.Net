@@ -39,6 +39,10 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitUserTrade
     {
         /// <summary>
+        /// Symbol
+        /// </summary>
+        public string Symbol { get; set; } = string.Empty;
+        /// <summary>
         /// Trade id
         /// </summary>
         [JsonPropertyName("id")]

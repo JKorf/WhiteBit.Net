@@ -7,6 +7,9 @@
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api">
             <inheritdoc cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api" />
         </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.ClientOptions">
+            <inheritdoc />
+        </member>
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.Account">
             <inheritdoc />
         </member>
@@ -258,6 +261,9 @@
             Client providing access to the WhiteBit V4 websocket Api
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.ClientOptions">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.#ctor(Microsoft.Extensions.Logging.ILogger,WhiteBit.Net.Objects.Options.WhiteBitSocketOptions)">
             <summary>
             ctor
@@ -338,7 +344,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetUserTradesAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToUserTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToUserTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToPositionUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitPositionsUpdate}},System.Threading.CancellationToken)">
@@ -350,7 +356,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetAuthenticationRequest(CryptoExchange.Net.Sockets.SocketConnection)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetAuthenticationRequestAsync(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SharedClient">
@@ -1822,7 +1828,7 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token for closing this subscription</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToUserTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToUserTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to user trade updates
             <para><a href="https://docs.whitebit.com/private/websocket/#deals" /></para>
@@ -1857,7 +1863,7 @@
         </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4ApiShared">
             <summary>
-            Shared interface for TP_RP_API_NAME socket API usage
+            Shared interface for V4 API socket API usage
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Interfaces.IWhiteBitOrderBookFactory">
@@ -1887,16 +1893,6 @@
             <summary>
             Tracker factory
             </summary>
-        </member>
-        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
-            <summary>
-            Create a new kline tracker
-            </summary>
-            <param name="symbol">The symbol</param>
-            <param name="interval">Kline interval</param>
-            <param name="limit">The max amount of klines to retain</param>
-            <param name="period">The max period the data should be retained</param>
-            <returns></returns>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
             <summary>
@@ -4002,7 +3998,7 @@
             Price
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSocketTrade.BaseVolume">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSocketTrade.Quantity">
             <summary>
             Base volume
             </summary>
@@ -4160,6 +4156,11 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubaccountTransferEntry.CreateTime">
             <summary>
             Creation time
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSubBalances">
+            <summary>
+            Sub balances
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitSubBalances.Asset">
@@ -4435,6 +4436,11 @@
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitUserTrade">
             <summary>
             User trade
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrade.Symbol">
+            <summary>
+            Symbol
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitUserTrade.Id">
@@ -4720,11 +4726,6 @@
             <summary>
             ctor
             </summary>
-            <param name="logger"></param>
-            <param name="topic"></param>
-            <param name="symbols"></param>
-            <param name="handler"></param>
-            <param name="auth"></param>
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
@@ -4744,7 +4745,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}}})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}})">
             <summary>
             ctor
             </summary>
@@ -4920,9 +4921,6 @@
             ctor
             </summary>
             <param name="serviceProvider">Service provider for resolving logging and clients</param>
-        </member>
-        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
-            <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
             <inheritdoc />

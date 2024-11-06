@@ -2,7 +2,7 @@
 
 [![.NET](https://img.shields.io/github/actions/workflow/status/JKorf/WhiteBit.Net/dotnet.yml?style=for-the-badge)](https://github.com/JKorf/WhiteBit.Net/actions/workflows/dotnet.yml) ![License](https://img.shields.io/github/license/JKorf/WhiteBit.Net?style=for-the-badge)
 
-WhiteBit.Net is a client library for accessing the [WhiteBit REST and Websocket API](WhiteBit). 
+WhiteBit.Net is a client library for accessing the [WhiteBit REST and Websocket API](https://docs.whitebit.com/). 
 
 ## Features
 * Response data is mapped to descriptive models
@@ -47,16 +47,17 @@ The NuGet package files are added along side the source with the latest GitHub r
 	```csharp
 	// Get the ETH/USDT ticker via rest request
 	var restClient = new WhiteBitRestClient();
-	var tickerResult = await restClient.SpotApi.ExchangeData.GetTickerAsync("ETHUSDT");
-	var lastPrice = tickerResult.Data.LastPrice;
+	var tickerResult = await restClient.V4Api.ExchangeData.GetTickersAsync();
+	var symbol = tickerResult.Data.Single(x => x.Symbol == "ETH_USDT");
+	var lastPrice = symbol.LastPrice;
 	```
 * Websocket streams
 	```csharp
 	// Subscribe to ETH/USDT ticker updates via the websocket API
 	var socketClient = new WhiteBitSocketClient();
-	var tickerSubscriptionResult = socketClient.SpotApi.SubscribeToTickerUpdatesAsync("ETHUSDT", (update) => 
+	var tickerSubscriptionResult = socketClient.V4Api.SubscribeToTickerUpdatesAsync("ETH_USDT", (update) =>
 	{
-	  var lastPrice = update.Data.LastPrice;
+	    var lastPrice = update.Data.Ticker.LastPrice;
 	});
 	```
 
@@ -95,14 +96,32 @@ A Discord server is available [here](https://discord.gg/MSpeEtSY8t). For discuss
 
 ## Supported functionality
 
-### Spot
+### V4 API Public
 |API|Supported|Location|
 |--|--:|--|
-|TODO|✓|`restClient.SpotApi.Account`|
-### Futures
+|Rest API|✓|`restClient.V4Api.ExchangeData`|
+|Websocket API|✓|`socketClient.V4Api`|
+
+### V4 API Private Rest Main
 |API|Supported|Location|
 |--|--:|--|
-|TODO|✓|`restClient.FuturesApi.ExchangeData`|
+|Codes API|✓|`restClient.V4Api.Codes`|
+|Crypto Lending API|X||
+|Fees API|✓|`restClient.V4Api.Account`|
+|SubAccount API|✓|`restClient.V4Api.SubAccount`|
+|Mining Pool API|✓|`restClient.V4Api.Account`|
+
+### V4 API Private Rest Trade
+|API|Supported|Location|
+|--|--:|--|
+|Spot API|✓|`restClient.V4Api.Account` / `restClient.V4Api.Trading`|
+|Collateral API|✓|`restClient.V4Api.Account` / `restClient.V4Api.CollateralTrading`|
+|Convert API|✓|`restClient.V4Api.Convert`|
+
+### V4 API Private WebSocket
+|API|Supported|Location|
+|--|--:|--|
+|*|✓|`socketClient.V4Api`|
 
 ## Support the project
 Any support is greatly appreciated.

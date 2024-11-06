@@ -38,8 +38,9 @@ namespace WhiteBit.Net.Clients.V4Api
         private static readonly MessagePath _index2SymbolPath = MessagePath.Get().Property("params").Index(2);
         private static readonly MessagePath _ordersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("market");
         private static readonly MessagePath _orderExecutedSymbolPath = MessagePath.Get().Property("params").Property("market");
-        
 
+        /// <inheritdoc />
+        public new WhiteBitSocketOptions ClientOptions => (WhiteBitSocketOptions)base.ClientOptions;
 
         private static readonly ConcurrentDictionary<string, CachedToken> _tokenCache = new();
         #endregion
@@ -54,6 +55,7 @@ namespace WhiteBit.Net.Clients.V4Api
             base(logger, options.Environment.SocketClientAddress!, options, options.V4Options)
         {
             RateLimiter = WhiteBitExchange.RateLimiter.WhiteBitSocket;
+            AllowTopicsOnTheSameConnection = false;
         }
         #endregion
 
@@ -312,7 +314,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<IEnumerable<WhiteBitUserTradeUpdate>>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitUserTradeSubscription(_logger, symbols.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -383,10 +385,9 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        protected override Query? GetAuthenticationRequest(SocketConnection connection)
+        protected override async Task<Query?> GetAuthenticationRequestAsync(SocketConnection connection)
         {
-#warning async?
-            var token = GetTokenAsync().Result;
+            var token = await GetTokenAsync().ConfigureAwait(false);
 
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(new WhiteBitSocketRequest
             {
@@ -412,8 +413,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var restClient = new WhiteBitRestClient(x =>
             {
                 x.ApiCredentials = apiCredentials;
-#warning environment?
-                //x.Environment = ClientOptions.Environment;
+                x.Environment = ClientOptions.Environment;
             });
 
             var result = await ((WhiteBitRestClientV4ApiAccount)restClient.V4Api.Account).GetWebsocketTokenAsync().ConfigureAwait(false);

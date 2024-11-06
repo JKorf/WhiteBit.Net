@@ -24,6 +24,8 @@ namespace WhiteBit.Net.Clients.V4Api
     internal partial class WhiteBitRestClientV4Api : RestApiClient, IWhiteBitRestClientV4Api
     {
         #region fields 
+        /// <inheritdoc />
+        public new WhiteBitRestOptions ClientOptions => (WhiteBitRestOptions)base.ClientOptions;
         internal static TimeSyncState _timeSyncState = new TimeSyncState("V4 Api");
         #endregion
 

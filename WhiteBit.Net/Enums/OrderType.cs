@@ -58,7 +58,7 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Margin normalization
         /// </summary>
-        [Map("14")]
+        [Map("14", "normalization")]
         CollateralNormalization = 14
     }
 }

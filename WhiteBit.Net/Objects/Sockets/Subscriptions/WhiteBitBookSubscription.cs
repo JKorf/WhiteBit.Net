@@ -38,6 +38,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbol = symbol;
             _depth = depth;
+            Topic = "OrderBook";
             ListenerIdentifiers =  new HashSet<string> { "depth_update" + "." + symbol };
         }
 
@@ -67,7 +68,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
             var data = (WhiteBitSocketUpdate<WhiteBitBookUpdate>)message.Data;
-            _handler.Invoke(message.As(data.Data, data.Method, data.Data.Symbol, data.Data.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(data.Data, data.Method, data.Data!.Symbol, data.Data.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
             return new CallResult(null);
         }
     }

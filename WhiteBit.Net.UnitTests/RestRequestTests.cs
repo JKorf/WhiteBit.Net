@@ -74,7 +74,7 @@ namespace WhiteBit.Net.UnitTests
                 opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
             });
             var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Trading", "https://whitebit.com", IsAuthenticated, stjCompare: true);
-            await tester.ValidateAsync(client => client.V4Api.Trading.GetUserTradesAsync(), "GetUserTrades");
+            await tester.ValidateAsync(client => client.V4Api.Trading.GetUserTradesAsync("ETH_USDT"), "GetUserTrades");
             await tester.ValidateAsync(client => client.V4Api.Trading.GetOrderTradesAsync(123), "GetOrderTrades", nestedJsonProperty: "records");
         }
 

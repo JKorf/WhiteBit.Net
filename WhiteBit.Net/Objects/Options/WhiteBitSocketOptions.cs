@@ -13,7 +13,7 @@ namespace WhiteBit.Net.Objects.Options
         public static WhiteBitSocketOptions Default { get; set; } = new WhiteBitSocketOptions()
         {
             Environment = WhiteBitEnvironment.Live,
-            SocketSubscriptionsCombineTarget = 1
+            SocketSubscriptionsCombineTarget = 10
         };
 
         
