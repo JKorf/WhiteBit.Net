@@ -377,11 +377,11 @@
             </summary>
             <param name="optionsDelegate">Option configuration delegate</param>
         </member>
-        <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILoggerFactory,System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions})">
+        <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Options.IOptions{WhiteBit.Net.Objects.Options.WhiteBitRestOptions})">
             <summary>
             Create a new instance of the WhiteBitRestClient using provided options
             </summary>
-            <param name="optionsDelegate">Option configuration delegate</param>
+            <param name="options">Option configuration</param>
             <param name="loggerFactory">The logger factory</param>
             <param name="httpClient">Http client for this client</param>
         </member>
@@ -400,24 +400,18 @@
         <member name="P:WhiteBit.Net.Clients.WhiteBitSocketClient.V4Api">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.#ctor(Microsoft.Extensions.Logging.ILoggerFactory)">
-            <summary>
-            Create a new instance of WhiteBitSocketClient
-            </summary>
-            <param name="loggerFactory">The logger factory</param>
-        </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.#ctor(System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions})">
             <summary>
             Create a new instance of WhiteBitSocketClient
             </summary>
             <param name="optionsDelegate">Option configuration delegate</param>
         </member>
-        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.#ctor(System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions},Microsoft.Extensions.Logging.ILoggerFactory)">
+        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.#ctor(Microsoft.Extensions.Options.IOptions{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions},Microsoft.Extensions.Logging.ILoggerFactory)">
             <summary>
             Create a new instance of WhiteBitSocketClient
             </summary>
             <param name="loggerFactory">The logger factory</param>
-            <param name="optionsDelegate">Option configuration delegate</param>
+            <param name="options">Option configuration</param>
         </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetDefaultOptions(System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions})">
             <summary>
@@ -4543,6 +4537,36 @@
             Side
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Options.WhiteBitOptions">
+            <summary>
+            WhiteBit options
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOptions.Rest">
+            <summary>
+            Rest client options
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOptions.Socket">
+            <summary>
+            Socket client options
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOptions.Environment">
+            <summary>
+            Trade environment. Contains info about URL's to use to connect to the API. Use `WhiteBitEnvironment` to swap environment, for example `Environment = WhiteBitEnvironment.Live`
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOptions.ApiCredentials">
+            <summary>
+            The api credentials used for signing requests.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitOptions.SocketClientLifeTime">
+            <summary>
+            The DI service lifetime for the IWhiteBitSocketClient
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Options.WhiteBitOrderBookOptions">
             <summary>
             Options for the WhiteBit SymbolOrderBook
@@ -4573,6 +4597,11 @@
             Default options for new clients
             </summary>
         </member>
+        <member name="M:WhiteBit.Net.Objects.Options.WhiteBitRestOptions.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Objects.Options.WhiteBitRestOptions.V4Options">
             <summary>
             V4 API options
@@ -4591,6 +4620,11 @@
         <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.Default">
             <summary>
             Default options for new clients
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.#ctor">
+            <summary>
+            ctor
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.V4Options">
@@ -4849,6 +4883,16 @@
             Socket API address
             </summary>
         </member>
+        <member name="M:WhiteBit.Net.WhiteBitEnvironment.#ctor">
+            <summary>
+            ctor for DI, use <see cref="M:WhiteBit.Net.WhiteBitEnvironment.CreateCustom(System.String,System.String,System.String)"/> for creating a custom environment
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitEnvironment.GetEnvironmentByName(System.String)">
+            <summary>
+            Get the WhiteBit environment by name
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.WhiteBitEnvironment.Live">
             <summary>
             Live environment
@@ -4949,15 +4993,26 @@
             Extensions for DI
             </summary>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions},System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions},System.Nullable{Microsoft.Extensions.DependencyInjection.ServiceLifetime})">
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
-            Add the IWhiteBitRestClient and IWhiteBitSocketClient to the sevice collection so they can be injected
+            Add services such as the IWhiteBitRestClient and IWhiteBitSocketClient. Configures the services based on the provided configuration.
             </summary>
             <param name="services">The service collection</param>
-            <param name="defaultRestOptionsDelegate">Set default options for the rest client</param>
-            <param name="defaultSocketOptionsDelegate">Set default options for the socket client</param>
-            <param name="socketClientLifeTime">The lifetime of the IWhiteBitSocketClient for the service collection. Defaults to Singleton.</param>
+            <param name="configuration">The configuration(section) containing the options</param>
             <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOptions})">
+            <summary>
+            Add services such as the IWhiteBitRestClient and IWhiteBitSocketClient. Services will be configured based on the provided options.
+            </summary>
+            <param name="services">The service collection</param>
+            <param name="optionsDelegate">Set options for the WhiteBit services</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions},System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions},System.Nullable{Microsoft.Extensions.DependencyInjection.ServiceLifetime})">
+            <summary>
+            DEPRECATED; use <see cref="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOptions})" /> instead
+            </summary>
         </member>
     </members>
 </doc>

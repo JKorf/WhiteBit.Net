@@ -1,6 +1,9 @@
 using CryptoExchange.Net;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -18,47 +21,115 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+
         /// <summary>
-        /// Add the IWhiteBitRestClient and IWhiteBitSocketClient to the sevice collection so they can be injected
+        /// Add services such as the IWhiteBitRestClient and IWhiteBitSocketClient. Configures the services based on the provided configuration.
         /// </summary>
         /// <param name="services">The service collection</param>
-        /// <param name="defaultRestOptionsDelegate">Set default options for the rest client</param>
-        /// <param name="defaultSocketOptionsDelegate">Set default options for the socket client</param>
-        /// <param name="socketClientLifeTime">The lifetime of the IWhiteBitSocketClient for the service collection. Defaults to Singleton.</param>
+        /// <param name="configuration">The configuration(section) containing the options</param>
         /// <returns></returns>
         public static IServiceCollection AddWhiteBit(
             this IServiceCollection services,
-            Action<WhiteBitRestOptions>? defaultRestOptionsDelegate = null,
-            Action<WhiteBitSocketOptions>? defaultSocketOptionsDelegate = null,
+            IConfiguration configuration)
+        {
+            var options = new WhiteBitOptions();
+            // Reset environment so we know if theyre overriden
+            options.Rest.Environment = null!;
+            options.Socket.Environment = null!;
+            configuration.Bind(options);
+
+            if (options.Rest == null || options.Socket == null)
+                throw new ArgumentException("Options null");
+
+            var restEnvName = options.Rest.Environment?.Name ?? options.Environment?.Name ?? WhiteBitEnvironment.Live.Name;
+            var socketEnvName = options.Socket.Environment?.Name ?? options.Environment?.Name ?? WhiteBitEnvironment.Live.Name;
+            options.Rest.Environment = WhiteBitEnvironment.GetEnvironmentByName(restEnvName) ?? options.Rest.Environment!;
+            options.Rest.ApiCredentials = options.Rest.ApiCredentials ?? options.ApiCredentials;
+            options.Socket.Environment = WhiteBitEnvironment.GetEnvironmentByName(socketEnvName) ?? options.Socket.Environment!;
+            options.Socket.ApiCredentials = options.Socket.ApiCredentials ?? options.ApiCredentials;
+
+
+            services.AddSingleton(x => Options.Options.Create(options.Rest));
+            services.AddSingleton(x => Options.Options.Create(options.Socket));
+
+            return AddWhiteBitCore(services, options.SocketClientLifeTime);
+        }
+
+        /// <summary>
+        /// Add services such as the IWhiteBitRestClient and IWhiteBitSocketClient. Services will be configured based on the provided options.
+        /// </summary>
+        /// <param name="services">The service collection</param>
+        /// <param name="optionsDelegate">Set options for the WhiteBit services</param>
+        /// <returns></returns>
+        public static IServiceCollection AddWhiteBit(
+            this IServiceCollection services,
+            Action<WhiteBitOptions>? optionsDelegate = null)
+        {
+            var options = new WhiteBitOptions();
+            // Reset environment so we know if theyre overriden
+            options.Rest.Environment = null!;
+            options.Socket.Environment = null!;
+            optionsDelegate?.Invoke(options);
+            if (options.Rest == null || options.Socket == null)
+                throw new ArgumentException("Options null");
+
+            options.Rest.Environment = options.Rest.Environment ?? options.Environment ?? WhiteBitEnvironment.Live;
+            options.Rest.ApiCredentials = options.Rest.ApiCredentials ?? options.ApiCredentials;
+            options.Socket.Environment = options.Socket.Environment ?? options.Environment ?? WhiteBitEnvironment.Live;
+            options.Socket.ApiCredentials = options.Socket.ApiCredentials ?? options.ApiCredentials;
+
+            services.AddSingleton(x => Options.Options.Create(options.Rest));
+            services.AddSingleton(x => Options.Options.Create(options.Socket));
+
+            return AddWhiteBitCore(services, options.SocketClientLifeTime);
+        }
+
+        /// <summary>
+        /// DEPRECATED; use <see cref="AddWhiteBit(IServiceCollection, Action{WhiteBitOptions}?)" /> instead
+        /// </summary>
+        public static IServiceCollection AddWhiteBit(
+            this IServiceCollection services,
+            Action<WhiteBitRestOptions> restDelegate,
+            Action<WhiteBitSocketOptions>? socketDelegate = null,
             ServiceLifetime? socketClientLifeTime = null)
         {
-            var restOptions = WhiteBitRestOptions.Default.Copy();
+            services.Configure<WhiteBitRestOptions>((x) => { restDelegate?.Invoke(x); });
+            services.Configure<WhiteBitSocketOptions>((x) => { socketDelegate?.Invoke(x); });
 
-            if (defaultRestOptionsDelegate != null)
-            {
-                defaultRestOptionsDelegate(restOptions);
-                WhiteBitRestClient.SetDefaultOptions(defaultRestOptionsDelegate);
-            }
+            return AddWhiteBitCore(services, socketClientLifeTime);
+        }
 
-            if (defaultSocketOptionsDelegate != null)
-                WhiteBitSocketClient.SetDefaultOptions(defaultSocketOptionsDelegate);
+        private static IServiceCollection AddWhiteBitCore(
+            this IServiceCollection services,
+            ServiceLifetime? socketClientLifeTime = null)
+        {
 
-            services.AddHttpClient<IWhiteBitRestClient, WhiteBitRestClient>(options =>
+            services.AddHttpClient<IWhiteBitRestClient, WhiteBitRestClient>((client, serviceProvider) =>
             {
-                options.Timeout = restOptions.RequestTimeout;
-            }).ConfigurePrimaryHttpMessageHandler(() =>
-            {
+                var options = serviceProvider.GetRequiredService<IOptions<WhiteBitRestOptions>>().Value;
+                client.Timeout = options.RequestTimeout;
+                return new WhiteBitRestClient(client, serviceProvider.GetRequiredService<ILoggerFactory>(), serviceProvider.GetRequiredService<IOptions<WhiteBitRestOptions>>());
+            }).ConfigurePrimaryHttpMessageHandler((serviceProvider) => {
                 var handler = new HttpClientHandler();
-                if (restOptions.Proxy != null)
+                try
+                {
+                    handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                }
+                catch (PlatformNotSupportedException)
+                { }
+
+                var options = serviceProvider.GetRequiredService<IOptions<WhiteBitRestOptions>>().Value;
+                if (options.Proxy != null)
                 {
                     handler.Proxy = new WebProxy
                     {
-                        Address = new Uri($"{restOptions.Proxy.Host}:{restOptions.Proxy.Port}"),
-                        Credentials = restOptions.Proxy.Password == null ? null : new NetworkCredential(restOptions.Proxy.Login, restOptions.Proxy.Password)
+                        Address = new Uri($"{options.Proxy.Host}:{options.Proxy.Port}"),
+                        Credentials = options.Proxy.Password == null ? null : new NetworkCredential(options.Proxy.Login, options.Proxy.Password)
                     };
                 }
                 return handler;
             });
+            services.Add(new ServiceDescriptor(typeof(IWhiteBitSocketClient), x => { return new WhiteBitSocketClient(x.GetRequiredService<IOptions<WhiteBitSocketOptions>>(), x.GetRequiredService<ILoggerFactory>()); }, socketClientLifeTime ?? ServiceLifetime.Singleton));
 
             services.AddTransient<ICryptoRestClient, CryptoRestClient>();
             services.AddSingleton<ICryptoSocketClient, CryptoSocketClient>();
@@ -67,11 +138,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.RegisterSharedRestInterfaces(x => x.GetRequiredService<IWhiteBitRestClient>().V4Api.SharedClient);
             services.RegisterSharedSocketInterfaces(x => x.GetRequiredService<IWhiteBitSocketClient>().V4Api.SharedClient);
-
-            if (socketClientLifeTime == null)
-                services.AddSingleton<IWhiteBitSocketClient, WhiteBitSocketClient>();
-            else
-                services.Add(new ServiceDescriptor(typeof(IWhiteBitSocketClient), typeof(WhiteBitSocketClient), socketClientLifeTime.Value));
             return services;
         }
     }

@@ -1,6 +1,7 @@
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using WhiteBit.Net.Clients.V4Api;
 using WhiteBit.Net.Interfaces.Clients;
@@ -26,16 +27,9 @@ namespace WhiteBit.Net.Clients
         /// <summary>
         /// Create a new instance of WhiteBitSocketClient
         /// </summary>
-        /// <param name="loggerFactory">The logger factory</param>
-        public WhiteBitSocketClient(ILoggerFactory? loggerFactory = null) : this((x) => { }, loggerFactory)
-        {
-        }
-
-        /// <summary>
-        /// Create a new instance of WhiteBitSocketClient
-        /// </summary>
         /// <param name="optionsDelegate">Option configuration delegate</param>
-        public WhiteBitSocketClient(Action<WhiteBitSocketOptions> optionsDelegate) : this(optionsDelegate, null)
+        public WhiteBitSocketClient(Action<WhiteBitSocketOptions>? optionsDelegate = null)
+            : this(Options.Create(ApplyOptionsDelegate(optionsDelegate)), null)
         {
         }
 
@@ -43,14 +37,12 @@ namespace WhiteBit.Net.Clients
         /// Create a new instance of WhiteBitSocketClient
         /// </summary>
         /// <param name="loggerFactory">The logger factory</param>
-        /// <param name="optionsDelegate">Option configuration delegate</param>
-        public WhiteBitSocketClient(Action<WhiteBitSocketOptions>? optionsDelegate, ILoggerFactory? loggerFactory = null) : base(loggerFactory, "WhiteBit")
+        /// <param name="options">Option configuration</param>
+        public WhiteBitSocketClient(IOptions<WhiteBitSocketOptions> options, ILoggerFactory? loggerFactory = null) : base(loggerFactory, "WhiteBit")
         {
-            var options = WhiteBitSocketOptions.Default.Copy();
-            optionsDelegate?.Invoke(options);
-            Initialize(options);
-                        
-            V4Api = AddApiClient(new WhiteBitSocketClientV4Api(_logger, options));
+            Initialize(options.Value);
+
+            V4Api = AddApiClient(new WhiteBitSocketClientV4Api(_logger, options.Value));
         }
         #endregion
 
@@ -60,9 +52,7 @@ namespace WhiteBit.Net.Clients
         /// <param name="optionsDelegate">Option configuration delegate</param>
         public static void SetDefaultOptions(Action<WhiteBitSocketOptions> optionsDelegate)
         {
-            var options = WhiteBitSocketOptions.Default.Copy();
-            optionsDelegate(options);
-            WhiteBitSocketOptions.Default = options;
+            WhiteBitSocketOptions.Default = ApplyOptionsDelegate(optionsDelegate);
         }
 
         /// <inheritdoc />
