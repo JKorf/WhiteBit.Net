@@ -10,14 +10,21 @@ namespace WhiteBit.Net.Objects.Options
         /// <summary>
         /// Default options for new clients
         /// </summary>
-        public static WhiteBitRestOptions Default { get; set; } = new WhiteBitRestOptions()
+        internal static WhiteBitRestOptions Default { get; set; } = new WhiteBitRestOptions()
         {
             Environment = WhiteBitEnvironment.Live,
             AutoTimestamp = true
         };
 
-        
-         /// <summary>
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public WhiteBitRestOptions()
+        {
+            Default?.Set(this);
+        }
+
+        /// <summary>
         /// V4 API options
         /// </summary>
         public RestApiOptions V4Options { get; private set; } = new RestApiOptions();
@@ -27,13 +34,12 @@ namespace WhiteBit.Net.Objects.Options
         /// </summary>
         public bool EnableNonceWindow { get; set; } = false;
 
-        internal WhiteBitRestOptions Copy()
+        internal WhiteBitRestOptions Set(WhiteBitRestOptions targetOptions)
         {
-            var options = Copy<WhiteBitRestOptions>();
-            options.EnableNonceWindow = EnableNonceWindow;
-            options.V4Options = V4Options.Copy<RestApiOptions>();
-
-            return options;
+            targetOptions = base.Set<WhiteBitRestOptions>(targetOptions);
+            targetOptions.EnableNonceWindow = EnableNonceWindow;
+            targetOptions.V4Options = V4Options.Set(targetOptions.V4Options);
+            return targetOptions;
         }
     }
 }
