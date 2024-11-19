@@ -137,6 +137,14 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 1.1.0 - 19 Nov 2024
+    * Updated CryptoExchange.Net to version 8.3.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.3.0
+    * Added support for loading client settings from IConfiguration
+    * Added DI registration method for configuring Rest and Socket options at the same time
+    * Added DisplayName and ImageUrl properties to WhiteBitExchange class
+    * Updated client constructors to accept IOptions from DI
+    * Removed redundant WhiteBitSocketClient constructor
+
 * Version 1.0.0 - 06 Nov 2024
     * Initial Release
 
