@@ -4917,6 +4917,16 @@
             Exchange name
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.DisplayName">
+            <summary>
+            Exchange name
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.ImageUrl">
+            <summary>
+            Url to exchange image
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.WhiteBitExchange.Url">
             <summary>
             Url to the main website

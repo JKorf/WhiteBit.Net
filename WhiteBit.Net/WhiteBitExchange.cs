@@ -21,6 +21,16 @@ namespace WhiteBit.Net
         public static string ExchangeName => "WhiteBit";
 
         /// <summary>
+        /// Exchange name
+        /// </summary>
+        public static string DisplayName => "WhiteBit";
+
+        /// <summary>
+        /// Url to exchange image
+        /// </summary>
+        public static string ImageUrl { get; } = "https://raw.githubusercontent.com/JKorf/WhiteBit.Net/master/WhiteBit.Net/Icon/icon.png";
+
+        /// <summary>
         /// Url to the main website
         /// </summary>
         public static string Url { get; } = "https://www.whitebit.com";
