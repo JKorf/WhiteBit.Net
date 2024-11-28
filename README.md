@@ -137,6 +137,12 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 1.2.0 - 28 Nov 2024
+    * Updated CryptoExchange.Net to version 8.4.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.4.0
+    * Added GetFeesAsync Shared REST client implementations
+    * Updated WhiteBitOptions to LibraryOptions implementation
+    * Updated test and analyzer package versions
+
 * Version 1.1.0 - 19 Nov 2024
     * Updated CryptoExchange.Net to version 8.3.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.3.0
     * Added support for loading client settings from IConfiguration
