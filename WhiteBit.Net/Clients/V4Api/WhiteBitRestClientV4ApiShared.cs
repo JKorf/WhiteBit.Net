@@ -64,6 +64,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 return result.AsExchangeResult<SharedSpotTicker>(Exchange, null, default);
 
             var ticker = result.Data.SingleOrDefault(x => x.Symbol == request.Symbol.GetSymbol(FormatSymbol));
+            if (ticker == null)
+                return result.AsExchangeError<SharedSpotTicker>(Exchange, new ServerError("Not found"));
 
             return result.AsExchangeResult(Exchange, TradingMode.Spot, new SharedSpotTicker(ticker.Symbol, ticker.LastPrice, null, null, ticker.BaseVolume, ticker.ChangePercentage));
         }
@@ -228,7 +230,7 @@ namespace WhiteBit.Net.Clients.V4Api
             });
         }
 
-        GetDepositsOptions IDepositRestClient.GetDepositsOptions { get; } = new GetDepositsOptions(SharedPaginationSupport.Descending, false);
+        GetDepositsOptions IDepositRestClient.GetDepositsOptions { get; } = new GetDepositsOptions(SharedPaginationSupport.Descending, false, 100);
         async Task<ExchangeWebResult<IEnumerable<SharedDeposit>>> IDepositRestClient.GetDepositsAsync(GetDepositsRequest request, INextPageToken? pageToken, CancellationToken ct)
         {
             var validationError = ((IDepositRestClient)this).GetDepositsOptions.ValidateRequest(Exchange, request, TradingMode.Spot, SupportedTradingModes);
@@ -269,7 +271,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Withdrawal client
 
-        GetWithdrawalsOptions IWithdrawalRestClient.GetWithdrawalsOptions { get; } = new GetWithdrawalsOptions(SharedPaginationSupport.Descending, true);
+        GetWithdrawalsOptions IWithdrawalRestClient.GetWithdrawalsOptions { get; } = new GetWithdrawalsOptions(SharedPaginationSupport.Descending, false, 100);
         async Task<ExchangeWebResult<IEnumerable<SharedWithdrawal>>> IWithdrawalRestClient.GetWithdrawalsAsync(GetWithdrawalsRequest request, INextPageToken? pageToken, CancellationToken ct)
         {
             var validationError = ((IWithdrawalRestClient)this).GetWithdrawalsOptions.ValidateRequest(Exchange, request, TradingMode.Spot, SupportedTradingModes);
@@ -484,7 +486,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetClosedOrdersRequest> ISpotOrderRestClient.GetClosedSpotOrdersOptions { get; } = new PaginatedEndpointOptions<GetClosedOrdersRequest>(SharedPaginationSupport.Ascending, true);
+        PaginatedEndpointOptions<GetClosedOrdersRequest> ISpotOrderRestClient.GetClosedSpotOrdersOptions { get; } = new PaginatedEndpointOptions<GetClosedOrdersRequest>(SharedPaginationSupport.Ascending, true, 100, true);
         async Task<ExchangeWebResult<IEnumerable<SharedSpotOrder>>> ISpotOrderRestClient.GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, INextPageToken? pageToken, CancellationToken ct)
         {
             var validationError = ((ISpotOrderRestClient)this).GetClosedSpotOrdersOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, [TradingMode.Spot]);
@@ -559,7 +561,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetUserTradesRequest> ISpotOrderRestClient.GetSpotUserTradesOptions { get; } = new PaginatedEndpointOptions<GetUserTradesRequest>(SharedPaginationSupport.Descending, true);
+        PaginatedEndpointOptions<GetUserTradesRequest> ISpotOrderRestClient.GetSpotUserTradesOptions { get; } = new PaginatedEndpointOptions<GetUserTradesRequest>(SharedPaginationSupport.Descending, true, 100, true);
         async Task<ExchangeWebResult<IEnumerable<SharedUserTrade>>> ISpotOrderRestClient.GetSpotUserTradesAsync(GetUserTradesRequest request, INextPageToken? pageToken, CancellationToken ct)
         {
             var validationError = ((ISpotOrderRestClient)this).GetSpotUserTradesOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, [TradingMode.Spot]);
@@ -779,7 +781,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Position History client
 
-        GetPositionHistoryOptions IPositionHistoryRestClient.GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(SharedPaginationSupport.Descending)
+        GetPositionHistoryOptions IPositionHistoryRestClient.GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(SharedPaginationSupport.Descending, true, 100)
         {
             RequiredOptionalParameters = new List<ParameterDescription>
             {
@@ -827,7 +829,6 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray(), nextToken);
         }
         #endregion
-
 
         #region Futures Order Client
 
@@ -979,7 +980,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetClosedOrdersRequest> IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new PaginatedEndpointOptions<GetClosedOrdersRequest>(SharedPaginationSupport.Descending, true);
+        PaginatedEndpointOptions<GetClosedOrdersRequest> IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new PaginatedEndpointOptions<GetClosedOrdersRequest>(SharedPaginationSupport.Descending, true, 100, true);
         async Task<ExchangeWebResult<IEnumerable<SharedFuturesOrder>>> IFuturesOrderRestClient.GetClosedFuturesOrdersAsync(GetClosedOrdersRequest request, INextPageToken? pageToken, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderRestClient)this).GetClosedFuturesOrdersOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, SupportedFuturesModes);
@@ -1054,7 +1055,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetUserTradesRequest> IFuturesOrderRestClient.GetFuturesUserTradesOptions { get; } = new PaginatedEndpointOptions<GetUserTradesRequest>(SharedPaginationSupport.Descending, true);
+        PaginatedEndpointOptions<GetUserTradesRequest> IFuturesOrderRestClient.GetFuturesUserTradesOptions { get; } = new PaginatedEndpointOptions<GetUserTradesRequest>(SharedPaginationSupport.Descending, true, 100, true);
         async Task<ExchangeWebResult<IEnumerable<SharedUserTrade>>> IFuturesOrderRestClient.GetFuturesUserTradesAsync(GetUserTradesRequest request, INextPageToken? pageToken, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderRestClient)this).GetFuturesUserTradesOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, SupportedFuturesModes);
@@ -1165,5 +1166,27 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
+        #region Fee Client
+        EndpointOptions<GetFeeRequest> IFeeRestClient.GetFeeOptions { get; } = new EndpointOptions<GetFeeRequest>(false);
+
+        async Task<ExchangeWebResult<SharedFee>> IFeeRestClient.GetFeesAsync(GetFeeRequest request, CancellationToken ct)
+        {
+            var validationError = ((IFeeRestClient)this).GetFeeOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, SupportedTradingModes);
+            if (validationError != null)
+                return new ExchangeWebResult<SharedFee>(Exchange, validationError);
+
+            // Get data
+            var result = await ExchangeData.GetSymbolsAsync(ct: ct).ConfigureAwait(false);
+            if (!result)
+                return result.AsExchangeResult<SharedFee>(Exchange, null, default);
+
+            var symbol = result.Data.SingleOrDefault(x => x.Name == request.Symbol.GetSymbol(FormatSymbol));
+            if (symbol == null)
+                return result.AsExchangeError<SharedFee>(Exchange, new ServerError("Not found"));
+
+            // Return
+            return result.AsExchangeResult(Exchange, TradingMode.Spot, new SharedFee(symbol.MakerFee, symbol.TakerFee));
+        }
+        #endregion
     }
 }
