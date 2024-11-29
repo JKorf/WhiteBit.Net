@@ -34,7 +34,7 @@ namespace WhiteBit.Net.SymbolOrderBooks
         /// <inheritdoc />
         public ISymbolOrderBook Create(SharedSymbol symbol, Action<WhiteBitOrderBookOptions>? options = null)
         {
-            var symbolName = WhiteBitExchange.FormatSymbol(symbol.BaseAsset, symbol.QuoteAsset, symbol.TradingMode, symbol.DeliverTime);
+            var symbolName = symbol.GetSymbol(WhiteBitExchange.FormatSymbol);
             return CreateV4(symbolName, options);
         }
                 
