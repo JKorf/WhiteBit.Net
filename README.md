@@ -142,6 +142,9 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 1.2.2 - 20 Dec 2024
+    * Fixed deserialization of restClient.V4Api.Trading.GetClosedOrdersAsync without results
+
 * Version 1.2.1 - 03 Dec 2024
     * Updated CryptoExchange.Net to version 8.4.3, see https://github.com/JKorf/CryptoExchange.Net/releases/
     * Fixed orderbook creation via WhiteBitOrderBookFactory
