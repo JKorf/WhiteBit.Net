@@ -17,6 +17,9 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.SharedApis;
 using CryptoExchange.Net.Converters.MessageParsing;
 using System.Linq;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -62,8 +65,23 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
+        private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.AllowNamedFloatingPointLiterals,
+            PropertyNameCaseInsensitive = false,
+            Converters =
+                    {
+                        new DateTimeConverter(),
+                        new EnumConverter(),
+                        new BoolConverter(),
+                        new DecimalConverter(),
+                        new IntConverter(),
+                        new LongConverter(),
+                        new EmptyArrayObjectConverter<Dictionary<string, IEnumerable<WhiteBitClosedOrder>>>()
+                    }
+        };
         /// <inheritdoc />
-        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor();
+        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(_serializerOptions);
         /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer();
 

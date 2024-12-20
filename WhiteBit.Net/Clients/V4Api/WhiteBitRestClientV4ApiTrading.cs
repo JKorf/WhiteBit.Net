@@ -175,6 +175,9 @@ namespace WhiteBit.Net.Clients.V4Api
             if (!result)
                 return result;
 
+            if (result.Data == null)
+                return result.As(new Dictionary<string, IEnumerable<WhiteBitClosedOrder>>());
+
             foreach(var symbolOrders in result.Data)
             {
                 foreach (var order in symbolOrders.Value)
