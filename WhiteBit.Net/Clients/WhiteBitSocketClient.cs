@@ -1,5 +1,6 @@
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
+using CryptoExchange.Net.Objects.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -45,6 +46,12 @@ namespace WhiteBit.Net.Clients
             V4Api = AddApiClient(new WhiteBitSocketClientV4Api(_logger, options.Value));
         }
         #endregion
+
+        /// <inheritdoc />
+        public void SetOptions(UpdateOptions options)
+        {
+            V4Api.SetOptions(options);
+        }
 
         /// <summary>
         /// Set the default options to be used when creating new clients

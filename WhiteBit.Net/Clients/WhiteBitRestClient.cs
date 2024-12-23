@@ -8,6 +8,7 @@ using CryptoExchange.Net.Clients;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Clients.V4Api;
 using Microsoft.Extensions.Options;
+using CryptoExchange.Net.Objects.Options;
 
 namespace WhiteBit.Net.Clients
 {
@@ -48,6 +49,12 @@ namespace WhiteBit.Net.Clients
         }
 
         #endregion
+
+        /// <inheritdoc />
+        public void SetOptions(UpdateOptions options)
+        {
+            V4Api.SetOptions(options);
+        }
 
         /// <summary>
         /// Set the default options to be used when creating new clients

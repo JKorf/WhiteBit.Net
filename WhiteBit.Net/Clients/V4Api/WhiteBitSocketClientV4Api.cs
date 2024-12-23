@@ -56,6 +56,20 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             RateLimiter = WhiteBitExchange.RateLimiter.WhiteBitSocket;
             AllowTopicsOnTheSameConnection = false;
+
+            RegisterPeriodicQuery(
+                "Ping",
+                TimeSpan.FromSeconds(30),
+                x => new WhiteBitQuery<object>(new WhiteBitSocketRequest() { Id = ExchangeHelpers.NextId(), Method = "ping", Request = [] }, false) { RequestTimeout = TimeSpan.FromSeconds(5) },
+                (connection, result) =>
+                {
+                    if (result.Error?.Message.Equals("Query timeout") == true)
+                    {
+                        // Ping timeout, reconnect
+                        _logger.LogWarning("[Sckt {SocketId}] Ping response timeout, reconnecting", connection.SocketId);
+                        _ = connection.TriggerReconnectAsync();
+                    }
+                });
         }
         #endregion
 

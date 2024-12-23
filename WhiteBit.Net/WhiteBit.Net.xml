@@ -385,6 +385,9 @@
             <param name="loggerFactory">The logger factory</param>
             <param name="httpClient">Http client for this client</param>
         </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.SetOptions(CryptoExchange.Net.Objects.Options.UpdateOptions)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitRestClient.SetDefaultOptions(System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions})">
             <summary>
             Set the default options to be used when creating new clients
@@ -412,6 +415,9 @@
             </summary>
             <param name="loggerFactory">The logger factory</param>
             <param name="options">Option configuration</param>
+        </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetOptions(CryptoExchange.Net.Objects.Options.UpdateOptions)">
+            <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetDefaultOptions(System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions})">
             <summary>
@@ -887,6 +893,12 @@
             V4 API endpoints
             </summary>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient.SetOptions(CryptoExchange.Net.Objects.Options.UpdateOptions)">
+            <summary>
+            Update specific options
+            </summary>
+            <param name="options">Options to update. Only specific options are changable after the client has been created</param>
+        </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <summary>
             Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.
@@ -902,6 +914,12 @@
             <summary>
             V4 API endpoints
             </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient.SetOptions(CryptoExchange.Net.Objects.Options.UpdateOptions)">
+            <summary>
+            Update specific options
+            </summary>
+            <param name="options">Options to update. Only specific options are changable after the client has been created</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <summary>
