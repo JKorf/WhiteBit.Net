@@ -4930,6 +4930,11 @@
             Urls to the API documentation
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.Type">
+            <summary>
+            Type of exchange
+            </summary>
+        </member>
         <member name="M:WhiteBit.Net.WhiteBitExchange.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
             <summary>
             Format a base and quote asset to an WhiteBit recognized symbol 
