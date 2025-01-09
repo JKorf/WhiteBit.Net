@@ -57,6 +57,8 @@ namespace WhiteBit.Net.Clients.V4Api
             RateLimiter = WhiteBitExchange.RateLimiter.WhiteBitSocket;
             AllowTopicsOnTheSameConnection = false;
 
+            KeepAliveInterval = TimeSpan.Zero; // Server doesn't correctly respond to ping frames
+
             RegisterPeriodicQuery(
                 "Ping",
                 TimeSpan.FromSeconds(30),
