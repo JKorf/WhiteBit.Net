@@ -528,7 +528,7 @@
             One minute
             </summary>
         </member>
-        <member name="F:WhiteBit.Net.Enums.KlineInterval.ThreeMinute">
+        <member name="F:WhiteBit.Net.Enums.KlineInterval.ThreeMinutes">
             <summary>
             Three minutes
             </summary>
@@ -3890,7 +3890,7 @@
             Create time
             </summary>
         </member>
-        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.updateTime">
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.UpdateTime">
             <summary>
             Update time
             </summary>

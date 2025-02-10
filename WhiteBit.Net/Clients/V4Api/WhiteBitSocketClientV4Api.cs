@@ -105,7 +105,9 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitTradeUpdate>(_logger, "trades", symbols.ToArray(), x=> onMessage(x.WithSymbol(x.Data.Symbol)), false, true);
+            var subscription = new WhiteBitSubscription<WhiteBitTradeUpdate>(_logger, "trades", symbols.ToArray(), x => onMessage(
+                x.WithSymbol(x.Data.Symbol)
+                .WithDataTimestamp(x.Data.Trades.Max(x => x.Timestamp))), false, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -131,7 +133,8 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitLastPriceUpdate>(_logger, "lastprice", symbols.ToArray(), x => onMessage(x.WithSymbol(x.Data.Symbol)), false, false);
+            var subscription = new WhiteBitSubscription<WhiteBitLastPriceUpdate>(_logger, "lastprice", symbols.ToArray(), x => onMessage(
+                x.WithSymbol(x.Data.Symbol)), false, false);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -208,7 +211,7 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             depth.ValidateIntValues(nameof(depth), 1, 5, 10, 20, 30, 50, 100);
 
-            var subscription = new WhiteBitBookSubscription(_logger, symbol, depth, onMessage);
+            var subscription = new WhiteBitBookSubscription(_logger, symbol, depth, x => onMessage(x.WithDataTimestamp(x.Data.OrderBook.Timestamp)));
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -332,7 +335,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitUserTradeSubscription(_logger, symbols.ToArray(), onMessage);
+            var subscription = new WhiteBitUserTradeSubscription(_logger, symbols.ToArray(), x => onMessage(x.WithDataTimestamp(x.Data.Time)));
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -342,7 +345,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitPositionsUpdate>(_logger, "positionsMargin", [], onMessage, true, true);
+            var subscription = new WhiteBitSubscription<WhiteBitPositionsUpdate>(_logger, "positionsMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.Records.Any() ? x.Data.Records.Max(x => x.UpdateTime) : null)), true, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -352,7 +355,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitBorrow>(_logger, "borrowsMargin", [], onMessage, true, true);
+            var subscription = new WhiteBitSubscription<WhiteBitBorrow>(_logger, "borrowsMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.UpdateTime)), true, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
