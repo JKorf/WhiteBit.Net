@@ -350,12 +350,32 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        #region Positions
+        #region Borrow
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitSubscription<WhiteBitBorrow>(_logger, "borrowsMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.UpdateTime)), true, true);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
+        }
+        #endregion
+
+        #region Account Borrow Events
+
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default)
+        {
+            var subscription = new WhiteBitSubscription<WhiteBitAccountMarginPositionUpdate>(_logger, "positionsAccountMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.PositionInfo.UpdateTime)), true, true);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
+        }
+        #endregion
+
+        #region Account Borrow Events
+
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToAccountBorrowEventUpdatesAsync(Action<DataEvent<WhiteBitAccountBorrowUpdate>> onMessage, CancellationToken ct = default)
+        {
+            var subscription = new WhiteBitSubscription<WhiteBitAccountBorrowUpdate>(_logger, "borrowsAccountMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.BorrowInfo.UpdateTime)), true, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion

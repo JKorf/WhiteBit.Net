@@ -258,6 +258,24 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<CallResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default);
 
         /// <summary>
+        /// Subscribe to user margin call and liquidation events
+        /// <para><a href="https://docs.whitebit.com/private/websocket/#account-borrows-events" /></para>
+        /// </summary>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToAccountBorrowEventUpdatesAsync(Action<DataEvent<WhiteBitAccountBorrowUpdate>> onMessage, CancellationToken ct = default);
+
+        /// <summary>
+        /// Subscribe to position margin call and liquidation events
+        /// <para><a href="https://docs.whitebit.com/private/websocket/#account-borrows-events" /></para>
+        /// </summary>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default);
+
+        /// <summary>
         /// Get the shared socket requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
         /// </summary>
         public IWhiteBitSocketClientV4ApiShared SharedClient { get; }

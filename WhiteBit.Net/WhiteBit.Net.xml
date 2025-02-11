@@ -353,6 +353,12 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBorrowUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBorrow}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToAccountMarginPositionEventUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitAccountMarginPositionUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToAccountBorrowEventUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
@@ -427,6 +433,21 @@
         </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Enums.AccountBorrowUpdateType">
+            <summary>
+            Borrow update
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.AccountBorrowUpdateType.MarginCall">
+            <summary>
+            Margin call
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.AccountBorrowUpdateType.Liquidation">
+            <summary>
+            Liquidation
+            </summary>
         </member>
         <member name="T:WhiteBit.Net.Enums.AccountType">
             <summary>
@@ -1914,6 +1935,24 @@
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToAccountBorrowEventUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to user margin call and liquidation events
+            <para><a href="https://docs.whitebit.com/private/websocket/#account-borrows-events" /></para>
+            </summary>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToAccountMarginPositionEventUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitAccountMarginPositionUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to position margin call and liquidation events
+            <para><a href="https://docs.whitebit.com/private/websocket/#account-borrows-events" /></para>
+            </summary>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SharedClient">
             <summary>
             Get the shared socket requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
@@ -1960,6 +1999,36 @@
             <param name="limit">The max amount of klines to retain</param>
             <param name="period">The max period the data should be retained</param>
             <returns></returns>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate">
+            <summary>
+            Account borrow update
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate.UpdateType">
+            <summary>
+            Update type
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate.BorrowInfo">
+            <summary>
+            The borrow info the update relates to
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAccountMarginPositionUpdate">
+            <summary>
+            Account borrow update
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountMarginPositionUpdate.UpdateType">
+            <summary>
+            Update type
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountMarginPositionUpdate.PositionInfo">
+            <summary>
+            The position info the update relates to
+            </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAsset">
             <summary>
@@ -3786,6 +3855,11 @@
             Quantity
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.Value">
+            <summary>
+            Position value
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.BasePrice">
             <summary>
             Base price
@@ -3829,6 +3903,11 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.UnrealizedFunding">
             <summary>
             Unrealized funding
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.RealizedPnl">
+            <summary>
+            Realized profit and loss
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory">
