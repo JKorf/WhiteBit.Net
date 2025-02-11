@@ -429,7 +429,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     return closeOrders.AsExchangeError<SharedSpotOrder>(Exchange, new ServerError("Not found"));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
-                var status = closedOrder.Status == ClosedOrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
+                var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
 
                 return closeOrders.AsExchangeResult(Exchange, TradingMode.Spot, new SharedSpotOrder(
                     closedOrder.Symbol,
@@ -516,7 +516,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
                 x.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                x.Status == ClosedOrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled,
+                x.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled,
                 x.CreateTime)
             {
                 ClientOrderId = x.ClientOrderId == string.Empty ? null : x.ClientOrderId,
@@ -923,7 +923,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     return closeOrders.AsExchangeError<SharedFuturesOrder>(Exchange, new ServerError("Not found"));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
-                var status = closedOrder.Status == ClosedOrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
+                var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
 
                 return closeOrders.AsExchangeResult(Exchange, TradingMode.Spot, new SharedFuturesOrder(
                     closedOrder.Symbol,
@@ -1010,7 +1010,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
                 x.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                x.Status == ClosedOrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled,
+                x.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled,
                 x.CreateTime)
             {
                 ClientOrderId = x.ClientOrderId == string.Empty ? null : x.ClientOrderId,

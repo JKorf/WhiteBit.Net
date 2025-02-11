@@ -140,6 +140,17 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("activation_price")]
         public decimal? TriggerPrice { get; set; }
+
+        /// <summary>
+        /// Closed order status
+        /// </summary>
+        [JsonPropertyName("status")]
+        public OrderStatus Status { get; set; }
+        /// <summary>
+        /// Self Trade Prevention mode
+        /// </summary>
+        [JsonPropertyName("stp")]
+        public SelfTradePreventionMode StpMode { get; set; }
     }
 
     /// <summary>
@@ -201,11 +212,5 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("ftime")]
         public DateTime FillTime { get; set; }
-
-        /// <summary>
-        /// Closed order status
-        /// </summary>
-        [JsonPropertyName("status")]
-        public ClosedOrderStatus Status { get; set; }
     }
 }
