@@ -3910,6 +3910,36 @@
             Realized profit and loss
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.TpSl">
+            <summary>
+            Info on attached TP / SL orders for the position. Not available in websocket updates
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositionTpSl">
+            <summary>
+            Info on TakeProfit/StopLoss attached orders for a position
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionTpSl.TakeProfitId">
+            <summary>
+            Take profit order id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionTpSl.TakeProfitPrice">
+            <summary>
+            Take profit price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionTpSl.StopLossId">
+            <summary>
+            Stop loss order id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionTpSl.StopLossPrice">
+            <summary>
+            Stop loss price
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitPositionHistory">
             <summary>
             

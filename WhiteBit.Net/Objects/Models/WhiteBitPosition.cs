@@ -107,7 +107,37 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("realized_pnl")]
         public decimal? RealizedPnl { get; set; }
+        /// <summary>
+        /// Info on attached TP / SL orders for the position. Not available in websocket updates
+        /// </summary>
+        [JsonPropertyName("tpsl")]
+        public WhiteBitPositionTpSl? TpSl { get; set; }
     }
 
-
+    /// <summary>
+    /// Info on TakeProfit/StopLoss attached orders for a position
+    /// </summary>
+    public record WhiteBitPositionTpSl
+    {
+        /// <summary>
+        /// Take profit order id
+        /// </summary>
+        [JsonPropertyName("takeProfitId")]
+        public long? TakeProfitId { get; set; }
+        /// <summary>
+        /// Take profit price
+        /// </summary>
+        [JsonPropertyName("takeProfit")]
+        public decimal? TakeProfitPrice { get; set; }
+        /// <summary>
+        /// Stop loss order id
+        /// </summary>
+        [JsonPropertyName("stopLossId")]
+        public long? StopLossId { get; set; }
+        /// <summary>
+        /// Stop loss price
+        /// </summary>
+        [JsonPropertyName("stopLoss")]
+        public decimal? StopLossPrice { get; set; }
+    }
 }
