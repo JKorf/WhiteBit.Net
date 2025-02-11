@@ -103,6 +103,9 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.SetAccountLeverageAsync(System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetTradingFeesAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes">
             <inheritdoc />
         </member>
@@ -1194,6 +1197,13 @@
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#change-collateral-account-leverage" /></para>
             </summary>
             <param name="leverage">New leverage setting</param>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetTradingFeesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get the users trading fees
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-all-market-fees" /></para>
+            </summary>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes">
@@ -4593,6 +4603,41 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTradeUpdate.Trades">
             <summary>
             Trades
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitTradingFee">
+            <summary>
+            Trading fee
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTradingFee.TakerFee">
+            <summary>
+            Taker fee rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTradingFee.MakerFee">
+            <summary>
+            Maker fee rate
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitTradingFees">
+            <summary>
+            Trading fees
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTradingFees.TakerFee">
+            <summary>
+            Taker fee rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTradingFees.MakerFee">
+            <summary>
+            Maker fee rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitTradingFees.CustomFees">
+            <summary>
+            Fees for symbols which are different from the default fees
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitUserTrades">

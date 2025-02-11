@@ -166,5 +166,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitLeverage>> SetAccountLeverageAsync(int leverage, CancellationToken ct = default);
 
+        /// <summary>
+        /// Get the users trading fees
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-all-market-fees" /></para>
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<WhiteBitTradingFees>> GetTradingFeesAsync(CancellationToken ct = default);
     }
 }

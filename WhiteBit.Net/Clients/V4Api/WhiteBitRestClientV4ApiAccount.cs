@@ -10,6 +10,7 @@ using CryptoExchange.Net.RateLimiting.Guards;
 using System.Linq;
 using System.IO;
 using WhiteBit.Net.Enums;
+using WhiteBit.Net.Objects.Internal;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -295,6 +296,31 @@ namespace WhiteBit.Net.Clients.V4Api
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitLeverage>(request, parameters, ct).ConfigureAwait(false);
             return result;
+        }
+
+        #endregion
+
+        // Doesn't seem to respect the provided market parameter
+        //#region Get Trading Fee
+
+        ///// <inheritdoc />
+        //public async Task<WebCallResult<WhiteBitTradingFee>> GetTradingFeeAsync(string symbol, CancellationToken ct = default)
+        //{
+        //    var parameters = new ParameterCollection();
+        //    parameters.Add("market", symbol);
+        //    var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/market/fee", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+        //    return await _baseClient.SendAsync<WhiteBitTradingFee>(request, parameters, null, ct).ConfigureAwait(false);
+        //}
+
+        //#endregion
+
+        #region Get Trading Fees
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitTradingFees>> GetTradingFeesAsync(CancellationToken ct = default)
+        {
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/market/fee", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            return await _baseClient.SendAsync<WhiteBitTradingFees>(request, null, ct).ConfigureAwait(false);
         }
 
         #endregion
