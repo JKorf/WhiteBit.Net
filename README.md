@@ -143,6 +143,19 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 1.4.0 - 11 Feb 2025
+    * Updated CryptoExchange.Net to version 8.8.0, see https://github.com/JKorf/CryptoExchange.Net/releases/
+    * Added support for more SharedKlineInterval values
+    * Added setting of DataTime value on websocket DataEvent updates
+    * Added SelfTradePreventionMode parameter to REST PlaceOrder endpoints, updated Order response model with StpMode and Status properties
+    * Added socketClient.V4Api.SubscribeToAccountMarginPositionEventUpdatesAsync and SubscribeToAccountBorrowEventUpdatesAsync subscriptions
+    * Added TpSl property to WhtieBitPosition model, containing TakeProfit/StopLoss order reference info
+    * Added Role and FeeAsset properties to socketClient.V4Api.SubscribeToUserTradeUpdatesAsync update model
+    * Added restClient.V4Api.Account.GetTradingFeesAsync endpoint
+    * Updated KlineInterval.ThreeMinute to KlineInterval.ThreeMinutes
+    * Fixed socketClient.V4Api.SubscribeToPositionUpdatesAsync UpdateTime being lower case
+    * Fix Mono runtime exception on rest client construction using DI
+
 * Version 1.3.2 - 09 Jan 2025
     * Updated CryptoExchange.Net to version 8.6.1, see https://github.com/JKorf/CryptoExchange.Net/releases/
     * Disable ping frames for socket connections as it's not stable
