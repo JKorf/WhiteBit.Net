@@ -61,6 +61,17 @@ namespace WhiteBit.Net.Objects.Models
         [ArrayProperty(8)]
         [JsonConverter(typeof(EnumConverter))]
         public OrderSide OrderSide { get; set; }
+        /// <summary>
+        /// Role
+        /// </summary>
+        [ArrayProperty(9)]
+        [JsonConverter(typeof(EnumConverter))]
+        public TradeRole Role { get; set; }
+        /// <summary>
+        /// Asset the fee is in
+        /// </summary>
+        [ArrayProperty(10)]
+        public string FeeAsset { get; set; } = string.Empty;
     }
 
 
