@@ -4605,6 +4605,11 @@
             When true, request nonces are allowed to be out of order by the server at least as they are within a 5 second window. This allows concurrent requests to succeed during high traffic.
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitRestOptions.NonceProvider">
+            <summary>
+            Optional nonce provider for signing requests.
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions">
             <summary>
             Options for the WhiteBitSocketClient
@@ -4618,6 +4623,11 @@
         <member name="M:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.#ctor">
             <summary>
             ctor
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.NonceProvider">
+            <summary>
+            Optional nonce provider for signing requests.
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.V4Options">
@@ -5021,6 +5031,9 @@
             <summary>
             DEPRECATED; use <see cref="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOptions})" /> instead
             </summary>
+        </member>
+        <member name="M:CoinEx.Net.Objects.Internal.WhiteBitNonceProvider.GetNonce">
+            <inheritdoc />
         </member>
     </members>
 </doc>

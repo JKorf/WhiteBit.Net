@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using CoinEx.Net.Objects.Internal;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.SystemTextJson;
@@ -13,10 +14,12 @@ namespace WhiteBit.Net
 {
     internal class WhiteBitAuthenticationProvider : AuthenticationProvider
     {
-        private static IMessageSerializer _serializer = new SystemTextJsonMessageSerializer();
+        private static readonly IMessageSerializer _serializer = new SystemTextJsonMessageSerializer();
+        private readonly INonceProvider _nonceProvider;
 
-        public WhiteBitAuthenticationProvider(ApiCredentials credentials) : base(credentials)
+        public WhiteBitAuthenticationProvider(ApiCredentials credentials, INonceProvider? nonceProvider) : base(credentials)
         {
+            _nonceProvider = nonceProvider ?? new WhiteBitNonceProvider();
         }
 
         public override void AuthenticateRequest(
@@ -36,7 +39,7 @@ namespace WhiteBit.Net
             if (!auth)
                 return;
 
-            var nonce = GetMillisecondTimestamp(apiClient);
+            var nonce = _nonceProvider.GetNonce();
             bodyParameters ??= new Dictionary<string, object>();
             bodyParameters.Add("request", uri.AbsolutePath);
             bodyParameters.Add("nonce", nonce);

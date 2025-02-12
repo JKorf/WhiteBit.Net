@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CoinEx.Net.Objects.Internal;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
@@ -82,7 +83,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
-            => new WhiteBitAuthenticationProvider(credentials);
+            => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
         #region Trades
 
@@ -105,7 +106,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitTradeUpdate>(_logger, "trades", symbols.ToArray(), x=> onMessage(x.WithSymbol(x.Data.Symbol)), false, true);
+            var subscription = new WhiteBitSubscription<WhiteBitTradeUpdate>(_logger, "trades", symbols.ToArray(), x => onMessage(x.WithSymbol(x.Data.Symbol)), false, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -299,7 +300,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 "ordersExecuted_request",
                 true,
                 ct,
-                new {
+                new
+                {
                     market = symbol,
                     order_types = orderTypes.Select(x => (int)x).ToArray()
                 },
@@ -397,7 +399,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }, auth);
 
             var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
-            return result.As<T>(result.Data == null ? default: result.Data.Result);
+            return result.As<T>(result.Data == null ? default : result.Data.Result);
         }
 
         /// <inheritdoc />
