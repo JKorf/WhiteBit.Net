@@ -9,7 +9,7 @@ WhiteBit.Net is a client library for accessing the [WhiteBit REST and Websocket 
 * Input parameters and response values are mapped to discriptive enum values where possible
 * Automatic websocket (re)connection management 
 * Client side rate limiting 
-* Cient side order book implementation
+* Client side order book implementation
 * Extensive logging
 * Support for different environments
 * Easy integration with other exchange client based on the CryptoExchange.Net base library
@@ -75,6 +75,7 @@ CryptoExchange.Net also allows for [easy access to different exchange API's](htt
 |Bitfinex|[JKorf/Bitfinex.Net](https://github.com/JKorf/Bitfinex.Net)|[![Nuget version](https://img.shields.io/nuget/v/Bitfinex.net.svg?style=flat-square)](https://www.nuget.org/packages/Bitfinex.Net)|
 |Bitget|[JKorf/Bitget.Net](https://github.com/JKorf/Bitget.Net)|[![Nuget version](https://img.shields.io/nuget/v/JK.Bitget.net.svg?style=flat-square)](https://www.nuget.org/packages/JK.Bitget.Net)|
 |BitMart|[JKorf/BitMart.Net](https://github.com/JKorf/BitMart.Net)|[![Nuget version](https://img.shields.io/nuget/v/BitMart.net.svg?style=flat-square)](https://www.nuget.org/packages/BitMart.Net)|
+|BitMEX|[JKorf/BitMEX.Net](https://github.com/JKorf/BitMEX.Net)|[![Nuget version](https://img.shields.io/nuget/v/JKorf.BitMEX.net.svg?style=flat-square)](https://www.nuget.org/packages/JKorf.BitMEX.Net)|
 |Bybit|[JKorf/Bybit.Net](https://github.com/JKorf/Bybit.Net)|[![Nuget version](https://img.shields.io/nuget/v/Bybit.net.svg?style=flat-square)](https://www.nuget.org/packages/Bybit.Net)|
 |Coinbase|[JKorf/Coinbase.Net](https://github.com/JKorf/Coinbase.Net)|[![Nuget version](https://img.shields.io/nuget/v/JKorf.Coinbase.net.svg?style=flat-square)](https://www.nuget.org/packages/JKorf.Coinbase.Net)|
 |CoinEx|[JKorf/CoinEx.Net](https://github.com/JKorf/CoinEx.Net)|[![Nuget version](https://img.shields.io/nuget/v/CoinEx.net.svg?style=flat-square)](https://www.nuget.org/packages/CoinEx.Net)|
@@ -142,6 +143,19 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 1.4.0 - 11 Feb 2025
+    * Updated CryptoExchange.Net to version 8.8.0, see https://github.com/JKorf/CryptoExchange.Net/releases/
+    * Added support for more SharedKlineInterval values
+    * Added setting of DataTime value on websocket DataEvent updates
+    * Added SelfTradePreventionMode parameter to REST PlaceOrder endpoints, updated Order response model with StpMode and Status properties
+    * Added socketClient.V4Api.SubscribeToAccountMarginPositionEventUpdatesAsync and SubscribeToAccountBorrowEventUpdatesAsync subscriptions
+    * Added TpSl property to WhtieBitPosition model, containing TakeProfit/StopLoss order reference info
+    * Added Role and FeeAsset properties to socketClient.V4Api.SubscribeToUserTradeUpdatesAsync update model
+    * Added restClient.V4Api.Account.GetTradingFeesAsync endpoint
+    * Updated KlineInterval.ThreeMinute to KlineInterval.ThreeMinutes
+    * Fixed socketClient.V4Api.SubscribeToPositionUpdatesAsync UpdateTime being lower case
+    * Fix Mono runtime exception on rest client construction using DI
+
 * Version 1.3.2 - 09 Jan 2025
     * Updated CryptoExchange.Net to version 8.6.1, see https://github.com/JKorf/CryptoExchange.Net/releases/
     * Disable ping frames for socket connections as it's not stable

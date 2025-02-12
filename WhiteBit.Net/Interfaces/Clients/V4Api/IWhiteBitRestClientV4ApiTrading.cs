@@ -25,13 +25,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="type">Order type</param>
         /// <param name="quantity">Quantity of the order in base asset</param>
         /// <param name="quoteQuantity">Quantity of the order in quote asset, only supported for market buy orders</param>
-        /// <param name="price"></param>
-        /// <param name="postOnly"></param>
-        /// <param name="immediateOrCancel"></param>
-        /// <param name="bboRole"></param>
-        /// <param name="triggerPrice"></param>
-        /// <param name="clientOrderId"></param>
-        /// <param name="ct"></param>
+        /// <param name="price">Limit price</param>
+        /// <param name="postOnly">Post only flag</param>
+        /// <param name="immediateOrCancel">Immediate or cancel flag</param>
+        /// <param name="bboRole">BBO role</param>
+        /// <param name="triggerPrice">Trigger price</param>
+        /// <param name="clientOrderId">Client order id</param>
+        /// <param name="stpMode">Self trade prevention mode</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<WhiteBitOrder>> PlaceSpotOrderAsync(
             string symbol,
@@ -45,6 +46,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
             int? bboRole = null,
             decimal? triggerPrice = null,
             string? clientOrderId = null,
+            SelfTradePreventionMode? stpMode = null,
             CancellationToken ct = default);
 
         /// <summary>

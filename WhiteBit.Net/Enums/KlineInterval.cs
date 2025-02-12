@@ -19,7 +19,7 @@ namespace WhiteBit.Net.Enums
         /// Three minutes
         /// </summary>
         [Map("180")]
-        ThreeMinute = 60 * 3,
+        ThreeMinutes = 60 * 3,
         /// <summary>
         /// Five minutes
         /// </summary>

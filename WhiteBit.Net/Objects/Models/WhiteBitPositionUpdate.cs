@@ -46,7 +46,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Update time
         /// </summary>
         [JsonPropertyName("mtime")]
-        public DateTime updateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
         /// <summary>
         /// Position quantity
         /// </summary>

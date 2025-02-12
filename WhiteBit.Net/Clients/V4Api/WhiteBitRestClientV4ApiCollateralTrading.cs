@@ -46,6 +46,7 @@ namespace WhiteBit.Net.Clients.V4Api
             decimal? takeProfitPrice = null,
             decimal? triggerPrice = null,
             string? clientOrderId = null,
+            SelfTradePreventionMode? stpMode = null,
             CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
@@ -60,6 +61,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptionalString("activationPrice", triggerPrice);
             parameters.AddOptionalString("stopLoss", stopLossPrice);
             parameters.AddOptionalString("takeProfit", takeProfitPrice);
+            parameters.AddOptionalEnum("stp", stpMode);
 
             string path;
             if (type == NewOrderType.Limit)

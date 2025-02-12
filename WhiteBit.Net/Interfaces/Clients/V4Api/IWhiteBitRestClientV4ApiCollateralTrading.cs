@@ -24,16 +24,16 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="side">Order side</param>
         /// <param name="type">Order type</param>
         /// <param name="quantity">Quantity of the order in base asset</param>
-        /// <param name="price"></param>
-        /// <param name="postOnly"></param>
-        /// <param name="immediateOrCancel"></param>
-        /// <param name="stopLossPrice"></param>
-        /// <param name="takeProfitPrice"></param>
-        /// <param name="bboRole"></param>
-        /// <param name="triggerPrice"></param>
-        /// <param name="clientOrderId"></param>
-        /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <param name="price">Limit price</param>
+        /// <param name="postOnly">Post only flag</param>
+        /// <param name="immediateOrCancel">Immediate or cancel flag</param>
+        /// <param name="stopLossPrice">Stop loss price</param>
+        /// <param name="takeProfitPrice">Take porfit price</param>
+        /// <param name="bboRole">BBO role</param>
+        /// <param name="triggerPrice">Trigger price</param>
+        /// <param name="clientOrderId">Client order id</param>
+        /// <param name="stpMode">Self trade prevention mode</param>
+        /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
             string symbol,
             OrderSide side,
@@ -47,6 +47,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
             decimal? takeProfitPrice = null,
             decimal? triggerPrice = null,
             string? clientOrderId = null,
+            SelfTradePreventionMode? stpMode = null,
             CancellationToken ct = default);
 
         /// <summary>

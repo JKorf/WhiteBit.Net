@@ -44,6 +44,7 @@ namespace WhiteBit.Net.Clients.V4Api
             int? bboRole = null,
             decimal? triggerPrice = null,
             string? clientOrderId = null,
+            SelfTradePreventionMode? stpMode = null,
             CancellationToken ct = default)
         {
             if (quoteQuantity != null && type != NewOrderType.Market && side != OrderSide.Buy)
@@ -59,6 +60,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptional("ioc", immediateOrCancel);
             parameters.AddOptional("bboRole", bboRole);
             parameters.AddOptionalString("activationPrice", triggerPrice);
+            parameters.AddOptionalEnum("stp", stpMode);
 
             string path;
             if (type == NewOrderType.Limit)

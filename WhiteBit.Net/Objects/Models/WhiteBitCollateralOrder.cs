@@ -92,6 +92,16 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("ioc")]
         public bool ImmediateOrCancel { get; set; }
         /// <summary>
+        /// Closed order status
+        /// </summary>
+        [JsonPropertyName("status")]
+        public OrderStatus Status { get; set; }
+        /// <summary>
+        /// Self Trade Prevention mode
+        /// </summary>
+        [JsonPropertyName("stp")]
+        public SelfTradePreventionMode StpMode { get; set; }
+        /// <summary>
         /// Take profit or stop loss configuration
         /// </summary>
         [JsonPropertyName("oto")]

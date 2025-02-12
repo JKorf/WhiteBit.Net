@@ -180,6 +180,5 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
-
     }
 }

@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 namespace WhiteBit.Net.UnitTests
 {
     [NonParallelizable]
-    internal class WhiteBitRestIntegrationTests : RestIntergrationTest<WhiteBitRestClient>
+    internal class WhiteBitRestIntegrationTests : RestIntegrationTest<WhiteBitRestClient>
     {
         public override bool Run { get; set; } = false;
 

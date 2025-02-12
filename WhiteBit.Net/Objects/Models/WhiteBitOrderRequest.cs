@@ -47,5 +47,10 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("clientOrderId"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string? ClientOrderId { get; set; }
+        /// <summary>
+        /// Self Trade Prevention mode
+        /// </summary>
+        [JsonPropertyName("stp"), JsonConverter(typeof(EnumConverter)), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public SelfTradePreventionMode? StpMode { get; set; }
     }
 }
