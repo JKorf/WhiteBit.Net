@@ -1,3 +1,4 @@
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects.Options;
 
 namespace WhiteBit.Net.Objects.Options
@@ -25,6 +26,11 @@ namespace WhiteBit.Net.Objects.Options
         }
 
         /// <summary>
+        /// Optional nonce provider for signing requests.
+        /// </summary>
+        public INonceProvider? NonceProvider { get; set; }
+
+        /// <summary>
         /// V4 API options
         /// </summary>
         public SocketApiOptions V4Options { get; private set; } = new SocketApiOptions();
@@ -34,6 +40,7 @@ namespace WhiteBit.Net.Objects.Options
         {
             targetOptions = base.Set<WhiteBitSocketOptions>(targetOptions);
             targetOptions.V4Options = V4Options.Set(targetOptions.V4Options);
+            targetOptions.NonceProvider = NonceProvider;
             return targetOptions;
         }
     }

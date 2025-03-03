@@ -82,7 +82,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
-            => new WhiteBitAuthenticationProvider(credentials);
+            => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
         #region Trades
 
@@ -302,7 +302,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 "ordersExecuted_request",
                 true,
                 ct,
-                new {
+                new
+                {
                     market = symbol,
                     order_types = orderTypes.Select(x => (int)x).ToArray()
                 },
@@ -420,7 +421,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }, auth);
 
             var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
-            return result.As<T>(result.Data == null ? default: result.Data.Result);
+            return result.As<T>(result.Data == null ? default : result.Data.Result);
         }
 
         /// <inheritdoc />

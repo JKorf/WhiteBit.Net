@@ -2010,6 +2010,9 @@
             <param name="period">The max period the data should be retained</param>
             <returns></returns>
         </member>
+        <member name="M:WhiteBit.Net.Objects.Internal.WhiteBitNonceProvider.GetNonce">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate">
             <summary>
             Account borrow update
@@ -4835,6 +4838,11 @@
             When true, request nonces are allowed to be out of order by the server at least as they are within a 5 second window. This allows concurrent requests to succeed during high traffic.
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitRestOptions.NonceProvider">
+            <summary>
+            Optional nonce provider for signing requests.
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions">
             <summary>
             Options for the WhiteBitSocketClient
@@ -4848,6 +4856,11 @@
         <member name="M:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.#ctor">
             <summary>
             ctor
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.NonceProvider">
+            <summary>
+            Optional nonce provider for signing requests.
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Options.WhiteBitSocketOptions.V4Options">

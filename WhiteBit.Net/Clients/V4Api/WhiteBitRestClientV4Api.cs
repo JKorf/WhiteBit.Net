@@ -1,25 +1,23 @@
-using CryptoExchange.Net;
-using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Objects;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using CryptoExchange.Net.CommonObjects;
-using CryptoExchange.Net.Interfaces.CommonClients;
-using WhiteBit.Net.Interfaces.Clients.V4Api;
-using WhiteBit.Net.Objects.Options;
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
+using CryptoExchange.Net.Converters.MessageParsing;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.SharedApis;
-using CryptoExchange.Net.Converters.MessageParsing;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using WhiteBit.Net.Interfaces.Clients.V4Api;
+using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
+using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -87,7 +85,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
-            => new WhiteBitAuthenticationProvider(credentials);
+            => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
         internal Task<WebCallResult> SendAsync(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)
             => SendToAddressAsync(BaseAddress, definition, parameters, cancellationToken, weight);
@@ -153,7 +151,7 @@ namespace WhiteBit.Net.Clients.V4Api
             => _timeSyncState.TimeOffset;
 
         /// <inheritdoc />
-        public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverDate = null) 
+        public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverDate = null)
             => WhiteBitExchange.FormatSymbol(baseAsset, quoteAsset, tradingMode, deliverDate);
 
         /// <inheritdoc />

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Net.Http;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.JsonNet;
@@ -5,10 +7,9 @@ using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Net.Http;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Interfaces.Clients;
+using WhiteBit.Net.Objects.Internal;
 
 namespace WhiteBit.Net.UnitTests
 {
@@ -18,7 +19,7 @@ namespace WhiteBit.Net.UnitTests
         [Test]
         public void CheckSignatureExample1()
         {
-            var authProvider = new WhiteBitAuthenticationProvider(new ApiCredentials("XXX", "XXX"));
+            var authProvider = new WhiteBitAuthenticationProvider(new ApiCredentials("XXX", "XXX"), new WhiteBitNonceProvider());
             var client = (RestApiClient)new WhiteBitRestClient().V4Api;
 
             CryptoExchange.Net.Testing.TestHelpers.CheckSignature(
