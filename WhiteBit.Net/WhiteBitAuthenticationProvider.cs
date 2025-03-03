@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using CoinEx.Net.Objects.Internal;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
+using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net

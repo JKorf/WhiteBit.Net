@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using CoinEx.Net.Objects.Internal;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
@@ -16,6 +15,7 @@ using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
+using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
 using WhiteBit.Net.Objects.Options;
 

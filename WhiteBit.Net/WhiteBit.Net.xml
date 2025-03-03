@@ -2010,6 +2010,9 @@
             <param name="period">The max period the data should be retained</param>
             <returns></returns>
         </member>
+        <member name="M:WhiteBit.Net.Objects.Internal.WhiteBitNonceProvider.GetNonce">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate">
             <summary>
             Account borrow update
@@ -5261,9 +5264,6 @@
             <summary>
             DEPRECATED; use <see cref="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOptions})" /> instead
             </summary>
-        </member>
-        <member name="M:CoinEx.Net.Objects.Internal.WhiteBitNonceProvider.GetNonce">
-            <inheritdoc />
         </member>
     </members>
 </doc>

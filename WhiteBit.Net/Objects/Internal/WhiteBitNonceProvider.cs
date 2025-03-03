@@ -1,7 +1,7 @@
 ﻿using System;
 using CryptoExchange.Net.Interfaces;
 
-namespace CoinEx.Net.Objects.Internal
+namespace WhiteBit.Net.Objects.Internal
 {
     internal class WhiteBitNonceProvider : INonceProvider
     {
