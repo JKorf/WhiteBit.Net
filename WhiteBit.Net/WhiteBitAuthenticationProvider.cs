@@ -39,7 +39,7 @@ namespace WhiteBit.Net
             if (!auth)
                 return;
 
-            var nonce = _nonceProvider.GetNonce();
+            var nonce = _nonceProvider.GetNonce().ToString();
             bodyParameters ??= new Dictionary<string, object>();
             bodyParameters.Add("request", uri.AbsolutePath);
             bodyParameters.Add("nonce", nonce);
