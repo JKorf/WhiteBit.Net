@@ -103,7 +103,7 @@ namespace WhiteBit.Net.Clients.V4Api
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitAsset[]>(result.Data?.Values);
+            return result.As<WhiteBitAsset[]>(result.Data?.Values.ToArray());
         }
 
         #endregion

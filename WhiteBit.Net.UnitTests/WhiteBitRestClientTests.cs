@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.Converters.JsonNet;
+using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Testing.Implementations;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +37,7 @@ namespace WhiteBit.Net.UnitTests
                 {
                     { "market", "ETH_USDT" },
                 },
-                DateTimeConverter.ParseFromLong(1499827319559),
+                DateTimeConverter.ParseFromDouble(1499827319559),
                 true,
                 false);
         }

@@ -311,7 +311,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetKlinesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.DateTime,System.DateTime,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToKlineUpdatesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToKlineUpdatesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate[]}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetOrderBookAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)">
@@ -329,7 +329,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetMarginBalancesAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToMarginBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToMarginBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance[]}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetOpenOrdersAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -341,7 +341,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetClosedOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToClosedOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},WhiteBit.Net.Enums.ClosedOrderFilter,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToClosedOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},WhiteBit.Net.Enums.ClosedOrderFilter,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder[]}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetUserTradesAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -437,17 +437,1319 @@
         <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
         </member>
-        <member name="T:WhiteBit.Net.Converters.EmptyArrayObjectConverter`1">
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.Boolean">
             <summary>
-            Converter mapping to an object but also handles when an empty array is send
+            Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
-            <typeparam name="T"></typeparam>
         </member>
-        <member name="M:WhiteBit.Net.Converters.EmptyArrayObjectConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
-            <inheritdoc />
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableBoolean">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
         </member>
-        <member name="M:WhiteBit.Net.Converters.EmptyArrayObjectConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
-            <inheritdoc />
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.Decimal">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableDecimal">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringDecimal">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitAsset">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitAssetLimit">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitClosedOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitDepositWithdrawProviderDetails">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitMainBalance">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitSubBalances">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitTicker">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitTradeBalance">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitTradeBalanceArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitTradingFee">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringWhiteBitUserTradeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringNullableInt32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringInt64">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DictionaryStringStringArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.IDictionaryStringObject">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.DateTime">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableDateTime">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.ActivationCondition">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableActivationCondition">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.ConditionalOrderType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.LiquidationStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableLiquidationStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.OrderProductType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.OrderProductTypeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.OrderSide">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableOrderSide">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.OrderStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.OrderType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.ProductType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.SelfTradePreventionMode">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableSelfTradePreventionMode">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.SubTransferDirection">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.SymbolType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.SystemStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableSystemStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.TradeRole">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.TransactionStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableTransactionStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.TransactionType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOffsetResultWhiteBitUserTrade">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitResponseWhiteBitFuturesSymbolArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitResponseStringArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketError">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketErrorArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketRequestArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketResponseWhiteBitSubscribeResponse">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketResponseObject">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateDictionaryStringWhiteBitTradeBalanceArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitAccountBorrowUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitAccountMarginPositionUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitBookUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitBorrow">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitClosedOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitKlineUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitLastPriceUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitMarginBalanceArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitOrderUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitPositionsUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitTickerUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitTradeUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitUserTradeUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubscribeResponse">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubscribeResponseArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountBorrowUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountBorrowUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountMarginPositionUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountMarginPositionUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAsset">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetLimit">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetLimitArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetLimits">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetLimitsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetNetworks">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetNetworksArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBookUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBookUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBorrow">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBorrowArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBorrows">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBorrowsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitClosedOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitClosedOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitClosedOrders">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitClosedOrdersArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCode">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCodeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCodeResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCodeResultArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralAccountSummary">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralAccountSummaryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralOrderConfig">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralOrderConfigArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralSummary">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitCollateralSummaryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConditionalOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConditionalOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConditionalOrders">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConditionalOrdersArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConditionalOrdersResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConditionalOrdersResultArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertEstimate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertEstimateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertHistory">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertHistoryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertHistoryEntry">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertHistoryEntryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertHistoryEntryPath">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertHistoryEntryPathArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitConvertResultArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositAddress">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositAddressArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositAddressInfo">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositAddressInfoArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositUrl">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositUrlArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdraw">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawal">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalConfirmations">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalConfirmationsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalCrypto">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalCryptoArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalDetails">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalDetailsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalFiat">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalFiatArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalPartial">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalPartialArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawals">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalSetting">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalSettingArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalSettingDetails">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawalSettingDetailsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawDetails">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawDetailsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawInfo">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawInfoArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawInfoFlex">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawInfoFlexArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawProviderDetails">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitDepositWithdrawProviderDetailsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitError">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitErrorArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitFuturesSymbol">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitFuturesSymbolArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitGeneratedCode">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitGeneratedCodeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitGeneratedCodes">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitGeneratedCodesArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitKillSwitch">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitKillSwitchArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitKlineUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitKlineUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitLastPriceUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitLastPriceUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitLeverage">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitLeverageArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMainBalance">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMainBalanceArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMarginBalance">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMarginBalanceArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMiningReward">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMiningRewardArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMiningRewards">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitMiningRewardsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOcoOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOcoOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderBook">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderBookArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderBookEntry">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderBookEntryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderRequestArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderResponse">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderResponseArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrders">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrdersArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPosition">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionHistory">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionHistoryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionHistoryOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionHistoryOrderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionsUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionsUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionTpSl">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionTpSlArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitPositionUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketTicker">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketTickerArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketTrade">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketTradeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccount">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccountArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccountKyc">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccountKycArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccountPermissions">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccountPermissionsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccounts">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubAccountsArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubaccountTransferEntry">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubaccountTransferEntryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubaccountTransferHistory">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubaccountTransferHistoryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubBalances">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSubBalancesArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSymbol">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSymbolArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSystemStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSystemStatusArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTicker">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTickerArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTickerUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTickerUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTime">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTimeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitToken">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTokenArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTrade">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradeBalance">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradeBalanceArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradeUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradeUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradingFee">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradingFeeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradingFees">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitTradingFeesArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitUserTrade">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitUserTradeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitUserTrades">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitUserTradesArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitUserTradeUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitUserTradeUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.Int32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableInt32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.Int64">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullableInt64">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.Object">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.ObjectArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.String">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.StringArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.Default">
+            <summary>
+            The default <see cref="T:System.Text.Json.Serialization.JsonSerializerContext"/> associated with a default <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.GeneratedSerializerOptions">
+            <summary>
+            The source-generated options associated with this context.
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.GetTypeInfo(System.Type)">
+            <inheritdoc/>
         </member>
         <member name="T:WhiteBit.Net.Enums.AccountBorrowUpdateType">
             <summary>
@@ -1050,7 +2352,7 @@
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.SharedClient">
             <summary>
-            Get the shared rest requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
+            Get the shared rest requests client. This interface is shared with other exchanges to allow for a common implementation for different exchanges.
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount">
@@ -1651,7 +2953,7 @@
             <param name="clientOrderId">Filter by client order id</param>
             <param name="status">Filter by order status</param>
             <param name="limit">Max number of results</param>
-            <param name="offset">Result ofset</param>
+            <param name="offset">Result offset</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetUserTradesAsync(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -1809,7 +3111,7 @@
             <param name="endTime">Filter by end time</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToKlineUpdatesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToKlineUpdatesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate[]}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to order book updates
             <para><a href="https://docs.whitebit.com/public/websocket/#subscribe" /></para>
@@ -1867,7 +3169,7 @@
             <param name="ct"></param>
             <returns></returns>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToMarginBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToMarginBalanceUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance[]}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to margin balance updates
             <para><a href="https://docs.whitebit.com/private/websocket/#balance-margin" /></para>
@@ -1908,7 +3210,7 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token for closing this subscription</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToClosedOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},WhiteBit.Net.Enums.ClosedOrderFilter,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder}}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToClosedOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},WhiteBit.Net.Enums.ClosedOrderFilter,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder[]}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to closed order updates
             <para><a href="https://docs.whitebit.com/private/websocket/#orders-executed" /></para>
@@ -4912,7 +6214,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder}}})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder[]}})">
             <summary>
             ctor
             </summary>
@@ -4935,7 +6237,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate}}})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate[]}})">
             <summary>
             ctor
             </summary>
@@ -4958,7 +6260,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance}}})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance[]}})">
             <summary>
             ctor
             </summary>

@@ -26,8 +26,8 @@ namespace WhiteBit.Net.Converters
 
             return new WhiteBitDepositWithdraw
             {
-                CryptoInfo = cryptoInfo,
-                FiatInfo = fiatInfo,
+                CryptoInfo = cryptoInfo.ToArray(),
+                FiatInfo = fiatInfo.ToArray(),
             };
         }
 

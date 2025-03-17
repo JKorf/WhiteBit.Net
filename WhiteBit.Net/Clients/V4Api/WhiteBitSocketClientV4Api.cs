@@ -233,7 +233,7 @@ namespace WhiteBit.Net.Clients.V4Api
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitTradeBalance[]>(result.Data.Values);
+            return result.As<WhiteBitTradeBalance[]>(result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />
@@ -260,7 +260,7 @@ namespace WhiteBit.Net.Clients.V4Api
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitMarginBalance[]>(result.Data.Values);
+            return result.As<WhiteBitMarginBalance[]>(result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />

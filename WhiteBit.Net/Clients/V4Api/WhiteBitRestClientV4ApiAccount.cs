@@ -40,7 +40,7 @@ namespace WhiteBit.Net.Clients.V4Api
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitMainBalance[]>(result.Data?.Values);
+            return result.As<WhiteBitMainBalance[]>(result.Data?.Values.ToArray());
         }
 
         #endregion
@@ -77,7 +77,7 @@ namespace WhiteBit.Net.Clients.V4Api
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitTradeBalance[]>(result.Data?.Values);
+            return result.As<WhiteBitTradeBalance[]>(result.Data?.Values.ToArray());
         }
 
         #endregion
