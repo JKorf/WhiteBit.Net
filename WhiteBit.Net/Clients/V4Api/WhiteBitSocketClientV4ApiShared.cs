@@ -366,7 +366,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 || update.Order.OrderType == OrderType.MarketBase
                 || update.Order.OrderType == OrderType.CollateralMarket
                 || update.Order.QuantityRemaining == 0)
+            {
                 return SharedOrderStatus.Filled;
+            }
 
             return SharedOrderStatus.Canceled;
         }

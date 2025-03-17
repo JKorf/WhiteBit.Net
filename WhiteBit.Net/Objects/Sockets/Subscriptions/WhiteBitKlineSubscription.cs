@@ -69,7 +69,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         {
             var data = (WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>)message.Data;
 
-            _handler.Invoke(message.As(data.Data, data.Method, data.Data.First().Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(data.Data, data.Method, data.Data!.First().Symbol, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

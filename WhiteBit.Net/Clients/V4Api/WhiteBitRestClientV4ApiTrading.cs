@@ -64,7 +64,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
             string path;
             if (type == NewOrderType.Limit)
+            {
                 path = "/api/v4/order/new";
+            }
             else if (type == NewOrderType.Market)
             {
                 // Buy market orders with base asset, stock endpoint
@@ -77,11 +79,17 @@ namespace WhiteBit.Net.Clients.V4Api
                     path = "/api/v4/order/market";
             }
             else if (type == NewOrderType.StopLimit)
+            {
                 path = "/api/v4/order/stop_limit";
+            }
             else if (type == NewOrderType.StopMarket)
+            {
                 path = "/api/v4/order/stop_market";
+            }
             else
+            {
                 throw new ArgumentException("Unknown path for order type");
+            }
 
             var request = _definitions.GetOrCreate(HttpMethod.Post, path, WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));

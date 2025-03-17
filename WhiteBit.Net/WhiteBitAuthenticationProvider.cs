@@ -14,7 +14,7 @@ namespace WhiteBit.Net
 {
     internal class WhiteBitAuthenticationProvider : AuthenticationProvider
     {
-        private static readonly IMessageSerializer _serializer = new SystemTextJsonMessageSerializer(SerializerOptions.WithConverters(WhiteBitExchange.SerializerContext));
+        private static readonly IMessageSerializer _serializer = new SystemTextJsonMessageSerializer(SerializerOptions.WithConverters(WhiteBitExchange._serializerContext));
         private readonly INonceProvider _nonceProvider;
 
         public WhiteBitAuthenticationProvider(ApiCredentials credentials, INonceProvider? nonceProvider) : base(credentials)

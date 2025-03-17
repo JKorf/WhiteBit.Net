@@ -66,7 +66,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         {
             var data = (WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>)message.Data;
 
-            _handler.Invoke(message.As(data.Data.First(), data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(data.Data!.First(), data.Method, null, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

@@ -49,7 +49,7 @@ namespace WhiteBit.Net
         /// </summary>
         public static ExchangeType Type { get; } = ExchangeType.CEX;
 
-        internal static JsonSerializerContext SerializerContext = new WhiteBitSourceGenerationContext();
+        internal static JsonSerializerContext _serializerContext = new WhiteBitSourceGenerationContext();
 
         /// <summary>
         /// Format a base and quote asset to an WhiteBit recognized symbol 
