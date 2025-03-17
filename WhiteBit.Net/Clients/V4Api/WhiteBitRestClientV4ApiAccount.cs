@@ -28,19 +28,19 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Main Balances
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitMainBalance>>> GetMainBalancesAsync(CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitMainBalance[]>> GetMainBalancesAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/main-account/balance", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitMainBalance>>(request, parameters, ct).ConfigureAwait(false);
             if (!result)
-                return result.As<IEnumerable<WhiteBitMainBalance>>(default);
+                return result.As<WhiteBitMainBalance[]>(default);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<IEnumerable<WhiteBitMainBalance>>(result.Data?.Values);
+            return result.As<WhiteBitMainBalance[]>(result.Data?.Values);
         }
 
         #endregion
@@ -64,7 +64,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Spot Balances
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitTradeBalance>>> GetSpotBalancesAsync(string? asset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(string? asset = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("ticker", asset);
@@ -72,12 +72,12 @@ namespace WhiteBit.Net.Clients.V4Api
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitTradeBalance>>(request, parameters, ct).ConfigureAwait(false);
             if (!result)
-                return result.As<IEnumerable<WhiteBitTradeBalance>>(default);
+                return result.As<WhiteBitTradeBalance[]>(default);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<IEnumerable<WhiteBitTradeBalance>>(result.Data?.Values);
+            return result.As<WhiteBitTradeBalance[]>(result.Data?.Values);
         }
 
         #endregion
@@ -213,12 +213,12 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Deposit Withdrawal Settings
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitDepositWithdrawalSetting>>> GetDepositWithdrawalSettingsAsync(CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitDepositWithdrawalSetting[]>> GetDepositWithdrawalSettingsAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/main-account/fee", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
-            var result = await _baseClient.SendAsync<IEnumerable<WhiteBitDepositWithdrawalSetting>>(request, parameters, ct).ConfigureAwait(false);
+            var result = await _baseClient.SendAsync<WhiteBitDepositWithdrawalSetting[]>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
 
@@ -261,11 +261,11 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Collateral Balance Summary
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitCollateralSummary>>> GetCollateralBalanceSummaryAsync(CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitCollateralSummary[]>> GetCollateralBalanceSummaryAsync(CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/balance-summary", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
-            var result = await _baseClient.SendAsync<IEnumerable<WhiteBitCollateralSummary>>(request, parameters, ct).ConfigureAwait(false);
+            var result = await _baseClient.SendAsync<WhiteBitCollateralSummary[]>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
 

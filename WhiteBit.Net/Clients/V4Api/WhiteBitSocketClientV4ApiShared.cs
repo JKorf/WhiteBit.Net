@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 new ParameterDescription("BalanceAssets", typeof(List<string>), "The assets to subscribe for updates", new List<string>{ "USDT", "ETH", "BTC" })
             }
         };
-        async Task<ExchangeResult<UpdateSubscription>> IBalanceSocketClient.SubscribeToBalanceUpdatesAsync(SubscribeBalancesRequest request, Action<ExchangeEvent<IEnumerable<SharedBalance>>> handler, CancellationToken ct)
+        async Task<ExchangeResult<UpdateSubscription>> IBalanceSocketClient.SubscribeToBalanceUpdatesAsync(SubscribeBalancesRequest request, Action<ExchangeEvent<SharedBalance[]>> handler, CancellationToken ct)
         {
             var validationError = ((IBalanceSocketClient)this).SubscribeBalanceOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedTradingModes);
             if (validationError != null)
@@ -43,7 +43,7 @@ namespace WhiteBit.Net.Clients.V4Api
             {
                 var result = await SubscribeToSpotBalanceUpdatesAsync(
                     assets!,
-                    update => handler(update.AsExchangeEvent<IEnumerable<SharedBalance>>(Exchange, update.Data.Select(x => new SharedBalance(x.Key, x.Value.Available, x.Value.Available + x.Value.Frozen)).ToArray())),
+                    update => handler(update.AsExchangeEvent<SharedBalance[]>(Exchange, update.Data.Select(x => new SharedBalance(x.Key, x.Value.Available, x.Value.Available + x.Value.Frozen)).ToArray())),
                     ct: ct).ConfigureAwait(false);
                 return new ExchangeResult<UpdateSubscription>(Exchange, result);
             }
@@ -51,7 +51,7 @@ namespace WhiteBit.Net.Clients.V4Api
             {
                 var result = await SubscribeToMarginBalanceUpdatesAsync(
                     assets!,
-                    update => handler(update.AsExchangeEvent<IEnumerable<SharedBalance>>(Exchange, update.Data.Select(x => new SharedBalance(x.Asset, x.AvailableWithoutBorrow, x.Balance)).ToArray())),
+                    update => handler(update.AsExchangeEvent<SharedBalance[]>(Exchange, update.Data.Select(x => new SharedBalance(x.Asset, x.AvailableWithoutBorrow, x.Balance)).ToArray())),
                     ct: ct).ConfigureAwait(false);
                 return new ExchangeResult<UpdateSubscription>(Exchange, result);
             }
@@ -148,7 +148,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Trade client
 
         EndpointOptions<SubscribeTradeRequest> ITradeSocketClient.SubscribeTradeOptions { get; } = new EndpointOptions<SubscribeTradeRequest>(false);
-        async Task<ExchangeResult<UpdateSubscription>> ITradeSocketClient.SubscribeToTradeUpdatesAsync(SubscribeTradeRequest request, Action<ExchangeEvent<IEnumerable<SharedTrade>>> handler, CancellationToken ct)
+        async Task<ExchangeResult<UpdateSubscription>> ITradeSocketClient.SubscribeToTradeUpdatesAsync(SubscribeTradeRequest request, Action<ExchangeEvent<SharedTrade[]>> handler, CancellationToken ct)
         {
             var validationError = ((ITradeSocketClient)this).SubscribeTradeOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, SupportedTradingModes);
             if (validationError != null)
@@ -161,7 +161,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     if (update.UpdateType == SocketUpdateType.Snapshot)
                         return;
 
-                    handler(update.AsExchangeEvent<IEnumerable<SharedTrade>>(Exchange, update.Data.Trades.Select(x => new SharedTrade(x.Quantity, x.Price, x.Timestamp)
+                    handler(update.AsExchangeEvent<SharedTrade[]>(Exchange, update.Data.Trades.Select(x => new SharedTrade(x.Quantity, x.Price, x.Timestamp)
                     {
                         Side = x.Side == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell
                     } ).ToArray()));
@@ -181,7 +181,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 new ParameterDescription("UserTradeSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT", "ETH_PERP" })
             }
         };
-        async Task<ExchangeResult<UpdateSubscription>> IUserTradeSocketClient.SubscribeToUserTradeUpdatesAsync(SubscribeUserTradeRequest request, Action<ExchangeEvent<IEnumerable<SharedUserTrade>>> handler, CancellationToken ct)
+        async Task<ExchangeResult<UpdateSubscription>> IUserTradeSocketClient.SubscribeToUserTradeUpdatesAsync(SubscribeUserTradeRequest request, Action<ExchangeEvent<SharedUserTrade[]>> handler, CancellationToken ct)
         {
             var validationError = ((IUserTradeSocketClient)this).SubscribeUserTradeOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedTradingModes);
             if (validationError != null)
@@ -197,7 +197,7 @@ namespace WhiteBit.Net.Clients.V4Api
                             return;
                     }
 
-                    handler(update.AsExchangeEvent<IEnumerable<SharedUserTrade>>(Exchange, [new SharedUserTrade(update.Data.Symbol, update.Data.OrderId.ToString(), update.Data.Id.ToString(), update.Data.OrderSide == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell, update.Data.Quantity, update.Data.Price, update.Data.Time)
+                    handler(update.AsExchangeEvent<SharedUserTrade[]>(Exchange, [new SharedUserTrade(update.Data.Symbol, update.Data.OrderId.ToString(), update.Data.Id.ToString(), update.Data.OrderSide == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell, update.Data.Quantity, update.Data.Price, update.Data.Time)
                     {
                         Fee = update.Data.Fee
                     }]));
@@ -217,7 +217,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT" })
             }
         };
-        async Task<ExchangeResult<UpdateSubscription>> ISpotOrderSocketClient.SubscribeToSpotOrderUpdatesAsync(SubscribeSpotOrderRequest request, Action<ExchangeEvent<IEnumerable<SharedSpotOrder>>> handler, CancellationToken ct)
+        async Task<ExchangeResult<UpdateSubscription>> ISpotOrderSocketClient.SubscribeToSpotOrderUpdatesAsync(SubscribeSpotOrderRequest request, Action<ExchangeEvent<SharedSpotOrder[]>> handler, CancellationToken ct)
         {
             var validationError = ((ISpotOrderSocketClient)this).SubscribeSpotOrderOptions.ValidateRequest(Exchange, request, TradingMode.Spot, [TradingMode.Spot]);
             if (validationError != null)
@@ -237,7 +237,7 @@ namespace WhiteBit.Net.Clients.V4Api
                         return;
                     }
 
-                    handler(update.AsExchangeEvent<IEnumerable<SharedSpotOrder>>(Exchange, new[] {
+                    handler(update.AsExchangeEvent<SharedSpotOrder[]>(Exchange, new[] {
                         new SharedSpotOrder(
                             update.Data.Order.Symbol,
                             update.Data.Order.OrderId.ToString(),
@@ -266,7 +266,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Position client
         EndpointOptions<SubscribePositionRequest> IPositionSocketClient.SubscribePositionOptions { get; } = new EndpointOptions<SubscribePositionRequest>(false);
-        async Task<ExchangeResult<UpdateSubscription>> IPositionSocketClient.SubscribeToPositionUpdatesAsync(SubscribePositionRequest request, Action<ExchangeEvent<IEnumerable<SharedPosition>>> handler, CancellationToken ct)
+        async Task<ExchangeResult<UpdateSubscription>> IPositionSocketClient.SubscribeToPositionUpdatesAsync(SubscribePositionRequest request, Action<ExchangeEvent<SharedPosition[]>> handler, CancellationToken ct)
         {
             var validationError = ((IPositionSocketClient)this).SubscribePositionOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedFuturesModes);
             if (validationError != null)
@@ -278,7 +278,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     if (update.UpdateType == SocketUpdateType.Snapshot)
                         return;
 
-                    handler(update.AsExchangeEvent<IEnumerable<SharedPosition>>(Exchange, update.Data.Records.Select(x => new SharedPosition(x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
+                    handler(update.AsExchangeEvent<SharedPosition[]>(Exchange, update.Data.Records.Select(x => new SharedPosition(x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
                     {
                         AverageOpenPrice = x.BasePrice,
                         PositionSide = x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
@@ -302,7 +302,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_PERP" })
             }
         };
-        async Task<ExchangeResult<UpdateSubscription>> IFuturesOrderSocketClient.SubscribeToFuturesOrderUpdatesAsync(SubscribeFuturesOrderRequest request, Action<ExchangeEvent<IEnumerable<SharedFuturesOrder>>> handler, CancellationToken ct)
+        async Task<ExchangeResult<UpdateSubscription>> IFuturesOrderSocketClient.SubscribeToFuturesOrderUpdatesAsync(SubscribeFuturesOrderRequest request, Action<ExchangeEvent<SharedFuturesOrder[]>> handler, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderSocketClient)this).SubscribeFuturesOrderOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedFuturesModes);
             if (validationError != null)
@@ -323,7 +323,7 @@ namespace WhiteBit.Net.Clients.V4Api
                         return;
                     }
 
-                    handler(update.AsExchangeEvent<IEnumerable<SharedFuturesOrder>>(Exchange, new[] {
+                    handler(update.AsExchangeEvent<SharedFuturesOrder[]>(Exchange, new[] {
                         new SharedFuturesOrder(
                             update.Data.Order.Symbol,
                             update.Data.Order.OrderId.ToString(),

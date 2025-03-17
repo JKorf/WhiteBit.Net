@@ -1,4 +1,4 @@
-﻿using CryptoExchange.Net.Converters.SystemTextJson;
+using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Bulk order request
     /// </summary>
+    [SerializationModel]
     public record WhiteBitOrderRequest
     {
         /// <summary>
@@ -50,7 +51,7 @@ namespace WhiteBit.Net.Objects.Models
         /// <summary>
         /// Self Trade Prevention mode
         /// </summary>
-        [JsonPropertyName("stp"), JsonConverter(typeof(EnumConverter)), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        [JsonPropertyName("stp"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public SelfTradePreventionMode? StpMode { get; set; }
     }
 }

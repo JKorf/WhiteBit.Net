@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,6 +9,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Deposit address info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositAddressInfo
     {
         /// <summary>
@@ -25,6 +27,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Address info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositAddress
     {
         /// <summary>

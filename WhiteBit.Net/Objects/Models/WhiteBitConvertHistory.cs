@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,13 +9,14 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Convert history
     /// </summary>
+    [SerializationModel]
     public record WhiteBitConvertHistory
     {
         /// <summary>
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitConvertHistoryEntry> Records { get; set; } = Array.Empty<WhiteBitConvertHistoryEntry>();
+        public WhiteBitConvertHistoryEntry[] Records { get; set; } = Array.Empty<WhiteBitConvertHistoryEntry>();
         /// <summary>
         /// Total results
         /// </summary>
@@ -35,6 +37,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Convert history entry
     /// </summary>
+    [SerializationModel]
     public record WhiteBitConvertHistoryEntry
     {
         /// <summary>
@@ -66,12 +69,13 @@ namespace WhiteBit.Net.Objects.Models
         /// Path
         /// </summary>
         [JsonPropertyName("path")]
-        public IEnumerable<WhiteBitConvertHistoryEntryPath> Path { get; set; } = Array.Empty<WhiteBitConvertHistoryEntryPath>();
+        public WhiteBitConvertHistoryEntryPath[] Path { get; set; } = Array.Empty<WhiteBitConvertHistoryEntryPath>();
     }
 
     /// <summary>
     /// Convert path
     /// </summary>
+    [SerializationModel]
     public record WhiteBitConvertHistoryEntryPath
     {
         /// <summary>

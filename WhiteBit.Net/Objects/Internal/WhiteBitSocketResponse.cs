@@ -1,10 +1,12 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
 namespace WhiteBit.Net.Objects.Internal
 {
+    [SerializationModel]
     internal record WhiteBitSocketResponse<T>
     {
         [JsonPropertyName("id")]
@@ -15,6 +17,7 @@ namespace WhiteBit.Net.Objects.Internal
         public T Result { get; set; } = default!;
     }
 
+    [SerializationModel]
     internal record WhiteBitSocketError
     {
         [JsonPropertyName("message")]

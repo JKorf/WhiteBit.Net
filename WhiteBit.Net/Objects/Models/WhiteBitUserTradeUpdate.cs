@@ -1,9 +1,10 @@
-﻿using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using WhiteBit.Net.Converters;
 using WhiteBit.Net.Enums;
 
 namespace WhiteBit.Net.Objects.Models
@@ -11,7 +12,8 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// User trade
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitUserTradeUpdate, WhiteBitSourceGenerationContext>))]
+    [SerializationModel]
     public record WhiteBitUserTradeUpdate
     {
         /// <summary>
@@ -59,13 +61,13 @@ namespace WhiteBit.Net.Objects.Models
         /// Side
         /// </summary>
         [ArrayProperty(8)]
-        [JsonConverter(typeof(EnumConverter))]
+
         public OrderSide OrderSide { get; set; }
         /// <summary>
         /// Role
         /// </summary>
         [ArrayProperty(9)]
-        [JsonConverter(typeof(EnumConverter))]
+
         public TradeRole Role { get; set; }
         /// <summary>
         /// Asset the fee is in

@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,6 +9,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Asset info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitAsset
     {
         /// <summary>
@@ -94,18 +96,19 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Deposit/withdrawal network info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitAssetNetworks
     {
         /// <summary>
         /// Deposits
         /// </summary>
         [JsonPropertyName("deposits")]
-        public IEnumerable<string> Deposits { get; set; } = Array.Empty<string>();
+        public string[] Deposits { get; set; } = Array.Empty<string>();
         /// <summary>
         /// Withdraws
         /// </summary>
         [JsonPropertyName("withdraws")]
-        public IEnumerable<string> Withdraws { get; set; } = Array.Empty<string>();
+        public string[] Withdraws { get; set; } = Array.Empty<string>();
         /// <summary>
         /// Default
         /// </summary>
@@ -116,6 +119,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Asset limits
     /// </summary>
+    [SerializationModel]
     public record WhiteBitAssetLimits
     {
         /// <summary>
@@ -133,6 +137,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// 
     /// </summary>
+    [SerializationModel]
     public record WhiteBitAssetLimit
     {
         /// <summary>

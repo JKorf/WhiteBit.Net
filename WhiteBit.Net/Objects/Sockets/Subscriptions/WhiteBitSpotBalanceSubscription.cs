@@ -21,12 +21,12 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 
         private readonly Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> _handler;
 
-        private IEnumerable<string> _symbols;
+        private string[] _symbols;
 
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(WhiteBitSocketUpdate<IEnumerable<Dictionary<string, WhiteBitTradeBalance>>>);
+            return typeof(WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public WhiteBitSpotBalanceSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> handler) : base(logger, true)
         {
             _handler = handler;
-            _symbols = symbols;
+            _symbols = symbols.ToArray();
             ListenerIdentifiers =  new HashSet<string> { "balanceSpot_update" };
         }
 
@@ -64,10 +64,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            var data = (WhiteBitSocketUpdate<IEnumerable<Dictionary<string, WhiteBitTradeBalance>>>)message.Data;
+            var data = (WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>)message.Data;
 
             _handler.Invoke(message.As(data.Data.First(), data.Method, null, SocketUpdateType.Update)!);
-            return new CallResult(null);
+            return CallResult.SuccessResult;
         }
     }
 }

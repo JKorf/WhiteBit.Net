@@ -1,4 +1,4 @@
-﻿using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Trading fees
     /// </summary>
+    [SerializationModel]
     public record WhiteBitTradingFees
     {
         /// <summary>

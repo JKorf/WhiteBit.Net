@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,13 +10,14 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Orders
     /// </summary>
+    [SerializationModel]
     public record WhiteBitOrders
     {
         /// <summary>
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitOrder> Records { get; set; } = Array.Empty<WhiteBitOrder>();
+        public WhiteBitOrder[] Records { get; set; } = Array.Empty<WhiteBitOrder>();
         /// <summary>
         /// Limit
         /// </summary>
@@ -36,6 +38,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Order info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitOrder
     {
         /// <summary>
@@ -156,6 +159,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Conditional order
     /// </summary>
+    [SerializationModel]
     public record WhiteBitConditionalOrder : WhiteBitOrder
     {
         /// <summary>
@@ -178,13 +182,14 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Orders
     /// </summary>
+    [SerializationModel]
     public record WhiteBitClosedOrders
     {
         /// <summary>
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitClosedOrder> Records { get; set; } = Array.Empty<WhiteBitClosedOrder>();
+        public WhiteBitClosedOrder[] Records { get; set; } = Array.Empty<WhiteBitClosedOrder>();
         /// <summary>
         /// Limit
         /// </summary>
@@ -205,6 +210,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Closed order info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitClosedOrder : WhiteBitOrder
     {
         /// <summary>

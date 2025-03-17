@@ -1,4 +1,5 @@
-﻿using CryptoExchange.Net.Attributes;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using CryptoExchange.Net.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Bulk order response
     /// </summary>
+    [SerializationModel]
     public record WhiteBitOrderResponse
     {
         /// <summary>

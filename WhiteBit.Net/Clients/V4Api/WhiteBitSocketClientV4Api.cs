@@ -87,9 +87,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Trades
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitSocketTrade>>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
         {
-            return await QueryAsync<IEnumerable<WhiteBitSocketTrade>>(
+            return await QueryAsync<WhiteBitSocketTrade[]>(
                 "trades_request",
                 false,
                 ct,
@@ -169,9 +169,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Kline
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitKlineUpdate>>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
         {
-            return await QueryAsync<IEnumerable<WhiteBitKlineUpdate>>(
+            return await QueryAsync<WhiteBitKlineUpdate[]>(
                 "candles_request",
                 false,
                 ct,
@@ -182,7 +182,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<WhiteBitKlineUpdate>>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitKlineSubscription(_logger, symbol, interval, onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -220,7 +220,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Spot Balances
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitTradeBalance>>> GetSpotBalancesAsync(CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitTradeBalance>>(
                 "balanceSpot_request",
@@ -228,12 +228,12 @@ namespace WhiteBit.Net.Clients.V4Api
                 ct).ConfigureAwait(false);
 
             if (!result)
-                return result.As<IEnumerable<WhiteBitTradeBalance>>(default);
+                return result.As<WhiteBitTradeBalance[]>(default);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<IEnumerable<WhiteBitTradeBalance>>(result.Data.Values);
+            return result.As<WhiteBitTradeBalance[]>(result.Data.Values);
         }
 
         /// <inheritdoc />
@@ -247,7 +247,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Margin Balances
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitMarginBalance>>> GetMarginBalancesAsync(CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitMarginBalance>>(
                 "balanceMargin_request",
@@ -255,16 +255,16 @@ namespace WhiteBit.Net.Clients.V4Api
                 ct).ConfigureAwait(false);
 
             if (!result)
-                return result.As<IEnumerable<WhiteBitMarginBalance>>(default);
+                return result.As<WhiteBitMarginBalance[]>(default);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<IEnumerable<WhiteBitMarginBalance>>(result.Data.Values);
+            return result.As<WhiteBitMarginBalance[]>(result.Data.Values);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<IEnumerable<WhiteBitMarginBalance>>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<WhiteBitMarginBalance[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitMarginBalanceSubscription(_logger, assets.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -305,14 +305,14 @@ namespace WhiteBit.Net.Clients.V4Api
                 new
                 {
                     market = symbol,
-                    order_types = orderTypes.Select(x => (int)x).ToArray()
+                    order_types = orderTypes?.Select(x => (int)x).ToArray()
                 },
                 limit ?? 0,
                 offset ?? 100).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<IEnumerable<WhiteBitClosedOrder>>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<WhiteBitClosedOrder[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitClosedOrderSubscription(_logger, symbols.ToArray(), (int)filter, onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);

@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Kill switch info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitKillSwitch
     {
         /// <summary>
@@ -30,7 +32,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Product types the kill switch is applied to
         /// </summary>
         [JsonPropertyName("types")]
-        public IEnumerable<OrderProductType>? OrderProductTypes { get; set; }
+        public OrderProductType[]? OrderProductTypes { get; set; }
     }
 
 

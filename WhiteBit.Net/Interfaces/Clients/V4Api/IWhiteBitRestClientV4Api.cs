@@ -1,5 +1,4 @@
 using CryptoExchange.Net.Interfaces;
-using CryptoExchange.Net.Interfaces.CommonClients;
 using System;
 
 namespace WhiteBit.Net.Interfaces.Clients.V4Api
@@ -45,7 +44,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         public IWhiteBitRestClientV4ApiCollateralTrading CollateralTrading { get; }
 
         /// <summary>
-        /// Get the shared rest requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
+        /// Get the shared rest requests client. This interface is shared with other exchanges to allow for a common implementation for different exchanges.
         /// </summary>
         public IWhiteBitRestClientV4ApiShared SharedClient { get; }
     }

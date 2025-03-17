@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,6 +9,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Sub account info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitSubAccount
     {
         /// <summary>
@@ -55,6 +57,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Kyc info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitSubAccountKyc
     {
         /// <summary>
@@ -72,6 +75,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Permissions
     /// </summary>
+    [SerializationModel]
     public record WhiteBitSubAccountPermissions
     {
         /// <summary>

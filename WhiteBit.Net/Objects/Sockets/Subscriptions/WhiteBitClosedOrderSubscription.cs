@@ -19,24 +19,24 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override HashSet<string> ListenerIdentifiers { get; set; }
 
-        private readonly Action<DataEvent<IEnumerable<WhiteBitClosedOrder>>> _handler;
+        private readonly Action<DataEvent<WhiteBitClosedOrder[]>> _handler;
 
         private readonly int _orderFilter;
-        private IEnumerable<string> _symbols;
+        private string[] _symbols;
 
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(WhiteBitSocketUpdate<IEnumerable<WhiteBitClosedOrder>>);
+            return typeof(WhiteBitSocketUpdate<WhiteBitClosedOrder[]>);
         }
 
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitClosedOrderSubscription(ILogger logger, IEnumerable<string> symbols, int orderFilter, Action<DataEvent<IEnumerable<WhiteBitClosedOrder>>> handler) : base(logger, true)
+        public WhiteBitClosedOrderSubscription(ILogger logger, IEnumerable<string> symbols, int orderFilter, Action<DataEvent<WhiteBitClosedOrder[]>> handler) : base(logger, true)
         {
             _handler = handler;
-            _symbols = symbols;
+            _symbols = symbols.ToArray();
             _orderFilter = orderFilter;
             ListenerIdentifiers =  new HashSet<string> { "ordersExecuted_update" };
         }
@@ -66,10 +66,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            var data = (WhiteBitSocketUpdate<IEnumerable<WhiteBitClosedOrder>>)message.Data;
+            var data = (WhiteBitSocketUpdate<WhiteBitClosedOrder[]>)message.Data;
 
             _handler.Invoke(message.As(data.Data, data.Method, data.Data.First().Symbol, SocketUpdateType.Update)!);
-            return new CallResult(null);
+            return CallResult.SuccessResult;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -10,6 +11,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Conditional orders
     /// </summary>
+    [SerializationModel]
     public record WhiteBitConditionalOrdersResult
     {
         /// <summary>
@@ -31,12 +33,13 @@ namespace WhiteBit.Net.Objects.Models
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitConditionalOrders> Records { get; set; } = Array.Empty<WhiteBitConditionalOrders>();
+        public WhiteBitConditionalOrders[] Records { get; set; } = Array.Empty<WhiteBitConditionalOrders>();
     }
 
     /// <summary>
     /// Conditional order
     /// </summary>
+    [SerializationModel]
     public record WhiteBitConditionalOrders
     {
         /// <summary>

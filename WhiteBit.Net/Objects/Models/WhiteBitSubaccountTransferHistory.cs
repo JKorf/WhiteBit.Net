@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Transfer history
     /// </summary>
+    [SerializationModel]
     public record WhiteBitSubaccountTransferHistory
     {
         /// <summary>
@@ -25,12 +27,13 @@ namespace WhiteBit.Net.Objects.Models
         /// Data
         /// </summary>
         [JsonPropertyName("data")]
-        public IEnumerable<WhiteBitSubaccountTransferEntry> Data { get; set; } = Array.Empty<WhiteBitSubaccountTransferEntry>();
+        public WhiteBitSubaccountTransferEntry[] Data { get; set; } = Array.Empty<WhiteBitSubaccountTransferEntry>();
     }
 
     /// <summary>
     /// Transfer entry
     /// </summary>
+    [SerializationModel]
     public record WhiteBitSubaccountTransferEntry
     {
         /// <summary>

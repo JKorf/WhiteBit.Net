@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Collateral order info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitCollateralOrder
     {
         /// <summary>
@@ -111,6 +113,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// OTO config
     /// </summary>
+    [SerializationModel]
     public record WhiteBitCollateralOrderConfig
     {
         /// <summary>

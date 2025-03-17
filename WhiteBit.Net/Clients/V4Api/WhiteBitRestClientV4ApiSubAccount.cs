@@ -149,7 +149,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Subaccount Balances
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitSubBalances>>> GetSubaccountBalancesAsync(string id, string? asset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitSubBalances[]>> GetSubaccountBalancesAsync(string id, string? asset = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.Add("id", id);
@@ -158,12 +158,12 @@ namespace WhiteBit.Net.Clients.V4Api
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitSubBalances>>(request, parameters, ct).ConfigureAwait(false);
             if (!result)
-                return result.As<IEnumerable<WhiteBitSubBalances>>(default);
+                return result.As<WhiteBitSubBalances[]>(default);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<IEnumerable<WhiteBitSubBalances>>(result.Data.Select(x => x.Value).ToArray());
+            return result.As<WhiteBitSubBalances[]>(result.Data.Select(x => x.Value).ToArray());
         }
 
         #endregion

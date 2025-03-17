@@ -122,7 +122,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
             var msg = accessor.GetValue<string>(MessagePath.Get().Property("message"));
-            var errors = accessor.GetValue<Dictionary<string, IEnumerable<string>>?>(MessagePath.Get().Property("errors"));
+            var errors = accessor.GetValue<Dictionary<string, string[]>?>(MessagePath.Get().Property("errors"));
             if (errors == null || !errors.Any())
             {
                 if (msg == null)

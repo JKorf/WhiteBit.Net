@@ -19,23 +19,23 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override HashSet<string> ListenerIdentifiers { get; set; }
 
-        private readonly Action<DataEvent<IEnumerable<WhiteBitMarginBalance>>> _handler;
+        private readonly Action<DataEvent<WhiteBitMarginBalance[]>> _handler;
 
-        private IEnumerable<string> _symbols;
+        private string[] _symbols;
 
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(WhiteBitSocketUpdate<IEnumerable<WhiteBitMarginBalance>>);
+            return typeof(WhiteBitSocketUpdate<WhiteBitMarginBalance[]>);
         }
 
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitMarginBalanceSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<IEnumerable<WhiteBitMarginBalance>>> handler) : base(logger, true)
+        public WhiteBitMarginBalanceSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<WhiteBitMarginBalance[]>> handler) : base(logger, true)
         {
             _handler = handler;
-            _symbols = symbols;
+            _symbols = symbols.ToArray();
             ListenerIdentifiers =  new HashSet<string> { "balanceMargin_update" };
         }
 
@@ -64,10 +64,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            var data = (WhiteBitSocketUpdate<IEnumerable<WhiteBitMarginBalance>>)message.Data;
+            var data = (WhiteBitSocketUpdate<WhiteBitMarginBalance[]>)message.Data;
 
             _handler.Invoke(message.As(data.Data, data.Method, null, SocketUpdateType.Update)!);
-            return new CallResult(null);
+            return CallResult.SuccessResult;
         }
     }
 }

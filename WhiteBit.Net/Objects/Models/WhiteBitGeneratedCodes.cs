@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,6 +9,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Generated codes history
     /// </summary>
+    [SerializationModel]
     public record WhiteBitGeneratedCodes
     {
         /// <summary>
@@ -19,7 +21,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Data
         /// </summary>
         [JsonPropertyName("data")]
-        public IEnumerable<WhiteBitGeneratedCode> Data { get; set; } = Array.Empty<WhiteBitGeneratedCode>();
+        public WhiteBitGeneratedCode[] Data { get; set; } = Array.Empty<WhiteBitGeneratedCode>();
         /// <summary>
         /// Limit
         /// </summary>
@@ -35,6 +37,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Generated code
     /// </summary>
+    [SerializationModel]
     public record WhiteBitGeneratedCode
     {
         /// <summary>

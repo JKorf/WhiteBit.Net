@@ -1,16 +1,18 @@
-﻿using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using WhiteBit.Net.Converters;
 
 namespace WhiteBit.Net.Objects.Models
 {
     /// <summary>
     /// Order book
     /// </summary>
+    [SerializationModel]
     public record WhiteBitOrderBook
     {
         /// <summary>
@@ -27,18 +29,19 @@ namespace WhiteBit.Net.Objects.Models
         /// Asks list
         /// </summary>
         [JsonPropertyName("asks")]
-        public IEnumerable<WhiteBitOrderBookEntry> Asks { get; set; } = Array.Empty<WhiteBitOrderBookEntry>();
+        public WhiteBitOrderBookEntry[] Asks { get; set; } = Array.Empty<WhiteBitOrderBookEntry>();
         /// <summary>
         /// Bids list
         /// </summary>
         [JsonPropertyName("bids")]
-        public IEnumerable<WhiteBitOrderBookEntry> Bids { get; set; } = Array.Empty<WhiteBitOrderBookEntry>();
+        public WhiteBitOrderBookEntry[] Bids { get; set; } = Array.Empty<WhiteBitOrderBookEntry>();
     }
 
     /// <summary>
     /// Order book entry
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitOrderBookEntry, WhiteBitSourceGenerationContext>))]
+    [SerializationModel]
     public record WhiteBitOrderBookEntry : ISymbolOrderBookEntry
     {
         /// <summary>

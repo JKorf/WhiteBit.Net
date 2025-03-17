@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,6 +9,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Mining reward history
     /// </summary>
+    [SerializationModel]
     public record WhiteBitMiningRewards
     {
         /// <summary>
@@ -24,12 +26,13 @@ namespace WhiteBit.Net.Objects.Models
         /// Data
         /// </summary>
         [JsonPropertyName("data")]
-        public IEnumerable<WhiteBitMiningReward> Data { get; set; } = Array.Empty<WhiteBitMiningReward>();
+        public WhiteBitMiningReward[] Data { get; set; } = Array.Empty<WhiteBitMiningReward>();
     }
 
     /// <summary>
     /// Reward info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitMiningReward
     {
         /// <summary>

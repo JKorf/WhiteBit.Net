@@ -86,13 +86,13 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Open Positions
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitPosition>>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitPosition[]>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/positions/open", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
-            var result = await _baseClient.SendAsync<IEnumerable<WhiteBitPosition>>(request, parameters, ct).ConfigureAwait(false);
+            var result = await _baseClient.SendAsync<WhiteBitPosition[]>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
 
@@ -101,7 +101,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Position History
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<WhiteBitPositionHistory>>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitPositionHistory[]>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
@@ -112,7 +112,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptional("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/positions/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
-            var result = await _baseClient.SendAsync<IEnumerable<WhiteBitPositionHistory>>(request, parameters, ct).ConfigureAwait(false);
+            var result = await _baseClient.SendAsync<WhiteBitPositionHistory[]>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
 

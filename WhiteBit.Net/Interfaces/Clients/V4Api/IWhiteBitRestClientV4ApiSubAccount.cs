@@ -88,7 +88,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="id">Sub account id</param>
         /// <param name="asset">Asset name</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitSubBalances>>> GetSubaccountBalancesAsync(string id, string? asset = null, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitSubBalances[]>> GetSubaccountBalancesAsync(string id, string? asset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get sub account transfer history
