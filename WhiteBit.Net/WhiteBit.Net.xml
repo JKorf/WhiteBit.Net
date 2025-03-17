@@ -437,6 +437,18 @@
         <member name="M:WhiteBit.Net.Clients.WhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
         </member>
+        <member name="T:WhiteBit.Net.Converters.EmptyArrayObjectConverter`1">
+            <summary>
+            Converter mapping to an object but also handles when an empty array is send
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:WhiteBit.Net.Converters.EmptyArrayObjectConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Converters.EmptyArrayObjectConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Enums.AccountBorrowUpdateType">
             <summary>
             Borrow update

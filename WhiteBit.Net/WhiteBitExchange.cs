@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using CryptoExchange.Net.SharedApis;
+using System.Text.Json.Serialization;
+using WhiteBit.Net.Converters;
 
 namespace WhiteBit.Net
 {
@@ -46,6 +48,8 @@ namespace WhiteBit.Net
         /// Type of exchange
         /// </summary>
         public static ExchangeType Type { get; } = ExchangeType.CEX;
+
+        internal static JsonSerializerContext SerializerContext = new WhiteBitSourceGenerationContext();
 
         /// <summary>
         /// Format a base and quote asset to an WhiteBit recognized symbol 

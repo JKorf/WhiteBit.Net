@@ -63,25 +63,26 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-        {
-            NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.AllowNamedFloatingPointLiterals,
-            PropertyNameCaseInsensitive = false,
-            Converters =
-                    {
-                        new DateTimeConverter(),
-                        new EnumConverter(),
-                        new BoolConverter(),
-                        new DecimalConverter(),
-                        new IntConverter(),
-                        new LongConverter(),
-                        new EmptyArrayObjectConverter<Dictionary<string, IEnumerable<WhiteBitClosedOrder>>>()
-                    }
-        };
+        //private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        //{
+        //    NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.AllowNamedFloatingPointLiterals,
+        //    PropertyNameCaseInsensitive = false,
+        //    Converters =
+        //            {
+        //                new DateTimeConverter(),
+        //                new EnumConverter(),
+        //                new BoolConverter(),
+        //                new DecimalConverter(),
+        //                new IntConverter(),
+        //                new LongConverter(),
+        //                new EmptyArrayObjectConverter<Dictionary<string, IEnumerable<WhiteBitClosedOrder>>>()
+        //            }
+        //};
+
         /// <inheritdoc />
-        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(_serializerOptions);
+        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(SerializerOptions.WithConverters(WhiteBitExchange.SerializerContext));
         /// <inheritdoc />
-        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer();
+        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(SerializerOptions.WithConverters(WhiteBitExchange.SerializerContext));
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
@@ -114,7 +115,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return result;
         }
 
-        protected override Error ParseErrorResponse(int httpStatusCode, IEnumerable<KeyValuePair<string, IEnumerable<string>>> responseHeaders, IMessageAccessor accessor)
+        protected override Error ParseErrorResponse(int httpStatusCode, KeyValuePair<string, string[]>[] responseHeaders, IMessageAccessor accessor)
         {
             if (!accessor.IsJson)
                 return new ServerError(accessor.GetOriginalString());
