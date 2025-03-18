@@ -254,10 +254,8 @@ namespace WhiteBit.Net.Clients.V4Api
                         {
                             ClientOrderId = update.Data.Order.ClientOrderId,
                             OrderPrice = update.Data.Order.Price,
-                            Quantity = update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? null : update.Data.Order.Quantity,
-                            QuantityFilled = update.Data.Order.QuantityFilled,
-                            QuoteQuantity = update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? update.Data.Order.Quantity : null,
-                            QuoteQuantityFilled = update.Data.Order.QuoteQuantityFilled,
+                            OrderQuantity = new SharedOrderQuantity(update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? null : update.Data.Order.Quantity, update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? update.Data.Order.Quantity : null),
+                            QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled),                            
                             Fee = update.Data.Order.Fee,
                             TimeInForce = ParseTimeInForce(update.Data.Order),
                             AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled
@@ -341,10 +339,8 @@ namespace WhiteBit.Net.Clients.V4Api
                         {
                             ClientOrderId = update.Data.Order.ClientOrderId,
                             OrderPrice = update.Data.Order.Price,
-                            Quantity = update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? null : update.Data.Order.Quantity,
-                            QuantityFilled = update.Data.Order.QuantityFilled,
-                            QuoteQuantity = update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? update.Data.Order.Quantity : null,
-                            QuoteQuantityFilled = update.Data.Order.QuoteQuantityFilled,
+                            OrderQuantity = new SharedOrderQuantity(update.Data.Order.Quantity, contractQuantity: update.Data.Order.Quantity),
+                            QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled, update.Data.Order.QuantityFilled),
                             Fee = update.Data.Order.Fee,
                             TimeInForce = ParseTimeInForce(update.Data.Order),
                             AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled

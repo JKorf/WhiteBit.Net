@@ -378,8 +378,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 request.Symbol.GetSymbol(FormatSymbol),
                 request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
                 request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.Limit ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
-                quantity: request.Quantity,
-                quoteQuantity: request.QuoteQuantity,
+                quantity: request.Quantity?.QuantityInBaseAsset,
+                quoteQuantity: request.Quantity?.QuantityInQuoteAsset,
                 price: request.Price,
                 postOnly: request.OrderType == SharedOrderType.LimitMaker ? true : null,
                 immediateOrCancel: request.TimeInForce == SharedTimeInForce.ImmediateOrCancel ? true : null,
@@ -421,10 +421,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     ClientOrderId = openOrder.ClientOrderId == string.Empty ? null : openOrder.ClientOrderId,
                     AveragePrice = openOrder.QuantityFilled != 0 ? openOrder.QuoteQuantityFilled / openOrder.QuantityFilled : null,
                     OrderPrice = openOrder.Price == 0 ? null : openOrder.Price,
-                    Quantity = openOrder.OrderType == OrderType.Market && openOrder.OrderSide == OrderSide.Buy ? null : openOrder.Quantity,
-                    QuantityFilled = openOrder.QuantityFilled,
-                    QuoteQuantity = openOrder.OrderType == OrderType.Market && openOrder.OrderSide == OrderSide.Buy ? openOrder.Quantity : null,
-                    QuoteQuantityFilled = openOrder.QuoteQuantityFilled,
+                    OrderQuantity = new SharedOrderQuantity(openOrder.OrderType == OrderType.Market && openOrder.OrderSide == OrderSide.Buy ? null : openOrder.Quantity, openOrder.OrderType == OrderType.Market && openOrder.OrderSide == OrderSide.Buy ? openOrder.Quantity : null),
+                    QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee
                 });
@@ -453,10 +451,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     ClientOrderId = closedOrder.ClientOrderId == string.Empty ? null : closedOrder.ClientOrderId,
                     AveragePrice = closedOrder.QuantityFilled != 0 ? closedOrder.QuoteQuantityFilled / closedOrder.QuantityFilled : null,
                     OrderPrice = closedOrder.Price == 0 ? null : closedOrder.Price,
-                    Quantity = closedOrder.OrderType == OrderType.Market && closedOrder.OrderSide == OrderSide.Buy ? null : closedOrder.Quantity,
-                    QuantityFilled = closedOrder.QuantityFilled,
-                    QuoteQuantity = closedOrder.OrderType == OrderType.Market && closedOrder.OrderSide == OrderSide.Buy ? closedOrder.Quantity : null,
-                    QuoteQuantityFilled = closedOrder.QuoteQuantityFilled,
+                    OrderQuantity = new SharedOrderQuantity(closedOrder.OrderType == OrderType.Market && closedOrder.OrderSide == OrderSide.Buy ? null : closedOrder.Quantity, closedOrder.OrderType == OrderType.Market && closedOrder.OrderSide == OrderSide.Buy ? closedOrder.Quantity : null),
+                    QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
                     Fee = closedOrder.Fee
                 });
@@ -489,10 +485,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 ClientOrderId = x.ClientOrderId == string.Empty ? null : x.ClientOrderId,
                 AveragePrice = x.QuantityFilled != 0 ? x.QuoteQuantityFilled / x.QuantityFilled : null,
                 OrderPrice = x.Price == 0 ? null : x.Price,
-                Quantity = x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? null : x.Quantity,
-                QuantityFilled = x.QuantityFilled,
-                QuoteQuantity = x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? x.Quantity : null,
-                QuoteQuantityFilled = x.QuoteQuantityFilled,
+                OrderQuantity = new SharedOrderQuantity(x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? null : x.Quantity, x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? x.Quantity : null),
+                QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee
             }).ToArray());
@@ -535,10 +529,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 ClientOrderId = x.ClientOrderId == string.Empty ? null : x.ClientOrderId,
                 AveragePrice = x.QuantityFilled != 0 ? x.QuoteQuantityFilled / x.QuantityFilled : null,
                 OrderPrice = x.Price == 0 ? null : x.Price,
-                Quantity = x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? null : x.Quantity,
-                QuantityFilled = x.QuantityFilled,
-                QuoteQuantity = x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? x.Quantity : null,
-                QuoteQuantityFilled = x.QuoteQuantityFilled,
+                OrderQuantity = new SharedOrderQuantity(x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? null : x.Quantity, x.OrderType == OrderType.Market && x.OrderSide == OrderSide.Buy ? x.Quantity : null),
+                QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee
             }));
@@ -885,7 +877,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 request.Symbol.GetSymbol(FormatSymbol),
                 request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
                 request.OrderType == SharedOrderType.Limit ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
-                quantity: request.Quantity,
+                quantity: request.Quantity?.QuantityInBaseAsset ?? request.Quantity?.QuantityInContracts,
                 price: request.Price,
                 postOnly: request.OrderType == SharedOrderType.LimitMaker ? true : null,
                 immediateOrCancel: request.TimeInForce == SharedTimeInForce.ImmediateOrCancel ? true : null,
@@ -927,10 +919,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     ClientOrderId = openOrder.ClientOrderId == string.Empty ? null : openOrder.ClientOrderId,
                     AveragePrice = openOrder.QuantityFilled != 0 ? openOrder.QuoteQuantityFilled / openOrder.QuantityFilled : null,
                     OrderPrice = openOrder.Price == 0 ? null : openOrder.Price,
-                    Quantity = openOrder.Quantity,
-                    QuantityFilled = openOrder.QuantityFilled,
-                    QuoteQuantity = null,
-                    QuoteQuantityFilled = openOrder.QuoteQuantityFilled,
+                    OrderQuantity = new SharedOrderQuantity(openOrder.Quantity, contractQuantity: openOrder.Quantity),
+                    QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled, openOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee
                 });
@@ -959,10 +949,8 @@ namespace WhiteBit.Net.Clients.V4Api
                         ClientOrderId = closedOrder.ClientOrderId == string.Empty ? null : closedOrder.ClientOrderId,
                         AveragePrice = closedOrder.QuantityFilled != 0 ? closedOrder.QuoteQuantityFilled / closedOrder.QuantityFilled : null,
                         OrderPrice = closedOrder.Price == 0 ? null : closedOrder.Price,
-                        Quantity = closedOrder.Quantity,
-                        QuantityFilled = closedOrder.QuantityFilled,
-                        QuoteQuantity = null,
-                        QuoteQuantityFilled = closedOrder.QuoteQuantityFilled,
+                        OrderQuantity = new SharedOrderQuantity(closedOrder.Quantity, contractQuantity: closedOrder.Quantity),
+                        QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled, closedOrder.QuantityFilled),
                         TimeInForce = ParseTimeInForce(closedOrder),
                         Fee = closedOrder.Fee
                     });
@@ -995,10 +983,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 ClientOrderId = x.ClientOrderId == string.Empty ? null : x.ClientOrderId,
                 AveragePrice = x.QuantityFilled != 0 ? x.QuoteQuantityFilled / x.QuantityFilled : null,
                 OrderPrice = x.Price == 0 ? null : x.Price,
-                Quantity = x.Quantity,
-                QuantityFilled = x.QuantityFilled,
-                QuoteQuantity = null,
-                QuoteQuantityFilled = x.QuoteQuantityFilled,
+                OrderQuantity = new SharedOrderQuantity(x.Quantity, contractQuantity: x.Quantity),
+                QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee
             }).ToArray());
@@ -1041,10 +1027,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 ClientOrderId = x.ClientOrderId == string.Empty ? null : x.ClientOrderId,
                 AveragePrice = x.QuantityFilled != 0 ? x.QuoteQuantityFilled / x.QuantityFilled : null,
                 OrderPrice = x.Price == 0 ? null : x.Price,
-                Quantity = x.Quantity,
-                QuantityFilled = x.QuantityFilled,
-                QuoteQuantity = null,
-                QuoteQuantityFilled = x.QuoteQuantityFilled,
+                OrderQuantity = new SharedOrderQuantity(x.Quantity, contractQuantity: x.Quantity),
+                QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee
             }));
