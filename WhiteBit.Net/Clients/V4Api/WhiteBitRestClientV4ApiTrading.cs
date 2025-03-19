@@ -99,7 +99,6 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
-
         #region Place Multiple Order
 
         /// <inheritdoc />

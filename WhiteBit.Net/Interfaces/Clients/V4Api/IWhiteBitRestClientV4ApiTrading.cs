@@ -53,7 +53,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Place multiple order in a single call. Only supports limit orders. Check the response data for individual order placement results
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#bulk-limit-order" /></para>
         /// </summary>
-        /// <param name="requests">Orders to place</param>
+        /// <param name="requests">Orders to place, max 20</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOrderResponse[]>> PlaceSpotMultipleOrdersAsync(
             IEnumerable<WhiteBitOrderRequest> requests,
