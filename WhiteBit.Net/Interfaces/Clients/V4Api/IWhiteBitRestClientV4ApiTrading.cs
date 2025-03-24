@@ -64,9 +64,10 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-order" /></para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
-        /// <param name="id">The order id</param>
+        /// <param name="orderId">The order id, either this or `clientOrderId` has to be provided</param>
+        /// <param name="clientOrderId">The client order id, either this or `id` should be provided</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long id, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Cancel all orders

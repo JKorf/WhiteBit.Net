@@ -111,11 +111,12 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Cancel Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long id, CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.Add("market", symbol);
-            parameters.Add("orderId", id);
+            parameters.AddOptional("orderId", orderId);
+            parameters.AddOptional("clientOrderId", clientOrderId);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrder>(request, parameters, ct).ConfigureAwait(false);
