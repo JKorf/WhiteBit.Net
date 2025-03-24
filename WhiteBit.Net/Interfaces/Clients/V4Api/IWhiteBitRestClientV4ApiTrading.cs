@@ -64,9 +64,10 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-order" /></para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
-        /// <param name="id">The order id</param>
+        /// <param name="orderId">The order id, either this or `clientOrderId` has to be provided</param>
+        /// <param name="clientOrderId">The client order id, either this or `id` should be provided</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long id, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Cancel all orders
@@ -127,15 +128,15 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Edit an order
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#modify-order" /></para>
         /// </summary>
-        /// <param name="orderId">The order id</param>
+        /// <param name="orderId">The order id, either this or `clientOrderId` should be provided</param>
+        /// <param name="clientOrderId">Client order id, either this or `orderId` should be provided</param>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
         /// <param name="quantity">New quantity</param>
         /// <param name="quoteQuantity">New quote quantity</param>
         /// <param name="price">New price</param>
         /// <param name="triggerPrice">New trigger price</param>
-        /// <param name="clientOrderId">New client order id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOrder>> EditOrderAsync(string symbol, long orderId, decimal? quantity = null, decimal? quoteQuantity = null, decimal? price = null, decimal? triggerPrice = null, string? clientOrderId = null, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitOrder>> EditOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, decimal? quantity = null, decimal? quoteQuantity = null, decimal? price = null, decimal? triggerPrice = null, CancellationToken ct = default);
 
         /// <summary>
         /// Set a kill switch. After the specified timeout all order fitting the parameters will be canceled unless the kill switch endpoint is called again to extend or cancel the timeout

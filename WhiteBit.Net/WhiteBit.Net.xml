@@ -232,7 +232,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.PlaceSpotMultipleOrdersAsync(System.Collections.Generic.IEnumerable{WhiteBit.Net.Objects.Models.WhiteBitOrderRequest},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.CancelOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.CancelOrderAsync(System.String,System.Nullable{System.Int64},System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.CancelAllOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderProductType},System.Threading.CancellationToken)">
@@ -250,7 +250,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetOrderTradesAsync(System.Int64,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.EditOrderAsync(System.String,System.Int64,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.EditOrderAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.SetKillSwitchAsync(System.String,System.Int32,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderProductType},System.Threading.CancellationToken)">
@@ -2913,13 +2913,14 @@
             <param name="requests">Orders to place, max 20</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.CancelOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.CancelOrderAsync(System.String,System.Nullable{System.Int64},System.String,System.Threading.CancellationToken)">
             <summary>
             Cancel an order
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-order" /></para>
             </summary>
             <param name="symbol">The symbol, for example `ETH_USDT`</param>
-            <param name="id">The order id</param>
+            <param name="orderId">The order id, either this or `clientOrderId` has to be provided</param>
+            <param name="clientOrderId">The client order id, either this or `id` should be provided</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.CancelAllOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderProductType},System.Threading.CancellationToken)">
@@ -2977,18 +2978,18 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.EditOrderAsync(System.String,System.Int64,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.EditOrderAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Threading.CancellationToken)">
             <summary>
             Edit an order
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#modify-order" /></para>
             </summary>
-            <param name="orderId">The order id</param>
+            <param name="orderId">The order id, either this or `clientOrderId` should be provided</param>
+            <param name="clientOrderId">Client order id, either this or `orderId` should be provided</param>
             <param name="symbol">The symbol, for example `ETH_USDT`</param>
             <param name="quantity">New quantity</param>
             <param name="quoteQuantity">New quote quantity</param>
             <param name="price">New price</param>
             <param name="triggerPrice">New trigger price</param>
-            <param name="clientOrderId">New client order id</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.SetKillSwitchAsync(System.String,System.Int32,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderProductType},System.Threading.CancellationToken)">
