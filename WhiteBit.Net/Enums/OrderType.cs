@@ -48,7 +48,7 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Margin stop limit
         /// </summary>
-        [Map("9", "stop limit")]
+        [Map("9", "margin stop limit")]
         CollateralStopLimit = 9,
         /// <summary>
         /// Margin trigger stop market

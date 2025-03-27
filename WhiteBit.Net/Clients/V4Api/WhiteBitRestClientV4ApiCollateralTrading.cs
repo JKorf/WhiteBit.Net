@@ -58,7 +58,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptional("postOnly", postOnly);
             parameters.AddOptional("ioc", immediateOrCancel);
             parameters.AddOptional("bboRole", bboRole);
-            parameters.AddOptionalString("activationPrice", triggerPrice);
+            parameters.AddOptionalString("activation_price", triggerPrice);
             parameters.AddOptionalString("stopLoss", stopLossPrice);
             parameters.AddOptionalString("takeProfit", takeProfitPrice);
             parameters.AddOptionalEnum("stp", stpMode);

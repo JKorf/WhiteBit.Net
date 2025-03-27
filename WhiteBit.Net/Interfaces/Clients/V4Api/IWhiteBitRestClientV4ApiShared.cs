@@ -25,7 +25,9 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         IOpenInterestRestClient,
         IPositionHistoryRestClient,
         IFuturesOrderRestClient,
-        IFeeRestClient
+        IFeeRestClient,
+        ISpotTriggerOrderRestClient,
+        IFuturesTriggerOrderRestClient
     {
     }
 }
