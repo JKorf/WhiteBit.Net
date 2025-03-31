@@ -154,6 +154,34 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("stp")]
         public SelfTradePreventionMode StpMode { get; set; }
+
+        /// <summary>
+        /// Take profit / stop loss data
+        /// </summary>
+        [JsonPropertyName("oto")]
+        public WhiteBitOto? OtoData { get; set; }
+    }
+
+    /// <summary>
+    /// OTO info
+    /// </summary>
+    public record WhiteBitOto
+    {
+        /// <summary>
+        /// OTO Id
+        /// </summary>
+        [JsonPropertyName("otoId")]
+        public long OtoId { get; set; }
+        /// <summary>
+        /// Stop loss price
+        /// </summary>
+        [JsonPropertyName("stopLoss")]
+        public decimal? StopLoss { get; set; }
+        /// <summary>
+        /// Take profit price
+        /// </summary>
+        [JsonPropertyName("takeProfit")]
+        public decimal? TakeProfit { get; set; }
     }
 
     /// <summary>

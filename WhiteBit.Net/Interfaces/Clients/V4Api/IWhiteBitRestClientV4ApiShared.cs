@@ -27,7 +27,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         IFuturesOrderRestClient,
         IFeeRestClient,
         ISpotTriggerOrderRestClient,
-        IFuturesTriggerOrderRestClient
+        IFuturesTriggerOrderRestClient,
+        IFuturesTpSlRestClient
     {
     }
 }

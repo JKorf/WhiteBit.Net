@@ -857,7 +857,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         string IFuturesOrderRestClient.GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
 
-        PlaceFuturesOrderOptions IFuturesOrderRestClient.PlaceFuturesOrderOptions { get; } = new PlaceFuturesOrderOptions()
+        PlaceFuturesOrderOptions IFuturesOrderRestClient.PlaceFuturesOrderOptions { get; } = new PlaceFuturesOrderOptions(true)
         {
             RequestNotes = "ReduceOnly is not supported"
         };
@@ -883,6 +883,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 postOnly: request.OrderType == SharedOrderType.LimitMaker ? true : null,
                 immediateOrCancel: request.TimeInForce == SharedTimeInForce.ImmediateOrCancel ? true : null,
                 clientOrderId: request.ClientOrderId,
+                takeProfitPrice: request.TakeProfitPrice,
+                stopLossPrice: request.StopLossPrice,
                 ct: ct).ConfigureAwait(false);
 
             if (!result)
@@ -923,7 +925,9 @@ namespace WhiteBit.Net.Clients.V4Api
                     OrderQuantity = new SharedOrderQuantity(openOrder.Quantity, contractQuantity: openOrder.Quantity),
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled, openOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
-                    Fee = openOrder.Fee
+                    Fee = openOrder.Fee,
+                    TakeProfitPrice = openOrder.OtoData?.TakeProfit,
+                    StopLossPrice = openOrder.OtoData?.StopLoss
                 });
             }
             else
@@ -953,8 +957,10 @@ namespace WhiteBit.Net.Clients.V4Api
                         OrderQuantity = new SharedOrderQuantity(closedOrder.Quantity, contractQuantity: closedOrder.Quantity),
                         QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled, closedOrder.QuantityFilled),
                         TimeInForce = ParseTimeInForce(closedOrder),
-                        Fee = closedOrder.Fee
-                    });
+                        Fee = closedOrder.Fee,
+                        TakeProfitPrice = closedOrder.OtoData?.TakeProfit,
+                        StopLossPrice = closedOrder.OtoData?.StopLoss
+                });
             }            
         }
 
@@ -987,7 +993,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 OrderQuantity = new SharedOrderQuantity(x.Quantity, contractQuantity: x.Quantity),
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
-                Fee = x.Fee
+                Fee = x.Fee,
+                TakeProfitPrice = x.OtoData?.TakeProfit,
+                StopLossPrice = x.OtoData?.StopLoss
             }).ToArray());
         }
 
@@ -1031,7 +1039,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 OrderQuantity = new SharedOrderQuantity(x.Quantity, contractQuantity: x.Quantity),
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
-                Fee = x.Fee
+                Fee = x.Fee,
+                TakeProfitPrice = x.OtoData?.TakeProfit,
+                StopLossPrice = x.OtoData?.StopLoss
             }));
 
             return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, TradingMode.Spot, data.OrderByDescending(x => x.CreateTime).ToArray(), nextToken);
@@ -1461,6 +1471,61 @@ namespace WhiteBit.Net.Clients.V4Api
                 return order.AsExchangeResult<SharedId>(Exchange, null, default);
 
             return order.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedId(request.OrderId));
+        }
+
+        #endregion
+
+        #region Tp/SL Client
+        EndpointOptions<SetTpSlRequest> IFuturesTpSlRestClient.SetTpSlOptions { get; } = new EndpointOptions<SetTpSlRequest>(true)
+        {
+        };
+
+        async Task<ExchangeWebResult<SharedId>> IFuturesTpSlRestClient.SetTpSlAsync(SetTpSlRequest request, CancellationToken ct)
+        {
+            var validationError = ((IFuturesTpSlRestClient)this).SetTpSlOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, SupportedTradingModes);
+            if (validationError != null)
+                return new ExchangeWebResult<SharedId>(Exchange, validationError);
+
+            var result = await CollateralTrading.PlaceOrderAsync(
+                request.Symbol.GetSymbol(FormatSymbol),
+                request.PositionSide == SharedPositionSide.Long ? OrderSide.Buy : OrderSide.Sell,
+                NewOrderType.StopMarket,
+                triggerPrice: request.TriggerPrice,
+                ct: ct).ConfigureAwait(false);
+
+            if (!result)
+                return result.AsExchangeResult<SharedId>(Exchange, null, default);
+
+            // Return
+            return result.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedId(result.Data.OrderId.ToString()));
+        }
+
+        EndpointOptions<CancelTpSlRequest> IFuturesTpSlRestClient.CancelTpSlOptions { get; } = new EndpointOptions<CancelTpSlRequest>(true)
+        {
+            RequiredOptionalParameters = new List<ParameterDescription>
+            {
+                new ParameterDescription(nameof(CancelTpSlRequest.OrderId), typeof(string), "Id of the tp/sl order", "123123")
+            }
+        };
+
+        async Task<ExchangeWebResult<bool>> IFuturesTpSlRestClient.CancelTpSlAsync(CancelTpSlRequest request, CancellationToken ct)
+        {
+            var validationError = ((IFuturesTpSlRestClient)this).CancelTpSlOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, SupportedTradingModes);
+            if (validationError != null)
+                return new ExchangeWebResult<bool>(Exchange, validationError);
+
+            if (!long.TryParse(request.OrderId, out var orderId))
+                return new ExchangeWebResult<bool>(Exchange, new ArgumentError("Invalid order id"));
+
+            var result = await Trading.CancelOrderAsync(
+                request.Symbol.GetSymbol(FormatSymbol),
+                orderId,
+                ct: ct).ConfigureAwait(false);
+            if (!result)
+                return result.AsExchangeResult<bool>(Exchange, null, default);
+
+            // Return
+            return result.AsExchangeResult(Exchange, request.Symbol.TradingMode, true);
         }
 
         #endregion
