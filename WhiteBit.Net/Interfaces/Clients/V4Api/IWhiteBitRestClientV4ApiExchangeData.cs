@@ -55,7 +55,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/public/http-v4/#orderbook" /></para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
-        /// <param name="limit">The order book depth</param>
+        /// <param name="limit">The order book depth, max 100</param>
         /// <param name="mergeLevel">Aggregation level</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, int? mergeLevel = null, CancellationToken ct = default);

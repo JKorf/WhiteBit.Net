@@ -28,7 +28,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         IFeeRestClient,
         ISpotTriggerOrderRestClient,
         IFuturesTriggerOrderRestClient,
-        IFuturesTpSlRestClient
+        IFuturesTpSlRestClient,
+        IBookTickerRestClient
     {
     }
 }

@@ -33,7 +33,7 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Stop market
         /// </summary>
-        [Map("4", "stop_market")]
+        [Map("4", "stop_market", "stop market")]
         StopMarket = 4,
         /// <summary>
         /// Margin limit
@@ -53,7 +53,7 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Margin trigger stop market
         /// </summary>
-        [Map("10", "trigger stop market")]
+        [Map("10", "trigger stop market", "trigger margin market")]
         CollateralTriggerStopMarket = 10,
         /// <summary>
         /// Margin normalization

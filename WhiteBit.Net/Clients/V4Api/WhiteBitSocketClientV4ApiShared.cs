@@ -253,12 +253,14 @@ namespace WhiteBit.Net.Clients.V4Api
                             update.Data.Order.CreateTime)
                         {
                             ClientOrderId = update.Data.Order.ClientOrderId,
-                            OrderPrice = update.Data.Order.Price,
-                            OrderQuantity = new SharedOrderQuantity(update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? null : update.Data.Order.Quantity, update.Data.Order.OrderType == OrderType.Market && update.Data.Order.OrderSide == OrderSide.Buy ? update.Data.Order.Quantity : null),
+                            OrderPrice = update.Data.Order.Price == 0 ? null : update.Data.Order.Price,
+                            OrderQuantity = new SharedOrderQuantity((update.Data.Order.OrderType == OrderType.Market || update.Data.Order.OrderType == OrderType.StopMarket) && update.Data.Order.OrderSide == OrderSide.Buy ? null : update.Data.Order.Quantity, (update.Data.Order.OrderType == OrderType.Market || update.Data.Order.OrderType == OrderType.StopMarket) && update.Data.Order.OrderSide == OrderSide.Buy ? update.Data.Order.Quantity : null),
                             QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled),                            
                             Fee = update.Data.Order.Fee,
                             TimeInForce = ParseTimeInForce(update.Data.Order),
-                            AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled
+                            AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled,
+                            TriggerPrice = update.Data.Order.TriggerPrice,
+                            IsTriggerOrder = update.Data.Order.TriggerPrice > 0
                         }
                     }));
                 },
@@ -338,12 +340,16 @@ namespace WhiteBit.Net.Clients.V4Api
                             update.Data.Order.CreateTime)
                         {
                             ClientOrderId = update.Data.Order.ClientOrderId,
-                            OrderPrice = update.Data.Order.Price,
+                            OrderPrice = update.Data.Order.Price == 0 ? null : update.Data.Order.Price,
                             OrderQuantity = new SharedOrderQuantity(update.Data.Order.Quantity, contractQuantity: update.Data.Order.Quantity),
                             QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled, update.Data.Order.QuantityFilled),
                             Fee = update.Data.Order.Fee,
                             TimeInForce = ParseTimeInForce(update.Data.Order),
-                            AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled
+                            AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled,
+                            TriggerPrice = update.Data.Order.TriggerPrice,
+                            StopLossPrice = update.Data.Order.OtoData?.StopLoss,
+                            TakeProfitPrice = update.Data.Order.OtoData?.TakeProfit,
+                            IsTriggerOrder = update.Data.Order.TriggerPrice > 0
                         }
                     }));
                 },
@@ -371,10 +377,10 @@ namespace WhiteBit.Net.Clients.V4Api
 
         private SharedOrderType ParseOrderType(OrderType type, bool postOnly)
         {
-            if (type == OrderType.Market || type == OrderType.CollateralMarket) return SharedOrderType.Market;
+            if (type == OrderType.Market || type == OrderType.CollateralMarket || type == OrderType.CollateralTriggerStopMarket) return SharedOrderType.Market;
             if (type == OrderType.MarketBase) return SharedOrderType.Market;
             if ((type == OrderType.Limit || type == OrderType.CollateralLimit) && postOnly) return SharedOrderType.LimitMaker;
-            if (type == OrderType.Limit || type == OrderType.CollateralLimit) return SharedOrderType.Limit;
+            if (type == OrderType.Limit || type == OrderType.CollateralLimit || type == OrderType.CollateralStopLimit) return SharedOrderType.Limit;
 
             return SharedOrderType.Other;
         }

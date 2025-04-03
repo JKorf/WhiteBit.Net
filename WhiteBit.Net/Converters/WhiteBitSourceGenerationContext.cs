@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Converters
-{  
+{
+    [JsonSerializable(typeof(OrderEvent))]
 
     // End manual defined attributes
 
