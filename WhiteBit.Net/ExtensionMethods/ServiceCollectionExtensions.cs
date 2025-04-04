@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration configuration)
         {
             var options = new WhiteBitOptions();
-            // Reset environment so we know if theyre overriden
+            // Reset environment so we know if they're overridden
             options.Rest.Environment = null!;
             options.Socket.Environment = null!;
             configuration.Bind(options);
@@ -66,7 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Action<WhiteBitOptions>? optionsDelegate = null)
         {
             var options = new WhiteBitOptions();
-            // Reset environment so we know if theyre overriden
+            // Reset environment so we know if they're overridden
             options.Rest.Environment = null!;
             options.Socket.Environment = null!;
             optionsDelegate?.Invoke(options);
@@ -82,21 +82,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton(x => Options.Options.Create(options.Socket));
 
             return AddWhiteBitCore(services, options.SocketClientLifeTime);
-        }
-
-        /// <summary>
-        /// DEPRECATED; use <see cref="AddWhiteBit(IServiceCollection, Action{WhiteBitOptions}?)" /> instead
-        /// </summary>
-        public static IServiceCollection AddWhiteBit(
-            this IServiceCollection services,
-            Action<WhiteBitRestOptions> restDelegate,
-            Action<WhiteBitSocketOptions>? socketDelegate = null,
-            ServiceLifetime? socketClientLifeTime = null)
-        {
-            services.Configure<WhiteBitRestOptions>((x) => { restDelegate?.Invoke(x); });
-            services.Configure<WhiteBitSocketOptions>((x) => { socketDelegate?.Invoke(x); });
-
-            return AddWhiteBitCore(services, socketClientLifeTime);
         }
 
         private static IServiceCollection AddWhiteBitCore(

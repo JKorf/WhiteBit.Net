@@ -6610,10 +6610,5 @@
             <param name="optionsDelegate">Set options for the WhiteBit services</param>
             <returns></returns>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitRestOptions},System.Action{WhiteBit.Net.Objects.Options.WhiteBitSocketOptions},System.Nullable{Microsoft.Extensions.DependencyInjection.ServiceLifetime})">
-            <summary>
-            DEPRECATED; use <see cref="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddWhiteBit(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{WhiteBit.Net.Objects.Options.WhiteBitOptions})" /> instead
-            </summary>
-        </member>
     </members>
 </doc>
