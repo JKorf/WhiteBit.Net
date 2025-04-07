@@ -125,12 +125,12 @@ namespace WhiteBit.Net.Objects.Models
         /// Stop loss price
         /// </summary>
         [JsonPropertyName("stopLoss")]
-        public decimal StopLossPrice { get; set; }
+        public decimal? StopLossPrice { get; set; }
         /// <summary>
         /// Take profit price
         /// </summary>
         [JsonPropertyName("takeProfit")]
-        public decimal TakeProfitPrice { get; set; }
+        public decimal? TakeProfitPrice { get; set; }
     }
 
 

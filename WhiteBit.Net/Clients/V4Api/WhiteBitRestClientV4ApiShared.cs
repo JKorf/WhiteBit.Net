@@ -1520,6 +1520,10 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Tp/SL Client
         EndpointOptions<SetTpSlRequest> IFuturesTpSlRestClient.SetTpSlOptions { get; } = new EndpointOptions<SetTpSlRequest>(true)
         {
+            RequiredOptionalParameters = new List<ParameterDescription>
+            {
+                new ParameterDescription(nameof(SetTpSlRequest.Quantity), typeof(decimal), "Quantity of the position to close, required by API", 0.123m)
+            }
         };
 
         async Task<ExchangeWebResult<SharedId>> IFuturesTpSlRestClient.SetTpSlAsync(SetTpSlRequest request, CancellationToken ct)
@@ -1530,8 +1534,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var result = await CollateralTrading.PlaceOrderAsync(
                 request.Symbol.GetSymbol(FormatSymbol),
-                request.PositionSide == SharedPositionSide.Long ? OrderSide.Buy : OrderSide.Sell,
+                request.PositionSide == SharedPositionSide.Long ? OrderSide.Sell : OrderSide.Buy,
                 NewOrderType.StopMarket,
+                quantity: request.Quantity!.Value,
                 triggerPrice: request.TriggerPrice,
                 ct: ct).ConfigureAwait(false);
 

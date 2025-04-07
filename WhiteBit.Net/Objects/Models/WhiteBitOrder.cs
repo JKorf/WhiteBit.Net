@@ -156,7 +156,7 @@ namespace WhiteBit.Net.Objects.Models
         public SelfTradePreventionMode StpMode { get; set; }
 
         /// <summary>
-        /// Take profit / stop loss data
+        /// Take profit / stop loss data, not used for websocket updates
         /// </summary>
         [JsonPropertyName("oto")]
         public WhiteBitOto? OtoData { get; set; }

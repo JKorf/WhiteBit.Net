@@ -335,7 +335,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetOpenOrdersAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToOpenOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToOpenOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetClosedOrdersAsync(System.String,System.Collections.Generic.IEnumerable{WhiteBit.Net.Enums.OrderType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -1866,6 +1866,21 @@
             OCO
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Enums.ConditionalType">
+            <summary>
+            Conditional type
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ConditionalType.MarginStopLoss">
+            <summary>
+            Stop loss
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.ConditionalType.MarginTakeProfit">
+            <summary>
+            Take profit
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Enums.KlineInterval">
             <summary>
             Kline interval
@@ -3200,13 +3215,14 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token for closing this subscription</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToOpenOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToOpenOrderUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to open order updates
             <para><a href="https://docs.whitebit.com/private/websocket/#orders-pending" /></para>
             </summary>
             <param name="symbols"></param>
-            <param name="onMessage">The event handler for the received data</param>
+            <param name="onOrderMessage">The event handler for handling an order update</param>
+            <param name="onOtoOrdersMessage">The event handler for handling an OTO order update</param>
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
@@ -4990,7 +5006,7 @@
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrder.OtoData">
             <summary>
-            Take profit / stop loss data
+            Take profit / stop loss data, not used for websocket updates
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOto">
@@ -5184,6 +5200,51 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate.Order">
+            <summary>
+            Order info
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOtoOrder">
+            <summary>
+            OTO order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOtoOrder.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOtoOrder.TriggerOrder">
+            <summary>
+            Trigger order
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOtoOrder.StopLossPrice">
+            <summary>
+            Stop loss price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOtoOrder.TakeProfitPrice">
+            <summary>
+            Take profit price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOtoOrder.ConditionalType">
+            <summary>
+            Conditional order type
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate">
+            <summary>
+            OTO order update
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate.Event">
+            <summary>
+            Event
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate.Order">
             <summary>
             Order info
             </summary>
@@ -6308,6 +6369,29 @@
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription">
+            <inheritdoc />
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.ListenerIdentifiers">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate}})">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetUnsubQuery">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription">

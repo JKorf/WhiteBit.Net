@@ -37,6 +37,7 @@ namespace WhiteBit.Net.Clients.V4Api
         private static readonly MessagePath _index7SymbolPath = MessagePath.Get().Property("params").Index(0).Index(7);
         private static readonly MessagePath _index2SymbolPath = MessagePath.Get().Property("params").Index(2);
         private static readonly MessagePath _ordersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("market");
+        private static readonly MessagePath _otoOrdersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("trigger_order").Property("market");
         private static readonly MessagePath _orderExecutedSymbolPath = MessagePath.Get().Property("params").Property("market");
 
         /// <inheritdoc />
@@ -286,9 +287,9 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onOrderMessage, Action<DataEvent<WhiteBitOtoOrderUpdate>>? onOtoOrdersMessage = null, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitOrderUpdate>(_logger, "ordersPending", symbols.ToArray(), onMessage, true, false);
+            var subscription = new WhiteBitOpenOrderSubscription(_logger, symbols.ToArray(), onOrderMessage, onOtoOrdersMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -405,6 +406,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
             if (method.Equals("ordersPending_update", StringComparison.Ordinal))
                 return method + "." + message.GetValue<string>(_ordersSymbolPath);
+            if (method.Equals("otoOrdersPending_update", StringComparison.Ordinal))
+                return method + "." + message.GetValue<string>(_otoOrdersSymbolPath);
             if (method.Equals("ordersExecuted_update", StringComparison.Ordinal))
                 return method + "." + message.GetValue<string>(_orderExecutedSymbolPath);
 

@@ -192,10 +192,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/private/websocket/#orders-pending" /></para>
         /// </summary>
         /// <param name="symbols"></param>
-        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="onOrderMessage">The event handler for handling an order update</param>
+        /// <param name="onOtoOrdersMessage">The event handler for handling an OTO order update</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onMessage, CancellationToken ct = default);
+        Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onOrderMessage, Action<DataEvent<WhiteBitOtoOrderUpdate>>? onOtoOrdersMessage = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get closed orders

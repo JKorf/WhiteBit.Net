@@ -347,8 +347,6 @@ namespace WhiteBit.Net.Clients.V4Api
                             TimeInForce = ParseTimeInForce(update.Data.Order),
                             AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled,
                             TriggerPrice = update.Data.Order.TriggerPrice,
-                            StopLossPrice = update.Data.Order.OtoData?.StopLoss,
-                            TakeProfitPrice = update.Data.Order.OtoData?.TakeProfit,
                             IsTriggerOrder = update.Data.Order.TriggerPrice > 0
                         }
                     }));
