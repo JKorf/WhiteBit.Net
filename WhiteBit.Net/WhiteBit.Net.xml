@@ -2300,12 +2300,13 @@
             <summary>
             V4 API endpoints
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api"/>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient.SetOptions(CryptoExchange.Net.Objects.Options.UpdateOptions)">
             <summary>
             Update specific options
             </summary>
-            <param name="options">Options to update. Only specific options are changable after the client has been created</param>
+            <param name="options">Options to update. Only specific options are changeable after the client has been created</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <summary>
@@ -2322,12 +2323,13 @@
             <summary>
             V4 API endpoints
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api"/>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient.SetOptions(CryptoExchange.Net.Objects.Options.UpdateOptions)">
             <summary>
             Update specific options
             </summary>
-            <param name="options">Options to update. Only specific options are changable after the client has been created</param>
+            <param name="options">Options to update. Only specific options are changeable after the client has been created</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <summary>
@@ -2344,36 +2346,43 @@
             <summary>
             Endpoints related to account settings, info or actions
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount"/>
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.Convert">
             <summary>
             Convert endpoints
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiConvert"/>
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.Codes">
             <summary>
             Code endpoints
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes"/>
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.SubAccount">
             <summary>
             Subaccount endpoints
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiSubAccount"/>
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.ExchangeData">
             <summary>
             Endpoints related to retrieving market and system data
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData"/>
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.Trading">
             <summary>
             Endpoints related to orders and trades
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading"/>
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.CollateralTrading">
             <summary>
             Endpoints related to collateral (Futures and Spot Margin) orders and trades
             </summary>
+            <see cref="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading"/>
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4Api.SharedClient">
             <summary>
@@ -3306,7 +3315,7 @@
         </member>
         <member name="P:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SharedClient">
             <summary>
-            Get the shared socket requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
+            Get the shared socket requests client. This interface is shared with other exchanges to allow for a common implementation for different exchanges.
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4ApiShared">

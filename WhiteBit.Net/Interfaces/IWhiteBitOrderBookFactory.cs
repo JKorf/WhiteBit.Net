@@ -16,7 +16,6 @@ namespace WhiteBit.Net.Interfaces
         /// </summary>
         IOrderBookFactory<WhiteBitOrderBookOptions> V4 { get; }
 
-
         /// <summary>
         /// Create a SymbolOrderBook for the symbol
         /// </summary>
@@ -24,8 +23,7 @@ namespace WhiteBit.Net.Interfaces
         /// <param name="options">Book options</param>
         /// <returns></returns>
         ISymbolOrderBook Create(SharedSymbol symbol, Action<WhiteBitOrderBookOptions>? options = null);
-
-        
+                
         /// <summary>
         /// Create a new V4 local order book instance
         /// </summary>

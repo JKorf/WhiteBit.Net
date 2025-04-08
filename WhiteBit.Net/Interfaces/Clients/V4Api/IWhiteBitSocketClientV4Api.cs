@@ -277,7 +277,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<CallResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
-        /// Get the shared socket requests client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
+        /// Get the shared socket requests client. This interface is shared with other exchanges to allow for a common implementation for different exchanges.
         /// </summary>
         public IWhiteBitSocketClientV4ApiShared SharedClient { get; }
     }
