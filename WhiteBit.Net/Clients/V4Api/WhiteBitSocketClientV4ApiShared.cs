@@ -257,10 +257,12 @@ namespace WhiteBit.Net.Clients.V4Api
                             OrderQuantity = new SharedOrderQuantity((update.Data.Order.OrderType == OrderType.Market || update.Data.Order.OrderType == OrderType.StopMarket) && update.Data.Order.OrderSide == OrderSide.Buy ? null : update.Data.Order.Quantity, (update.Data.Order.OrderType == OrderType.Market || update.Data.Order.OrderType == OrderType.StopMarket) && update.Data.Order.OrderSide == OrderSide.Buy ? update.Data.Order.Quantity : null),
                             QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled),                            
                             Fee = update.Data.Order.Fee,
+                            FeeAsset = update.Data.Order.FeeAsset,
                             TimeInForce = ParseTimeInForce(update.Data.Order),
                             AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled,
                             TriggerPrice = update.Data.Order.TriggerPrice,
-                            IsTriggerOrder = update.Data.Order.TriggerPrice > 0
+                            IsTriggerOrder = update.Data.Order.TriggerPrice > 0,
+                            UpdateTime = update.Data.Order.UpdateTime
                         }
                     }));
                 },
@@ -344,10 +346,12 @@ namespace WhiteBit.Net.Clients.V4Api
                             OrderQuantity = new SharedOrderQuantity(update.Data.Order.Quantity, contractQuantity: update.Data.Order.Quantity),
                             QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled, update.Data.Order.QuantityFilled),
                             Fee = update.Data.Order.Fee,
+                            FeeAsset = update.Data.Order.FeeAsset,
                             TimeInForce = ParseTimeInForce(update.Data.Order),
                             AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled,
                             TriggerPrice = update.Data.Order.TriggerPrice,
-                            IsTriggerOrder = update.Data.Order.TriggerPrice > 0
+                            IsTriggerOrder = update.Data.Order.TriggerPrice > 0,
+                            UpdateTime = update.Data.Order.UpdateTime
                         }
                     }));
                 },

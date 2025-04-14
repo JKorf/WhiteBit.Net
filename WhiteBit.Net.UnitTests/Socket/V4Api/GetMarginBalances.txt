@@ -1,0 +1,22 @@
+> { "id": "|2|", "method": "authorize", "params": [ "123", "public" ]}
+< { "id": |2|, "result": { "status": "success" }, "error": null }
+> { "id": "|1|", "method": "balanceMargin_request", "params": []}
+=
+{
+  "id": |1|,
+  "error": null,
+  "result": {
+    "BTC": {
+      "balance": "0.0006092",               
+      "borrow": "0",                        
+      "available_without_borrow": "0.0006092",  
+      "available_with_borrow": "0.00288701"     
+    },
+    "USDT": {
+      "balance": "0.00538073",                 
+      "borrow": "0",                         
+      "available_without_borrow": "0.00538073", 
+      "available_with_borrow": "28.43739825" 
+    }
+  }
+}

@@ -81,6 +81,17 @@ namespace WhiteBit.Net.Objects.Models
         internal DateTime CreateTimeInt { set { CreateTime = value; } }
 
         /// <summary>
+        /// Fill timestamp
+        /// </summary>
+        [JsonPropertyName("ftime")]
+        public DateTime? FillTime { get; set; }
+        /// <summary>
+        /// Edit timestamp
+        /// </summary>
+        [JsonPropertyName("mtime")]
+        public DateTime? UpdateTime { get; set; }
+
+        /// <summary>
         /// Filled quantity in quote asset
         /// </summary>
         [JsonPropertyName("dealMoney")]
@@ -122,6 +133,11 @@ namespace WhiteBit.Net.Objects.Models
         [JsonInclude, JsonPropertyName("deal_fee")]
         internal decimal FeeInt { set => Fee = value; }
         /// <summary>
+        /// Fee asset
+        /// </summary>
+        [JsonPropertyName("fee_asset")]
+        public string? FeeAsset { get; set; }
+        /// <summary>
         /// Limit price
         /// </summary>
         [JsonPropertyName("price")]
@@ -154,6 +170,12 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("stp")]
         public SelfTradePreventionMode StpMode { get; set; }
+
+        /// <summary>
+        /// Order source
+        /// </summary>
+        [JsonPropertyName("source")]
+        public string? Source { get; set; }
 
         /// <summary>
         /// Take profit / stop loss data, not used for websocket updates
@@ -190,11 +212,6 @@ namespace WhiteBit.Net.Objects.Models
     [SerializationModel]
     public record WhiteBitConditionalOrder : WhiteBitOrder
     {
-        /// <summary>
-        /// Update timestamp
-        /// </summary>
-        [JsonPropertyName("mtime")]
-        public DateTime? UpdateTime { get; set; }
         /// <summary>
         /// Trigger condition
         /// </summary>
@@ -241,10 +258,5 @@ namespace WhiteBit.Net.Objects.Models
     [SerializationModel]
     public record WhiteBitClosedOrder : WhiteBitOrder
     {
-        /// <summary>
-        /// Filled timestamp
-        /// </summary>
-        [JsonPropertyName("ftime")]
-        public DateTime FillTime { get; set; }
     }
 }

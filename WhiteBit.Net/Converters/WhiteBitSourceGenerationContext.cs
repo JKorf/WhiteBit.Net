@@ -8,6 +8,17 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Converters
 {
     [JsonSerializable(typeof(OrderEvent))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitSocketTrade[]>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<decimal>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitSocketTicker>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitKlineUpdate[]>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitOrderBook>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<Dictionary<string, WhiteBitTradeBalance>>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<Dictionary<string, WhiteBitMarginBalance>>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitOrders>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitClosedOrders>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitUserTrades>))]
+    [JsonSerializable(typeof(WhiteBitSocketResponse<decimal?>))]
 
     // End manual defined attributes
 

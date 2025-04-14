@@ -1,0 +1,16 @@
+> { "id": "|1|", "method": "market_request", "params": []}
+=
+{
+  "id": |1|,
+  "result": {
+    "period": 86400, 
+    "last": "0.020981",
+    "open": "0.02035", 
+    "close": "0.020981", 
+    "high": "0.020988", 
+    "low": "0.020281",
+    "volume": "135220.218",
+    "deal": "2776.587022649" 
+  },
+  "error": null
+}

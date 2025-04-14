@@ -303,10 +303,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 "ordersExecuted_request",
                 true,
                 ct,
-                new
+                new Dictionary<string, object?>
                 {
-                    market = symbol,
-                    order_types = orderTypes?.Select(x => (int)x).ToArray()
+                    { "market", symbol },
+                    { "order_types", orderTypes?.Select(x => (int)x).ToArray() }
                 },
                 limit ?? 0,
                 offset ?? 100).ConfigureAwait(false);
@@ -451,6 +451,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
             if (_tokenCache.TryGetValue(apiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
                 return new CallResult<string>(token.Token);
+
+            if (ClientOptions.Environment.Name == "UnitTest")
+                return new CallResult<string>("123");
 
             _logger.LogDebug("Requesting websocket token");
             var restClient = new WhiteBitRestClient(x =>
