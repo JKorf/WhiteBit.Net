@@ -83,6 +83,11 @@ namespace WhiteBit.Net
         /// </summary>
         public event Action<RateLimitEvent> RateLimitTriggered;
 
+        /// <summary>
+        /// Event when the rate limit is updated. Note that it's only updated when a request is send, so there are no specific updates when the current usage is decaying.
+        /// </summary>
+        public event Action<RateLimitUpdateEvent> RateLimitUpdated;
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal WhiteBitRateLimiters()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -93,11 +98,13 @@ namespace WhiteBit.Net
         private void Initialize()
         {
             WhiteBit = new RateLimitGate("WhiteBit");
-            WhiteBit.RateLimitTriggered += (x) => RateLimitTriggered?.Invoke(x);
-
             WhiteBitSocket = new RateLimitGate("WhiteBit Socket")
                 .AddGuard(new RateLimitGuard(RateLimitGuard.PerConnection, new LimitItemTypeFilter(RateLimitItemType.Request), 200, TimeSpan.FromMinutes(1), RateLimitWindowType.Sliding))
                 .AddGuard(new RateLimitGuard(RateLimitGuard.PerHost, new LimitItemTypeFilter(RateLimitItemType.Connection), 1000, TimeSpan.FromMinutes(1), RateLimitWindowType.Sliding));
+            WhiteBit.RateLimitTriggered += (x) => RateLimitTriggered?.Invoke(x);
+            WhiteBit.RateLimitUpdated += (x) => RateLimitUpdated?.Invoke(x);
+            WhiteBitSocket.RateLimitTriggered += (x) => RateLimitTriggered?.Invoke(x);
+            WhiteBitSocket.RateLimitUpdated += (x) => RateLimitUpdated?.Invoke(x);
         }
 
 
