@@ -63,22 +63,6 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        //private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-        //{
-        //    NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.AllowNamedFloatingPointLiterals,
-        //    PropertyNameCaseInsensitive = false,
-        //    Converters =
-        //            {
-        //                new DateTimeConverter(),
-        //                new EnumConverter(),
-        //                new BoolConverter(),
-        //                new DecimalConverter(),
-        //                new IntConverter(),
-        //                new LongConverter(),
-        //                new EmptyArrayObjectConverter<Dictionary<string, IEnumerable<WhiteBitClosedOrder>>>()
-        //            }
-        //};
-
         /// <inheritdoc />
         protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(SerializerOptions.WithConverters(WhiteBitExchange._serializerContext));
         /// <inheritdoc />
