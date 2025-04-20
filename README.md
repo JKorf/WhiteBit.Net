@@ -13,6 +13,7 @@ WhiteBit.Net is a client library for accessing the [WhiteBit REST and Websocket 
 * Extensive logging
 * Support for different environments
 * Easy integration with other exchange client based on the CryptoExchange.Net base library
+* Native AOT support
 
 ## Supported Frameworks
 The library is targeting both `.NET Standard 2.0` and `.NET Standard 2.1` for optimal compatibility
