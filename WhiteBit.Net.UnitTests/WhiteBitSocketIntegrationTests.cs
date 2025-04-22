@@ -34,7 +34,7 @@ namespace WhiteBit.Net.UnitTests
         [Test]
         public async Task TestSubscriptions()
         {
-            await RunAndCheckUpdate<WhiteBitTicker>((client, updateHandler) => client.V4Api.SubscribeToSpotBalanceUpdatesAsync(new[] { "ETH_USDT" }, default, default), false, true);
+            await RunAndCheckUpdate<WhiteBitTicker>((client, updateHandler) => client.V4Api.SubscribeToSpotBalanceUpdatesAsync(new[] { "ETH" }, default, default), false, true);
             await RunAndCheckUpdate<WhiteBitTickerUpdate>((client, updateHandler) => client.V4Api.SubscribeToTickerUpdatesAsync("ETH_USDT", updateHandler, default), true, false);
         } 
     }
