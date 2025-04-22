@@ -140,7 +140,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 data = data.Take(request.Limit.Value);
 
             // Return
-            return result.AsExchangeResult<SharedTrade[]>(Exchange, TradingMode.Spot, data.Select(x => new SharedTrade(x.BaseVolume, x.Price, x.Timestamp)
+            return result.AsExchangeResult<SharedTrade[]>(Exchange, request.Symbol.TradingMode, data.Select(x => new SharedTrade(x.BaseVolume, x.Price, x.Timestamp)
             {
                 Side = x.Side == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell
             }).ToArray());
@@ -162,7 +162,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (!result)
                 return result.AsExchangeResult<SharedOrderBook>(Exchange, null, default);
 
-            return result.AsExchangeResult(Exchange, TradingMode.Spot, new SharedOrderBook(result.Data.Asks, result.Data.Bids));
+            return result.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedOrderBook(result.Data.Asks, result.Data.Bids));
         }
 
         #endregion
@@ -176,11 +176,22 @@ namespace WhiteBit.Net.Clients.V4Api
             if (validationError != null)
                 return new ExchangeWebResult<SharedBalance[]>(Exchange, validationError);
 
-            var result = await Account.GetSpotBalancesAsync(ct: ct).ConfigureAwait(false);
-            if (!result)
-                return result.AsExchangeResult<SharedBalance[]>(Exchange, null, default);
+            if (request.TradingMode == null || request.TradingMode == TradingMode.Spot)
+            {
+                var result = await Account.GetSpotBalancesAsync(ct: ct).ConfigureAwait(false);
+                if (!result)
+                    return result.AsExchangeResult<SharedBalance[]>(Exchange, null, default);
 
-            return result.AsExchangeResult<SharedBalance[]>(Exchange, TradingMode.Spot, result.Data.Select(x => new SharedBalance(x.Asset, x.Available, x.Available + x.Frozen)).ToArray());
+                return result.AsExchangeResult<SharedBalance[]>(Exchange, TradingMode.Spot, result.Data.Select(x => new SharedBalance(x.Asset, x.Available, x.Available + x.Frozen)).ToArray());
+            }
+            else
+            {
+                var result = await Account.GetCollateralBalancesAsync(ct: ct).ConfigureAwait(false);
+                if (!result)
+                    return result.AsExchangeResult<SharedBalance[]>(Exchange, null, default);
+
+                return result.AsExchangeResult<SharedBalance[]>(Exchange, SupportedFuturesModes, result.Data.Select(x => new SharedBalance(x.Key, x.Value, x.Value)).ToArray());
+            }
         }
 
         #endregion
@@ -942,7 +953,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var openOrder = openOrders.Data.SingleOrDefault();
             if (openOrder != null)
             {
-                return openOrders.AsExchangeResult(Exchange, TradingMode.Spot, new SharedFuturesOrder(
+                return openOrders.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedFuturesOrder(
                     ExchangeSymbolCache.ParseSymbol(_topicFuturesId, openOrder.Symbol), 
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
@@ -976,7 +987,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
 
-                return closeOrders.AsExchangeResult(Exchange, TradingMode.Spot, new SharedFuturesOrder(
+                return closeOrders.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedFuturesOrder(
                     ExchangeSymbolCache.ParseSymbol(_topicFuturesId, closedOrder.Symbol), 
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
@@ -1014,7 +1025,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var data = orders.Data.Where(x => x.Symbol.EndsWith("_PERP"));
 
-            return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, TradingMode.Spot, data.Select(x => new SharedFuturesOrder(
+            return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, SupportedFuturesModes, data.Select(x => new SharedFuturesOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
@@ -1084,7 +1095,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 IsTriggerOrder = x.TriggerPrice > 0
             }));
 
-            return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, TradingMode.Spot, data.OrderByDescending(x => x.CreateTime).ToArray(), nextToken);
+            return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, request.Symbol.TradingMode, data.OrderByDescending(x => x.CreateTime).ToArray(), nextToken);
         }
 
         EndpointOptions<GetOrderTradesRequest> IFuturesOrderRestClient.GetFuturesOrderTradesOptions { get; } = new EndpointOptions<GetOrderTradesRequest>(true);
@@ -1101,7 +1112,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (!orders)
                 return orders.AsExchangeResult<SharedUserTrade[]>(Exchange, null, default);
 
-            return orders.AsExchangeResult<SharedUserTrade[]>(Exchange, TradingMode.Spot, orders.Data.Select(x => new SharedUserTrade(
+            return orders.AsExchangeResult<SharedUserTrade[]>(Exchange, request.Symbol.TradingMode, orders.Data.Select(x => new SharedUserTrade(
                 ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
                 request.Symbol.GetSymbol(FormatSymbol),
                 x.OrderId.ToString(),
@@ -1249,7 +1260,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return result.AsExchangeError<SharedFee>(Exchange, new ServerError("Not found"));
 
             // Return
-            return result.AsExchangeResult(Exchange, TradingMode.Spot, new SharedFee(symbol.MakerFee, symbol.TakerFee));
+            return result.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedFee(symbol.MakerFee, symbol.TakerFee));
         }
         #endregion
 
