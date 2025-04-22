@@ -145,6 +145,28 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 2.0.0-beta1 - 22 Apr 2025
+    * Updated CryptoExchange.Net to version 9.0.0-beta1, see https://github.com/JKorf/CryptoExchange.Net/releases/
+    * Added support for Native AOT compilation
+    * Added RateLimitUpdated event
+    * Added SharedSymbol response property to all Shared interfaces response models returning a symbol name
+    * Added GenerateClientOrderId method to V4Api Shared clients
+    * Added IBookTickerRestClient implementation to V4Api Shared client
+    * Added ISpotTriggerOrderRestClient implementation to V4Api Shared client
+    * Added IFuturesTriggerOrderRestClient implementation to V4Api Shared client
+    * Added IFuturesTpSlRestClient implementation to V4Api Shared client
+    * Added takeProfitPrice, stopLossPrice parameter support to V4Api PlaceFuturesOrderAsync
+    * Added TakeProfitPrice, StopLossPrice, TriggerPrice, IsTriggerOrder to SharedFuturesOrder model
+    * Added TriggerPrice, IsTriggerOrder properties to SharedSpotOrder model
+    * Added OptionalExchangeParameters and Supported properties to EndpointOptions
+    * Added handling of OTO order message in socketClient.V4Api.SubscribeToOrderUpdatesAsync subscription
+    * Refactored Shared clients quantity parameters and responses to use SharedQuantity
+    * Updated WhiteBitOrder model
+    * Updated all IEnumerable response and model types to array response types
+    * Removed Newtonsoft.Json dependency
+    * Removed legacy AddWhiteBit(restOptions, socketOptions) DI overload
+    * Fixed some typos
+
 * Version 1.5.0 - 24 Mar 2025
     * Added clientOrderId parameter to restClient.V4Api.Trading.CancelOrderAsync, renamed id to orderId and made it optional
     * Added WhiteBitNonceProvider
