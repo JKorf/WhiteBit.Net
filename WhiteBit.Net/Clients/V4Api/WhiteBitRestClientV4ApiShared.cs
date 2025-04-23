@@ -75,7 +75,10 @@ namespace WhiteBit.Net.Clients.V4Api
             if (ticker == null)
                 return result.AsExchangeError<SharedSpotTicker>(Exchange, new ServerError("Not found"));
 
-            return result.AsExchangeResult(Exchange, TradingMode.Spot, new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, ticker.Symbol), ticker.Symbol, ticker.LastPrice, null, null, ticker.BaseVolume, ticker.ChangePercentage));
+            return result.AsExchangeResult(Exchange, TradingMode.Spot, new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, ticker.Symbol), ticker.Symbol, ticker.LastPrice, null, null, ticker.BaseVolume, ticker.ChangePercentage)
+            {
+                QuoteVolume = ticker.QuoteVolume
+            });
         }
 
         EndpointOptions<GetTickersRequest> ISpotTickerRestClient.GetSpotTickersOptions { get; } = new EndpointOptions<GetTickersRequest>(false);
@@ -90,7 +93,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 return result.AsExchangeResult<SharedSpotTicker[]>(Exchange, null, default);
 
             var data = result.Data.Where(x => !x.Symbol.EndsWith("_PERP"));
-            return result.AsExchangeResult<SharedSpotTicker[]>(Exchange, TradingMode.Spot, data.Select(x => new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), x.Symbol, x.LastPrice, null, null, x.BaseVolume, x.ChangePercentage)).ToArray());
+            return result.AsExchangeResult<SharedSpotTicker[]>(Exchange, TradingMode.Spot, data.Select(x => new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), x.Symbol, x.LastPrice, null, null, x.BaseVolume, x.ChangePercentage)
+            {
+                QuoteVolume = x.QuoteVolume
+            }).ToArray());
         }
 
         #endregion
