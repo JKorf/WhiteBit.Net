@@ -431,6 +431,8 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override async Task<Query?> GetAuthenticationRequestAsync(SocketConnection connection)
         {
             var token = await GetTokenAsync().ConfigureAwait(false);
+            if (!token)
+                return null;
 
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(new WhiteBitSocketRequest
             {
@@ -463,11 +465,13 @@ namespace WhiteBit.Net.Clients.V4Api
             });
 
             var result = await ((WhiteBitRestClientV4ApiAccount)restClient.V4Api.Account).GetWebsocketTokenAsync().ConfigureAwait(false);
-            if (result)
-                _tokenCache[apiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
-            else
+            if (!result)
+            {
                 _logger.LogWarning("Failed to retrieve websocket token: {Error}", result.Error);
+                return result.As<string>(default);
+            }
 
+            _tokenCache[apiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
             return result.As<string>(result.Data);
         }
 

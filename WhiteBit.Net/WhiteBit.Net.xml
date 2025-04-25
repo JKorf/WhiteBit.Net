@@ -567,6 +567,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.ConditionalType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.LiquidationStatus">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -813,6 +818,11 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitOrderUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitOtoOrderUpdate">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -1468,6 +1478,16 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOto">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOtoOrder">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOtoOrderUpdate">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>

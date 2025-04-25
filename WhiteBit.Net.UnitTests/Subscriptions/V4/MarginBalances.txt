@@ -1,0 +1,25 @@
+> { "id": "|2|", "method": "authorize", "params": [ "<get_your_token_via_api>", "public"] }
+< { "id": |2|, "result": { "status": "success" }, "error": null }
+> { "id": "|1|", "method": "balanceMargin_subscribe", "params": ["ETH"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+  "method": "balanceMargin_update",
+  "params": [
+    {
+      "a": "BTC",        
+      "B": "0.0006092",  
+      "b": "0",          
+      "av": "0.0006092",
+      "ab": "0.00288701"  
+    },
+    {
+      "a": "USDT",     
+      "B": "0.00538073",  
+      "b": "0",         
+      "av": "0.00538073", 
+      "ab": "28.43739825" 
+    }
+  ],
+  "id": null
+}

@@ -1,0 +1,31 @@
+> { "id": "|2|", "method": "authorize", "params": [ "<get_your_token_via_api>", "public"] }
+< { "id": |2|, "result": { "status": "success" }, "error": null }
+> { "id": "|1|", "method": "positionsMargin_subscribe", "params": [] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+  "method": "positionsMargin_update",
+  "params": {
+      "total": 1,                          
+      "records": [
+          {
+              "id": 2,                   
+              "market": "BTC_USDT",         
+              "ctime": 1704067200,        
+              "mtime": 1704067200,          
+              "amount": "-0.01",          
+              "amount_in_money": "118.762", 
+              "base_price": "60000",         
+              "pnl": "-0.47",                
+              "liq_price": "65000",        
+              "liq_stage": null,           
+              "unrealized_funding": "0",     
+              "funding": "0",      
+              "margin": "23.8",              
+              "free_margin": "999932.92",  
+              "realized_pnl": "0"          
+          }
+      ]
+  },
+  "id": null
+}
