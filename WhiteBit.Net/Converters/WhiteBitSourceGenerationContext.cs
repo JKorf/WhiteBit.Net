@@ -19,6 +19,8 @@ namespace WhiteBit.Net.Converters
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitClosedOrders>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitUserTrades>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<decimal?>))]
+    [JsonSerializable(typeof(WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>))]
+    [JsonSerializable(typeof(WhiteBitOtoOrder))]
 
     // End manual defined attributes
 

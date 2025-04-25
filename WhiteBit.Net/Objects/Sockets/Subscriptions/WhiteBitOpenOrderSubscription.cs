@@ -30,7 +30,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            if (message.GetValue<string>(_methodPath)!.Equals("ordersPendingUpdate"))
+            if (message.GetValue<string>(_methodPath)!.Equals("ordersPendingUpdate")
+                || message.GetValue<string>(_methodPath)!.Equals("ordersPending_update"))
                 return typeof(WhiteBitSocketUpdate<WhiteBitOrderUpdate>);
 
             return typeof(WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>);
