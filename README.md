@@ -145,6 +145,11 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 2.0.0-beta4 - 01 May 2025
+    * Updated CryptoExchange.Net version to 9.0.0-beta5
+    * Added property to retrieve all available API environments
+    * Fixed deserialization issue restClient.V4Api.Trading.GetClosedOrdersAsync
+
 * Version 2.0.0-beta3 - 25 Apr 2025
     * Fixed socketClient.V4Api.SubscribeToOpenOrderUpdatesAsync deserialization issues
 
