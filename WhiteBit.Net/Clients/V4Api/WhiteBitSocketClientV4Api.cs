@@ -77,9 +77,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         /// <inheritdoc />
-        protected override IByteMessageAccessor CreateAccessor() => new SystemTextJsonByteMessageAccessor(SerializerOptions.WithConverters(WhiteBitExchange._serializerContext));
+        protected override IByteMessageAccessor CreateAccessor() => new SystemTextJsonByteMessageAccessor(WhiteBitExchange._serializerContext);
         /// <inheritdoc />
-        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(SerializerOptions.WithConverters(WhiteBitExchange._serializerContext));
+        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
@@ -447,11 +447,10 @@ namespace WhiteBit.Net.Clients.V4Api
 
         private async Task<CallResult<string>> GetTokenAsync()
         {
-            var apiCredentials = ApiOptions.ApiCredentials ?? ClientOptions.ApiCredentials;
-            if (apiCredentials == null)
+            if (ApiCredentials == null)
                 return new CallResult<string>(new NoApiCredentialsError());
 
-            if (_tokenCache.TryGetValue(apiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
+            if (_tokenCache.TryGetValue(ApiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
                 return new CallResult<string>(token.Token);
 
             if (ClientOptions.Environment.Name == "UnitTest")
@@ -460,7 +459,7 @@ namespace WhiteBit.Net.Clients.V4Api
             _logger.LogDebug("Requesting websocket token");
             var restClient = new WhiteBitRestClient(x =>
             {
-                x.ApiCredentials = apiCredentials;
+                x.ApiCredentials = ApiCredentials;
                 x.Environment = ClientOptions.Environment;
             });
 
@@ -471,7 +470,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return result.As<string>(default);
             }
 
-            _tokenCache[apiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
+            _tokenCache[ApiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
             return result.As<string>(result.Data);
         }
 

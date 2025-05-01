@@ -76,6 +76,8 @@ namespace WhiteBit.Net.UnitTests
             var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Trading", "https://whitebit.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.V4Api.Trading.GetUserTradesAsync("ETH_USDT"), "GetUserTrades");
             await tester.ValidateAsync(client => client.V4Api.Trading.GetOrderTradesAsync(123), "GetOrderTrades", nestedJsonProperty: "records");
+            await tester.ValidateAsync(client => client.V4Api.Trading.GetClosedOrdersAsync(), "GetClosedOrders", skipResponseValidation: true);
+            await tester.ValidateAsync(client => client.V4Api.Trading.GetClosedOrdersAsync(), "GetClosedOrders2");
         }
 
         [Test]
