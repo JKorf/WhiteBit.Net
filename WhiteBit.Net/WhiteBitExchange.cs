@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using WhiteBit.Net.Converters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using System.Text.Json;
+using CryptoExchange.Net.Converters;
 
 namespace WhiteBit.Net
 {
@@ -51,7 +52,7 @@ namespace WhiteBit.Net
         /// </summary>
         public static ExchangeType Type { get; } = ExchangeType.CEX;
 
-        internal static JsonSerializerOptions _serializerContext = SerializerOptions.WithConverters(new WhiteBitSourceGenerationContext(), new ClosedOrdersConverter());
+        internal static JsonSerializerOptions _serializerContext = SerializerOptions.WithConverters(JsonSerializerContextCache.GetOrCreate<WhiteBitSourceGenerationContext>(), new ClosedOrdersConverter());
 
         /// <summary>
         /// Format a base and quote asset to an WhiteBit recognized symbol 
