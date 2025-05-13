@@ -14,7 +14,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// OTO order update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter<WhiteBitOtoOrderUpdate, WhiteBitSourceGenerationContext>))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitOtoOrderUpdate>))]
     [SerializationModel]
     public record WhiteBitOtoOrderUpdate
     {

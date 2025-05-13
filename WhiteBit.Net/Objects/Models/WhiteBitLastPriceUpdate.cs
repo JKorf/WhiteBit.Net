@@ -12,7 +12,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Last price update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter<WhiteBitLastPriceUpdate, WhiteBitSourceGenerationContext>))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitLastPriceUpdate>))]
     [SerializationModel]
     public record WhiteBitLastPriceUpdate
     {

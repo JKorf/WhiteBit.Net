@@ -12,7 +12,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Account borrow update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter<WhiteBitAccountMarginPositionUpdate, WhiteBitSourceGenerationContext>))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitAccountMarginPositionUpdate>))]
     [SerializationModel]
     public record WhiteBitAccountMarginPositionUpdate
     {

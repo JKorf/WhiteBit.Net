@@ -11,7 +11,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Kline update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter<WhiteBitKlineUpdate, WhiteBitSourceGenerationContext>))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitKlineUpdate>))]
     [SerializationModel]
     public record WhiteBitKlineUpdate
     {

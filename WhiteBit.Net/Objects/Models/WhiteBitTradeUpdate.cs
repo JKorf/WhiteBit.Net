@@ -12,7 +12,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Trades update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter<WhiteBitTradeUpdate, WhiteBitSourceGenerationContext>))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitTradeUpdate>))]
     [SerializationModel]
     public record WhiteBitTradeUpdate
     {

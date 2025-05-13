@@ -12,7 +12,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Order update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter<WhiteBitOrderUpdate, WhiteBitSourceGenerationContext>))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitOrderUpdate>))]
     [SerializationModel]
     public record WhiteBitOrderUpdate
     {

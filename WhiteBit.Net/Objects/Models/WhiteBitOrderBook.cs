@@ -40,7 +40,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Order book entry
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter<WhiteBitOrderBookEntry, WhiteBitSourceGenerationContext>))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitOrderBookEntry>))]
     [SerializationModel]
     public record WhiteBitOrderBookEntry : ISymbolOrderBookEntry
     {
