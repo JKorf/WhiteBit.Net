@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -10,21 +11,23 @@ namespace WhiteBit.Net.Objects.Models
     /// Deposit/withdrawal info
     /// </summary>
     [JsonConverter(typeof(DepositWithdrawalInfoConverter))]
+    [SerializationModel]
     public record WhiteBitDepositWithdraw
     {
         /// <summary>
         /// Crypto info
         /// </summary>
-        public IEnumerable<WhiteBitDepositWithdrawalCrypto> CryptoInfo { get; set; } = Array.Empty<WhiteBitDepositWithdrawalCrypto>();
+        public WhiteBitDepositWithdrawalCrypto[] CryptoInfo { get; set; } = Array.Empty<WhiteBitDepositWithdrawalCrypto>();
         /// <summary>
         /// Fiat infos
         /// </summary>
-        public IEnumerable<WhiteBitDepositWithdrawalFiat> FiatInfo { get; set; } = Array.Empty<WhiteBitDepositWithdrawalFiat>();
+        public WhiteBitDepositWithdrawalFiat[] FiatInfo { get; set; } = Array.Empty<WhiteBitDepositWithdrawalFiat>();
     }
 
     /// <summary>
     /// Deposit/withdrawal info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawInfo
     {
         /// <summary>
@@ -41,7 +44,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Providers
         /// </summary>
         [JsonPropertyName("providers")]
-        public IEnumerable<string> Providers { get; set; } = Array.Empty<string>();
+        public string[] Providers { get; set; } = Array.Empty<string>();
         /// <summary>
         /// Is depositable
         /// </summary>
@@ -67,6 +70,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Crypto deposit/withdrawal info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawalCrypto : WhiteBitDepositWithdrawInfo
     {
         /// <summary>
@@ -84,6 +88,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Crypto deposit/withdrawal info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawalFiat : WhiteBitDepositWithdrawInfo
     {
         /// <summary>
@@ -101,6 +106,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Withdrawal/deposit limits/fees details
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawDetails
     {
         /// <summary>
@@ -136,6 +142,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Provider
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawProviderDetails
     {
         /// <summary>
@@ -193,6 +200,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Flex fee info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawInfoFlex
     {
         /// <summary>

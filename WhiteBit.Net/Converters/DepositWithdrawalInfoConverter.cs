@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,6 +10,10 @@ namespace WhiteBit.Net.Converters
 {
     internal class DepositWithdrawalInfoConverter : JsonConverter<WhiteBitDepositWithdraw>
     {
+#if NET5_0_OR_GREATER
+        [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL3050:RequiresUnreferencedCode", Justification = "JsonSerializerOptions provided here has TypeInfoResolver set")]
+        [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2026:RequiresUnreferencedCode", Justification = "JsonSerializerOptions provided here has TypeInfoResolver set")]
+#endif
         public override WhiteBitDepositWithdraw? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var cryptoInfo = new List<WhiteBitDepositWithdrawalCrypto>();
@@ -26,8 +31,8 @@ namespace WhiteBit.Net.Converters
 
             return new WhiteBitDepositWithdraw
             {
-                CryptoInfo = cryptoInfo,
-                FiatInfo = fiatInfo,
+                CryptoInfo = cryptoInfo.ToArray(),
+                FiatInfo = fiatInfo.ToArray(),
             };
         }
 

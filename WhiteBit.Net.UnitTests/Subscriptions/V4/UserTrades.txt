@@ -1,0 +1,22 @@
+> { "id": "|2|", "method": "authorize", "params": [ "<get_your_token_via_api>", "public"] }
+< { "id": |2|, "result": { "status": "success" }, "error": null }
+> { "id": "|1|", "method": "deals_subscribe", "params": ["ETH"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+  "id": null,
+  "method": "deals_update",
+  "params": [
+    13674578673,       
+    1738251095.345432,  
+    "ETH_BTC",         
+    1212909726406,     
+    "0.03084",      
+    "0.2625",        
+    "0.0002625",     
+    "",              
+    2,                
+    2,            
+    "ETH"           
+    ]
+}

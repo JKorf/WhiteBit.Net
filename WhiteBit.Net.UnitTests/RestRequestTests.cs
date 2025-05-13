@@ -21,7 +21,7 @@ namespace WhiteBit.Net.UnitTests
                 opts.AutoTimestamp = false;
                 opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
             });
-            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Account", "https://whitebit.com", IsAuthenticated, stjCompare: true);
+            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Account", "https://whitebit.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.V4Api.Convert.GetConvertEstimateAsync("123", "123", 0.1m, "123"), "GetConvertEstimate");
             await tester.ValidateAsync(client => client.V4Api.Convert.ConfirmConvertAsync("123"), "ConfirmConvert");
             await tester.ValidateAsync(client => client.V4Api.Convert.GetConvertHistoryAsync(), "GetConvertHistory");
@@ -56,7 +56,7 @@ namespace WhiteBit.Net.UnitTests
             {
                 opts.AutoTimestamp = false;
             });
-            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/ExchangeData", "https://whitebit.com", IsAuthenticated, stjCompare: true);
+            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/ExchangeData", "https://whitebit.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetSystemStatusAsync(), "GetSystemStatus");
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetTickersAsync(), "GetTickers", skipResponseValidation: true);
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetOrderBookAsync("ETH_USDT"), "GetOrderBook");
@@ -73,9 +73,11 @@ namespace WhiteBit.Net.UnitTests
                 opts.AutoTimestamp = false;
                 opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
             });
-            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Trading", "https://whitebit.com", IsAuthenticated, stjCompare: true);
+            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Trading", "https://whitebit.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.V4Api.Trading.GetUserTradesAsync("ETH_USDT"), "GetUserTrades");
             await tester.ValidateAsync(client => client.V4Api.Trading.GetOrderTradesAsync(123), "GetOrderTrades", nestedJsonProperty: "records");
+            await tester.ValidateAsync(client => client.V4Api.Trading.GetClosedOrdersAsync(), "GetClosedOrders", skipResponseValidation: true);
+            await tester.ValidateAsync(client => client.V4Api.Trading.GetClosedOrdersAsync(), "GetClosedOrders2");
         }
 
         [Test]
@@ -86,7 +88,7 @@ namespace WhiteBit.Net.UnitTests
                 opts.AutoTimestamp = false;
                 opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
             });
-            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/CollateralTrading", "https://whitebit.com", IsAuthenticated, stjCompare: true);
+            var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/CollateralTrading", "https://whitebit.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.V4Api.CollateralTrading.GetOpenPositionsAsync("123"), "GetOpenPositions");
             await tester.ValidateAsync(client => client.V4Api.CollateralTrading.GetPositionHistoryAsync(), "GetPositionHistory");
             await tester.ValidateAsync(client => client.V4Api.CollateralTrading.GetOpenConditionalOrdersAsync("123"), "GetOpenConditionalOrders");

@@ -21,7 +21,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 
         private readonly Action<DataEvent<WhiteBitUserTradeUpdate>> _handler;
 
-        private IEnumerable<string> _symbols;
+        private string[] _symbols;
 
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
@@ -35,7 +35,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public WhiteBitUserTradeSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> handler) : base(logger, true)
         {
             _handler = handler;
-            _symbols = symbols;
+            _symbols = symbols.ToArray();
             ListenerIdentifiers =  new HashSet<string> { "deals_update" };
         }
 
@@ -67,7 +67,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             var data = (WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>)message.Data;
 
             _handler.Invoke(message.As(data.Data, data.Method, data.Data!.Symbol, SocketUpdateType.Update)!);
-            return new CallResult(null);
+            return CallResult.SuccessResult;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Position info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitPosition
     {
         /// <summary>
@@ -117,6 +119,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Info on TakeProfit/StopLoss attached orders for a position
     /// </summary>
+    [SerializationModel]
     public record WhiteBitPositionTpSl
     {
         /// <summary>

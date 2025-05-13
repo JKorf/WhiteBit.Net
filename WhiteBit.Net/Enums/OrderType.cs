@@ -1,13 +1,13 @@
-﻿using CryptoExchange.Net.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Text.Json.Serialization;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using CryptoExchange.Net.Attributes;
 
 namespace WhiteBit.Net.Enums
 {
     /// <summary>
     /// Order type
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<OrderType>))]
     public enum OrderType
     {
         /// <summary>
@@ -33,7 +33,7 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Stop market
         /// </summary>
-        [Map("4", "stop_market")]
+        [Map("4", "stop_market", "stop market")]
         StopMarket = 4,
         /// <summary>
         /// Margin limit
@@ -48,12 +48,12 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// Margin stop limit
         /// </summary>
-        [Map("9", "stop limit")]
+        [Map("9", "margin stop limit")]
         CollateralStopLimit = 9,
         /// <summary>
         /// Margin trigger stop market
         /// </summary>
-        [Map("10", "trigger stop market")]
+        [Map("10", "trigger stop market", "trigger margin market")]
         CollateralTriggerStopMarket = 10,
         /// <summary>
         /// Margin normalization

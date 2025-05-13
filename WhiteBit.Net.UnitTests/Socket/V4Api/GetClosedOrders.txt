@@ -1,0 +1,33 @@
+> { "id": "|2|", "method": "authorize", "params": [ "123", "public" ]}
+< { "id": |2|, "result": { "status": "success" }, "error": null }
+> { "id": "|1|", "method": "ordersExecuted_request", "params": []}
+=
+{
+    "id": |1|,
+    "result": {
+        "limit": 100,
+        "offset": 0,
+        "records": [
+            {
+                "id": 1212266594338,             
+                "ctime": 1738230617.8867061,    
+                "ftime": 1738230617.8867061,  
+                "market": "BTC_USDT",       
+                "source": "web",          
+                "type": 2,                 
+                "side": 1,                      
+                "post_only": false,              
+                "ioc": false,                    
+                "price": "0",                    
+                "amount": "1",                
+                "deal_stock": "1",              
+                "deal_money": "105366.06693468",  
+                "deal_fee": "10.536606693468",   
+                "client_order_id": "",      
+                "status": "FILLED",           
+                "fee_asset": "USDT"           
+            }
+        ]
+    },
+    "error": null
+}

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using WhiteBit.Net.SymbolOrderBooks;
 
 namespace WhiteBit.Net.UnitTests
 {
@@ -94,6 +95,12 @@ namespace WhiteBit.Net.UnitTests
             await RunAndCheckResult(client => client.V4Api.CollateralTrading.GetPositionHistoryAsync(default, default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.V4Api.CollateralTrading.GetOpenConditionalOrdersAsync(default, default, default, default), true);
 
+        }
+
+        [Test]
+        public async Task TestOrderBooks()
+        {
+            await TestOrderBook(new WhiteBitV4SymbolOrderBook("ETH_USDT"));
         }
     }
 }

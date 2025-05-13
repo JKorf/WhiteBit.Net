@@ -1,0 +1,31 @@
+> { "id": "|2|", "method": "authorize", "params": [ "<get_your_token_via_api>", "public"] }
+< { "id": |2|, "result": { "status": "success" }, "error": null }
+> { "id": "|1|", "method": "ordersPending_subscribe", "params": ["ETH_USDT"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+  "id": null,
+  "method": "ordersPending_update",
+    "params": [
+        1,                         
+        {
+            "id": 1212904480922,       
+            "market": "ETH_USDT",       
+            "type": 1,           
+            "side": 2,             
+            "post_only": false,       
+            "ioc": false,        
+            "ctime": 1738250982.28914, 
+            "mtime": 1738250982.28914, 
+            "price": "90000",         
+            "amount": "1",          
+            "left": "1",             
+            "deal_stock": "0",         
+            "deal_money": "0",        
+            "deal_fee": "0",           
+            "client_order_id": "",      
+            "stp": "no",                
+            "status": "OPEN"        
+        }
+    ]
+}

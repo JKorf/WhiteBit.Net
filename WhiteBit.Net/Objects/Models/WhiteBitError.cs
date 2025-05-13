@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,6 +9,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Error
     /// </summary>
+    [SerializationModel]
     public record WhiteBitError
     {
         /// <summary>
@@ -24,6 +26,6 @@ namespace WhiteBit.Net.Objects.Models
         /// Error messages
         /// </summary>
         [JsonPropertyName("errors")]
-        public Dictionary<string, IEnumerable<string>>? Errors { get; set; }
+        public Dictionary<string, string[]>? Errors { get; set; }
     }
 }

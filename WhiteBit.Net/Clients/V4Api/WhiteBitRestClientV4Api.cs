@@ -14,6 +14,7 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Logging;
+using WhiteBit.Net.Converters;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
@@ -63,25 +64,10 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-        {
-            NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.AllowNamedFloatingPointLiterals,
-            PropertyNameCaseInsensitive = false,
-            Converters =
-                    {
-                        new DateTimeConverter(),
-                        new EnumConverter(),
-                        new BoolConverter(),
-                        new DecimalConverter(),
-                        new IntConverter(),
-                        new LongConverter(),
-                        new EmptyArrayObjectConverter<Dictionary<string, IEnumerable<WhiteBitClosedOrder>>>()
-                    }
-        };
         /// <inheritdoc />
-        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(_serializerOptions);
+        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(WhiteBitExchange._serializerContext);
         /// <inheritdoc />
-        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer();
+        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
@@ -105,36 +91,27 @@ namespace WhiteBit.Net.Clients.V4Api
             return result;
         }
 
-        internal Task<WebCallResult<T>> SendAsync<T>(RequestDefinition definition, ParameterCollection? uriParameters, ParameterCollection? bodyParameters, CancellationToken cancellationToken, int? weight = null) where T : class
-            => SendToAddressAsync<T>(BaseAddress, definition, uriParameters, bodyParameters, cancellationToken, weight);
-
-        internal async Task<WebCallResult<T>> SendToAddressAsync<T>(string baseAddress, RequestDefinition definition, ParameterCollection? uriParameters, ParameterCollection? bodyParameters, CancellationToken cancellationToken, int? weight = null) where T : class
-        {
-            var result = await base.SendAsync<T>(baseAddress, definition, uriParameters, bodyParameters, cancellationToken, null, weight).ConfigureAwait(false);
-            return result;
-        }
-
-        protected override Error ParseErrorResponse(int httpStatusCode, IEnumerable<KeyValuePair<string, IEnumerable<string>>> responseHeaders, IMessageAccessor accessor)
+        protected override Error ParseErrorResponse(int httpStatusCode, KeyValuePair<string, string[]>[] responseHeaders, IMessageAccessor accessor, Exception? exception)
         {
             if (!accessor.IsJson)
-                return new ServerError(accessor.GetOriginalString());
+                return new ServerError(null, "Unknown request error", exception: exception);
 
             var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
             var msg = accessor.GetValue<string>(MessagePath.Get().Property("message"));
-            var errors = accessor.GetValue<Dictionary<string, IEnumerable<string>>?>(MessagePath.Get().Property("errors"));
+            var errors = accessor.GetValue<Dictionary<string, string[]>?>(MessagePath.Get().Property("errors"));
             if (errors == null || !errors.Any())
             {
                 if (msg == null)
-                    return new ServerError(accessor.GetOriginalString());
+                    return new ServerError(null, "Unknown request error", exception: exception);
 
                 if (code == null)
-                    return new ServerError(msg);
+                    return new ServerError(null, msg, exception);
 
-                return new ServerError(code.Value, msg);
+                return new ServerError(code.Value, msg, exception);
             }
             else
             {
-                return new ServerError(code!.Value, string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}")));
+                return new ServerError(code!.Value, string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}")), exception);
             }
         }
 

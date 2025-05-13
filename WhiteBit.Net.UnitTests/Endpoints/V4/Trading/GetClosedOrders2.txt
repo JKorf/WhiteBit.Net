@@ -1,0 +1,27 @@
+POST
+/api/v4/trade-account/order/history
+true
+{
+    "BTC_USDT": [
+        {
+            "amount": "0.0009",          
+            "price": "40000",          
+            "type": "limit",          
+            "id": 4986126152,         
+            "clientOrderId": "customId11", 
+            "side": "sell",              
+            "ctime": 1597486960.311311,   
+            "takerFee": "0.001",        
+            "ftime": 1597486960.311332,  
+            "makerFee": "0.001",         
+            "dealFee": "0.041258268", 
+            "dealStock": "0.0009",     
+            "dealMoney": "41.258268",  
+            "postOnly": false,             
+            "ioc": false,               
+            "status": "CANCELED",         
+           "feeAsset": "USDT",           
+           "stp": "no"                      
+        }
+    ]
+}

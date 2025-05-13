@@ -1,13 +1,13 @@
-﻿using CryptoExchange.Net.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Text.Json.Serialization;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using CryptoExchange.Net.Attributes;
 
 namespace WhiteBit.Net.Enums
 {
     /// <summary>
     /// Status of a closed order
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<ClosedOrderStatus>))]
     public enum ClosedOrderStatus
     {
         /// <summary>

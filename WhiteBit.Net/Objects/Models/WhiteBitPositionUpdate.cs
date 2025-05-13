@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,6 +9,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Positions
     /// </summary>
+    [SerializationModel]
     public record WhiteBitPositionsUpdate
     {
         /// <summary>
@@ -19,12 +21,13 @@ namespace WhiteBit.Net.Objects.Models
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitPositionUpdate> Records { get; set; } = Array.Empty<WhiteBitPositionUpdate>();
+        public WhiteBitPositionUpdate[] Records { get; set; } = Array.Empty<WhiteBitPositionUpdate>();
     }
 
     /// <summary>
     /// Position info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitPositionUpdate
     {
         /// <summary>

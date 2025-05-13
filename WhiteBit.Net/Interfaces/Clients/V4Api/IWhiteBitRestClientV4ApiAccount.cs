@@ -18,7 +18,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#main-balance" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitMainBalance>>> GetMainBalancesAsync(CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitMainBalance[]>> GetMainBalancesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get deposit address
@@ -35,7 +35,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="asset">Filter by asset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitTradeBalance>>> GetSpotBalancesAsync(string? asset = null, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(string? asset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get fiat deposit url, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
@@ -122,7 +122,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#fees" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitDepositWithdrawalSetting>>> GetDepositWithdrawalSettingsAsync(CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitDepositWithdrawalSetting[]>> GetDepositWithdrawalSettingsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get mining rewards history
@@ -149,7 +149,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance-summary" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitCollateralSummary>>> GetCollateralBalanceSummaryAsync(CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitCollateralSummary[]>> GetCollateralBalanceSummaryAsync(CancellationToken ct = default);
         
         /// <summary>
         /// Get collateral account summary

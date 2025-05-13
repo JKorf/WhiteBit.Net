@@ -19,7 +19,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override HashSet<string> ListenerIdentifiers { get; set; }
 
-        private readonly Action<DataEvent<IEnumerable<WhiteBitKlineUpdate>>> _handler;
+        private readonly Action<DataEvent<WhiteBitKlineUpdate[]>> _handler;
 
         private readonly KlineInterval _interval;
         private string _symbol;
@@ -27,13 +27,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Type? GetMessageType(IMessageAccessor message)
         {
-            return typeof(WhiteBitSocketUpdate<IEnumerable<WhiteBitKlineUpdate>>);
+            return typeof(WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>);
         }
 
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitKlineSubscription(ILogger logger, string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<WhiteBitKlineUpdate>>> handler) : base(logger, false)
+        public WhiteBitKlineSubscription(ILogger logger, string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> handler) : base(logger, false)
         {
             _handler = handler;
             _symbol = symbol;
@@ -67,10 +67,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
-            var data = (WhiteBitSocketUpdate<IEnumerable<WhiteBitKlineUpdate>>)message.Data;
+            var data = (WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>)message.Data;
 
-            _handler.Invoke(message.As(data.Data, data.Method, data.Data.First().Symbol, SocketUpdateType.Update)!);
-            return new CallResult(null);
+            _handler.Invoke(message.As(data.Data, data.Method, data.Data!.First().Symbol, SocketUpdateType.Update)!);
+            return CallResult.SuccessResult;
         }
     }
 }

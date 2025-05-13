@@ -1,0 +1,15 @@
+> { "id": "|1|", "method": "depth_request", "params": []}
+=
+{
+    "id": |1|,
+    "result": {
+        "timestamp": 1689600180,
+        "asks": [                  
+            ["0.020846", "29.369"]
+        ],
+        "bids": [                  
+            ["0.02083", "9.598"]
+        ]
+    },
+    "error": null
+}

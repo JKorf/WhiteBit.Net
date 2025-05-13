@@ -1,9 +1,10 @@
-﻿using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using WhiteBit.Net.Converters;
 using WhiteBit.Net.Enums;
 
 namespace WhiteBit.Net.Objects.Models
@@ -11,7 +12,8 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Account borrow update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitAccountBorrowUpdate>))]
+    [SerializationModel]
     public record WhiteBitAccountBorrowUpdate
     {
         /// <summary>

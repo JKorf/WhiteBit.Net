@@ -49,6 +49,12 @@ namespace WhiteBit.Net
          };
 
         /// <summary>
+        /// Available environment names
+        /// </summary>
+        /// <returns></returns>
+        public static string[] All => [Live.Name];
+
+        /// <summary>
         /// Live environment
         /// </summary>
         public static WhiteBitEnvironment Live { get; }

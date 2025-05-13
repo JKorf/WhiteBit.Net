@@ -1,0 +1,17 @@
+> { "id": "|2|", "method": "authorize", "params": [ "<get_your_token_via_api>", "public"] }
+< { "id": |2|, "result": { "status": "success" }, "error": null }
+> { "id": "|1|", "method": "balanceSpot_subscribe", "params": ["ETH"] }
+< { "id": |1|, "result": { "status": "success" }, "error": null }
+= 
+{
+    "id": null,
+    "method": "balanceSpot_update",
+    "params": [
+        {
+            "USDT": {
+                "available": "100.1885", 
+                "freeze": "0"  
+            }
+        }
+    ]
+}

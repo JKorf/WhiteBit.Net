@@ -37,6 +37,7 @@ namespace WhiteBit.Net.Clients.V4Api
         private static readonly MessagePath _index7SymbolPath = MessagePath.Get().Property("params").Index(0).Index(7);
         private static readonly MessagePath _index2SymbolPath = MessagePath.Get().Property("params").Index(2);
         private static readonly MessagePath _ordersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("market");
+        private static readonly MessagePath _otoOrdersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("trigger_order").Property("market");
         private static readonly MessagePath _orderExecutedSymbolPath = MessagePath.Get().Property("params").Property("market");
 
         /// <inheritdoc />
@@ -76,9 +77,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         /// <inheritdoc />
-        protected override IByteMessageAccessor CreateAccessor() => new SystemTextJsonByteMessageAccessor();
+        protected override IByteMessageAccessor CreateAccessor() => new SystemTextJsonByteMessageAccessor(WhiteBitExchange._serializerContext);
         /// <inheritdoc />
-        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer();
+        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
@@ -87,9 +88,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Trades
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitSocketTrade>>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
         {
-            return await QueryAsync<IEnumerable<WhiteBitSocketTrade>>(
+            return await QueryAsync<WhiteBitSocketTrade[]>(
                 "trades_request",
                 false,
                 ct,
@@ -169,9 +170,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Kline
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitKlineUpdate>>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
         {
-            return await QueryAsync<IEnumerable<WhiteBitKlineUpdate>>(
+            return await QueryAsync<WhiteBitKlineUpdate[]>(
                 "candles_request",
                 false,
                 ct,
@@ -182,7 +183,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<WhiteBitKlineUpdate>>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitKlineSubscription(_logger, symbol, interval, onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -220,7 +221,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Spot Balances
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitTradeBalance>>> GetSpotBalancesAsync(CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitTradeBalance>>(
                 "balanceSpot_request",
@@ -228,12 +229,12 @@ namespace WhiteBit.Net.Clients.V4Api
                 ct).ConfigureAwait(false);
 
             if (!result)
-                return result.As<IEnumerable<WhiteBitTradeBalance>>(default);
+                return result.As<WhiteBitTradeBalance[]>(default);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<IEnumerable<WhiteBitTradeBalance>>(result.Data.Values);
+            return result.As<WhiteBitTradeBalance[]>(result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />
@@ -247,7 +248,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Margin Balances
 
         /// <inheritdoc />
-        public async Task<CallResult<IEnumerable<WhiteBitMarginBalance>>> GetMarginBalancesAsync(CancellationToken ct = default)
+        public async Task<CallResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitMarginBalance>>(
                 "balanceMargin_request",
@@ -255,16 +256,16 @@ namespace WhiteBit.Net.Clients.V4Api
                 ct).ConfigureAwait(false);
 
             if (!result)
-                return result.As<IEnumerable<WhiteBitMarginBalance>>(default);
+                return result.As<WhiteBitMarginBalance[]>(default);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<IEnumerable<WhiteBitMarginBalance>>(result.Data.Values);
+            return result.As<WhiteBitMarginBalance[]>(result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<IEnumerable<WhiteBitMarginBalance>>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<WhiteBitMarginBalance[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitMarginBalanceSubscription(_logger, assets.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -286,14 +287,14 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onOrderMessage, Action<DataEvent<WhiteBitOtoOrderUpdate>>? onOtoOrdersMessage = null, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitOrderUpdate>(_logger, "ordersPending", symbols.ToArray(), onMessage, true, false);
+            var subscription = new WhiteBitOpenOrderSubscription(_logger, symbols.ToArray(), onOrderMessage, onOtoOrdersMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
 
-        #region Open Orders
+        #region Closed Orders
 
         /// <inheritdoc />
         public async Task<CallResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes, int? limit = null, int? offset = null, CancellationToken ct = default)
@@ -302,17 +303,17 @@ namespace WhiteBit.Net.Clients.V4Api
                 "ordersExecuted_request",
                 true,
                 ct,
-                new
+                new Dictionary<string, object?>
                 {
-                    market = symbol,
-                    order_types = orderTypes.Select(x => (int)x).ToArray()
+                    { "market", symbol },
+                    { "order_types", orderTypes?.Select(x => (int)x).ToArray() }
                 },
                 limit ?? 0,
                 offset ?? 100).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<IEnumerable<WhiteBitClosedOrder>>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<WhiteBitClosedOrder[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitClosedOrderSubscription(_logger, symbols.ToArray(), (int)filter, onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -405,6 +406,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
             if (method.Equals("ordersPending_update", StringComparison.Ordinal))
                 return method + "." + message.GetValue<string>(_ordersSymbolPath);
+            if (method.Equals("otoOrdersPending_update", StringComparison.Ordinal))
+                return method + "." + message.GetValue<string>(_otoOrdersSymbolPath);
             if (method.Equals("ordersExecuted_update", StringComparison.Ordinal))
                 return method + "." + message.GetValue<string>(_orderExecutedSymbolPath);
 
@@ -428,6 +431,8 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override async Task<Query?> GetAuthenticationRequestAsync(SocketConnection connection)
         {
             var token = await GetTokenAsync().ConfigureAwait(false);
+            if (!token)
+                return null;
 
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(new WhiteBitSocketRequest
             {
@@ -442,26 +447,30 @@ namespace WhiteBit.Net.Clients.V4Api
 
         private async Task<CallResult<string>> GetTokenAsync()
         {
-            var apiCredentials = ApiOptions.ApiCredentials ?? ClientOptions.ApiCredentials;
-            if (apiCredentials == null)
+            if (ApiCredentials == null)
                 return new CallResult<string>(new NoApiCredentialsError());
 
-            if (_tokenCache.TryGetValue(apiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
+            if (_tokenCache.TryGetValue(ApiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
                 return new CallResult<string>(token.Token);
+
+            if (ClientOptions.Environment.Name == "UnitTest")
+                return new CallResult<string>("123");
 
             _logger.LogDebug("Requesting websocket token");
             var restClient = new WhiteBitRestClient(x =>
             {
-                x.ApiCredentials = apiCredentials;
+                x.ApiCredentials = ApiCredentials;
                 x.Environment = ClientOptions.Environment;
             });
 
             var result = await ((WhiteBitRestClientV4ApiAccount)restClient.V4Api.Account).GetWebsocketTokenAsync().ConfigureAwait(false);
-            if (result)
-                _tokenCache[apiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
-            else
+            if (!result)
+            {
                 _logger.LogWarning("Failed to retrieve websocket token: {Error}", result.Error);
+                return result.As<string>(default);
+            }
 
+            _tokenCache[ApiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
             return result.As<string>(result.Data);
         }
 

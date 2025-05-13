@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,13 +10,14 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Orders
     /// </summary>
+    [SerializationModel]
     public record WhiteBitOrders
     {
         /// <summary>
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitOrder> Records { get; set; } = Array.Empty<WhiteBitOrder>();
+        public WhiteBitOrder[] Records { get; set; } = Array.Empty<WhiteBitOrder>();
         /// <summary>
         /// Limit
         /// </summary>
@@ -36,6 +38,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Order info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitOrder
     {
         /// <summary>
@@ -76,6 +79,17 @@ namespace WhiteBit.Net.Objects.Models
 
         [JsonInclude, JsonPropertyName("ctime")]
         internal DateTime CreateTimeInt { set { CreateTime = value; } }
+
+        /// <summary>
+        /// Fill timestamp
+        /// </summary>
+        [JsonPropertyName("ftime")]
+        public DateTime? FillTime { get; set; }
+        /// <summary>
+        /// Edit timestamp
+        /// </summary>
+        [JsonPropertyName("mtime")]
+        public DateTime? UpdateTime { get; set; }
 
         /// <summary>
         /// Filled quantity in quote asset
@@ -119,6 +133,11 @@ namespace WhiteBit.Net.Objects.Models
         [JsonInclude, JsonPropertyName("deal_fee")]
         internal decimal FeeInt { set => Fee = value; }
         /// <summary>
+        /// Fee asset
+        /// </summary>
+        [JsonPropertyName("fee_asset")]
+        public string? FeeAsset { get; set; }
+        /// <summary>
         /// Limit price
         /// </summary>
         [JsonPropertyName("price")]
@@ -151,18 +170,48 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("stp")]
         public SelfTradePreventionMode StpMode { get; set; }
+
+        /// <summary>
+        /// Order source
+        /// </summary>
+        [JsonPropertyName("source")]
+        public string? Source { get; set; }
+
+        /// <summary>
+        /// Take profit / stop loss data, not used for websocket updates
+        /// </summary>
+        [JsonPropertyName("oto")]
+        public WhiteBitOto? OtoData { get; set; }
+    }
+
+    /// <summary>
+    /// OTO info
+    /// </summary>
+    public record WhiteBitOto
+    {
+        /// <summary>
+        /// OTO Id
+        /// </summary>
+        [JsonPropertyName("otoId")]
+        public long OtoId { get; set; }
+        /// <summary>
+        /// Stop loss price
+        /// </summary>
+        [JsonPropertyName("stopLoss")]
+        public decimal? StopLoss { get; set; }
+        /// <summary>
+        /// Take profit price
+        /// </summary>
+        [JsonPropertyName("takeProfit")]
+        public decimal? TakeProfit { get; set; }
     }
 
     /// <summary>
     /// Conditional order
     /// </summary>
+    [SerializationModel]
     public record WhiteBitConditionalOrder : WhiteBitOrder
     {
-        /// <summary>
-        /// Update timestamp
-        /// </summary>
-        [JsonPropertyName("mtime")]
-        public DateTime? UpdateTime { get; set; }
         /// <summary>
         /// Trigger condition
         /// </summary>
@@ -178,13 +227,14 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Orders
     /// </summary>
+    [SerializationModel]
     public record WhiteBitClosedOrders
     {
         /// <summary>
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitClosedOrder> Records { get; set; } = Array.Empty<WhiteBitClosedOrder>();
+        public WhiteBitClosedOrder[] Records { get; set; } = Array.Empty<WhiteBitClosedOrder>();
         /// <summary>
         /// Limit
         /// </summary>
@@ -205,12 +255,8 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Closed order info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitClosedOrder : WhiteBitOrder
     {
-        /// <summary>
-        /// Filled timestamp
-        /// </summary>
-        [JsonPropertyName("ftime")]
-        public DateTime FillTime { get; set; }
     }
 }

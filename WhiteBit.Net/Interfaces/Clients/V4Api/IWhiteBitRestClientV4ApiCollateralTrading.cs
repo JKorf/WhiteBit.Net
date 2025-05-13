@@ -56,7 +56,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">Filter by symbol</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitPosition>>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitPosition[]>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get position history
@@ -69,7 +69,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<IEnumerable<WhiteBitPositionHistory>>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitPositionHistory[]>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get open conditional orders

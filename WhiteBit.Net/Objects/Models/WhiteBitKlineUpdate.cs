@@ -1,16 +1,18 @@
-﻿using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using WhiteBit.Net.Converters;
 
 namespace WhiteBit.Net.Objects.Models
 {
     /// <summary>
     /// Kline update
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
+    [JsonConverter(typeof(ArrayConverter<WhiteBitKlineUpdate>))]
+    [SerializationModel]
     public record WhiteBitKlineUpdate
     {
         /// <summary>

@@ -1,0 +1,7 @@
+> { "id": "|1|", "method": "lastprice_request", "params": []}
+=
+{
+  "id": |1|,
+  "result": "0.020553",
+  "error": null
+}

@@ -1,4 +1,5 @@
-﻿using System;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Deposit/withdrawal history
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawals
     {
         /// <summary>
@@ -25,7 +27,7 @@ namespace WhiteBit.Net.Objects.Models
         /// Records
         /// </summary>
         [JsonPropertyName("records")]
-        public IEnumerable<WhiteBitDepositWithdrawal> Records { get; set; } = Array.Empty<WhiteBitDepositWithdrawal>();
+        public WhiteBitDepositWithdrawal[] Records { get; set; } = Array.Empty<WhiteBitDepositWithdrawal>();
         /// <summary>
         /// Total number of results
         /// </summary>
@@ -36,6 +38,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Deposit/withdrawal info
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawal
     {
         /// <summary>
@@ -123,6 +126,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Details
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawalDetails
     {
         /// <summary>
@@ -135,6 +139,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Partial
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawalPartial
     {
         /// <summary>
@@ -162,6 +167,7 @@ namespace WhiteBit.Net.Objects.Models
     /// <summary>
     /// Confirmations
     /// </summary>
+    [SerializationModel]
     public record WhiteBitDepositWithdrawalConfirmations
     {
         /// <summary>
