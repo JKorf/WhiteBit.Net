@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
 
@@ -36,7 +35,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         {
             _handler = handler;
             _symbols = symbols.ToArray();
-            ListenerIdentifiers =  new HashSet<string> { "balanceSpot_update" };
+            ListenerIdentifiers = new HashSet<string> { "balanceSpot_update" };
+            Topic = "SpotBalance";
         }
 
         /// <inheritdoc />

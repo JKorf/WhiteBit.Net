@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Converters.MessageParsing;
 using CryptoExchange.Net.Interfaces;
@@ -5,10 +8,6 @@ using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
 
@@ -46,7 +45,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _otoHandler = otoHandler;
             _symbols = symbols.ToArray();
             ListenerIdentifiers = new HashSet<string>();
-            foreach (var symbol in symbols) 
+            Topic = "OpenOrder";
+
+            foreach (var symbol in symbols)
             {
                 ListenerIdentifiers.Add("ordersPending_update." + symbol);
                 ListenerIdentifiers.Add("otoOrdersPending_update." + symbol);
