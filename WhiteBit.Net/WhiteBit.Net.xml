@@ -2157,6 +2157,11 @@
             Filled
             </summary>
         </member>
+        <member name="F:WhiteBit.Net.Enums.OrderStatus.PartiallyFilled">
+            <summary>
+            Partially filled
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Enums.OrderType">
             <summary>
             Order type

@@ -65,6 +65,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
         {
             var data = (WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>)message.Data;
+            var balances = data.Data!.First();
+            foreach (var item in balances)
+                item.Value.Asset = item.Key;
 
             _handler.Invoke(message.As(data.Data!.First(), data.Method, null, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
