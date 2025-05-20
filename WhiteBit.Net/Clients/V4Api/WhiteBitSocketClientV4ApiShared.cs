@@ -26,11 +26,10 @@ namespace WhiteBit.Net.Clients.V4Api
         public void SetDefaultExchangeParameter(string key, object value) => ExchangeParameters.SetStaticParameter(Exchange, key, value);
         public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
 
-
         #region Balance client
         EndpointOptions<SubscribeBalancesRequest> IBalanceSocketClient.SubscribeBalanceOptions { get; } = new EndpointOptions<SubscribeBalancesRequest>(false)
         {
-            RequiredExchangeParameters = new List<ParameterDescription>
+            OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("BalanceAssets", typeof(List<string>), "The assets to subscribe for updates", new List<string>{ "USDT", "ETH", "BTC" })
             }
@@ -42,6 +41,20 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeResult<UpdateSubscription>(Exchange, validationError);
 
             var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
+            if (assets == null)
+            {
+                // request all assets
+                var client = new WhiteBitRestClient(x =>
+                {
+                    x.Environment = ClientOptions.Environment;
+                });
+                var assetsResult = await client.V4Api.ExchangeData.GetAssetsAsync().ConfigureAwait(false);
+                if (!assetsResult)
+                    return new ExchangeResult<UpdateSubscription>(Exchange, assetsResult.Error!);
+
+                assets = assetsResult.Data.Where(x => x.CanDeposit).Select(x => x.Asset).ToList();
+            }
+
             if (request.TradingMode == null || request.TradingMode == TradingMode.Spot)
             {
                 var result = await SubscribeToSpotBalanceUpdatesAsync(
@@ -184,7 +197,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         EndpointOptions<SubscribeUserTradeRequest> IUserTradeSocketClient.SubscribeUserTradeOptions { get; } = new EndpointOptions<SubscribeUserTradeRequest>(true)
         {
-            RequiredExchangeParameters = new List<ParameterDescription>
+            OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("UserTradeSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT", "ETH_PERP" })
             }
@@ -196,6 +209,20 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeResult<UpdateSubscription>(Exchange, validationError);
 
             var symbols = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "UserTradeSymbols");
+            if (symbols == null)
+            {
+                // request all symbols
+                var client = new WhiteBitRestClient(x =>
+                {
+                    x.Environment = ClientOptions.Environment;
+                });
+                var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
+                if (!symbolsResult)
+                    return new ExchangeResult<UpdateSubscription>(Exchange, symbolsResult.Error!);
+
+                symbols = symbolsResult.Data.Select(x => x.Name).ToList();
+            }
+
             var result = await SubscribeToUserTradeUpdatesAsync(symbols!,
                 update =>
                 {
@@ -220,7 +247,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         EndpointOptions<SubscribeSpotOrderRequest> ISpotOrderSocketClient.SubscribeSpotOrderOptions { get; } = new EndpointOptions<SubscribeSpotOrderRequest>(false)
         {
-            RequiredExchangeParameters = new List<ParameterDescription>
+            OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT" })
             }
@@ -231,8 +258,22 @@ namespace WhiteBit.Net.Clients.V4Api
             if (validationError != null)
                 return new ExchangeResult<UpdateSubscription>(Exchange, validationError);
 
-            var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
-            var result = await SubscribeToOpenOrderUpdatesAsync(assets!,
+            var symbols = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
+            if (symbols == null)
+            {
+                // request all symbols
+                var client = new WhiteBitRestClient(x =>
+                {
+                    x.Environment = ClientOptions.Environment;
+                });
+                var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
+                if (!symbolsResult)
+                    return new ExchangeResult<UpdateSubscription>(Exchange, symbolsResult.Error!);
+
+                symbols = symbolsResult.Data.Where(x => x.SymbolType == SymbolType.Spot).Select(x => x.Name).ToList();
+            }
+
+            var result = await SubscribeToOpenOrderUpdatesAsync(symbols!,
                 update =>
                 {
                     if (update.Data.Order.OrderType != Enums.OrderType.Market
@@ -308,7 +349,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         EndpointOptions<SubscribeFuturesOrderRequest> IFuturesOrderSocketClient.SubscribeFuturesOrderOptions { get; } = new EndpointOptions<SubscribeFuturesOrderRequest>(false)
         {
-            RequiredExchangeParameters = new List<ParameterDescription>
+            OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_PERP" })
             }
@@ -319,8 +360,22 @@ namespace WhiteBit.Net.Clients.V4Api
             if (validationError != null)
                 return new ExchangeResult<UpdateSubscription>(Exchange, validationError);
 
-            var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
-            var result = await SubscribeToOpenOrderUpdatesAsync(assets!,
+            var symbols = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
+            if (symbols == null)
+            {
+                // request all symbols
+                var client = new WhiteBitRestClient(x =>
+                {
+                    x.Environment = ClientOptions.Environment;
+                });
+                var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
+                if (!symbolsResult)
+                    return new ExchangeResult<UpdateSubscription>(Exchange, symbolsResult.Error!);
+
+                symbols = symbolsResult.Data.Where(x => x.SymbolType == SymbolType.Futures).Select(x => x.Name).ToList();
+            }
+
+            var result = await SubscribeToOpenOrderUpdatesAsync(symbols!,
                 update =>
                 {
                     if (update.Data.Order.OrderType == Enums.OrderType.Market
