@@ -24,6 +24,11 @@ namespace WhiteBit.Net.Enums
         /// Filled
         /// </summary>
         [Map("Filled", "1")]
-        Filled
+        Filled,
+        /// <summary>
+        /// Partially filled
+        /// </summary>
+        [Map("PARTIALLY_FILLED")]
+        PartiallyFilled
     }
 }
