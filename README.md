@@ -145,6 +145,11 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 2.0.2 - 20 May 2025
+    * Added missing PartiallyFilled value to OrderStatus enum
+    * Updated Shared logic to request all assets/symbols when subscribing to user updates if they're not provided, removing the need to provide them in exchange parameters
+    * Fixed balance subscription model asset property not set
+
 * Version 2.0.1 - 19 May 2025
     * Fixed user data subscriptions not producing updates when subscribing multiple asset/symbols in multiple calls
 
