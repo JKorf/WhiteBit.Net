@@ -121,6 +121,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<ICryptoSocketClient, CryptoSocketClient>();
             services.AddTransient<IWhiteBitOrderBookFactory, WhiteBitOrderBookFactory>();
             services.AddTransient<IWhiteBitTrackerFactory, WhiteBitTrackerFactory>();
+            services.AddSingleton<IWhiteBitUserClientProvider, WhiteBitUserClientProvider>(x =>
+            new WhiteBitUserClientProvider(
+                x.GetRequiredService<HttpClient>(),
+                x.GetRequiredService<ILoggerFactory>(),
+                x.GetRequiredService<IOptions<WhiteBitRestOptions>>(),
+                x.GetRequiredService<IOptions<WhiteBitSocketOptions>>()));
 
             services.RegisterSharedRestInterfaces(x => x.GetRequiredService<IWhiteBitRestClient>().V4Api.SharedClient);
             services.RegisterSharedSocketInterfaces(x => x.GetRequiredService<IWhiteBitSocketClient>().V4Api.SharedClient);
