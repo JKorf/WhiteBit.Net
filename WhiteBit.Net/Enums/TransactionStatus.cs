@@ -44,6 +44,16 @@ namespace WhiteBit.Net.Enums
         /// Partial success
         /// </summary>
         [Map("18")]
-        PartialSuccess
+        PartialSuccess,
+        /// <summary>
+        /// Awaiting Travel Rule verification
+        /// </summary>
+        [Map("27")]
+        AwaitingVerification,
+        /// <summary>
+        /// Travel Rule verification in progress
+        /// </summary>
+        [Map("28")]
+        ConfirmationInProgress
     }
 }

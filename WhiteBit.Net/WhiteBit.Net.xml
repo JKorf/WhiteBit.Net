@@ -2385,6 +2385,16 @@
             Partial success
             </summary>
         </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.AwaitingVerification">
+            <summary>
+            Awaiting Travel Rule verification
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.TransactionStatus.ConfirmationInProgress">
+            <summary>
+            Travel Rule verification in progress
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Enums.TransactionType">
             <summary>
             Transaction type
