@@ -3688,7 +3688,7 @@
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookUpdate.OrderBook">
             <summary>
-            Trades
+            Order book
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookUpdate.Symbol">
@@ -5279,6 +5279,26 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBook.Bids">
             <summary>
             Bids list
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrderBookUpdate">
+            <summary>
+            Order book update
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBookUpdate.UpdateId">
+            <summary>
+            Update id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBookUpdate.PrevUpdateId">
+            <summary>
+            Previous update id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrderBookUpdate.EventTime">
+            <summary>
+            Event time
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitOrderBookEntry">

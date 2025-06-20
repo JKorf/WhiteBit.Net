@@ -22,10 +22,10 @@ namespace WhiteBit.Net.Objects.Models
         [ArrayProperty(0)]
         public bool Snapshot { get; set; }
         /// <summary>
-        /// Trades
+        /// Order book
         /// </summary>
         [ArrayProperty(1), JsonConversion]
-        public WhiteBitOrderBook OrderBook { get; set; } = null!;
+        public WhiteBitOrderBookUpdate OrderBook { get; set; } = null!;
         /// <summary>
         /// Symbol
         /// </summary>

@@ -38,6 +38,28 @@ namespace WhiteBit.Net.Objects.Models
     }
 
     /// <summary>
+    /// Order book update
+    /// </summary>
+    public record WhiteBitOrderBookUpdate: WhiteBitOrderBook
+    {
+        /// <summary>
+        /// Update id
+        /// </summary>
+        [JsonPropertyName("update_id")]
+        public long UpdateId { get; set; }
+        /// <summary>
+        /// Previous update id
+        /// </summary>
+        [JsonPropertyName("past_update_id")]
+        public long? PrevUpdateId { get; set; }
+        /// <summary>
+        /// Event time
+        /// </summary>
+        [JsonPropertyName("event_time")]
+        public DateTime EventTime { get; set; }
+    }
+
+    /// <summary>
     /// Order book entry
     /// </summary>
     [JsonConverter(typeof(ArrayConverter<WhiteBitOrderBookEntry>))]
