@@ -104,6 +104,11 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("stp")]
         public SelfTradePreventionMode StpMode { get; set; }
         /// <summary>
+        /// Position side
+        /// </summary>
+        [JsonPropertyName("positionSide")]
+        public PositionSide PositionSide { get; set; }
+        /// <summary>
         /// Take profit or stop loss configuration
         /// </summary>
         [JsonPropertyName("oto")]

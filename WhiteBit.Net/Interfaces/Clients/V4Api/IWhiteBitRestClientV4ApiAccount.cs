@@ -172,5 +172,21 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitTradingFees>> GetTradingFeesAsync(CancellationToken ct = default);
+
+        /// <summary>
+        /// Get current hedge mode status
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /></para>
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<WhiteBitHedgeMode>> GetHedgeModeAsync(CancellationToken ct = default);
+
+        /// <summary>
+        /// Set hedge mode
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /></para>
+        /// </summary>
+        /// <param name="enableHedgeMode">Hedge mode enabled or not</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<WhiteBitHedgeMode>> SetHedgeModeAsync(bool enableHedgeMode, CancellationToken ct = default);
+
     }
 }

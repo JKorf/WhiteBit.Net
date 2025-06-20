@@ -325,6 +325,34 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
+        #region Get Hedge Mode
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitHedgeMode>> GetHedgeModeAsync(CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/hedge-mode", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var result = await _baseClient.SendAsync<WhiteBitHedgeMode>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        #endregion
+
+        #region Set Hedge Mode
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitHedgeMode>> SetHedgeModeAsync(bool enableHedgeMode, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.Add("hedgeMode", enableHedgeMode);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/hedge-mode/update", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var result = await _baseClient.SendAsync<WhiteBitHedgeMode>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        #endregion
+
+
         internal async Task<WebCallResult<string>> GetWebsocketTokenAsync(CancellationToken ct = default)
         {
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/profile/websocket_token", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);

@@ -106,6 +106,12 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetTradingFeesAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetHedgeModeAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.SetHedgeModeAsync(System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCodes">
             <inheritdoc />
         </member>
@@ -124,7 +130,7 @@
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{WhiteBit.Net.Enums.SelfTradePreventionMode},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{WhiteBit.Net.Enums.SelfTradePreventionMode},System.Nullable{WhiteBit.Net.Enums.PositionSide},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.GetOpenPositionsAsync(System.String,System.Threading.CancellationToken)">
@@ -136,7 +142,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.GetOpenConditionalOrdersAsync(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.PlaceOcoOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.PlaceOcoOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.String,System.Nullable{WhiteBit.Net.Enums.PositionSide},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiCollateralTrading.CancelOcoOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
@@ -642,6 +648,16 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.OrderType">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.PositionSide">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.NullablePositionSide">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -1346,6 +1362,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitHedgeMode">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitKillSwitch">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -1462,6 +1483,11 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderBookEntryArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitOrderBookUpdate">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -2240,6 +2266,26 @@
             Margin normalization
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Enums.PositionSide">
+            <summary>
+            Position side
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.PositionSide.Long">
+            <summary>
+            Long position
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.PositionSide.Short">
+            <summary>
+            Short position
+            </summary>
+        </member>
+        <member name="F:WhiteBit.Net.Enums.PositionSide.Both">
+            <summary>
+            Both
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Enums.ProductType">
             <summary>
             Product type
@@ -2707,6 +2753,21 @@
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetHedgeModeAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get current hedge mode status
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /></para>
+            </summary>
+            <param name="ct">Cancellation token</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.SetHedgeModeAsync(System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Set hedge mode
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /></para>
+            </summary>
+            <param name="enableHedgeMode">Hedge mode enabled or not</param>
+            <param name="ct">Cancellation token</param>
+        </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCodes">
             <summary>
             WhiteBit V4 code endpoints
@@ -2755,7 +2816,7 @@
             WhiteBit V4 collateral trading endpoints (Futures and Spot Margin), placing and managing orders.
             </summary>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{WhiteBit.Net.Enums.SelfTradePreventionMode},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.PlaceOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,WhiteBit.Net.Enums.NewOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{WhiteBit.Net.Enums.SelfTradePreventionMode},System.Nullable{WhiteBit.Net.Enums.PositionSide},System.Threading.CancellationToken)">
             <summary>
             Place a new order
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-limit-order" /></para>
@@ -2771,11 +2832,12 @@
             <param name="postOnly">Post only flag</param>
             <param name="immediateOrCancel">Immediate or cancel flag</param>
             <param name="stopLossPrice">Stop loss price</param>
-            <param name="takeProfitPrice">Take porfit price</param>
+            <param name="takeProfitPrice">Take profit price</param>
             <param name="bboRole">BBO role</param>
             <param name="triggerPrice">Trigger price</param>
             <param name="clientOrderId">Client order id</param>
             <param name="stpMode">Self trade prevention mode</param>
+            <param name="positionSide">Position side, required when in hedge mode</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.GetOpenPositionsAsync(System.String,System.Threading.CancellationToken)">
@@ -2809,7 +2871,7 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.PlaceOcoOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.String,System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.PlaceOcoOrderAsync(System.String,WhiteBit.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.String,System.Nullable{WhiteBit.Net.Enums.PositionSide},System.Threading.CancellationToken)">
             <summary>
             Place a new OCO order
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-collateral-oco-order" /></para>
@@ -2821,6 +2883,7 @@
             <param name="triggerPrice">Trigger price</param>
             <param name="stopLimitPrice">Stop limit price</param>
             <param name="clientOrderId">Client order id</param>
+            <param name="positionSide">Position side, required when in hedge mode</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiCollateralTrading.CancelOcoOrderAsync(System.String,System.Int64,System.Threading.CancellationToken)">
@@ -3931,6 +3994,11 @@
             Self Trade Prevention mode
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.PositionSide">
+            <summary>
+            Position side
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitCollateralOrder.OneTriggersOtherConfig">
             <summary>
             Take profit or stop loss configuration
@@ -4821,6 +4889,16 @@
             External id
             </summary>
         </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitHedgeMode">
+            <summary>
+            Hedge mode status
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitHedgeMode.HedgeMode">
+            <summary>
+            In hedge mode
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitKillSwitch">
             <summary>
             Kill switch info
@@ -5181,6 +5259,11 @@
             Self Trade Prevention mode
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrder.PositionSide">
+            <summary>
+            Position side
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitOrder.Source">
             <summary>
             Order source
@@ -5526,6 +5609,11 @@
             Realized profit and loss
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.PositionSide">
+            <summary>
+            Position side
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPosition.TpSl">
             <summary>
             Info on attached TP / SL orders for the position. Not available in websocket updates
@@ -5739,6 +5827,11 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.RealizedPnl">
             <summary>
             Realized profit and loss
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitPositionUpdate.PositionSide">
+            <summary>
+            Position side
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitSocketTicker">

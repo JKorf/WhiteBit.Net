@@ -28,11 +28,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="postOnly">Post only flag</param>
         /// <param name="immediateOrCancel">Immediate or cancel flag</param>
         /// <param name="stopLossPrice">Stop loss price</param>
-        /// <param name="takeProfitPrice">Take porfit price</param>
+        /// <param name="takeProfitPrice">Take profit price</param>
         /// <param name="bboRole">BBO role</param>
         /// <param name="triggerPrice">Trigger price</param>
         /// <param name="clientOrderId">Client order id</param>
         /// <param name="stpMode">Self trade prevention mode</param>
+        /// <param name="positionSide">Position side, required when in hedge mode</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
             string symbol,
@@ -48,6 +49,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
             decimal? triggerPrice = null,
             string? clientOrderId = null,
             SelfTradePreventionMode? stpMode = null,
+            PositionSide? positionSide = null,
             CancellationToken ct = default);
 
         /// <summary>
@@ -92,8 +94,18 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="triggerPrice">Trigger price</param>
         /// <param name="stopLimitPrice">Stop limit price</param>
         /// <param name="clientOrderId">Client order id</param>
+        /// <param name="positionSide">Position side, required when in hedge mode</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(string symbol, OrderSide orderSide, decimal quantity, decimal price, decimal triggerPrice, decimal stopLimitPrice, string? clientOrderId = null, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
+            string symbol,
+            OrderSide orderSide,
+            decimal quantity,
+            decimal price,
+            decimal triggerPrice,
+            decimal stopLimitPrice,
+            string? clientOrderId = null,
+            PositionSide? positionSide = null,
+            CancellationToken ct = default);
 
         /// <summary>
         /// Cancel an OCO order

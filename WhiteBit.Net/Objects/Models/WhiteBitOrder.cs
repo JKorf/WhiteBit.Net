@@ -170,6 +170,11 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("stp")]
         public SelfTradePreventionMode StpMode { get; set; }
+        /// <summary>
+        /// Position side
+        /// </summary>
+        [JsonPropertyName("position_side")]
+        public PositionSide? PositionSide { get; set; }
 
         /// <summary>
         /// Order source

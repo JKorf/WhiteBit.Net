@@ -110,6 +110,11 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("realized_pnl")]
         public decimal? RealizedPnl { get; set; }
         /// <summary>
+        /// Position side
+        /// </summary>
+        [JsonPropertyName("position_side")]
+        public PositionSide PositionSide { get; set; }
+        /// <summary>
         /// Info on attached TP / SL orders for the position. Not available in websocket updates
         /// </summary>
         [JsonPropertyName("tpsl")]

@@ -35,6 +35,8 @@ namespace WhiteBit.Net.UnitTests
             await tester.ValidateAsync(client => client.V4Api.Account.GetCollateralBalanceSummaryAsync(), "GetCollateralBalanceSummary");
             await tester.ValidateAsync(client => client.V4Api.Account.SetAccountLeverageAsync(123), "SetAccountLeverage");
             await tester.ValidateAsync(client => client.V4Api.Account.GetCollateralAccountSummaryAsync(), "GetCollateralAccountSummary");
+            await tester.ValidateAsync(client => client.V4Api.Account.GetHedgeModeAsync(), "GetHedgeMode");
+            await tester.ValidateAsync(client => client.V4Api.Account.SetHedgeModeAsync(true), "SetHedgeMode");
             await tester.ValidateAsync(client => client.V4Api.Codes.CreateCodeAsync("123", 0.1m), "CreateCode");
             await tester.ValidateAsync(client => client.V4Api.Codes.ApplyCodeAsync("123"), "ApplyCode");
             await tester.ValidateAsync(client => client.V4Api.Codes.GetCreatedCodesAsync(), "GetCreatedCodes");

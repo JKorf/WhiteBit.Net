@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using WhiteBit.Net.Enums;
 
 namespace WhiteBit.Net.Objects.Models
 {
@@ -105,6 +106,11 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("realized_pnl")]
         public decimal RealizedPnl { get; set; }
+        /// <summary>
+        /// Position side
+        /// </summary>
+        [JsonPropertyName("position_side")]
+        public PositionSide PositionSide { get; set; }
     }
 
 

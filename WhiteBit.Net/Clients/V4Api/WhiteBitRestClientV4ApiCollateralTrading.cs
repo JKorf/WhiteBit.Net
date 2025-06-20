@@ -47,6 +47,7 @@ namespace WhiteBit.Net.Clients.V4Api
             decimal? triggerPrice = null,
             string? clientOrderId = null,
             SelfTradePreventionMode? stpMode = null,
+            PositionSide? positionSide = null,
             CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
@@ -62,6 +63,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptionalString("stopLoss", stopLossPrice);
             parameters.AddOptionalString("takeProfit", takeProfitPrice);
             parameters.AddOptionalEnum("stp", stpMode);
+            parameters.AddOptionalEnum("positionSide", positionSide);
 
             string path;
             if (type == NewOrderType.Limit)
@@ -138,7 +140,16 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Oco Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(string symbol, OrderSide orderSide, decimal quantity, decimal price, decimal triggerPrice, decimal stopLimitPrice, string? clientOrderId = null, CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
+            string symbol,
+            OrderSide orderSide,
+            decimal quantity,
+            decimal price,
+            decimal triggerPrice,
+            decimal stopLimitPrice,
+            string? clientOrderId = null, 
+            PositionSide? positionSide = null,
+            CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.Add("market", symbol);
@@ -148,6 +159,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddString("activation_price", triggerPrice);
             parameters.AddString("stop_limit_price", stopLimitPrice);
             parameters.AddOptional("clientOrderId", clientOrderId);
+            parameters.AddOptionalEnum("positionSide", positionSide);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/collateral/oco", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
             var result = await _baseClient.SendAsync<WhiteBitOcoOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
