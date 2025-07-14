@@ -278,7 +278,7 @@
             ctor
             </summary>
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateAccessor">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateAccessor(System.Net.WebSockets.WebSocketMessageType)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateSerializer">
