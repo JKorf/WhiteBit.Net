@@ -314,6 +314,12 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitTickerUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetKlinesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.DateTime,System.DateTime,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -832,6 +838,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitBookTickerUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitSocketUpdateWhiteBitBookUpdate">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -958,6 +969,16 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAssetNetworksArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBookTickerUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitBookTickerUpdateArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -3295,6 +3316,26 @@
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to public book ticker updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#book-ticker" /></para>
+            </summary>
+            <param name="symbol">Symbol to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
+            <summary>
+            Subscribe to public book ticker updates
+            <para><a href="https://docs.whitebit.com/public/websocket/#book-ticker" /></para>
+            </summary>
+            <param name="symbols">Symbols to subscribe</param>
+            <param name="onMessage">The event handler for the received data</param>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.GetLastPriceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Get the last price for a symbol
@@ -3737,6 +3778,51 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAssetLimit.Min">
             <summary>
             Min
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate">
+            <summary>
+            Book Ticker update
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.DataTime">
+            <summary>
+            Timestamp of the data
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.MessageTime">
+            <summary>
+            Timestamp of the message
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.UpdateId">
+            <summary>
+            Update id
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.BestBidPrice">
+            <summary>
+            Best bid price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.BestBidQuantity">
+            <summary>
+            Best bid quantity
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.BestAskPrice">
+            <summary>
+            Best ask price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate.BestAskQuantity">
+            <summary>
+            Best ask price
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitBookUpdate">

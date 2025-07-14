@@ -85,23 +85,15 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeResult<UpdateSubscription>(Exchange, validationError);
 
             var symbol = request.Symbol.GetSymbol(FormatSymbol);
-            decimal lastBidPrice = 0;
-            decimal lastBidQuantity = 0;
-            decimal lastAskPrice = 0;
-            decimal lastAskQuantity = 0;
-            var result = await SubscribeToOrderBookUpdatesAsync(symbol, 1, update =>
+            var result = await SubscribeToBookTickerUpdatesAsync(symbol, update =>
             {
-                var ask = update.Data.OrderBook.Asks.SingleOrDefault(x => x.Quantity != 0);
-                var bid = update.Data.OrderBook.Bids.SingleOrDefault(x => x.Quantity != 0);
                 handler(update.AsExchangeEvent(Exchange, new SharedBookTicker(
                     ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Symbol),
                     update.Data.Symbol,
-                    ask?.Price ?? lastAskPrice, ask?.Quantity ?? lastAskQuantity,
-                    bid?.Price ?? lastBidPrice, bid?.Quantity ?? lastBidQuantity)));
-                lastBidPrice = bid?.Price ?? lastBidPrice;
-                lastBidQuantity = bid?.Quantity ?? lastBidQuantity;
-                lastAskPrice = ask?.Price ?? lastAskPrice;
-                lastAskQuantity = ask?.Quantity ?? lastAskQuantity;
+                    update.Data.BestAskPrice,
+                    update.Data.BestAskQuantity,
+                    update.Data.BestBidPrice,
+                    update.Data.BestBidQuantity)));
             }, ct).ConfigureAwait(false);
 
             return new ExchangeResult<UpdateSubscription>(Exchange, result);

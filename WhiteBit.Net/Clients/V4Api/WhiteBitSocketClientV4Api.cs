@@ -40,6 +40,7 @@ namespace WhiteBit.Net.Clients.V4Api
         private static readonly MessagePath _ordersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("market");
         private static readonly MessagePath _otoOrdersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("trigger_order").Property("market");
         private static readonly MessagePath _orderExecutedSymbolPath = MessagePath.Get().Property("params").Property("market");
+        private static readonly MessagePath _bookTickerSymbolPath = MessagePath.Get().Property("params").Index(0).Index(2);
 
         /// <inheritdoc />
         public new WhiteBitSocketOptions ClientOptions => (WhiteBitSocketOptions)base.ClientOptions;
@@ -168,6 +169,21 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
+        #region Book Ticker
+
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
+            => await SubscribeToBookTickerUpdatesAsync([symbol], onMessage, ct).ConfigureAwait(false);
+
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
+        {
+            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, "bookTicker", symbols.ToArray(), x => onMessage(x.As(x.Data.First()).WithSymbol(x.Data[0].Symbol)), false, false);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
+        }
+
+        #endregion
+        
         #region Kline
 
         /// <inheritdoc />
@@ -404,6 +420,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 return method + "." + message.GetValue<string>(_index7SymbolPath);
             if (method.Equals("depth_update", StringComparison.Ordinal))
                 return method + "." + message.GetValue<string>(_index2SymbolPath);
+            if (method.Equals("bookTicker_update", StringComparison.Ordinal))
+                return method + "." + message.GetValue<string>(_bookTickerSymbolPath);
 
             if (method.Equals("ordersPending_update", StringComparison.Ordinal))
                 return method + "." + message.GetValue<string>(_ordersSymbolPath);
