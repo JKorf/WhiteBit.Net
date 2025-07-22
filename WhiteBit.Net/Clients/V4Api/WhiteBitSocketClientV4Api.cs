@@ -173,12 +173,15 @@ namespace WhiteBit.Net.Clients.V4Api
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
-            => await SubscribeToBookTickerUpdatesAsync([symbol], onMessage, ct).ConfigureAwait(false);
+        {
+            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, "bookTicker", [symbol], x => onMessage(x.As(x.Data.First()).WithSymbol(x.Data[0].Symbol)), false, false);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
+        }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, "bookTicker", symbols.ToArray(), x => onMessage(x.As(x.Data.First()).WithSymbol(x.Data[0].Symbol)), false, false);
+            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, "bookTicker", [], x => onMessage(x.As(x.Data.First()).WithSymbol(x.Data[0].Symbol)), false, false);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 

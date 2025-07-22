@@ -15,18 +15,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitMarginBalanceSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
-        /// <inheritdoc />
-        public override HashSet<string> ListenerIdentifiers { get; set; }
 
         private readonly Action<DataEvent<WhiteBitMarginBalance[]>> _handler;
 
         private string[] _symbols;
-
-        /// <inheritdoc />
-        public override Type? GetMessageType(IMessageAccessor message)
-        {
-            return typeof(WhiteBitSocketUpdate<WhiteBitMarginBalance[]>);
-        }
 
         /// <summary>
         /// ctor
@@ -35,7 +27,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         {
             _handler = handler;
             _symbols = symbols.ToArray();
-            ListenerIdentifiers = new HashSet<string> { "balanceMargin_update" };
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>(MessageIdMatchType.Full, "balanceMargin_update", DoHandleMessage);
             Topic = "MarginBalance";
         }
 
@@ -62,11 +54,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>> message)
         {
-            var data = (WhiteBitSocketUpdate<WhiteBitMarginBalance[]>)message.Data;
-
-            _handler.Invoke(message.As(data.Data, data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, null, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

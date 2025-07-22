@@ -15,18 +15,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitSpotBalanceSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
-        /// <inheritdoc />
-        public override HashSet<string> ListenerIdentifiers { get; set; }
-
         private readonly Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> _handler;
 
         private string[] _symbols;
-
-        /// <inheritdoc />
-        public override Type? GetMessageType(IMessageAccessor message)
-        {
-            return typeof(WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>);
-        }
 
         /// <summary>
         /// ctor
@@ -35,8 +26,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         {
             _handler = handler;
             _symbols = symbols.ToArray();
-            ListenerIdentifiers = new HashSet<string> { "balanceSpot_update" };
             Topic = "SpotBalance";
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>(MessageIdMatchType.Full, "balanceSpot_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -62,14 +53,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>> message)
         {
-            var data = (WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>)message.Data;
-            var balances = data.Data!.First();
+            var balances = message.Data.Data!.First();
             foreach (var item in balances)
                 item.Value.Asset = item.Key;
 
-            _handler.Invoke(message.As(data.Data!.First(), data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(balances, message.Data.Method, null, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

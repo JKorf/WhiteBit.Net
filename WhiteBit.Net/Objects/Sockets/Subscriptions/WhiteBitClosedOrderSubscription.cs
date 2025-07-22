@@ -15,19 +15,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitClosedOrderSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
-        /// <inheritdoc />
-        public override HashSet<string> ListenerIdentifiers { get; set; }
-
         private readonly Action<DataEvent<WhiteBitClosedOrder[]>> _handler;
 
         private readonly int _orderFilter;
         private string[] _symbols;
-
-        /// <inheritdoc />
-        public override Type? GetMessageType(IMessageAccessor message)
-        {
-            return typeof(WhiteBitSocketUpdate<WhiteBitClosedOrder[]>);
-        }
 
         /// <summary>
         /// ctor
@@ -37,7 +28,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             _orderFilter = orderFilter;
-            ListenerIdentifiers = new HashSet<string> { "ordersExecuted_update" };
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>(MessageIdMatchType.Full, "ordersExecuted_update", DoHandleMessage);
             Topic = "ClosedOrder";
         }
 
@@ -64,11 +55,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>> message)
         {
-            var data = (WhiteBitSocketUpdate<WhiteBitClosedOrder[]>)message.Data;
-
-            _handler.Invoke(message.As(data.Data, data.Method, data.Data!.First().Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.First().Symbol, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }
