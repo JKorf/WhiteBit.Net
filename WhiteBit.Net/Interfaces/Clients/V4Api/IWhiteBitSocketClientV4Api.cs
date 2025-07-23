@@ -57,14 +57,13 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
-        /// Subscribe to public book ticker updates
+        /// Subscribe to public book ticker updates for all symbols
         /// <para><a href="https://docs.whitebit.com/public/websocket/#book-ticker" /></para>
         /// </summary>
-        /// <param name="symbols">Symbols to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default);
+        Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get the last price for a symbol

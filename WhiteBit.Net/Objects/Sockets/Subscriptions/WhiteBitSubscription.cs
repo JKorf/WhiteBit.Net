@@ -15,20 +15,11 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitSubscription<T> : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
-        /// <inheritdoc />
-        public override HashSet<string> ListenerIdentifiers { get; set; }
-
         private readonly Action<DataEvent<T>> _handler;
 
         private bool _firstUpdateSnapshot;
         private string _topic;
         private string[]? _symbols;
-
-        /// <inheritdoc />
-        public override Type? GetMessageType(IMessageAccessor message)
-        {
-            return typeof(WhiteBitSocketUpdate<T>);
-        }
 
         /// <summary>
         /// ctor
@@ -40,7 +31,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _firstUpdateSnapshot = firstUpdateSnapshot;
             _symbols = symbols;
             Topic = topic;
-            ListenerIdentifiers = symbols?.Any() == true ? new HashSet<string>(symbols.Select(x => topic + "_update." + x)) : new HashSet<string> { topic + "_update" };
+
+            if (symbols == null)
+                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageLinkType.Full, $"{topic}_update", DoHandleMessage);
+            else if (symbols.Length == 0)
+                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageLinkType.StartsWith, $"{topic}_update", DoHandleMessage);
+            else
+                MessageMatcher = MessageMatcher.Create(symbols.Select(x => new MessageHandlerLink<WhiteBitSocketUpdate<T>>(MessageLinkType.Full, $"{topic}_update.{x}", DoHandleMessage)).ToArray());
         }
 
         /// <inheritdoc />
@@ -66,11 +63,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<T>> message)
         {
-            var data = (WhiteBitSocketUpdate<T>)message.Data;
-
-            _handler.Invoke(message.As(data.Data, data.Method, null, (_firstUpdateSnapshot && ConnectionInvocations == 1) ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, null, (_firstUpdateSnapshot && ConnectionInvocations == 1) ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

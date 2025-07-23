@@ -199,6 +199,9 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetFuturesSymbolsAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiExchangeData.GetFundingHistoryAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiSubAccount">
             <inheritdoc />
         </member>
@@ -317,7 +320,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetKlinesAsync(System.String,WhiteBit.Net.Enums.KlineInterval,System.DateTime,System.DateTime,System.Threading.CancellationToken)">
@@ -1349,6 +1352,16 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitErrorArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitFundingHistory">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitFundingHistoryArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -3053,6 +3066,17 @@
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiExchangeData.GetFundingHistoryAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get funding rate history
+            </summary>
+            <param name="symbol">Symbol name, for example `BTC_PERP`</param>
+            <param name="startTime">Filter by start time</param>
+            <param name="endTime">Filter by end time</param>
+            <param name="limit">Max number of results</param>
+            <param name="offset">Result offset</param>
+            <param name="ct">Cancellation token</param>
+        </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiShared">
             <summary>
             Shared interface for V4 rest API usage
@@ -3326,12 +3350,11 @@
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitSocketClientV4Api.SubscribeToBookTickerUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookTickerUpdate}},System.Threading.CancellationToken)">
             <summary>
-            Subscribe to public book ticker updates
+            Subscribe to public book ticker updates for all symbols
             <para><a href="https://docs.whitebit.com/public/websocket/#book-ticker" /></para>
             </summary>
-            <param name="symbols">Symbols to subscribe</param>
             <param name="onMessage">The event handler for the received data</param>
             <param name="ct">Cancellation token for closing this subscription</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
@@ -4813,6 +4836,36 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitError.Errors">
             <summary>
             Error messages
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitFundingHistory">
+            <summary>
+            Funding history
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFundingHistory.FundingTime">
+            <summary>
+            Funding time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFundingHistory.FundingRate">
+            <summary>
+            Funding rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFundingHistory.SettlePrice">
+            <summary>
+            Settlement price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFundingHistory.FundingCalcTime">
+            <summary>
+            Funding rate calculation time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitFundingHistory.Symbol">
+            <summary>
+            Symbol name
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitFuturesSymbol">
@@ -6653,12 +6706,6 @@
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription">
             <inheritdoc />
         </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
-            <inheritdoc />
-        </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.String,System.Int32,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitBookUpdate}})">
             <summary>
             ctor
@@ -6670,16 +6717,10 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitBookUpdate}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription">
-            <inheritdoc />
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder[]}})">
@@ -6693,16 +6734,10 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder[]}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription">
-            <inheritdoc />
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.String,WhiteBit.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate[]}})">
@@ -6716,16 +6751,10 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate[]}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription">
-            <inheritdoc />
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance[]}})">
@@ -6739,16 +6768,10 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance[]}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription">
-            <inheritdoc />
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate}})">
@@ -6762,16 +6785,13 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate}})">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitOrderUpdate}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription">
-            <inheritdoc />
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{System.Collections.Generic.Dictionary{System.String,WhiteBit.Net.Objects.Models.WhiteBitTradeBalance}}})">
@@ -6785,16 +6805,10 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{System.Collections.Generic.Dictionary{System.String,WhiteBit.Net.Objects.Models.WhiteBitTradeBalance}[]}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1">
-            <inheritdoc />
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.#ctor(Microsoft.Extensions.Logging.ILogger,System.String,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{`0}},System.Boolean,System.Boolean)">
@@ -6808,16 +6822,10 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{`0}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription">
-            <inheritdoc />
-        </member>
-        <member name="P:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.ListenerIdentifiers">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetMessageType(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}})">
@@ -6831,7 +6839,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetUnsubQuery">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{System.Object})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}})">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.Objects.WhiteBitApiAddresses">

@@ -11,14 +11,12 @@ namespace WhiteBit.Net.Objects.Sockets
 {
     internal class WhiteBitQuery<T> : Query<WhiteBitSocketResponse<T>>
     {
-        public override HashSet<string> ListenerIdentifiers { get; set; }
-
         public WhiteBitQuery(WhiteBitSocketRequest request, bool authenticated, int weight = 1) : base(request, authenticated, weight)
         {
-            ListenerIdentifiers = new HashSet<string> { request.Id.ToString() };
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketResponse<T>>(MessageLinkType.Full, request.Id.ToString(), HandleMessage);
         }
 
-        public override CallResult<WhiteBitSocketResponse<T>> HandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketResponse<T>> message)
+        public CallResult<WhiteBitSocketResponse<T>> HandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketResponse<T>> message)
         {
             if (message.Data.Error != null)
                 return new CallResult<WhiteBitSocketResponse<T>>(new ServerError(message.Data.Error.Code, message.Data.Error.Message));

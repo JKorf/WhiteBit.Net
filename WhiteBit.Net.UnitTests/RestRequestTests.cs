@@ -65,6 +65,7 @@ namespace WhiteBit.Net.UnitTests
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetRecentTradesAsync("ETH_USDT"), "GetRecentTrades");
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetCollateralSymbolsAsync(), "GetCollateralSymbols", nestedJsonProperty: "result");
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetFuturesSymbolsAsync(), "GetFuturesSymbols", nestedJsonProperty: "result");
+            await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetFundingHistoryAsync("ETH_PERP"), "GetFundingHistory");
         }
 
         [Test]

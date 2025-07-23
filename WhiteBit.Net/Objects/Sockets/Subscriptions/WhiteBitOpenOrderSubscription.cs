@@ -18,23 +18,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     {
         private readonly MessagePath _methodPath = MessagePath.Get().Property("method");
 
-        /// <inheritdoc />
-        public override HashSet<string> ListenerIdentifiers { get; set; }
-
         private readonly Action<DataEvent<WhiteBitOrderUpdate>> _handler;
         private readonly Action<DataEvent<WhiteBitOtoOrderUpdate>>? _otoHandler;
 
         private string[] _symbols;
-
-        /// <inheritdoc />
-        public override Type? GetMessageType(IMessageAccessor message)
-        {
-            if (message.GetValue<string>(_methodPath)!.Equals("ordersPendingUpdate")
-                || message.GetValue<string>(_methodPath)!.Equals("ordersPending_update"))
-                return typeof(WhiteBitSocketUpdate<WhiteBitOrderUpdate>);
-
-            return typeof(WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>);
-        }
 
         /// <summary>
         /// ctor
@@ -44,14 +31,16 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _otoHandler = otoHandler;
             _symbols = symbols.ToArray();
-            ListenerIdentifiers = new HashSet<string>();
             Topic = "OpenOrder";
 
+            var checkers = new List<MessageHandlerLink>();
             foreach (var symbol in symbols)
             {
-                ListenerIdentifiers.Add("ordersPending_update." + symbol);
-                ListenerIdentifiers.Add("otoOrdersPending_update." + symbol);
+                checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>(MessageLinkType.Full, "ordersPending_update." + symbol, DoHandleMessage));
+                checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>(MessageLinkType.Full, "otoOrdersPending_update." + symbol, DoHandleMessage));
             }
+
+            MessageMatcher = MessageMatcher.Create(checkers.ToArray());
         }
 
         /// <inheritdoc />
@@ -77,17 +66,16 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>> message)
         {
-            if (message.Data is WhiteBitSocketUpdate<WhiteBitOrderUpdate> orderUpdate)
-            {
-                _handler.Invoke(message.As(orderUpdate.Data, orderUpdate.Method, orderUpdate.Data!.Order.Symbol, SocketUpdateType.Update)!);
-            }
-            else if (message.Data is WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate> otoOrderUpdate)
-            {
-                _otoHandler?.Invoke(message.As(otoOrderUpdate.Data, otoOrderUpdate.Method, otoOrderUpdate.Data!.Order.TriggerOrder?.Symbol, SocketUpdateType.Update)!);
-            }
+            _otoHandler?.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Order.TriggerOrder?.Symbol, SocketUpdateType.Update)!);
+            return CallResult.SuccessResult;
+        }
 
+        /// <inheritdoc />
+        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitOrderUpdate>> message)
+        {
+            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Order.Symbol, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

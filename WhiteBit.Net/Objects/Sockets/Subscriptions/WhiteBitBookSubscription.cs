@@ -16,19 +16,11 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitBookSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
-        /// <inheritdoc />
-        public override HashSet<string> ListenerIdentifiers { get; set; }
 
         private readonly Action<DataEvent<WhiteBitBookUpdate>> _handler;
 
         private readonly int _depth;
         private string _symbol;
-
-        /// <inheritdoc />
-        public override Type? GetMessageType(IMessageAccessor message)
-        {
-            return typeof(WhiteBitSocketUpdate<WhiteBitBookUpdate>);
-        }
 
         /// <summary>
         /// ctor
@@ -39,7 +31,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbol = symbol;
             _depth = depth;
             Topic = "OrderBook";
-            ListenerIdentifiers =  new HashSet<string> { "depth_update" + "." + symbol };
+
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitBookUpdate>>(MessageLinkType.Full, "depth_update." + symbol, DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -65,10 +58,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitBookUpdate>> message)
         {
-            var data = (WhiteBitSocketUpdate<WhiteBitBookUpdate>)message.Data;
-            _handler.Invoke(message.As(data.Data, data.Method, data.Data!.Symbol, data.Data.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
+            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Symbol, message.Data.Data.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }
