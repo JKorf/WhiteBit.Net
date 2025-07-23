@@ -180,5 +180,28 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
+        #region Get Funding History
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitFundingHistory[]>> GetFundingHistoryAsync(
+            string symbol,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            int? limit = null,
+            int? offset = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.AddOptionalMilliseconds("startDate", startTime);
+            parameters.AddOptionalMilliseconds("endDate", endTime);
+            parameters.AddOptional("limit", limit);
+            parameters.AddOptional("offset", offset);
+            var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/funding-history/" + symbol, WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
+                limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+            return await _baseClient.SendAsync<WhiteBitFundingHistory[]>(request, parameters, ct).ConfigureAwait(false);
+        }
+
+        #endregion
     }
 }

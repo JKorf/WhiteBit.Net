@@ -90,5 +90,21 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitFuturesSymbol[]>> GetFuturesSymbolsAsync(CancellationToken ct = default);
 
+        /// <summary>
+        /// Get funding rate history
+        /// </summary>
+        /// <param name="symbol">Symbol name, for example `BTC_PERP`</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="limit">Max number of results</param>
+        /// <param name="offset">Result offset</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<WhiteBitFundingHistory[]>> GetFundingHistoryAsync(
+            string symbol,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            int? limit = null,
+            int? offset = null,
+            CancellationToken ct = default);
     }
 }
