@@ -33,11 +33,11 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             Topic = topic;
 
             if (symbols == null)
-                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageIdMatchType.Full, $"{topic}_update", DoHandleMessage);
+                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageLinkType.Full, $"{topic}_update", DoHandleMessage);
             else if (symbols.Length == 0)
-                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageIdMatchType.StartsWith, $"{topic}_update", DoHandleMessage);
+                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageLinkType.StartsWith, $"{topic}_update", DoHandleMessage);
             else
-                MessageMatcher = MessageMatcher.Create(symbols.Select(x => new MessageCheck<WhiteBitSocketUpdate<T>>(MessageIdMatchType.Full, $"{topic}_update.{x}", DoHandleMessage)).ToArray());
+                MessageMatcher = MessageMatcher.Create(symbols.Select(x => new MessageHandlerLink<WhiteBitSocketUpdate<T>>(MessageLinkType.Full, $"{topic}_update.{x}", DoHandleMessage)).ToArray());
         }
 
         /// <inheritdoc />

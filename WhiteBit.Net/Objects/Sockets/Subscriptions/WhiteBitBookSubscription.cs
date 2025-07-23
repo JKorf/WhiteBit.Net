@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _depth = depth;
             Topic = "OrderBook";
 
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitBookUpdate>>(MessageIdMatchType.Full, "depth_update." + symbol, DoHandleMessage);
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitBookUpdate>>(MessageLinkType.Full, "depth_update." + symbol, DoHandleMessage);
         }
 
         /// <inheritdoc />

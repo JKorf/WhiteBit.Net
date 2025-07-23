@@ -33,11 +33,11 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols.ToArray();
             Topic = "OpenOrder";
 
-            var checkers = new List<MessageCheck>();
+            var checkers = new List<MessageHandlerLink>();
             foreach (var symbol in symbols)
             {
-                checkers.Add(new MessageCheck<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>(MessageIdMatchType.Full, "ordersPending_update." + symbol, DoHandleMessage));
-                checkers.Add(new MessageCheck<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>(MessageIdMatchType.Full, "otoOrdersPending_update." + symbol, DoHandleMessage));
+                checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>(MessageLinkType.Full, "ordersPending_update." + symbol, DoHandleMessage));
+                checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>(MessageLinkType.Full, "otoOrdersPending_update." + symbol, DoHandleMessage));
             }
 
             MessageMatcher = MessageMatcher.Create(checkers.ToArray());

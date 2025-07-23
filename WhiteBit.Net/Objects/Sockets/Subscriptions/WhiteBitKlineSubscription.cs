@@ -30,7 +30,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbol = symbol;
             _interval = interval;
             Topic = "Klines";
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>(MessageIdMatchType.Full, "candles_update." + symbol, DoHandleMessage);
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>(MessageLinkType.Full, "candles_update." + symbol, DoHandleMessage);
         }
 
         /// <inheritdoc />

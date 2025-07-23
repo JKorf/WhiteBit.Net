@@ -28,7 +28,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             Topic = "UserTrade";
-            MessageMatcher = MessageMatcher.Create< WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageIdMatchType.Full, "deals_update", DoHandleMessage);
+            MessageMatcher = MessageMatcher.Create< WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageLinkType.Full, "deals_update", DoHandleMessage);
         }
 
         /// <inheritdoc />

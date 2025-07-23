@@ -13,7 +13,7 @@ namespace WhiteBit.Net.Objects.Sockets
     {
         public WhiteBitQuery(WhiteBitSocketRequest request, bool authenticated, int weight = 1) : base(request, authenticated, weight)
         {
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketResponse<T>>(MessageIdMatchType.Full, request.Id.ToString(), HandleMessage);
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketResponse<T>>(MessageLinkType.Full, request.Id.ToString(), HandleMessage);
         }
 
         public CallResult<WhiteBitSocketResponse<T>> HandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketResponse<T>> message)
