@@ -1593,5 +1593,37 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
+        #region Funding Rate client
+        GetFundingRateHistoryOptions IFundingRateRestClient.GetFundingRateHistoryOptions { get; } = new GetFundingRateHistoryOptions(SharedPaginationSupport.Descending, true, 100, false);
+
+        async Task<ExchangeWebResult<SharedFundingRate[]>> IFundingRateRestClient.GetFundingRateHistoryAsync(GetFundingRateHistoryRequest request, INextPageToken? pageToken, CancellationToken ct)
+        {
+            var validationError = ((IFundingRateRestClient)this).GetFundingRateHistoryOptions.ValidateRequest(Exchange, request, request.Symbol.TradingMode, SupportedTradingModes);
+            if (validationError != null)
+                return new ExchangeWebResult<SharedFundingRate[]>(Exchange, validationError);
+
+            DateTime? fromTime = null;
+            if (pageToken is DateTimeToken token)
+                fromTime = token.LastTime;
+
+            // Get data
+            var result = await ExchangeData.GetFundingHistoryAsync(
+                request.Symbol.GetSymbol(FormatSymbol),
+                startTime: fromTime ?? request.StartTime,
+                endTime: request.EndTime,
+                limit: request.Limit ?? 100,
+                ct: ct).ConfigureAwait(false);
+            if (!result)
+                return result.AsExchangeResult<SharedFundingRate[]>(Exchange, null, default);
+
+            DateTimeToken? nextToken = null;
+            if (result.Data.Count() == (request.Limit ?? 100))
+                nextToken = new DateTimeToken(result.Data.Min(x => x.FundingTime).AddSeconds(-1));
+
+            // Return
+            return result.AsExchangeResult(Exchange, request.Symbol.TradingMode, result.Data.Select(x => new SharedFundingRate(x.FundingRate, x.FundingTime)).ToArray(), nextToken);
+        }
+        #endregion
     }
 }
