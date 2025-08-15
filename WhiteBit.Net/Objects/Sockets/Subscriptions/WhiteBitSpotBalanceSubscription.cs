@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
@@ -15,6 +16,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitSpotBalanceSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
+        private readonly SocketApiClient _client;
         private readonly Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> _handler;
 
         private string[] _symbols;
@@ -22,8 +24,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitSpotBalanceSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> handler) : base(logger, true)
+        public WhiteBitSpotBalanceSubscription(ILogger logger, SocketApiClient client, IEnumerable<string> symbols, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> handler) : base(logger, true)
         {
+            _client = client;
             _handler = handler;
             _symbols = symbols.ToArray();
             Topic = "SpotBalance";
@@ -33,7 +36,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetSubQuery(SocketConnection connection)
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "balanceSpot_subscribe",
@@ -44,7 +47,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetUnsubQuery()
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "balanceSpot_unsubscribe",

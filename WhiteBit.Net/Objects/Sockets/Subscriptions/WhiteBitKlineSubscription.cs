@@ -1,4 +1,5 @@
 using CryptoExchange.Net;
+using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
@@ -16,6 +17,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitKlineSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
+        private readonly SocketApiClient _client;
         private readonly Action<DataEvent<WhiteBitKlineUpdate[]>> _handler;
 
         private readonly KlineInterval _interval;
@@ -24,8 +26,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitKlineSubscription(ILogger logger, string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> handler) : base(logger, false)
+        public WhiteBitKlineSubscription(ILogger logger, SocketApiClient client, string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> handler) : base(logger, false)
         {
+            _client = client;
             _handler = handler;
             _symbol = symbol;
             _interval = interval;
@@ -36,7 +39,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetSubQuery(SocketConnection connection)
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "candles_subscribe",
@@ -47,7 +50,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetUnsubQuery()
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "candles_unsubscribe",

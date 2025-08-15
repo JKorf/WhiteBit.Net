@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WhiteBit.Net.SymbolOrderBooks;
+using System.Net;
 
 namespace WhiteBit.Net.UnitTests
 {
@@ -45,7 +46,7 @@ namespace WhiteBit.Net.UnitTests
             var result = await CreateClient().V4Api.ExchangeData.GetRecentTradesAsync("TSTTST", default);
 
             Assert.That(result.Success, Is.False);
-            Assert.That(result.Error.Code, Is.EqualTo(422));
+            Assert.That(result.ResponseStatusCode, Is.EqualTo((HttpStatusCode)422));
         }
 
         [Test]

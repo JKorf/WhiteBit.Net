@@ -12,6 +12,7 @@ using WhiteBit.Net.Enums;
 using System.Xml.Linq;
 using CryptoExchange.Net;
 using System.Drawing;
+using CryptoExchange.Net.Objects.Errors;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -73,7 +74,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var ticker = result.Data.SingleOrDefault(x => x.Symbol == request.Symbol!.GetSymbol(FormatSymbol));
             if (ticker == null)
-                return result.AsExchangeError<SharedSpotTicker>(Exchange, new ServerError("Not found"));
+                return result.AsExchangeError<SharedSpotTicker>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
             return result.AsExchangeResult(Exchange, TradingMode.Spot, new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, ticker.Symbol), ticker.Symbol, ticker.LastPrice, null, null, ticker.BaseVolume, ticker.ChangePercentage)
             {
@@ -243,7 +244,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var asset = assets.Data.SingleOrDefault(x => x.Asset == request.Asset);
             if (asset == null)
-                return assets.AsExchangeError<SharedAsset>(Exchange, new ServerError("Not found"));
+                return assets.AsExchangeError<SharedAsset>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownAsset, "Asset not found")));
 
             var networks = asset.Networks.Withdraws.Intersect(asset.Networks.Deposits);
             return assets.AsExchangeResult(Exchange, TradingMode.Spot, new SharedAsset(asset.Asset)
@@ -442,7 +443,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedSpotOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedSpotOrder>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedSpotOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
             var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders)
@@ -478,7 +479,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     return closeOrders.AsExchangeResult<SharedSpotOrder>(Exchange, null, default);
 
                 if (!closeOrders.Data.Any())
-                    return closeOrders.AsExchangeError<SharedSpotOrder>(Exchange, new ServerError("Not found"));
+                    return closeOrders.AsExchangeError<SharedSpotOrder>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownOrder, "Order not found")));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
@@ -596,7 +597,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedUserTrade[]>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedUserTrade[]>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedUserTrade[]>(Exchange, ArgumentError.Invalid(nameof(GetOrderTradesRequest.OrderId), "Invalid order id"));
 
             var orders = await Trading.GetOrderTradesAsync(orderId, ct: ct).ConfigureAwait(false);
             if (!orders)
@@ -668,7 +669,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedId>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
             var order = await Trading.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!order)
@@ -750,7 +751,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var symbol = request.Symbol!.GetSymbol(FormatSymbol);
             var ticker = resultTicker.Data.SingleOrDefault(x => x.Symbol == symbol);
             if (ticker == null)
-                return resultTicker.AsExchangeError<SharedFuturesTicker>(Exchange, new ServerError("Not found"));
+                return resultTicker.AsExchangeError<SharedFuturesTicker>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
             return resultTicker.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedFuturesTicker(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, ticker.Symbol), ticker.Symbol, ticker.LastPrice, ticker.HighPrice, ticker.LowPrice, ticker.BaseVolume, null)
             {
@@ -832,7 +833,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var symbol = request.Symbol!.GetSymbol(FormatSymbol);
             var ticker = resultTicker.Data.SingleOrDefault(x => x.Symbol == symbol);
             if (ticker == null)
-                return resultTicker.AsExchangeError<SharedOpenInterest>(Exchange, new ServerError("Not found"));
+                return resultTicker.AsExchangeError<SharedOpenInterest>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
             return resultTicker.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedOpenInterest(ticker.OpenInterest));
         }
@@ -950,7 +951,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedFuturesOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedFuturesOrder>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedFuturesOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
             var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders)
@@ -988,7 +989,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     return closeOrders.AsExchangeResult<SharedFuturesOrder>(Exchange, null, default);
 
                 if (!closeOrders.Data.Any())
-                    return closeOrders.AsExchangeError<SharedFuturesOrder>(Exchange, new ServerError("Not found"));
+                    return closeOrders.AsExchangeError<SharedFuturesOrder>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownOrder, "Order not found")));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
@@ -1112,7 +1113,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedUserTrade[]>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedUserTrade[]>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedUserTrade[]>(Exchange, ArgumentError.Invalid(nameof(GetOrderTradesRequest.OrderId), "Invalid order id"));
 
             var orders = await Trading.GetOrderTradesAsync(orderId, ct: ct).ConfigureAwait(false);
             if (!orders)
@@ -1184,7 +1185,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedId>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
             var order = await Trading.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!order)
@@ -1263,7 +1264,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var symbol = result.Data.SingleOrDefault(x => x.Name == request.Symbol!.GetSymbol(FormatSymbol));
             if (symbol == null)
-                return result.AsExchangeError<SharedFee>(Exchange, new ServerError("Not found"));
+                return result.AsExchangeError<SharedFee>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
             // Return
             return result.AsExchangeResult(Exchange, request.TradingMode, new SharedFee(symbol.MakerFee, symbol.TakerFee));
@@ -1309,7 +1310,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedSpotTriggerOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedSpotTriggerOrder>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedSpotTriggerOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
             var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders)
@@ -1345,7 +1346,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     return closeOrders.AsExchangeResult<SharedSpotTriggerOrder>(Exchange, null, default);
 
                 if (!closeOrders.Data.Any())
-                    return closeOrders.AsExchangeError<SharedSpotTriggerOrder>(Exchange, new ServerError("Not found"));
+                    return closeOrders.AsExchangeError<SharedSpotTriggerOrder>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownOrder, "Order not found")));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 return closeOrders.AsExchangeResult(Exchange, TradingMode.Spot, new SharedSpotTriggerOrder(
@@ -1378,7 +1379,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedId>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
             var order = await Trading.CancelOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
@@ -1438,7 +1439,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedFuturesTriggerOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedFuturesTriggerOrder>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedFuturesTriggerOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
             var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders)
@@ -1475,7 +1476,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     return closeOrders.AsExchangeResult<SharedFuturesTriggerOrder>(Exchange, null, default);
 
                 if (!closeOrders.Data.Any())
-                    return closeOrders.AsExchangeError<SharedFuturesTriggerOrder>(Exchange, new ServerError("Not found"));
+                    return closeOrders.AsExchangeError<SharedFuturesTriggerOrder>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownOrder, "Order not found")));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 
@@ -1520,7 +1521,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<SharedId>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
             var order = await Trading.CancelOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
@@ -1579,7 +1580,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new ExchangeWebResult<bool>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
-                return new ExchangeWebResult<bool>(Exchange, new ArgumentError("Invalid order id"));
+                return new ExchangeWebResult<bool>(Exchange, ArgumentError.Invalid(nameof(CancelTpSlRequest.OrderId), "Invalid order id"));
 
             var result = await Trading.CancelOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),

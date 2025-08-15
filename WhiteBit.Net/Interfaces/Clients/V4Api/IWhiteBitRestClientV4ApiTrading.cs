@@ -20,7 +20,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-limit-order" /></para>
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-market-order" /></para>
         /// </summary>
-        /// <param name="symbol">Symbol</param>
+        /// <param name="symbol">Symbol, for example `ETH_USDT`</param>
         /// <param name="side">Order side</param>
         /// <param name="type">Order type</param>
         /// <param name="quantity">Quantity of the order in base asset</param>

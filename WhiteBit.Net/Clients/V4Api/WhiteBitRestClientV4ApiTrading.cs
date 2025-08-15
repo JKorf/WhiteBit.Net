@@ -48,7 +48,7 @@ namespace WhiteBit.Net.Clients.V4Api
             CancellationToken ct = default)
         {
             if (quoteQuantity != null && type != NewOrderType.Market && side != OrderSide.Buy)
-                return new WebCallResult<WhiteBitOrder>(new ArgumentError("quoteQuantity parameter only supported for buy market orders"));
+                return new WebCallResult<WhiteBitOrder>(ArgumentError.Invalid(nameof(quoteQuantity), "quoteQuantity parameter only supported for buy market orders"));
 
             var parameters = new ParameterCollection();
             parameters.Add("market", symbol);

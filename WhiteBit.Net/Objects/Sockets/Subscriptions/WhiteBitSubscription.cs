@@ -1,4 +1,5 @@
 using CryptoExchange.Net;
+using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
@@ -15,6 +16,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitSubscription<T> : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
+        private readonly SocketApiClient _client;
         private readonly Action<DataEvent<T>> _handler;
 
         private bool _firstUpdateSnapshot;
@@ -24,8 +26,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitSubscription(ILogger logger, string topic, string[]? symbols, Action<DataEvent<T>> handler, bool auth, bool firstUpdateSnapshot) : base(logger, auth)
+        public WhiteBitSubscription(ILogger logger, SocketApiClient client, string topic, string[]? symbols, Action<DataEvent<T>> handler, bool auth, bool firstUpdateSnapshot) : base(logger, auth)
         {
+            _client = client;
             _handler = handler;
             _topic = topic;
             _firstUpdateSnapshot = firstUpdateSnapshot;
@@ -43,7 +46,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetSubQuery(SocketConnection connection)
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = _topic + "_subscribe",
@@ -54,7 +57,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetUnsubQuery()
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = _topic + "_unsubscribe",
