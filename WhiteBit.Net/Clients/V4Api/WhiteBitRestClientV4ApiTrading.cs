@@ -1,18 +1,19 @@
-using CryptoExchange.Net.Objects;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Threading;
-using WhiteBit.Net.Interfaces.Clients.V4Api;
-using WhiteBit.Net.Enums;
-using System;
-using WhiteBit.Net.Objects.Models;
-using System.Linq;
-using CryptoExchange.Net.Converters.SystemTextJson;
-using WhiteBit.Net.Objects.Internal;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.RateLimiting.Guards;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using WhiteBit.Net.Enums;
+using WhiteBit.Net.Interfaces.Clients.V4Api;
+using WhiteBit.Net.Objects.Internal;
+using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -48,7 +49,7 @@ namespace WhiteBit.Net.Clients.V4Api
             CancellationToken ct = default)
         {
             if (quoteQuantity != null && type != NewOrderType.Market && side != OrderSide.Buy)
-                return new WebCallResult<WhiteBitOrder>(new ArgumentError("quoteQuantity parameter only supported for buy market orders"));
+                return new WebCallResult<WhiteBitOrder>(ArgumentError.Invalid(nameof(quoteQuantity), "quoteQuantity parameter only supported for buy market orders"));
 
             var parameters = new ParameterCollection();
             parameters.Add("market", symbol);
@@ -102,15 +103,40 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Multiple Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrderResponse[]>> PlaceSpotMultipleOrdersAsync(
+        public async Task<WebCallResult<CallResult<WhiteBitOrderResponse>[]>> PlaceSpotMultipleOrdersAsync(
             IEnumerable<WhiteBitOrderRequest> requests,
             CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.Add("orders", requests.ToArray());
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/bulk", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
-            var result = await _baseClient.SendAsync<WhiteBitOrderResponse[]>(request, parameters, ct).ConfigureAwait(false);
-            return result;
+            var resultData = await _baseClient.SendAsync<WhiteBitOrderResponse[]>(request, parameters, ct).ConfigureAwait(false);
+            if (!resultData)
+                return resultData.As<CallResult<WhiteBitOrderResponse>[]>(default);
+
+            var result = new List<CallResult<WhiteBitOrderResponse>>();
+            foreach (var item in resultData.Data)
+            {
+                if (item.Error?.Code == null)
+                {
+                    result.Add(new CallResult<WhiteBitOrderResponse>(item));
+                }
+                else
+                {
+                    ServerError error;
+                    if (item.Error.Errors?.Any() == true)
+                        error = new ServerError(item.Error.Code, _baseClient.GetErrorInfo(item.Error.Code, string.Join(", ", item.Error.Errors!.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}"))));
+                    else
+                        error = new ServerError(item.Error.Code, _baseClient.GetErrorInfo(item.Error.Code, item.Error.Message!));
+
+                    result.Add(new CallResult<WhiteBitOrderResponse>(error));
+                }
+            }
+
+            if (result.All(x => !x.Success))
+                return resultData.AsErrorWithData(new ServerError(new ErrorInfo(ErrorType.AllOrdersFailed, "All orders failed")), result.ToArray());
+
+            return resultData.As(result.ToArray());
         }
 
         #endregion

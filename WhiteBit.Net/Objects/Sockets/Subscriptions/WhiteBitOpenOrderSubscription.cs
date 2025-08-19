@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
@@ -16,6 +17,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitOpenOrderSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
+        private readonly SocketApiClient _client;
         private readonly MessagePath _methodPath = MessagePath.Get().Property("method");
 
         private readonly Action<DataEvent<WhiteBitOrderUpdate>> _handler;
@@ -26,8 +28,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitOpenOrderSubscription(ILogger logger, IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> handler, Action<DataEvent<WhiteBitOtoOrderUpdate>>? otoHandler) : base(logger, true)
+        public WhiteBitOpenOrderSubscription(ILogger logger, SocketApiClient client, IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> handler, Action<DataEvent<WhiteBitOtoOrderUpdate>>? otoHandler) : base(logger, true)
         {
+            _client = client;
             _handler = handler;
             _otoHandler = otoHandler;
             _symbols = symbols.ToArray();
@@ -46,7 +49,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetSubQuery(SocketConnection connection)
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "ordersPending_subscribe",
@@ -57,7 +60,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetUnsubQuery()
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "ordersPending_unsubscribe",

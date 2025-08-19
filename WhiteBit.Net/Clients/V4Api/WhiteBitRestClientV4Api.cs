@@ -12,6 +12,7 @@ using CryptoExchange.Net.Converters.MessageParsing;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Converters;
@@ -29,6 +30,9 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public new WhiteBitRestOptions ClientOptions => (WhiteBitRestOptions)base.ClientOptions;
         internal static TimeSyncState _timeSyncState = new TimeSyncState("V4 Api");
+
+        // API error responses are not easily parsable. For example response code 0 can mean an invalid API key or Order value too low
+        protected override ErrorMapping ErrorMapping { get; } = new ErrorMapping([]);
         #endregion
 
         #region Api clients
@@ -94,7 +98,7 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override Error ParseErrorResponse(int httpStatusCode, KeyValuePair<string, string[]>[] responseHeaders, IMessageAccessor accessor, Exception? exception)
         {
             if (!accessor.IsValid)
-                return new ServerError(null, "Unknown request error", exception: exception);
+                return new ServerError(ErrorInfo.Unknown, exception: exception);
 
             var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
             var msg = accessor.GetValue<string>(MessagePath.Get().Property("message"));
@@ -102,16 +106,16 @@ namespace WhiteBit.Net.Clients.V4Api
             if (errors == null || !errors.Any())
             {
                 if (msg == null)
-                    return new ServerError(null, "Unknown request error", exception: exception);
+                    return new ServerError(ErrorInfo.Unknown, exception: exception);
 
                 if (code == null)
-                    return new ServerError(null, msg, exception);
+                    return new ServerError(ErrorInfo.Unknown with { Message = msg }, exception);
 
-                return new ServerError(code.Value, msg, exception);
+                return new ServerError(code.Value, GetErrorInfo(code.Value, msg), exception);
             }
             else
             {
-                return new ServerError(code!.Value, string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}")), exception);
+                return new ServerError(code!.Value, GetErrorInfo(code!.Value, string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}"))), exception);
             }
         }
 

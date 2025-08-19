@@ -1,4 +1,5 @@
 using CryptoExchange.Net;
+using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
@@ -16,7 +17,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
     /// <inheritdoc />
     internal class WhiteBitBookSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
     {
-
+        private readonly SocketApiClient _client;
         private readonly Action<DataEvent<WhiteBitBookUpdate>> _handler;
 
         private readonly int _depth;
@@ -25,8 +26,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitBookSubscription(ILogger logger, string symbol, int depth, Action<DataEvent<WhiteBitBookUpdate>> handler) : base(logger, false)
+        public WhiteBitBookSubscription(ILogger logger, SocketApiClient client, string symbol, int depth, Action<DataEvent<WhiteBitBookUpdate>> handler) : base(logger, false)
         {
+            _client = client;
             _handler = handler;
             _symbol = symbol;
             _depth = depth;
@@ -38,7 +40,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetSubQuery(SocketConnection connection)
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "depth_subscribe",
@@ -49,7 +51,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public override Query? GetUnsubQuery()
         {
-            return new WhiteBitQuery<WhiteBitSubscribeResponse>(new Internal.WhiteBitSocketRequest
+            return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "depth_unsubscribe",
