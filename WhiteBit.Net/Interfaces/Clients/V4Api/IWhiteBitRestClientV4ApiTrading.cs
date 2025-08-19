@@ -55,7 +55,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="requests">Orders to place, max 20</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOrderResponse[]>> PlaceSpotMultipleOrdersAsync(
+        Task<WebCallResult<CallResult<WhiteBitOrderResponse>[]>> PlaceSpotMultipleOrdersAsync(
             IEnumerable<WhiteBitOrderRequest> requests,
             CancellationToken ct = default);
 
