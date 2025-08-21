@@ -47,6 +47,8 @@ namespace WhiteBit.Net.Clients.V4Api
         public new WhiteBitSocketOptions ClientOptions => (WhiteBitSocketOptions)base.ClientOptions;
 
         private static readonly ConcurrentDictionary<string, CachedToken> _tokenCache = new();
+
+        protected override ErrorMapping ErrorMapping => WhiteBitErrors.SocketErrors;
         #endregion
 
 
