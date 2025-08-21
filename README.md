@@ -148,6 +148,10 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 2.6.1 - 21 Aug 2025
+    * Added check for parsing Unauthorized response
+    * Added websocket error mapping for unknown symbol and unauthorized errors
+
 * Version 2.6.0 - 20 Aug 2025
     * Updated CryptoExchange.Net to version 9.5.0, see https://github.com/JKorf/CryptoExchange.Net/releases/
     * Added improved error parsing
