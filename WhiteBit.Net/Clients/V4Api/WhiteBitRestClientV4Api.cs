@@ -111,6 +111,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (code == null)
                     return new ServerError(ErrorInfo.Unknown with { Message = msg }, exception);
 
+                if (httpStatusCode == 401 && code == 0)
+                    return new ServerError(new ErrorInfo(ErrorType.Unauthorized, "Unauthorized") { Message = msg }, exception);
+
                 return new ServerError(code.Value, GetErrorInfo(code.Value, msg), exception);
             }
             else
