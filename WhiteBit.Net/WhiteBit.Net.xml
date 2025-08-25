@@ -469,6 +469,9 @@
         <member name="M:WhiteBit.Net.Clients.WhiteBitUserClientProvider.InitializeUserClient(System.String,CryptoExchange.Net.Authentication.ApiCredentials,WhiteBit.Net.WhiteBitEnvironment)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.WhiteBitUserClientProvider.ClearUserClients(System.String)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitUserClientProvider.GetRestClient(System.String,CryptoExchange.Net.Authentication.ApiCredentials,WhiteBit.Net.WhiteBitEnvironment)">
             <inheritdoc />
         </member>
@@ -2553,6 +2556,11 @@
             <param name="userIdentifier">The identifier for the user</param>
             <param name="credentials">The credentials for the user</param>
             <param name="environment">The environment to use</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitUserClientProvider.ClearUserClients(System.String)">
+            <summary>
+            Reset the cached clients for a user. This can be useful when a user changes API credentials.
+            </summary>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.IWhiteBitUserClientProvider.GetRestClient(System.String,CryptoExchange.Net.Authentication.ApiCredentials,WhiteBit.Net.WhiteBitEnvironment)">
             <summary>
@@ -6714,7 +6722,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitBookSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitBookUpdate}})">
@@ -6731,7 +6739,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitClosedOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitClosedOrder[]}})">
@@ -6748,7 +6756,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitKlineSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitKlineUpdate[]}})">
@@ -6765,7 +6773,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitMarginBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitMarginBalance[]}})">
@@ -6782,7 +6790,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitOpenOrderSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitOtoOrderUpdate}})">
@@ -6802,7 +6810,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSpotBalanceSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{System.Collections.Generic.Dictionary{System.String,WhiteBit.Net.Objects.Models.WhiteBitTradeBalance}[]}})">
@@ -6819,7 +6827,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitSubscription`1.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{`0}})">
@@ -6836,7 +6844,7 @@
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetSubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetUnsubQuery">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.GetUnsubQuery(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.DoHandleMessage(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Internal.WhiteBitSocketUpdate{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}})">

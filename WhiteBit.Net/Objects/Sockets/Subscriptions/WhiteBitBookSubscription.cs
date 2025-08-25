@@ -38,7 +38,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override Query? GetSubQuery(SocketConnection connection)
+        protected override Query? GetSubQuery(SocketConnection connection)
         {
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
@@ -49,7 +49,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public override Query? GetUnsubQuery()
+        protected override Query? GetUnsubQuery(SocketConnection connection)
         {
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(_client, new Internal.WhiteBitSocketRequest
             {
