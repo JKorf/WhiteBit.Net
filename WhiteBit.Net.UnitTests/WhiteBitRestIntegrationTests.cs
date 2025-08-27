@@ -1,17 +1,13 @@
-﻿using WhiteBit.Net.Clients;
-using WhiteBit.Net.Objects;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Testing;
 using Microsoft.Extensions.Logging;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using NUnit.Framework;
+using WhiteBit.Net.Clients;
 using WhiteBit.Net.SymbolOrderBooks;
-using System.Net;
 
 namespace WhiteBit.Net.UnitTests
 {
@@ -71,11 +67,11 @@ namespace WhiteBit.Net.UnitTests
             await RunAndCheckResult(client => client.V4Api.ExchangeData.GetSystemStatusAsync(default), false);
             await RunAndCheckResult(client => client.V4Api.ExchangeData.GetTickersAsync(default), false);
             await RunAndCheckResult(client => client.V4Api.ExchangeData.GetAssetsAsync(default), false);
-            await RunAndCheckResult(client => client.V4Api.ExchangeData.GetOrderBookAsync("ETH_USDT", default,  default, default), false);
+            await RunAndCheckResult(client => client.V4Api.ExchangeData.GetOrderBookAsync("ETH_USDT", default, default, default), false);
             await RunAndCheckResult(client => client.V4Api.ExchangeData.GetRecentTradesAsync("ETH_USDT", default, default), false);
             await RunAndCheckResult(client => client.V4Api.ExchangeData.GetDepositWithdrawalInfoAsync(default), false);
             await RunAndCheckResult(client => client.V4Api.ExchangeData.GetCollateralSymbolsAsync(default), false);
-            await RunAndCheckResult(client => client.V4Api.ExchangeData.GetFuturesSymbolsAsync(default), false);            
+            await RunAndCheckResult(client => client.V4Api.ExchangeData.GetFuturesSymbolsAsync(default), false);
         }
 
         [Test]
@@ -83,7 +79,7 @@ namespace WhiteBit.Net.UnitTests
         {
             await RunAndCheckResult(client => client.V4Api.Trading.GetOpenOrdersAsync(default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.V4Api.Trading.GetClosedOrdersAsync(default, default, default, default, default, default, default), true);
-            await RunAndCheckResult(client => client.V4Api.Trading.GetUserTradesAsync(default, default, default, default, default), true);
+            await RunAndCheckResult(client => client.V4Api.Trading.GetUserTradesAsync(default, default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.V4Api.Trading.GetKillSwitchStatusAsync(default, default), true);
 
         }

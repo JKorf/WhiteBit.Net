@@ -1,8 +1,6 @@
-using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
+using CryptoExchange.Net.Converters.SystemTextJson;
 using WhiteBit.Net.Enums;
 
 namespace WhiteBit.Net.Objects.Models
@@ -99,6 +97,12 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("fee")]
         public decimal Fee { get; set; }
+
+        /// <summary>
+        /// Fee asset
+        /// </summary>
+        [JsonPropertyName("feeAsset")]
+        public string FeeAsset { get; set; } = string.Empty;
     }
 
 
