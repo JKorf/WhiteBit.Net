@@ -37,8 +37,8 @@ namespace WhiteBit.Net.Clients.V4Api
             string symbol,
             OrderSide side,
             NewOrderType type,
-            decimal? quantity = null, 
-            decimal? quoteQuantity = null, 
+            decimal? quantity = null,
+            decimal? quoteQuantity = null,
             decimal? price = null,
             bool? postOnly = null,
             bool? immediateOrCancel = null,
@@ -214,12 +214,12 @@ namespace WhiteBit.Net.Clients.V4Api
             if (result.Data == null)
                 return result.As(new Dictionary<string, WhiteBitClosedOrder[]>());
 
-            foreach(var symbolOrders in result.Data)
+            foreach (var symbolOrders in result.Data)
             {
                 foreach (var order in symbolOrders.Value)
                     order.Symbol = symbolOrders.Key;
             }
-            
+
             return result;
         }
 
@@ -228,11 +228,13 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get User Trades
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitUserTrade[]>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<WhiteBitUserTrade[]>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, DateTime? startDate = null, DateTime? endDate = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
             parameters.AddOptional("clientOrderId", clientOrderId);
+            parameters.AddOptionalSeconds("startTime", startDate);
+            parameters.AddOptionalSeconds("endTime", endDate);
             parameters.AddOptional("limit", limit);
             parameters.AddOptional("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/executed-history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
@@ -248,7 +250,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (!result)
                     return result.As<WhiteBitUserTrade[]>(default);
 
-                foreach(var item in result.Data)
+                foreach (var item in result.Data)
                 {
                     foreach (var x in item.Value)
                         x.Symbol = item.Key;
