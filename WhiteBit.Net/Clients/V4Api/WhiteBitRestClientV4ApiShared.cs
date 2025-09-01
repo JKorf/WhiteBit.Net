@@ -614,6 +614,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.Time)
             {
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 Role = x.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray());
         }
@@ -633,6 +634,8 @@ namespace WhiteBit.Net.Clients.V4Api
             // Get data
             var orders = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
                 offset: offset,
+                startTime: request.StartTime,
+                endTime: request.EndTime,
                 limit: request.Limit ?? 100,
                 ct: ct
                 ).ConfigureAwait(false);
@@ -655,6 +658,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 y.Time)
             {
                 Fee = y.Fee,
+                FeeAsset = y.FeeAsset,
                 Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray();
 

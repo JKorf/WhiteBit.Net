@@ -110,12 +110,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">Filter by symbol, for example `ETH_USDT`</param>
         /// <param name="clientOrderId">Filter by client order id</param>
-        /// <param name="startDate">Filter by start date</param>
-        /// <param name="endDate">Filter by end date</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitUserTrade[]>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, DateTime? startDate = null, DateTime? endDate = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<WebCallResult<WhiteBitUserTrade[]>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get trades for a specific order
