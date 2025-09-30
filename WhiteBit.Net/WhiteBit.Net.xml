@@ -3641,15 +3641,6 @@
             Tracker factory
             </summary>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
-            <summary>
-            Create a new trade tracker for a symbol
-            </summary>
-            <param name="symbol">The symbol</param>
-            <param name="limit">The max amount of klines to retain</param>
-            <param name="period">The max period the data should be retained</param>
-            <returns></returns>
-        </member>
         <member name="M:WhiteBit.Net.Objects.Internal.WhiteBitNonceProvider.GetNonce">
             <inheritdoc />
         </member>
@@ -7055,6 +7046,15 @@
             ctor
             </summary>
             <param name="serviceProvider">Service provider for resolving logging and clients</param>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CanCreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CanCreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
             <inheritdoc />

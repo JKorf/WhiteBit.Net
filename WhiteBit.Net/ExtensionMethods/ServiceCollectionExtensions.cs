@@ -104,6 +104,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<ICryptoSocketClient, CryptoSocketClient>();
             services.AddTransient<IWhiteBitOrderBookFactory, WhiteBitOrderBookFactory>();
             services.AddTransient<IWhiteBitTrackerFactory, WhiteBitTrackerFactory>();
+            services.AddTransient<ITrackerFactory, WhiteBitTrackerFactory>();
             services.AddSingleton<IWhiteBitUserClientProvider, WhiteBitUserClientProvider>(x =>
             new WhiteBitUserClientProvider(
                 x.GetRequiredService<HttpClient>(),

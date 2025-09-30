@@ -32,6 +32,15 @@ namespace WhiteBit.Net
         }
 
         /// <inheritdoc />
+        public bool CanCreateKlineTracker(SharedSymbol symbol, SharedKlineInterval interval) => false;
+
+        /// <inheritdoc />
+        public bool CanCreateTradeTracker(SharedSymbol symbol) => true;
+
+        /// <inheritdoc />
+        public IKlineTracker CreateKlineTracker(SharedSymbol symbol, SharedKlineInterval interval, int? limit = null, TimeSpan? period = null) => throw new NotImplementedException();
+
+        /// <inheritdoc />
         public ITradeTracker CreateTradeTracker(SharedSymbol symbol, int? limit = null, TimeSpan? period = null)
         {
             var restClient = _serviceProvider?.GetRequiredService<IWhiteBitRestClient>() ?? new WhiteBitRestClient();
