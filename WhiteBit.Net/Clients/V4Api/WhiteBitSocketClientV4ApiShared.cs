@@ -231,8 +231,18 @@ namespace WhiteBit.Net.Clients.V4Api
                             return;
                     }
 
-                    handler(update.AsExchangeEvent<SharedUserTrade[]>(Exchange, [new SharedUserTrade(ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Symbol), update.Data.Symbol, update.Data.OrderId.ToString(), update.Data.Id.ToString(), update.Data.OrderSide == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell, update.Data.Quantity, update.Data.Price, update.Data.Time)
+                    handler(update.AsExchangeEvent<SharedUserTrade[]>(Exchange, [
+                        new SharedUserTrade(
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Symbol),
+                            update.Data.Symbol,
+                            update.Data.OrderId.ToString(),
+                            update.Data.Id.ToString(),
+                            update.Data.OrderSide == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
+                            update.Data.Quantity,
+                            update.Data.Price,
+                            update.Data.Time)
                     {
+                        ClientOrderId = update.Data.ClientOrderId,
                         Fee = update.Data.Fee
                     }]));
                 }, ct).ConfigureAwait(false);

@@ -30,7 +30,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         IFuturesTriggerOrderRestClient,
         IFuturesTpSlRestClient,
         IBookTickerRestClient,
-        IFundingRateRestClient
+        IFundingRateRestClient,
+        ITransferRestClient
     {
     }
 }

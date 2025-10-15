@@ -175,21 +175,29 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Balance Client
-        EndpointOptions<GetBalancesRequest> IBalanceRestClient.GetBalancesOptions { get; } = new EndpointOptions<GetBalancesRequest>(true);
+        GetBalancesOptions IBalanceRestClient.GetBalancesOptions { get; } = new GetBalancesOptions(AccountTypeFilter.Funding, AccountTypeFilter.Spot, AccountTypeFilter.Futures);
 
         async Task<ExchangeWebResult<SharedBalance[]>> IBalanceRestClient.GetBalancesAsync(GetBalancesRequest request, CancellationToken ct)
         {
-            var validationError = ((IBalanceRestClient)this).GetBalancesOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedTradingModes);
+            var validationError = ((IBalanceRestClient)this).GetBalancesOptions.ValidateRequest(Exchange, request, SupportedTradingModes);
             if (validationError != null)
                 return new ExchangeWebResult<SharedBalance[]>(Exchange, validationError);
 
-            if (request.TradingMode == null || request.TradingMode == TradingMode.Spot)
+            if (request.AccountType == null || request.AccountType == SharedAccountType.Spot)
             {
                 var result = await Account.GetSpotBalancesAsync(ct: ct).ConfigureAwait(false);
                 if (!result)
                     return result.AsExchangeResult<SharedBalance[]>(Exchange, null, default);
 
                 return result.AsExchangeResult<SharedBalance[]>(Exchange, TradingMode.Spot, result.Data.Select(x => new SharedBalance(x.Asset, x.Available, x.Available + x.Frozen)).ToArray());
+            }
+            else if(request.AccountType == SharedAccountType.Funding)
+            {
+                var result = await Account.GetMainBalancesAsync(ct: ct).ConfigureAwait(false);
+                if (!result)
+                    return result.AsExchangeResult<SharedBalance[]>(Exchange, null, default);
+
+                return result.AsExchangeResult<SharedBalance[]>(Exchange, SupportedFuturesModes, result.Data.Select(x => new SharedBalance(x.Asset, x.MainBalance, x.MainBalance)).ToArray());
             }
             else
             {
@@ -613,6 +621,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.Price,
                 x.Time)
             {
+                ClientOrderId = x.ClientOrderId,
                 Fee = x.Fee,
                 FeeAsset = x.FeeAsset,
                 Role = x.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
@@ -657,6 +666,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 y.Price,
                 y.Time)
             {
+                ClientOrderId = y.ClientOrderId,
                 Fee = y.Fee,
                 FeeAsset = y.FeeAsset,
                 Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
@@ -1133,6 +1143,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.Price,
                 x.Time)
             {
+                ClientOrderId = x.ClientOrderId,
                 Fee = x.Fee,
                 Role = x.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray());
@@ -1174,6 +1185,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 y.Price,
                 y.Time)
             {
+                ClientOrderId = y.ClientOrderId,
                 Fee = y.Fee,
                 Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray();
@@ -1629,6 +1641,49 @@ namespace WhiteBit.Net.Clients.V4Api
             // Return
             return result.AsExchangeResult(Exchange, request.Symbol.TradingMode, result.Data.Select(x => new SharedFundingRate(x.FundingRate, x.FundingTime)).ToArray(), nextToken);
         }
+        #endregion
+
+        #region Transfer client
+
+        TransferOptions ITransferRestClient.TransferOptions { get; } = new TransferOptions([
+            SharedAccountType.Spot,
+            SharedAccountType.PerpetualLinearFutures,
+            SharedAccountType.PerpetualInverseFutures,
+            SharedAccountType.DeliveryLinearFutures,
+            SharedAccountType.DeliveryInverseFutures
+            ]);
+        async Task<ExchangeWebResult<SharedId>> ITransferRestClient.TransferAsync(TransferRequest request, CancellationToken ct)
+        {
+            var validationError = ((ITransferRestClient)this).TransferOptions.ValidateRequest(Exchange, request, TradingMode.Spot, SupportedTradingModes);
+            if (validationError != null)
+                return new ExchangeWebResult<SharedId>(Exchange, validationError);
+
+            var fromType = GetTransferType(request.FromAccountType);
+            var toType = GetTransferType(request.ToAccountType);
+            if (fromType == null || toType == null)
+                return new ExchangeWebResult<SharedId>(Exchange, ArgumentError.Invalid("To/From AccountType", "invalid to/from account combination"));
+
+            // Get data
+            var transfer = await Account.TransferAsync(
+                fromType.Value,
+                toType.Value,
+                request.Asset,
+                request.Quantity,
+                ct: ct).ConfigureAwait(false);
+            if (!transfer)
+                return transfer.AsExchangeResult<SharedId>(Exchange, null, default);
+
+            return transfer.AsExchangeResult(Exchange, TradingMode.Spot, new SharedId(""));
+        }
+
+        private AccountType? GetTransferType(SharedAccountType type)
+        {
+            if (type == SharedAccountType.Funding) return AccountType.Main;
+            if (type == SharedAccountType.Spot) return AccountType.Spot;
+            if (type.IsFuturesAccount()) return AccountType.Collateral;
+            return null;
+        }
+
         #endregion
     }
 }
