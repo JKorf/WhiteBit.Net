@@ -8,7 +8,7 @@ namespace WhiteBit.Net.Interfaces
     /// <summary>
     /// WhiteBit local order book factory
     /// </summary>
-    public interface IWhiteBitOrderBookFactory
+    public interface IWhiteBitOrderBookFactory : IExchangeService
     {
         
         /// <summary>

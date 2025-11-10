@@ -455,6 +455,9 @@
         <member name="T:WhiteBit.Net.Clients.WhiteBitUserClientProvider">
             <inheritdoc />
         </member>
+        <member name="P:WhiteBit.Net.Clients.WhiteBitUserClientProvider.ExchangeName">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.WhiteBitUserClientProvider.#ctor(System.Action{WhiteBit.Net.Objects.Options.WhiteBitOptions})">
             <summary>
             ctor
@@ -6872,6 +6875,9 @@
             <summary>
             WhiteBit order book factory
             </summary>
+        </member>
+        <member name="P:WhiteBit.Net.SymbolOrderBooks.WhiteBitOrderBookFactory.ExchangeName">
+            <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.SymbolOrderBooks.WhiteBitOrderBookFactory.#ctor(System.IServiceProvider)">
             <summary>

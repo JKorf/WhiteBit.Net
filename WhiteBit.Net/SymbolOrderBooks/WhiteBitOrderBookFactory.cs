@@ -17,6 +17,9 @@ namespace WhiteBit.Net.SymbolOrderBooks
     {
         private readonly IServiceProvider _serviceProvider;
 
+        /// <inheritdoc />
+        public string ExchangeName => WhiteBitExchange.ExchangeName;
+
         /// <summary>
         /// ctor
         /// </summary>
