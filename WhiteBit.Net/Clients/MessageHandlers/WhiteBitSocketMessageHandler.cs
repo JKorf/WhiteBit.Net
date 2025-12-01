@@ -5,11 +5,11 @@ using System.Text.Json;
 
 namespace WhiteBit.Net.Clients.MessageHandlers
 {
-    internal class WhiteBitSocketFuturesMessageHandler : JsonSocketMessageHandler
+    internal class WhiteBitSocketMessageHandler : JsonSocketMessageHandler
     {
         public override JsonSerializerOptions Options { get; } = WhiteBitExchange._serializerContext;
 
-        public WhiteBitSocketFuturesMessageHandler()
+        public WhiteBitSocketMessageHandler()
         {
         }
 

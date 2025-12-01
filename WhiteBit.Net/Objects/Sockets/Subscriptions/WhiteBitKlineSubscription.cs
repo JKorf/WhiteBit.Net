@@ -59,7 +59,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitKlineUpdate[]> message)
         {
             _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.First().Symbol, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
