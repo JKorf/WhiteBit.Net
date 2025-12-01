@@ -44,6 +44,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             }
 
             MessageMatcher = MessageMatcher.Create(checkers.ToArray());
+
         }
 
         /// <inheritdoc />
@@ -69,16 +70,26 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate> message)
         {
-            _otoHandler?.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Order.TriggerOrder?.Symbol, SocketUpdateType.Update)!);
+            _otoHandler?.Invoke(
+                    new DataEvent<WhiteBitOtoOrderUpdate>(message.Data!, receiveTime, originalData)
+                        .WithStreamId(message.Method)
+                        .WithSymbol(message.Data!.Order.TriggerOrder?.Symbol)
+                        .WithUpdateType(SocketUpdateType.Update)
+                );
             return CallResult.SuccessResult;
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitOrderUpdate>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitOrderUpdate> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Order.Symbol, SocketUpdateType.Update)!);
+            _handler?.Invoke(
+                    new DataEvent<WhiteBitOrderUpdate>(message.Data!, receiveTime, originalData)
+                        .WithStreamId(message.Method)
+                        .WithSymbol(message.Data!.Order.Symbol)
+                        .WithUpdateType(SocketUpdateType.Update)
+                );
             return CallResult.SuccessResult;
         }
     }

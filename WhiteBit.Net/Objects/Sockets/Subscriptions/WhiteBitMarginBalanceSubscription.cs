@@ -29,8 +29,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _client = client;
             _handler = handler;
             _symbols = symbols.ToArray();
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>(MessageLinkType.Full, "balanceMargin_update", DoHandleMessage);
             Topic = "MarginBalance";
+
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>(MessageLinkType.Full, "balanceMargin_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>("balanceMargin_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -56,9 +58,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitMarginBalance[]> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<WhiteBitMarginBalance[]>(message.Data!, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                );
+
             return CallResult.SuccessResult;
         }
     }
