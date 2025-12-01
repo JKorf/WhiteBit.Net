@@ -32,6 +32,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols.ToArray();
             _orderFilter = orderFilter;
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>(MessageLinkType.Full, "ordersExecuted_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>("depth_update", DoHandleMessage);
             Topic = "ClosedOrder";
         }
 
@@ -58,9 +59,15 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitClosedOrder[]> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.First().Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<WhiteBitClosedOrder[]>(message.Data!, receiveTime, originalData)
+                    .WithStreamId(message.Method)
+                    .WithSymbol(message.Data!.First().Symbol)
+                    .WithUpdateType(SocketUpdateType.Update)
+                );
+
             return CallResult.SuccessResult;
         }
     }

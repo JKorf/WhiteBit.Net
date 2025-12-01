@@ -9,6 +9,7 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
+using CryptoExchange.Net.Converters.MessageParsing.DynamicConverters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
@@ -17,6 +18,7 @@ using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.SharedApis;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
+using WhiteBit.Net.Clients.MessageHandlers;
 using WhiteBit.Net.Enums;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Internal;
@@ -85,6 +87,8 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override IByteMessageAccessor CreateAccessor(WebSocketMessageType type) => new SystemTextJsonByteMessageAccessor(WhiteBitExchange._serializerContext);
         /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
+
+        public override ISocketMessageHandler CreateMessageConverter(WebSocketMessageType messageType) => new WhiteBitSocketMessageHandler();
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)

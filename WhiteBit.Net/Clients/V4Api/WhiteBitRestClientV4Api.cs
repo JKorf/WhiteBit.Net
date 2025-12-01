@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -9,12 +10,14 @@ using System.Threading.Tasks;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
+using CryptoExchange.Net.Converters.MessageParsing.DynamicConverters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Logging;
+using WhiteBit.Net.Clients.MessageHandlers;
 using WhiteBit.Net.Converters;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Internal;
@@ -33,6 +36,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         // API error responses are not easily parsable. For example response code 0 can mean an invalid API key or Order value too low
         protected override ErrorMapping ErrorMapping { get; } = new ErrorMapping([]);
+        protected override IRestMessageHandler MessageHandler { get; } = new WhiteBitRestMessageHandler();
         #endregion
 
         #region Api clients
@@ -95,7 +99,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return result;
         }
 
-        protected override Error ParseErrorResponse(int httpStatusCode, KeyValuePair<string, string[]>[] responseHeaders, IMessageAccessor accessor, Exception? exception)
+        protected override Error ParseErrorResponse(int httpStatusCode, HttpResponseHeaders responseHeaders, IMessageAccessor accessor, Exception? exception)
         {
             if (!accessor.IsValid)
                 return new ServerError(ErrorInfo.Unknown, exception: exception);

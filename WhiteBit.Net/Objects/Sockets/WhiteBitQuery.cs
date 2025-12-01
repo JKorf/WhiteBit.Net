@@ -20,12 +20,12 @@ namespace WhiteBit.Net.Objects.Sockets
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketResponse<T>>(MessageLinkType.Full, request.Id.ToString(), HandleMessage);
         }
 
-        public CallResult<WhiteBitSocketResponse<T>> HandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketResponse<T>> message)
+        public CallResult<WhiteBitSocketResponse<T>> HandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketResponse<T> message)
         {
-            if (message.Data.Error != null)
-                return new CallResult<WhiteBitSocketResponse<T>>(new ServerError(message.Data.Error.Code, _client.GetErrorInfo(message.Data.Error.Code, message.Data.Error.Message)));
+            if (message.Error != null)
+                return new CallResult<WhiteBitSocketResponse<T>>(new ServerError(message.Error.Code, _client.GetErrorInfo(message.Error.Code, message.Error.Message)));
 
-            return message.ToCallResult();
+            return new CallResult<WhiteBitSocketResponse<T>>(message, originalData, null);
         }
     }
 }
