@@ -28,9 +28,11 @@ namespace WhiteBit.Net
                 return;
 
             var nonce = _nonceProvider.GetNonce().ToString();
+            request.BodyParameters ??= new Dictionary<string, object>();
             request.BodyParameters.Add("request", request.Path);
             request.BodyParameters.Add("nonce", nonce);
             request.BodyParameters.Add("nonceWindow", ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow);
+            request.Headers ??= new Dictionary<string, string>();
             request.Headers.Add("X-TXC-APIKEY", ApiKey);
 
             var payload = GetSerializedBody(_serializer, request.BodyParameters);

@@ -30,7 +30,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             Topic = "SpotBalance";
+
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>(MessageLinkType.Full, "balanceSpot_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>("balanceSpot_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -56,13 +58,15 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]> message)
         {
-            var balances = message.Data.Data!.First();
+            var balances = message.Data!.First();
             foreach (var item in balances)
                 item.Value.Asset = item.Key;
 
-            _handler.Invoke(message.As(balances, message.Data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<Dictionary<string, WhiteBitTradeBalance>>(balances, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update));
             return CallResult.SuccessResult;
         }
     }

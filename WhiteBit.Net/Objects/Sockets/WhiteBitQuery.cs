@@ -17,7 +17,9 @@ namespace WhiteBit.Net.Objects.Sockets
         public WhiteBitQuery(SocketApiClient client, WhiteBitSocketRequest request, bool authenticated, int weight = 1) : base(request, authenticated, weight)
         {
             _client = client;
+
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketResponse<T>>(MessageLinkType.Full, request.Id.ToString(), HandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketResponse<T>>(request.Id.ToString(), HandleMessage);
         }
 
         public CallResult<WhiteBitSocketResponse<T>> HandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketResponse<T> message)

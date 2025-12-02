@@ -31,7 +31,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             Topic = "UserTrade";
-            MessageMatcher = MessageMatcher.Create< WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageLinkType.Full, "deals_update", DoHandleMessage);
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageLinkType.Full, "deals_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>("deals_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -57,9 +58,15 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitUserTradeUpdate> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<WhiteBitUserTradeUpdate>(message.Data!, receiveTime, originalData)
+                .WithStreamId(message.Method)
+                .WithSymbol(message.Data!.Symbol)
+                .WithUpdateType(SocketUpdateType.Update)
+                );
+            //_handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Symbol, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

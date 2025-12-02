@@ -13,13 +13,15 @@ namespace WhiteBit.Net.UnitTests
     [TestFixture]
     public class RestRequestTests
     {
-        [Test]
-        public async Task ValidateV4AccountCalls()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task ValidateV4AccountCalls(bool useUpdatedDeserialization)
         {
             var client = new WhiteBitRestClient(opts =>
             {
                 opts.AutoTimestamp = false;
                 opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
+                opts.UseUpdatedDeserialization = useUpdatedDeserialization;
             });
             var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Account", "https://whitebit.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.V4Api.Convert.GetConvertEstimateAsync("123", "123", 0.1m, "123"), "GetConvertEstimate");
@@ -51,12 +53,14 @@ namespace WhiteBit.Net.UnitTests
             await tester.ValidateAsync(client => client.V4Api.SubAccount.GetSubaccountTransferHistoryAsync(), "GetSubaccountTransferHistory");
         }
 
-        [Test]
-        public async Task ValidateV4ExchangeDataCalls()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task ValidateV4ExchangeDataCalls(bool useUpdatedDeserialization)
         {
             var client = new WhiteBitRestClient(opts =>
             {
                 opts.AutoTimestamp = false;
+                opts.UseUpdatedDeserialization = useUpdatedDeserialization;
             });
             var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/ExchangeData", "https://whitebit.com", IsAuthenticated);
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetSystemStatusAsync(), "GetSystemStatus");
@@ -68,12 +72,14 @@ namespace WhiteBit.Net.UnitTests
             await tester.ValidateAsync(client => client.V4Api.ExchangeData.GetFundingHistoryAsync("ETH_PERP"), "GetFundingHistory");
         }
 
-        [Test]
-        public async Task ValidateV4TradingCalls()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task ValidateV4TradingCalls(bool useUpdatedDeserialization)
         {
             var client = new WhiteBitRestClient(opts =>
             {
                 opts.AutoTimestamp = false;
+                opts.UseUpdatedDeserialization = useUpdatedDeserialization;
                 opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
             });
             var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/Trading", "https://whitebit.com", IsAuthenticated);
@@ -83,12 +89,14 @@ namespace WhiteBit.Net.UnitTests
             await tester.ValidateAsync(client => client.V4Api.Trading.GetClosedOrdersAsync(), "GetClosedOrders2");
         }
 
-        [Test]
-        public async Task ValidateV4CollateralTradingCalls()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task ValidateV4CollateralTradingCalls(bool useUpdatedDeserialization)
         {
             var client = new WhiteBitRestClient(opts =>
             {
                 opts.AutoTimestamp = false;
+                opts.UseUpdatedDeserialization = useUpdatedDeserialization;
                 opts.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456");
             });
             var tester = new RestRequestValidator<WhiteBitRestClient>(client, "Endpoints/V4/CollateralTrading", "https://whitebit.com", IsAuthenticated);

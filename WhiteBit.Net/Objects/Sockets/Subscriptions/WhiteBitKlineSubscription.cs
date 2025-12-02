@@ -33,7 +33,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbol = symbol;
             _interval = interval;
             Topic = "Klines";
+
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>(MessageLinkType.Full, "candles_update." + symbol, DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithTopicFilter<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>("candles_update", symbol, DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -61,7 +63,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitKlineUpdate[]> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.First().Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<WhiteBitKlineUpdate[]>(message.Data!, receiveTime, originalData)
+                    .WithStreamId(message.Method)
+                    .WithSymbol(message.Data!.First().Symbol)
+                    .WithUpdateType(SocketUpdateType.Update)
+                );
+
             return CallResult.SuccessResult;
         }
     }

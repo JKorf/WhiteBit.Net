@@ -37,14 +37,18 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             Topic = "OpenOrder";
 
             var checkers = new List<MessageHandlerLink>();
+            var routes = new List<MessageRoute>();
             foreach (var symbol in symbols)
             {
                 checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>(MessageLinkType.Full, "ordersPending_update." + symbol, DoHandleMessage));
                 checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>(MessageLinkType.Full, "otoOrdersPending_update." + symbol, DoHandleMessage));
+
+                routes.Add(MessageRoute<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>.CreateWithTopicFilter("ordersPending_update", symbol, DoHandleMessage));
+                routes.Add(MessageRoute<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>.CreateWithTopicFilter("otoOrdersPending_update", symbol, DoHandleMessage));
             }
 
             MessageMatcher = MessageMatcher.Create(checkers.ToArray());
-
+            MessageRouter = MessageRouter.Create(routes.ToArray());
         }
 
         /// <inheritdoc />
