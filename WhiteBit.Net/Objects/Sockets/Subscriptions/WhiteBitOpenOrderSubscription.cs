@@ -15,7 +15,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitOpenOrderSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitOpenOrderSubscription : Subscription
     {
         private readonly SocketApiClient _client;
         private readonly MessagePath _methodPath = MessagePath.Get().Property("method");

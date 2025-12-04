@@ -14,7 +14,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitClosedOrderSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitClosedOrderSubscription : Subscription
     {
         private readonly SocketApiClient _client;
         private readonly Action<DataEvent<WhiteBitClosedOrder[]>> _handler;

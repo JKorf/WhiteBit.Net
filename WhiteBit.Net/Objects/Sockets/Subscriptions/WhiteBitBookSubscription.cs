@@ -15,7 +15,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitBookSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitBookSubscription : Subscription
     {
         private readonly SocketApiClient _client;
         private readonly Action<DataEvent<WhiteBitBookUpdate>> _handler;
