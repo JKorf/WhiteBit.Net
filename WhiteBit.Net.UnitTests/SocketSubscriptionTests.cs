@@ -15,6 +15,7 @@ namespace WhiteBit.Net.UnitTests
     [TestFixture]
     public class SocketSubscriptionTests
     {
+
         [TestCase(false)]
         [TestCase(true)]
         public async Task ValidateV4ApiSubscriptions(bool useUpdatedDeserialization)

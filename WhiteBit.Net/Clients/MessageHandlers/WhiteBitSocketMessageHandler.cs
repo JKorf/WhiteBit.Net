@@ -24,21 +24,19 @@ namespace WhiteBit.Net.Clients.MessageHandlers
             AddTopicMapping<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(x => x.Data!.Symbol);
         }
 
-        protected override MessageEvaluator[] TypeEvaluators { get; } = [ 
-            new MessageEvaluator {
-                Priority = 1,
+        protected override MessageTypeDefinition[] TypeEvaluators { get; } = [ 
+            new MessageTypeDefinition {
                 Fields = [
-                    new PropertyFieldReference("id") { Constraint = x => x != null },
+                    new PropertyFieldReference("id").WithNotNullContstraint(),
                 ],
-                IdentifyMessageCallback = x => x.FieldValue("id")!
+                TypeIdentifierCallback = x => x.FieldValue("id")!
             },
 
-            new MessageEvaluator {
-                Priority = 2,
+            new MessageTypeDefinition {
                 Fields = [
                     new PropertyFieldReference("method"),
                 ],
-                IdentifyMessageCallback = x => x.FieldValue("method")!
+                TypeIdentifierCallback = x => x.FieldValue("method")!
             },
 
         ];
