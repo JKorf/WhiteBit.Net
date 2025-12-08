@@ -1,5 +1,5 @@
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Interfaces.Clients;
 using CryptoExchange.Net.Objects.Options;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using CryptoExchange.Net.Authentication;
@@ -18,10 +16,8 @@ using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Clients.MessageHandlers;
-using WhiteBit.Net.Converters;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Internal;
-using WhiteBit.Net.Objects.Models;
 using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net.Clients.V4Api

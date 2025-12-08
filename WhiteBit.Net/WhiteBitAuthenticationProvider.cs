@@ -5,7 +5,6 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Options;

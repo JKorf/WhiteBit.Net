@@ -1,7 +1,6 @@
 using CryptoExchange.Net.SharedApis;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
@@ -9,9 +8,7 @@ using CryptoExchange.Net.Objects;
 using System.Linq;
 using WhiteBit.Net.Objects.Models;
 using WhiteBit.Net.Enums;
-using System.Xml.Linq;
 using CryptoExchange.Net;
-using System.Drawing;
 using CryptoExchange.Net.Objects.Errors;
 
 namespace WhiteBit.Net.Clients.V4Api

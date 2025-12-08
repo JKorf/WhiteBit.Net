@@ -3,7 +3,6 @@ using System.Threading;
 using WhiteBit.Net.Objects.Models;
 using CryptoExchange.Net.Objects;
 using WhiteBit.Net.Enums;
-using System.Collections.Generic;
 using System;
 
 namespace WhiteBit.Net.Interfaces.Clients.V4Api
