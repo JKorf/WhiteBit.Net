@@ -95,33 +95,6 @@ namespace WhiteBit.Net.Clients.V4Api
             return result;
         }
 
-        protected override Error ParseErrorResponse(int httpStatusCode, HttpResponseHeaders responseHeaders, IMessageAccessor accessor, Exception? exception)
-        {
-            if (!accessor.IsValid)
-                return new ServerError(ErrorInfo.Unknown, exception: exception);
-
-            var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
-            var msg = accessor.GetValue<string>(MessagePath.Get().Property("message"));
-            var errors = accessor.GetValue<Dictionary<string, string[]>?>(MessagePath.Get().Property("errors"));
-            if (errors == null || !errors.Any())
-            {
-                if (msg == null)
-                    return new ServerError(ErrorInfo.Unknown, exception: exception);
-
-                if (code == null)
-                    return new ServerError(ErrorInfo.Unknown with { Message = msg }, exception);
-
-                if (httpStatusCode == 401 && code == 0)
-                    return new ServerError(new ErrorInfo(ErrorType.Unauthorized, "Unauthorized") { Message = msg }, exception);
-
-                return new ServerError(code.Value, GetErrorInfo(code.Value, msg), exception);
-            }
-            else
-            {
-                return new ServerError(code!.Value, GetErrorInfo(code!.Value, string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}"))), exception);
-            }
-        }
-
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
             => ExchangeData.GetServerTimeAsync();
