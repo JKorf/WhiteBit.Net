@@ -53,7 +53,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "depth_unsubscribe",
-                Request = [_symbol, _depth]
+                Request = [_symbol]
             }, false);
         }
 

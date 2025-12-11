@@ -27,7 +27,7 @@ namespace WhiteBit.Net.Clients.MessageHandlers
         protected override MessageTypeDefinition[] TypeEvaluators { get; } = [ 
             new MessageTypeDefinition {
                 Fields = [
-                    new PropertyFieldReference("id").WithNotNullContstraint(),
+                    new PropertyFieldReference("id").WithNotNullConstraint(),
                 ],
                 TypeIdentifierCallback = x => x.FieldValue("id")!
             },
