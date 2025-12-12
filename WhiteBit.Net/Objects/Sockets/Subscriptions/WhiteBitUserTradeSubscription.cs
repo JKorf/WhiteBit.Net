@@ -25,11 +25,14 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitUserTradeSubscription(ILogger logger, SocketApiClient client, IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> handler) : base(logger, true)
+        public WhiteBitUserTradeSubscription(ILogger logger, SocketApiClient client, string[] symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> handler) : base(logger, true)
         {
             _client = client;
             _handler = handler;
-            _symbols = symbols.ToArray();
+            _symbols = symbols;
+
+            IndividualSubscriptionCount = symbols.Length;
+
             Topic = "UserTrade";
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageLinkType.Full, "deals_update", DoHandleMessage);
             MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>("deals_update", DoHandleMessage);

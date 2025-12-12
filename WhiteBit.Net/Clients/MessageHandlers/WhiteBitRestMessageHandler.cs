@@ -25,7 +25,11 @@ namespace WhiteBit.Net.Clients.MessageHandlers
 
             int? code = document!.RootElement.TryGetProperty("code", out var codeProp) ? codeProp.GetInt32() : null;
             var msg = document!.RootElement.TryGetProperty("msg", out var msgProp) ? msgProp.GetString() : null;
+#pragma warning disable IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
+#pragma warning disable IL3050 // Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.
             var errors = document.RootElement.TryGetProperty("errors", out var errorsProp) ? errorsProp.Deserialize<Dictionary<string, string[]>>(Options) : null;
+#pragma warning restore IL3050 // Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.
+#pragma warning restore IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
             if (errors == null || !errors.Any())
             {
                 if (msg == null)

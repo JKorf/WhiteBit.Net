@@ -30,6 +30,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols;
             Topic = topic;
 
+            IndividualSubscriptionCount = symbols?.Length ?? 1;
+
             if (symbols == null)
                 MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageLinkType.Full, $"{topic}_update", DoHandleMessage);
             else if (symbols.Length == 0)

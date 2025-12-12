@@ -6837,7 +6837,7 @@
         <member name="T:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,CryptoExchange.Net.Clients.SocketApiClient,System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}})">
+        <member name="M:WhiteBit.Net.Objects.Sockets.Subscriptions.WhiteBitUserTradeSubscription.#ctor(Microsoft.Extensions.Logging.ILogger,CryptoExchange.Net.Clients.SocketApiClient,System.String[],System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitUserTradeUpdate}})">
             <summary>
             ctor
             </summary>
