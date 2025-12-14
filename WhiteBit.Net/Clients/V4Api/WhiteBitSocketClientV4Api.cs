@@ -119,7 +119,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitTradeUpdate>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitTradeUpdate>(data.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitTradeUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
                         .WithDataTimestamp(data.Data!.Trades.Length > 0 ? data.Data.Trades.Max(x => x.Timestamp) : null)
                         .WithStreamId("trades")
@@ -156,7 +156,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitLastPriceUpdate>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitLastPriceUpdate>(data.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitLastPriceUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId("lastprice")
                         .WithSymbol(data.Data!.Symbol)
@@ -192,7 +192,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitTickerUpdate>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitTickerUpdate>(data.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithStreamId("bookTicker")
                         .WithSymbol(data.Data!.Symbol)
@@ -213,7 +213,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitBookTickerUpdate>(data.Data!.First(), receiveTime, originalData)
+                    new DataEvent<WhiteBitBookTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!.First(), receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithDataTimestamp(data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null)
                         .WithStreamId("bookTicker")
@@ -231,7 +231,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitBookTickerUpdate>(data.Data!.First(), receiveTime, originalData)
+                    new DataEvent<WhiteBitBookTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!.First(), receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
                         .WithDataTimestamp(data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null)
                         .WithStreamId("bookTicker")
@@ -428,7 +428,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitPositionsUpdate>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitPositionsUpdate>(data.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitPositionsUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
                         .WithDataTimestamp(data.Data!.Records.Length > 0 ? data.Data.Records.Max(x => x.UpdateTime) : null)
                         .WithStreamId("positionsMargin")
@@ -448,7 +448,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBorrow>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitBorrow>(data.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitBorrow>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
                         .WithDataTimestamp(data.Data!.UpdateTime)
                         .WithStreamId("borrowsMargin")
@@ -468,7 +468,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountMarginPositionUpdate>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitAccountMarginPositionUpdate>(data.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitAccountMarginPositionUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
                         .WithDataTimestamp(data.Data!.PositionInfo.UpdateTime)
                         .WithStreamId("positionsAccountMargin")
@@ -488,7 +488,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountBorrowUpdate>>((receiveTime, originalData, invocations, data) =>
             {
                 onMessage(
-                    new DataEvent<WhiteBitAccountBorrowUpdate>(data.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitAccountBorrowUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
                         .WithDataTimestamp(data.Data!.BorrowInfo.UpdateTime)
                         .WithStreamId("positionsAccountMargin")

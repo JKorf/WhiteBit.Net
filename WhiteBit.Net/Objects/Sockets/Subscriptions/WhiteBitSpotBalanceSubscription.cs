@@ -65,7 +65,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                 item.Value.Asset = item.Key;
 
             _handler.Invoke(
-                new DataEvent<Dictionary<string, WhiteBitTradeBalance>>(balances, receiveTime, originalData)
+                new DataEvent<Dictionary<string, WhiteBitTradeBalance>>(WhiteBitExchange.ExchangeName, balances, receiveTime, originalData)
                     .WithUpdateType(SocketUpdateType.Update));
             return CallResult.SuccessResult;
         }

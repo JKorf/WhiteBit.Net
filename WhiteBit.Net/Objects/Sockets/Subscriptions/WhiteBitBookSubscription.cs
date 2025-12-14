@@ -61,7 +61,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitBookUpdate> message)
         {
             _handler.Invoke(
-                new DataEvent<WhiteBitBookUpdate>(message.Data!, receiveTime, originalData)
+                new DataEvent<WhiteBitBookUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
                     .WithStreamId(message.Method)
                     .WithSymbol(message.Data!.Symbol)
                     .WithUpdateType(message.Data!.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)

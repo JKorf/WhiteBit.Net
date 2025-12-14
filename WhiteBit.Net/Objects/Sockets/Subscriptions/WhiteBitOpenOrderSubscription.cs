@@ -77,7 +77,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate> message)
         {
             _otoHandler?.Invoke(
-                    new DataEvent<WhiteBitOtoOrderUpdate>(message.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitOtoOrderUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
                         .WithStreamId(message.Method)
                         .WithSymbol(message.Data!.Order.TriggerOrder?.Symbol)
                         .WithUpdateType(SocketUpdateType.Update)
@@ -89,7 +89,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitOrderUpdate> message)
         {
             _handler?.Invoke(
-                    new DataEvent<WhiteBitOrderUpdate>(message.Data!, receiveTime, originalData)
+                    new DataEvent<WhiteBitOrderUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
                         .WithStreamId(message.Method)
                         .WithSymbol(message.Data!.Order.Symbol)
                         .WithUpdateType(SocketUpdateType.Update)
