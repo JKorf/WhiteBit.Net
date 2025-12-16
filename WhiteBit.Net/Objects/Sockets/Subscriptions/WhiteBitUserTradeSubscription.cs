@@ -69,7 +69,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                 .WithSymbol(message.Data!.Symbol)
                 .WithUpdateType(SocketUpdateType.Update)
                 );
-            //_handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Symbol, SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }

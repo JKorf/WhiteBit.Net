@@ -68,7 +68,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<T> message)
         {
             _handler.Invoke(receiveTime, originalData, ConnectionInvocations, message);
-            //_handler.Invoke(message.As(message.Data.Data, message.Data.Method, null, (_firstUpdateSnapshot && ConnectionInvocations == 1) ? SocketUpdateType.Snapshot : SocketUpdateType.Update)!);
             return CallResult.SuccessResult;
         }
     }
