@@ -152,6 +152,16 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 3.0.0 - 16 Dec 2025
+    * Added Net10.0 target framework
+    * Updated CryptoExchange.Net version to 10.0.0, see https://github.com/JKorf/CryptoExchange.Net/releases/ for full release notes
+    * Updated REST message response handling
+    * Updated WebSocket message handling
+    * Added UseUpdatedDeserialization socket client options to toggle by new and old message handling
+    * Added SocketIndividualSubscriptionCombineTarget socket client option
+    * Updated Shared API's subscription update types from ExchangeEvent to DataEvent
+    * Fixed order book unsubscribing
+
 * Version 2.12.0 - 11 Nov 2025
     * Updated CryptoExchange.Net version to 9.13.0, see https://github.com/JKorf/CryptoExchange.Net/releases/
 
