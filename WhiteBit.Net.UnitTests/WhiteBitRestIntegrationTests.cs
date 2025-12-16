@@ -14,7 +14,7 @@ namespace WhiteBit.Net.UnitTests
     [NonParallelizable]
     internal class WhiteBitRestIntegrationTests : RestIntegrationTest<WhiteBitRestClient>
     {
-        public override bool Run { get; set; } = true;
+        public override bool Run { get; set; } = false;
 
         public WhiteBitRestIntegrationTests()
         {

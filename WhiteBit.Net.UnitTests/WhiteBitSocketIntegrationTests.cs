@@ -12,7 +12,7 @@ namespace WhiteBit.Net.UnitTests
 {
     internal class WhiteBitSocketIntegrationTests : SocketIntegrationTest<WhiteBitSocketClient>
     {
-        public override bool Run { get; set; } = true;
+        public override bool Run { get; set; } = false;
 
         public WhiteBitSocketIntegrationTests()
         {
