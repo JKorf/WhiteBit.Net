@@ -2,23 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
+using CryptoExchange.Net.Converters.MessageParsing.DynamicConverters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Logging;
-using WhiteBit.Net.Converters;
+using WhiteBit.Net.Clients.MessageHandlers;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Internal;
-using WhiteBit.Net.Objects.Models;
 using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net.Clients.V4Api
@@ -33,6 +32,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         // API error responses are not easily parsable. For example response code 0 can mean an invalid API key or Order value too low
         protected override ErrorMapping ErrorMapping { get; } = new ErrorMapping([]);
+        protected override IRestMessageHandler MessageHandler { get; } = new WhiteBitRestMessageHandler();
         #endregion
 
         #region Api clients
@@ -93,33 +93,6 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var result = await base.SendAsync<T>(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
             return result;
-        }
-
-        protected override Error ParseErrorResponse(int httpStatusCode, KeyValuePair<string, string[]>[] responseHeaders, IMessageAccessor accessor, Exception? exception)
-        {
-            if (!accessor.IsValid)
-                return new ServerError(ErrorInfo.Unknown, exception: exception);
-
-            var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
-            var msg = accessor.GetValue<string>(MessagePath.Get().Property("message"));
-            var errors = accessor.GetValue<Dictionary<string, string[]>?>(MessagePath.Get().Property("errors"));
-            if (errors == null || !errors.Any())
-            {
-                if (msg == null)
-                    return new ServerError(ErrorInfo.Unknown, exception: exception);
-
-                if (code == null)
-                    return new ServerError(ErrorInfo.Unknown with { Message = msg }, exception);
-
-                if (httpStatusCode == 401 && code == 0)
-                    return new ServerError(new ErrorInfo(ErrorType.Unauthorized, "Unauthorized") { Message = msg }, exception);
-
-                return new ServerError(code.Value, GetErrorInfo(code.Value, msg), exception);
-            }
-            else
-            {
-                return new ServerError(code!.Value, GetErrorInfo(code!.Value, string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}"))), exception);
-            }
         }
 
         /// <inheritdoc />

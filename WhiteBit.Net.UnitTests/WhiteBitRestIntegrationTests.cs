@@ -84,7 +84,6 @@ namespace WhiteBit.Net.UnitTests
 
         }
 
-
         [Test]
         public async Task TestCollateralTrading()
         {

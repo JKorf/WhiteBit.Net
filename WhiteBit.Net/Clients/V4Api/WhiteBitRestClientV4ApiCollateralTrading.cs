@@ -1,6 +1,5 @@
 using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
@@ -8,10 +7,6 @@ using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Enums;
 using System;
 using WhiteBit.Net.Objects.Models;
-using System.Linq;
-using CryptoExchange.Net.Converters.SystemTextJson;
-using WhiteBit.Net.Objects.Internal;
-using CryptoExchange.Net;
 using CryptoExchange.Net.RateLimiting.Guards;
 
 namespace WhiteBit.Net.Clients.V4Api

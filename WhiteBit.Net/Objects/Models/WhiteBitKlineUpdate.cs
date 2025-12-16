@@ -1,10 +1,7 @@
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
-using WhiteBit.Net.Converters;
 
 namespace WhiteBit.Net.Objects.Models
 {

@@ -1,12 +1,11 @@
 using CryptoExchange.Net;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Internal;
@@ -15,7 +14,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitKlineSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitKlineSubscription : Subscription
     {
         private readonly SocketApiClient _client;
         private readonly Action<DataEvent<WhiteBitKlineUpdate[]>> _handler;
@@ -33,7 +32,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbol = symbol;
             _interval = interval;
             Topic = "Klines";
+
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>(MessageLinkType.Full, "candles_update." + symbol, DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithTopicFilter<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>("candles_update", symbol, DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -59,9 +60,15 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitKlineUpdate[]> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.First().Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<WhiteBitKlineUpdate[]>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
+                    .WithStreamId(message.Method)
+                    .WithSymbol(message.Data!.First().Symbol)
+                    .WithUpdateType(SocketUpdateType.Update)
+                );
+
             return CallResult.SuccessResult;
         }
     }

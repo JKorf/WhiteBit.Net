@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
@@ -14,7 +14,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitUserTradeSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitUserTradeSubscription : Subscription
     {
         private readonly SocketApiClient _client;
 
@@ -25,13 +25,17 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <summary>
         /// ctor
         /// </summary>
-        public WhiteBitUserTradeSubscription(ILogger logger, SocketApiClient client, IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> handler) : base(logger, true)
+        public WhiteBitUserTradeSubscription(ILogger logger, SocketApiClient client, string[] symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> handler) : base(logger, true)
         {
             _client = client;
             _handler = handler;
-            _symbols = symbols.ToArray();
+            _symbols = symbols;
+
+            IndividualSubscriptionCount = symbols.Length;
+
             Topic = "UserTrade";
-            MessageMatcher = MessageMatcher.Create< WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageLinkType.Full, "deals_update", DoHandleMessage);
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageLinkType.Full, "deals_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>("deals_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -57,9 +61,14 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitUserTradeUpdate> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Symbol, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<WhiteBitUserTradeUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
+                .WithStreamId(message.Method)
+                .WithSymbol(message.Data!.Symbol)
+                .WithUpdateType(SocketUpdateType.Update)
+                );
             return CallResult.SuccessResult;
         }
     }

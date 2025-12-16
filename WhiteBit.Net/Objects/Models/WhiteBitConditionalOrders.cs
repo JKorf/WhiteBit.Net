@@ -1,8 +1,5 @@
 using CryptoExchange.Net.Converters.SystemTextJson;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
 using System.Text.Json.Serialization;
 using WhiteBit.Net.Enums;
 

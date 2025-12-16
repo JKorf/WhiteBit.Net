@@ -18,7 +18,7 @@ namespace WhiteBit.Net.UnitTests
         {
         }
 
-        public override WhiteBitSocketClient GetClient(ILoggerFactory loggerFactory)
+        public override WhiteBitSocketClient GetClient(ILoggerFactory loggerFactory, bool useUpdatedDeserialization)
         {
             var key = Environment.GetEnvironmentVariable("APIKEY");
             var sec = Environment.GetEnvironmentVariable("APISECRET");
@@ -31,11 +31,12 @@ namespace WhiteBit.Net.UnitTests
             }), loggerFactory);
         }
 
-        [Test]
-        public async Task TestSubscriptions()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task TestSubscriptions(bool useUpdatedDeserialization)
         {
-            await RunAndCheckUpdate<WhiteBitTicker>((client, updateHandler) => client.V4Api.SubscribeToSpotBalanceUpdatesAsync(new[] { "ETH" }, default, default), false, true);
-            await RunAndCheckUpdate<WhiteBitTickerUpdate>((client, updateHandler) => client.V4Api.SubscribeToTickerUpdatesAsync("ETH_USDT", updateHandler, default), true, false);
+            await RunAndCheckUpdate<WhiteBitTicker>(useUpdatedDeserialization, (client, updateHandler) => client.V4Api.SubscribeToSpotBalanceUpdatesAsync(new[] { "ETH" }, default, default), false, true);
+            await RunAndCheckUpdate<WhiteBitTickerUpdate>(useUpdatedDeserialization, (client, updateHandler) => client.V4Api.SubscribeToTickerUpdatesAsync("ETH_USDT", updateHandler, default), true, false);
         } 
     }
 }

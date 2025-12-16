@@ -1,0 +1,7 @@
+>1 { "id": "|1|", "method": "candles_subscribe", "params": ["ETH_USDT", 86400] }
+>2 { "id": "|1|", "method": "candles_subscribe", "params": ["ETH_USDT", 86400] }
+<1 { "id": |id|, "result": { "status": "success" }, "error": null }
+<2 { "id": |id|, "result": { "status": "success" }, "error": null }
+=1 { "id": null, "method": "candles_update", "params": [[ 1580895000, "0.020683", "0.020683", "0.020683", "0.020666", "504.701", "10.433600491", "ETH_USDT" ]]}
+=2 { "id": null, "method": "candles_update", "params": [[ 1580895000, "0.020683", "0.020683", "0.020683", "0.020666", "504.701", "10.433600491", "ETH_USDT" ]]}
+

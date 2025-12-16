@@ -4,10 +4,10 @@ using System.Linq;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
@@ -15,7 +15,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitOpenOrderSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitOpenOrderSubscription : Subscription
     {
         private readonly SocketApiClient _client;
         private readonly MessagePath _methodPath = MessagePath.Get().Property("method");
@@ -37,13 +37,18 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             Topic = "OpenOrder";
 
             var checkers = new List<MessageHandlerLink>();
+            var routes = new List<MessageRoute>();
             foreach (var symbol in symbols)
             {
                 checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>(MessageLinkType.Full, "ordersPending_update." + symbol, DoHandleMessage));
                 checkers.Add(new MessageHandlerLink<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>(MessageLinkType.Full, "otoOrdersPending_update." + symbol, DoHandleMessage));
+
+                routes.Add(MessageRoute<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>.CreateWithTopicFilter("ordersPending_update", symbol, DoHandleMessage));
+                routes.Add(MessageRoute<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>.CreateWithTopicFilter("otoOrdersPending_update", symbol, DoHandleMessage));
             }
 
             MessageMatcher = MessageMatcher.Create(checkers.ToArray());
+            MessageRouter = MessageRouter.Create(routes.ToArray());
         }
 
         /// <inheritdoc />
@@ -69,16 +74,26 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate> message)
         {
-            _otoHandler?.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Order.TriggerOrder?.Symbol, SocketUpdateType.Update)!);
+            _otoHandler?.Invoke(
+                    new DataEvent<WhiteBitOtoOrderUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
+                        .WithStreamId(message.Method)
+                        .WithSymbol(message.Data!.Order.TriggerOrder?.Symbol)
+                        .WithUpdateType(SocketUpdateType.Update)
+                );
             return CallResult.SuccessResult;
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitOrderUpdate>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitOrderUpdate> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, message.Data.Data!.Order.Symbol, SocketUpdateType.Update)!);
+            _handler?.Invoke(
+                    new DataEvent<WhiteBitOrderUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
+                        .WithStreamId(message.Method)
+                        .WithSymbol(message.Data!.Order.Symbol)
+                        .WithUpdateType(SocketUpdateType.Update)
+                );
             return CallResult.SuccessResult;
         }
     }

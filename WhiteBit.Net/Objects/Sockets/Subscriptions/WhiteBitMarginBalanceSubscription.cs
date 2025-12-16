@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
@@ -14,7 +14,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitMarginBalanceSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitMarginBalanceSubscription : Subscription
     {
         private readonly SocketApiClient _client;
         private readonly Action<DataEvent<WhiteBitMarginBalance[]>> _handler;
@@ -29,8 +29,10 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _client = client;
             _handler = handler;
             _symbols = symbols.ToArray();
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>(MessageLinkType.Full, "balanceMargin_update", DoHandleMessage);
             Topic = "MarginBalance";
+
+            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>(MessageLinkType.Full, "balanceMargin_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>("balanceMargin_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -56,9 +58,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitMarginBalance[]> message)
         {
-            _handler.Invoke(message.As(message.Data.Data, message.Data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<WhiteBitMarginBalance[]>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                );
+
             return CallResult.SuccessResult;
         }
     }

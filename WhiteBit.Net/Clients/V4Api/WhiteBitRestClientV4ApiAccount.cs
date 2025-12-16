@@ -8,9 +8,7 @@ using WhiteBit.Net.Objects.Models;
 using System;
 using CryptoExchange.Net.RateLimiting.Guards;
 using System.Linq;
-using System.IO;
 using WhiteBit.Net.Enums;
-using WhiteBit.Net.Objects.Internal;
 
 namespace WhiteBit.Net.Clients.V4Api
 {

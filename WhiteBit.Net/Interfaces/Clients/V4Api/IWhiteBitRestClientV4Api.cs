@@ -1,4 +1,4 @@
-using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Interfaces.Clients;
 using System;
 
 namespace WhiteBit.Net.Interfaces.Clients.V4Api

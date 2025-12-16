@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
@@ -14,7 +14,7 @@ using WhiteBit.Net.Objects.Models;
 namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class WhiteBitSpotBalanceSubscription : Subscription<WhiteBitSocketResponse<WhiteBitSubscribeResponse>, WhiteBitSocketResponse<WhiteBitSubscribeResponse>>
+    internal class WhiteBitSpotBalanceSubscription : Subscription
     {
         private readonly SocketApiClient _client;
         private readonly Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> _handler;
@@ -30,7 +30,9 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             Topic = "SpotBalance";
+
             MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>(MessageLinkType.Full, "balanceSpot_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>("balanceSpot_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -56,13 +58,15 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         }
 
         /// <inheritdoc />
-        public CallResult DoHandleMessage(SocketConnection connection, DataEvent<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>> message)
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]> message)
         {
-            var balances = message.Data.Data!.First();
+            var balances = message.Data!.First();
             foreach (var item in balances)
                 item.Value.Asset = item.Key;
 
-            _handler.Invoke(message.As(balances, message.Data.Method, null, SocketUpdateType.Update)!);
+            _handler.Invoke(
+                new DataEvent<Dictionary<string, WhiteBitTradeBalance>>(WhiteBitExchange.ExchangeName, balances, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update));
             return CallResult.SuccessResult;
         }
     }

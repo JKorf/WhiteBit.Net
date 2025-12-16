@@ -1,9 +1,7 @@
 using System.Threading.Tasks;
 using System.Threading;
 using CryptoExchange.Net.Objects;
-using System.Collections.Generic;
 using WhiteBit.Net.Objects.Models;
-using System;
 using WhiteBit.Net.Enums;
 
 namespace WhiteBit.Net.Interfaces.Clients.V4Api

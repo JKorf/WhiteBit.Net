@@ -15,13 +15,16 @@ namespace WhiteBit.Net.UnitTests
     [TestFixture]
     public class SocketSubscriptionTests
     {
-        [Test]
-        public async Task ValidateV4ApiSubscriptions()
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task ValidateV4ApiSubscriptions(bool useUpdatedDeserialization)
         {
             var loggerFactory = new LoggerFactory();
             loggerFactory.AddProvider(new TraceLoggerProvider());
             var client = new WhiteBitSocketClient(Options.Create(new WhiteBitSocketOptions
             {
+                UseUpdatedDeserialization = useUpdatedDeserialization,
                 Environment = new WhiteBitEnvironment("UnitTest", "https://localhost", "wss://localhost"),
                 ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456")
             }), loggerFactory);

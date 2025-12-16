@@ -9,6 +9,7 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.MessageParsing;
+using CryptoExchange.Net.Converters.MessageParsing.DynamicConverters;
 using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
@@ -16,7 +17,9 @@ using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.SharedApis;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
+using WhiteBit.Net.Clients.MessageHandlers;
 using WhiteBit.Net.Enums;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Internal;
@@ -86,6 +89,8 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
+        public override ISocketMessageHandler CreateMessageConverter(WebSocketMessageType messageType) => new WhiteBitSocketMessageHandler();
+
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
             => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
@@ -111,9 +116,18 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitTradeUpdate>(_logger, this, "trades", symbols.ToArray(), x => onMessage(
-                x.WithSymbol(x.Data.Symbol)
-                .WithDataTimestamp(x.Data.Trades.Max(x => x.Timestamp))), false, true);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitTradeUpdate>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitTradeUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
+                        .WithDataTimestamp(data.Data!.Trades.Length > 0 ? data.Data.Trades.Max(x => x.Timestamp) : null)
+                        .WithStreamId("trades")
+                        .WithSymbol(data.Data.Symbol)
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitTradeUpdate>(_logger, this, "trades", symbols.ToArray(), internalHandler, false);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -139,8 +153,17 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitLastPriceUpdate>(_logger, this, "lastprice", symbols.ToArray(), x => onMessage(
-                x.WithSymbol(x.Data.Symbol)), false, false);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitLastPriceUpdate>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitLastPriceUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(SocketUpdateType.Update)
+                        .WithStreamId("lastprice")
+                        .WithSymbol(data.Data!.Symbol)
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitLastPriceUpdate>(_logger, this, "lastprice", symbols.ToArray(), internalHandler, false);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -166,7 +189,17 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitTickerUpdate>(_logger, this, "market", symbols.ToArray(), x => onMessage(x.WithSymbol(x.Data.Symbol)), false, false);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitTickerUpdate>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(SocketUpdateType.Update)
+                        .WithStreamId("bookTicker")
+                        .WithSymbol(data.Data!.Symbol)
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitTickerUpdate>(_logger, this, "market", symbols.ToArray(), internalHandler, false);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -177,14 +210,36 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, this, "bookTicker", [symbol], x => onMessage(x.As(x.Data.First()).WithSymbol(x.Data[0].Symbol)), false, false);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitBookTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!.First(), receiveTime, originalData)
+                        .WithUpdateType(SocketUpdateType.Update)
+                        .WithDataTimestamp(data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null)
+                        .WithStreamId("bookTicker")
+                        .WithSymbol(data.Data.First().Symbol)
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, this, "bookTicker", [symbol], internalHandler, false);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, this, "bookTicker", [], x => onMessage(x.As(x.Data.First()).WithSymbol(x.Data[0].Symbol)), false, false);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitBookTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!.First(), receiveTime, originalData)
+                        .WithUpdateType(SocketUpdateType.Update)
+                        .WithDataTimestamp(data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null)
+                        .WithStreamId("bookTicker")
+                        .WithSymbol(data.Data.First().Symbol)
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitBookTickerUpdate[]>(_logger, this, "bookTicker", [], internalHandler, false);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -370,7 +425,17 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitPositionsUpdate>(_logger, this, "positionsMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.Records.Any() ? x.Data.Records.Max(x => x.UpdateTime) : null)), true, true);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitPositionsUpdate>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitPositionsUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
+                        .WithDataTimestamp(data.Data!.Records.Length > 0 ? data.Data.Records.Max(x => x.UpdateTime) : null)
+                        .WithStreamId("positionsMargin")
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitPositionsUpdate>(_logger, this, "positionsMargin", [], internalHandler, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -380,7 +445,17 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitBorrow>(_logger, this, "borrowsMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.UpdateTime)), true, true);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBorrow>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitBorrow>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
+                        .WithDataTimestamp(data.Data!.UpdateTime)
+                        .WithStreamId("borrowsMargin")
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitBorrow>(_logger, this, "borrowsMargin", [], internalHandler, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -390,7 +465,17 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitAccountMarginPositionUpdate>(_logger, this, "positionsAccountMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.PositionInfo.UpdateTime)), true, true);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountMarginPositionUpdate>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitAccountMarginPositionUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
+                        .WithDataTimestamp(data.Data!.PositionInfo.UpdateTime)
+                        .WithStreamId("positionsAccountMargin")
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitAccountMarginPositionUpdate>(_logger, this, "positionsAccountMargin", [], internalHandler, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -400,7 +485,17 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToAccountBorrowEventUpdatesAsync(Action<DataEvent<WhiteBitAccountBorrowUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitSubscription<WhiteBitAccountBorrowUpdate>(_logger, this, "borrowsAccountMargin", [], x => onMessage(x.WithDataTimestamp(x.Data.BorrowInfo.UpdateTime)), true, true);
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountBorrowUpdate>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitAccountBorrowUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
+                        .WithDataTimestamp(data.Data!.BorrowInfo.UpdateTime)
+                        .WithStreamId("positionsAccountMargin")
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitAccountBorrowUpdate>(_logger, this, "borrowsAccountMargin", [], internalHandler, true);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
