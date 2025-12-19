@@ -55,7 +55,10 @@ namespace WhiteBit.Net.Clients.MessageHandlers
             }
             else
             {
-                return new ServerError(ErrorInfo.Unknown with { Message = string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}")) } );
+                var message = string.Join(", ", errors.Select(x => $"Error field '{x.Key}': {string.Join(" & ", x.Value)}"));
+                return code.HasValue ?
+                    new ServerError(code.Value, _errorMapping.GetErrorInfo(code.Value.ToString(), message)) :
+                    new ServerError(ErrorInfo.Unknown with { Message = message });
             }
         }
     }
