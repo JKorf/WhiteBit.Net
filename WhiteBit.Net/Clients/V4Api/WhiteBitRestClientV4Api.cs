@@ -30,9 +30,8 @@ namespace WhiteBit.Net.Clients.V4Api
         public new WhiteBitRestOptions ClientOptions => (WhiteBitRestOptions)base.ClientOptions;
         internal static TimeSyncState _timeSyncState = new TimeSyncState("V4 Api");
 
-        // API error responses are not easily parsable. For example response code 0 can mean an invalid API key or Order value too low
-        protected override ErrorMapping ErrorMapping { get; } = new ErrorMapping([]);
-        protected override IRestMessageHandler MessageHandler { get; } = new WhiteBitRestMessageHandler();
+        protected override ErrorMapping ErrorMapping { get; } = WhiteBitErrors.RestErrors;
+        protected override IRestMessageHandler MessageHandler { get; } = new WhiteBitRestMessageHandler(WhiteBitErrors.RestErrors);
         #endregion
 
         #region Api clients
