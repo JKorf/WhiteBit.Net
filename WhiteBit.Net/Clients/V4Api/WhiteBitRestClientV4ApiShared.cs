@@ -1361,6 +1361,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     ClientOrderId = openOrder.ClientOrderId
                 });
             }
@@ -1391,6 +1392,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
                     Fee = closedOrder.Fee,
+                    FeeAsset = closedOrder.FeeAsset,
                     ClientOrderId = closedOrder.ClientOrderId
                 });
             }
@@ -1491,6 +1493,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled, contractQuantity: openOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     ClientOrderId = openOrder.ClientOrderId
                 });
             }
@@ -1522,7 +1525,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     OrderQuantity = new SharedOrderQuantity(closedOrder.Quantity, contractQuantity: closedOrder.Quantity),
                     QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled, contractQuantity: closedOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
-                    Fee = closedOrder.Fee
+                    Fee = closedOrder.Fee,
+                    FeeAsset = closedOrder.FeeAsset
                 });
             }
         }
