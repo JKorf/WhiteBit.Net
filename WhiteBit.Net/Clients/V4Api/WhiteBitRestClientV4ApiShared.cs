@@ -475,6 +475,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     TriggerPrice = openOrder.TriggerPrice,
                     IsTriggerOrder = openOrder.TriggerPrice > 0
                 });
@@ -507,6 +508,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
                     Fee = closedOrder.Fee,
+                    FeeAsset = closedOrder.FeeAsset,
                     TriggerPrice = closedOrder.TriggerPrice,
                     IsTriggerOrder = closedOrder.TriggerPrice > 0
                 });
@@ -543,6 +545,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TriggerPrice = x.TriggerPrice,
                 IsTriggerOrder = x.TriggerPrice > 0
             }).ToArray());
@@ -589,6 +592,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TriggerPrice = x.TriggerPrice,
                 IsTriggerOrder = x.TriggerPrice > 0
             }));
@@ -989,6 +993,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled, openOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     TakeProfitPrice = openOrder.OtoData?.TakeProfit,
                     StopLossPrice = openOrder.OtoData?.StopLoss,
                     TriggerPrice = openOrder.TriggerPrice,
@@ -1023,6 +1028,7 @@ namespace WhiteBit.Net.Clients.V4Api
                         QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled, closedOrder.QuantityFilled),
                         TimeInForce = ParseTimeInForce(closedOrder),
                         Fee = closedOrder.Fee,
+                        FeeAsset = closedOrder.FeeAsset,
                         TakeProfitPrice = closedOrder.OtoData?.TakeProfit,
                         StopLossPrice = closedOrder.OtoData?.StopLoss,
                         TriggerPrice = closedOrder.TriggerPrice,
@@ -1061,6 +1067,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
@@ -1109,6 +1116,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
@@ -1144,6 +1152,7 @@ namespace WhiteBit.Net.Clients.V4Api
             {
                 ClientOrderId = x.ClientOrderId,
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 Role = x.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray());
         }
@@ -1186,6 +1195,7 @@ namespace WhiteBit.Net.Clients.V4Api
             {
                 ClientOrderId = y.ClientOrderId,
                 Fee = y.Fee,
+                FeeAsset = y.FeeAsset,
                 Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray();
 
