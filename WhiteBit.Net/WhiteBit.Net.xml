@@ -2501,6 +2501,14 @@
             Extension methods specific to using the WhiteBit API
             </summary>
         </member>
+        <member name="M:WhiteBit.Net.ExtensionMethods.WhiteBitExtensionMethods.ToPositionSide(CryptoExchange.Net.SharedApis.SharedPositionSide)">
+            <summary>
+            Converts a <see cref="T:CryptoExchange.Net.SharedApis.SharedPositionSide"/> to a <see cref="T:WhiteBit.Net.Enums.PositionSide"/>.
+            </summary>
+            <param name="side">The shared position side to convert.</param>
+            <returns>The corresponding <see cref="T:WhiteBit.Net.Enums.PositionSide"/> value.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the provided side is not supported.</exception>
+        </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient">
             <summary>
             Client for accessing the WhiteBit Rest API. 
