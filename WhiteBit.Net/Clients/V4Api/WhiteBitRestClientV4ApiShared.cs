@@ -10,6 +10,7 @@ using WhiteBit.Net.Objects.Models;
 using WhiteBit.Net.Enums;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects.Errors;
+using WhiteBit.Net.ExtensionMethods;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -952,6 +953,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 clientOrderId: request.ClientOrderId,
                 takeProfitPrice: request.TakeProfitPrice,
                 stopLossPrice: request.StopLossPrice,
+                positionSide: request.PositionSide.HasValue ? request.PositionSide.Value.ToPositionSide() : null,
                 ct: ct).ConfigureAwait(false);
 
             if (!result)
@@ -1440,6 +1442,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 triggerPrice: request.TriggerPrice,
                 price: request.OrderPrice,
                 clientOrderId: request.ClientOrderId,
+                positionSide: request.PositionSide.ToPositionSide(),
                 ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.AsExchangeResult<SharedId>(Exchange, null, default);
