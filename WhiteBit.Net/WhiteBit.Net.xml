@@ -46,12 +46,6 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetServerTimestampAsync">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetTimeSyncInfo">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetTimeOffset">
-            <inheritdoc />
-        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
             <inheritdoc />
         </member>
