@@ -63,10 +63,13 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitUserTradeUpdate> message)
         {
+            _client.UpdateTimeOffset(message.Data!.Time);
+
             _handler.Invoke(
                 new DataEvent<WhiteBitUserTradeUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
                 .WithStreamId(message.Method)
                 .WithSymbol(message.Data!.Symbol)
+                .WithDataTimestamp(message.Data.Time, _client.GetTimeOffset())
                 .WithUpdateType(SocketUpdateType.Update)
                 );
             return CallResult.SuccessResult;

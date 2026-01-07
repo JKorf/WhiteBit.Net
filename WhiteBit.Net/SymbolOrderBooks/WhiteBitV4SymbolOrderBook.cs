@@ -88,11 +88,11 @@ namespace WhiteBit.Net.SymbolOrderBooks
         {
             if (data.Data.Snapshot)
             {
-                SetInitialOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks);
+                SetInitialOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks, data.DataTime, data.DataTimeLocal);
             }
             else
             {
-                UpdateOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks);
+                UpdateOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks, data.DataTime, data.DataTimeLocal);
             }
         }
 
