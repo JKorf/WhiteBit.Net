@@ -55,7 +55,7 @@ namespace WhiteBit.Net.SymbolOrderBooks
             Initialize(options);
 
             _strictLevels = true;
-            _sequencesAreConsecutive = options?.Limit == null;
+            _sequencesAreConsecutive = true;
 
             Levels = options?.Limit ?? 20;
             _initialDataTimeout = options?.InitialDataTimeout ?? TimeSpan.FromSeconds(30);
@@ -88,11 +88,11 @@ namespace WhiteBit.Net.SymbolOrderBooks
         {
             if (data.Data.Snapshot)
             {
-                SetInitialOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks, data.DataTime, data.DataTimeLocal);
+                SetSnapshot(data.Data.OrderBook.UpdateId, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks, data.DataTime, data.DataTimeLocal);
             }
             else
             {
-                UpdateOrderBook(DateTime.UtcNow.Ticks, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks, data.DataTime, data.DataTimeLocal);
+                UpdateOrderBook(data.Data.OrderBook.PrevUpdateId!.Value + 1, data.Data.OrderBook.UpdateId, data.Data.OrderBook.Bids, data.Data.OrderBook.Asks, data.DataTime, data.DataTimeLocal);
             }
         }
 
