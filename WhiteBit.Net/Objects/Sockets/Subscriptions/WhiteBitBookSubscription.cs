@@ -68,6 +68,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                     .WithSymbol(message.Data!.Symbol)
                     .WithDataTimestamp(message.Data!.OrderBook.EventTime, _client.GetTimeOffset())
                     .WithUpdateType(message.Data!.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
+                    .WithSequenceNumber(message.Data.OrderBook.UpdateId)
                 );
             return CallResult.SuccessResult;
         }
