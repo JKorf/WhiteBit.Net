@@ -18,6 +18,19 @@ namespace WhiteBit.Net
     public static class WhiteBitExchange
     {
         /// <summary>
+        /// Platform metadata
+        /// </summary>
+        public static PlatformInfo Metadata { get; } = new PlatformInfo(
+                "WhiteBit",
+                "WhiteBit",
+                "https://raw.githubusercontent.com/JKorf/WhiteBit.Net/master/WhiteBit.Net/Icon/icon.png",
+                "https://www.whitebit.com",
+                ["https://docs.whitebit.com/"],
+                PlatformType.CryptoCurrencyExchange,
+                CentralizationType.Centralized
+                );
+
+        /// <summary>
         /// Exchange name
         /// </summary>
         public static string ExchangeName => "WhiteBit";

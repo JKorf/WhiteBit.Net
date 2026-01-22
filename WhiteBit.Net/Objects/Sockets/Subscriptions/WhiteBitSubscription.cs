@@ -32,13 +32,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
 
             IndividualSubscriptionCount = symbols?.Length ?? 1;
 
-            if (symbols == null)
-                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageLinkType.Full, $"{topic}_update", DoHandleMessage);
-            else if (symbols.Length == 0)
-                MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<T>>(MessageLinkType.StartsWith, $"{topic}_update", DoHandleMessage);
-            else
-                MessageMatcher = MessageMatcher.Create(symbols.Select(x => new MessageHandlerLink<WhiteBitSocketUpdate<T>>(MessageLinkType.Full, $"{topic}_update.{x}", DoHandleMessage)).ToArray());
-
             MessageRouter = MessageRouter.CreateWithOptionalTopicFilters<WhiteBitSocketUpdate<T>>($"{topic}_update", symbols, DoHandleMessage);
         }
 

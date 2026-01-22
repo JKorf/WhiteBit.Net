@@ -31,7 +31,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols.ToArray();
             Topic = "SpotBalance";
 
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>(MessageLinkType.Full, "balanceSpot_update", DoHandleMessage);
             MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>("balanceSpot_update", DoHandleMessage);
         }
 

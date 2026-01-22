@@ -34,9 +34,6 @@
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.ExchangeName">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CreateAccessor">
-            <inheritdoc />
-        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CreateSerializer">
             <inheritdoc />
         </member>
@@ -275,9 +272,6 @@
             ctor
             </summary>
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateAccessor(System.Net.WebSockets.WebSocketMessageType)">
-            <inheritdoc />
-        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateSerializer">
             <inheritdoc />
         </member>
@@ -369,9 +363,6 @@
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToAccountBorrowEventUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate}},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetAuthenticationRequestAsync(CryptoExchange.Net.Sockets.Default.SocketConnection)">
@@ -6979,6 +6970,11 @@
         <member name="T:WhiteBit.Net.WhiteBitExchange">
             <summary>
             WhiteBit exchange information and configuration
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.Metadata">
+            <summary>
+            Platform metadata
             </summary>
         </member>
         <member name="P:WhiteBit.Net.WhiteBitExchange.ExchangeName">

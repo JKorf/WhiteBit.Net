@@ -67,8 +67,6 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         /// <inheritdoc />
-        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(WhiteBitExchange._serializerContext);
-        /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
         /// <inheritdoc />

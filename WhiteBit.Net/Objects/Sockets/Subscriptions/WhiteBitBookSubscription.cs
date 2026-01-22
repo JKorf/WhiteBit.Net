@@ -31,7 +31,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _depth = depth;
             Topic = "OrderBook";
 
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitBookUpdate>>(MessageLinkType.Full, "depth_update." + symbol, DoHandleMessage);
             MessageRouter = MessageRouter.CreateWithTopicFilter<WhiteBitSocketUpdate<WhiteBitBookUpdate>>("depth_update", symbol, DoHandleMessage);
         }
 

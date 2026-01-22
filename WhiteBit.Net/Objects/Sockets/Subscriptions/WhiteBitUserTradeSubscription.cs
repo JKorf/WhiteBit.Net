@@ -34,7 +34,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             IndividualSubscriptionCount = symbols.Length;
 
             Topic = "UserTrade";
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>(MessageLinkType.Full, "deals_update", DoHandleMessage);
             MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>("deals_update", DoHandleMessage);
         }
 

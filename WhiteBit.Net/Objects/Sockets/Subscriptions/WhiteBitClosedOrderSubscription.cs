@@ -31,7 +31,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             _orderFilter = orderFilter;
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>(MessageLinkType.Full, "ordersExecuted_update", DoHandleMessage);
             MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>("depth_update", DoHandleMessage);
             Topic = "ClosedOrder";
         }

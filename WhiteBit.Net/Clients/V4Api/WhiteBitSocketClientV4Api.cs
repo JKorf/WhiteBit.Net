@@ -36,15 +36,6 @@ namespace WhiteBit.Net.Clients.V4Api
     internal partial class WhiteBitSocketClientV4Api : SocketApiClient, IWhiteBitSocketClientV4Api
     {
         #region fields
-        private static readonly MessagePath _idPath = MessagePath.Get().Property("id");
-        private static readonly MessagePath _methodPath = MessagePath.Get().Property("method");
-        private static readonly MessagePath _index0SymbolPath = MessagePath.Get().Property("params").Index(0);
-        private static readonly MessagePath _index7SymbolPath = MessagePath.Get().Property("params").Index(0).Index(7);
-        private static readonly MessagePath _index2SymbolPath = MessagePath.Get().Property("params").Index(2);
-        private static readonly MessagePath _ordersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("market");
-        private static readonly MessagePath _otoOrdersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("trigger_order").Property("market");
-        private static readonly MessagePath _orderExecutedSymbolPath = MessagePath.Get().Property("params").Property("market");
-        private static readonly MessagePath _bookTickerSymbolPath = MessagePath.Get().Property("params").Index(0).Index(2);
 
         /// <inheritdoc />
         public new WhiteBitSocketOptions ClientOptions => (WhiteBitSocketOptions)base.ClientOptions;
@@ -84,8 +75,6 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        /// <inheritdoc />
-        protected override IByteMessageAccessor CreateAccessor(WebSocketMessageType type) => new SystemTextJsonByteMessageAccessor(WhiteBitExchange._serializerContext);
         /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
@@ -523,40 +512,6 @@ namespace WhiteBit.Net.Clients.V4Api
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
-
-        /// <inheritdoc />
-        public override string? GetListenerIdentifier(IMessageAccessor message)
-        {
-            var id = message.GetValue<long?>(_idPath);
-            if (id != null)
-                return id.ToString();
-
-            var method = message.GetValue<string>(_methodPath);
-            if (method == null)
-                return null;
-
-            if (method.Equals("trades_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index0SymbolPath);
-            if (method.Equals("lastprice_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index0SymbolPath);
-            if (method.Equals("market_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index0SymbolPath);
-            if (method.Equals("candles_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index7SymbolPath);
-            if (method.Equals("depth_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index2SymbolPath);
-            if (method.Equals("bookTicker_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_bookTickerSymbolPath);
-
-            if (method.Equals("ordersPending_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_ordersSymbolPath);
-            if (method.Equals("otoOrdersPending_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_otoOrdersSymbolPath);
-            if (method.Equals("ordersExecuted_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_orderExecutedSymbolPath);
-
-            return method;
-        }
 
         private async Task<CallResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
         {
