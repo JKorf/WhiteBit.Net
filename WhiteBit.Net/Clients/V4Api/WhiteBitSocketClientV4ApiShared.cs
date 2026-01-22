@@ -431,8 +431,12 @@ namespace WhiteBit.Net.Clients.V4Api
 
         private SharedOrderStatus ParseOrderStatus(WhiteBitOrderUpdate update)
         {
-            if (update.Event == OrderEvent.New)
+            if (update.Event == OrderEvent.New
+                || update.Order.Status == OrderStatus.Open
+                || update.Order.Status == OrderStatus.PartiallyFilled)
+            {
                 return SharedOrderStatus.Open;
+            }
 
             if (update.Order.OrderType == OrderType.Market
                 || update.Order.OrderType == OrderType.MarketBase
