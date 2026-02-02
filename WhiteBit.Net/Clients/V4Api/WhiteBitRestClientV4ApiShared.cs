@@ -1317,6 +1317,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 UnrealizedPnl = x.Pnl,
                 LiquidationPrice = x.LiquidationPrice == 0 ? null : x.LiquidationPrice,
                 AverageOpenPrice = x.BasePrice,
+                PositionMode = SharedPositionMode.OneWay,
                 PositionSide = x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short, 
                 TakeProfitPrice = x.TpSl?.TakeProfitPrice,
                 StopLossPrice = x.TpSl?.StopLossPrice

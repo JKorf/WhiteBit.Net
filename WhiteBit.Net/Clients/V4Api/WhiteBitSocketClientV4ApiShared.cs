@@ -343,6 +343,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     handler(update.ToType<SharedPosition[]>(update.Data.Records.Select(x => new SharedPosition(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
                     {
                         AverageOpenPrice = x.BasePrice,
+                        PositionMode = SharedPositionMode.OneWay,
                         PositionSide = x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
                         UnrealizedPnl = x.UnrealizedPnl,
                         LiquidationPrice = x.LiquidationPrice,
