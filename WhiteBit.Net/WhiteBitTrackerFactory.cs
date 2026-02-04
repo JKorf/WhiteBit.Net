@@ -1,12 +1,16 @@
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.SharedApis;
 using CryptoExchange.Net.Trackers.Klines;
 using CryptoExchange.Net.Trackers.Trades;
-using WhiteBit.Net.Interfaces;
-using WhiteBit.Net.Interfaces.Clients;
+using CryptoExchange.Net.Trackers.UserData.Interfaces;
+using CryptoExchange.Net.Trackers.UserData.Objects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using WhiteBit.Net.Clients;
+using WhiteBit.Net.Interfaces;
+using WhiteBit.Net.Interfaces.Clients;
 
 namespace WhiteBit.Net
 {
@@ -54,6 +58,64 @@ namespace WhiteBit.Net
                 symbol,
                 limit,
                 period
+                );
+        }
+
+        /// <inheritdoc />
+        public IUserSpotDataTracker CreateUserSpotDataTracker(SpotUserDataTrackerConfig config)
+        {
+            var restClient = _serviceProvider?.GetRequiredService<IWhiteBitRestClient>() ?? new WhiteBitRestClient();
+            var socketClient = _serviceProvider?.GetRequiredService<IWhiteBitSocketClient>() ?? new WhiteBitSocketClient();
+            return new WhiteBitUserSpotDataTracker(
+                _serviceProvider?.GetRequiredService<ILogger<WhiteBitUserSpotDataTracker>>() ?? new NullLogger<WhiteBitUserSpotDataTracker>(),
+                restClient,
+                socketClient,
+                null,
+                config
+                );
+        }
+
+        /// <inheritdoc />
+        public IUserSpotDataTracker CreateUserSpotDataTracker(string userIdentifier, SpotUserDataTrackerConfig config, ApiCredentials credentials, WhiteBitEnvironment? environment = null)
+        {
+            var clientProvider = _serviceProvider?.GetRequiredService<IWhiteBitUserClientProvider>() ?? new WhiteBitUserClientProvider();
+            var restClient = clientProvider.GetRestClient(userIdentifier, credentials, environment);
+            var socketClient = clientProvider.GetSocketClient(userIdentifier, credentials, environment);
+            return new WhiteBitUserSpotDataTracker(
+                _serviceProvider?.GetRequiredService<ILogger<WhiteBitUserSpotDataTracker>>() ?? new NullLogger<WhiteBitUserSpotDataTracker>(),
+                restClient,
+                socketClient,
+                userIdentifier,
+                config
+                );
+        }
+
+        /// <inheritdoc />
+        public IUserFuturesDataTracker CreateUserFuturesDataTracker(FuturesUserDataTrackerConfig config)
+        {
+            var restClient = _serviceProvider?.GetRequiredService<IWhiteBitRestClient>() ?? new WhiteBitRestClient();
+            var socketClient = _serviceProvider?.GetRequiredService<IWhiteBitSocketClient>() ?? new WhiteBitSocketClient();
+            return new WhiteBitUserFuturesDataTracker(
+                _serviceProvider?.GetRequiredService<ILogger<WhiteBitUserFuturesDataTracker>>() ?? new NullLogger<WhiteBitUserFuturesDataTracker>(),
+                restClient,
+                socketClient,
+                null,
+                config
+                );
+        }
+
+        /// <inheritdoc />
+        public IUserFuturesDataTracker CreateUserFuturesDataTracker(string userIdentifier, FuturesUserDataTrackerConfig config, ApiCredentials credentials, WhiteBitEnvironment? environment = null)
+        {
+            var clientProvider = _serviceProvider?.GetRequiredService<IWhiteBitUserClientProvider>() ?? new WhiteBitUserClientProvider();
+            var restClient = clientProvider.GetRestClient(userIdentifier, credentials, environment);
+            var socketClient = clientProvider.GetSocketClient(userIdentifier, credentials, environment);
+            return new WhiteBitUserFuturesDataTracker(
+                _serviceProvider?.GetRequiredService<ILogger<WhiteBitUserFuturesDataTracker>>() ?? new NullLogger<WhiteBitUserFuturesDataTracker>(),
+                restClient,
+                socketClient,
+                userIdentifier,
+                config
                 );
         }
     }
