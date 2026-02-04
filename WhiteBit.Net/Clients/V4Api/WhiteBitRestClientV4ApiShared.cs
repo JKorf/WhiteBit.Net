@@ -353,7 +353,15 @@ namespace WhiteBit.Net.Clients.V4Api
             if (deposits.Data.Total > deposits.Data.Offset + deposits.Data.Limit)
                 nextToken = new OffsetToken(deposits.Data.Offset + request.Limit ?? 100);
 
-            return deposits.AsExchangeResult<SharedDeposit[]>(Exchange, TradingMode.Spot, deposits.Data.Records.Select(x => new SharedDeposit(x.Asset, x.Quantity, x.TransactionStatus == Enums.TransactionStatus.Success, x.CreateTime)
+            return deposits.AsExchangeResult<SharedDeposit[]>(Exchange, TradingMode.Spot, deposits.Data.Records.Select(x =>
+            new SharedDeposit(
+                x.Asset,
+                x.Quantity,
+                x.TransactionStatus == Enums.TransactionStatus.Success,
+                x.CreateTime,
+                x.TransactionStatus == TransactionStatus.Success ? SharedTransferStatus.Completed
+                : x.TransactionStatus == TransactionStatus.UnconfirmedByUser || x.TransactionStatus == TransactionStatus.Canceled ? SharedTransferStatus.Failed
+                : SharedTransferStatus.InProgress)
             {
                 Confirmations = x.Confirmations?.Actual,
                 Network = x.Network,
