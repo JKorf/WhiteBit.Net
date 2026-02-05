@@ -3637,7 +3637,7 @@
             Tracker factory
             </summary>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,CryptoExchange.Net.Authentication.ApiCredentials,WhiteBit.Net.WhiteBitEnvironment)">
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
             <summary>
             Create a new Spot user data tracker
             </summary>
@@ -3652,7 +3652,7 @@
             </summary>
             <param name="config">Configuration</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,CryptoExchange.Net.Authentication.ApiCredentials,WhiteBit.Net.WhiteBitEnvironment)">
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
             <summary>
             Create a new futures user data tracker
             </summary>
@@ -7101,13 +7101,13 @@
         <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserSpotDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,CryptoExchange.Net.Authentication.ApiCredentials,WhiteBit.Net.WhiteBitEnvironment)">
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserFuturesDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,CryptoExchange.Net.Authentication.ApiCredentials,WhiteBit.Net.WhiteBitEnvironment)">
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
             <inheritdoc />
         </member>
         <member name="T:WhiteBit.Net.WhiteBitUserSpotDataTracker">

@@ -62,7 +62,7 @@ namespace WhiteBit.Net
         }
 
         /// <inheritdoc />
-        public IUserSpotDataTracker CreateUserSpotDataTracker(SpotUserDataTrackerConfig config)
+        public IUserSpotDataTracker CreateUserSpotDataTracker(SpotUserDataTrackerConfig? config = null)
         {
             var restClient = _serviceProvider?.GetRequiredService<IWhiteBitRestClient>() ?? new WhiteBitRestClient();
             var socketClient = _serviceProvider?.GetRequiredService<IWhiteBitSocketClient>() ?? new WhiteBitSocketClient();
@@ -76,7 +76,7 @@ namespace WhiteBit.Net
         }
 
         /// <inheritdoc />
-        public IUserSpotDataTracker CreateUserSpotDataTracker(string userIdentifier, SpotUserDataTrackerConfig config, ApiCredentials credentials, WhiteBitEnvironment? environment = null)
+        public IUserSpotDataTracker CreateUserSpotDataTracker(string userIdentifier, ApiCredentials credentials, SpotUserDataTrackerConfig? config = null, WhiteBitEnvironment? environment = null)
         {
             var clientProvider = _serviceProvider?.GetRequiredService<IWhiteBitUserClientProvider>() ?? new WhiteBitUserClientProvider();
             var restClient = clientProvider.GetRestClient(userIdentifier, credentials, environment);
@@ -91,7 +91,7 @@ namespace WhiteBit.Net
         }
 
         /// <inheritdoc />
-        public IUserFuturesDataTracker CreateUserFuturesDataTracker(FuturesUserDataTrackerConfig config)
+        public IUserFuturesDataTracker CreateUserFuturesDataTracker(FuturesUserDataTrackerConfig? config = null)
         {
             var restClient = _serviceProvider?.GetRequiredService<IWhiteBitRestClient>() ?? new WhiteBitRestClient();
             var socketClient = _serviceProvider?.GetRequiredService<IWhiteBitSocketClient>() ?? new WhiteBitSocketClient();
@@ -105,7 +105,7 @@ namespace WhiteBit.Net
         }
 
         /// <inheritdoc />
-        public IUserFuturesDataTracker CreateUserFuturesDataTracker(string userIdentifier, FuturesUserDataTrackerConfig config, ApiCredentials credentials, WhiteBitEnvironment? environment = null)
+        public IUserFuturesDataTracker CreateUserFuturesDataTracker(string userIdentifier, ApiCredentials credentials, FuturesUserDataTrackerConfig? config = null, WhiteBitEnvironment? environment = null)
         {
             var clientProvider = _serviceProvider?.GetRequiredService<IWhiteBitUserClientProvider>() ?? new WhiteBitUserClientProvider();
             var restClient = clientProvider.GetRestClient(userIdentifier, credentials, environment);

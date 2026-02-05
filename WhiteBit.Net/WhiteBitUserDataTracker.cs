@@ -17,7 +17,7 @@ namespace WhiteBit.Net
             IWhiteBitRestClient restClient,
             IWhiteBitSocketClient socketClient,
             string? userIdentifier,
-            SpotUserDataTrackerConfig config) : base(
+            SpotUserDataTrackerConfig? config) : base(
                 logger,
                 restClient.V4Api.SharedClient,
                 null,
@@ -27,7 +27,7 @@ namespace WhiteBit.Net
                 socketClient.V4Api.SharedClient,
                 socketClient.V4Api.SharedClient,
                 userIdentifier,
-                config)
+                config ?? new SpotUserDataTrackerConfig())
         {
         }
     }
@@ -46,7 +46,7 @@ namespace WhiteBit.Net
             IWhiteBitRestClient restClient,
             IWhiteBitSocketClient socketClient,
             string? userIdentifier,
-            FuturesUserDataTrackerConfig config) : base(logger,
+            FuturesUserDataTrackerConfig? config) : base(logger,
                 restClient.V4Api.SharedClient,
                 null,
                 restClient.V4Api.SharedClient,
@@ -56,7 +56,7 @@ namespace WhiteBit.Net
                 socketClient.V4Api.SharedClient,
                 socketClient.V4Api.SharedClient,
                 userIdentifier,
-                config)
+                config ?? new FuturesUserDataTrackerConfig())
         {
         }
     }
