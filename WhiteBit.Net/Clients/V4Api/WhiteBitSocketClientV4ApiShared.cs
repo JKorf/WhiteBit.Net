@@ -26,7 +26,7 @@ namespace WhiteBit.Net.Clients.V4Api
         public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
 
         #region Balance client
-        EndpointOptions<SubscribeBalancesRequest> IBalanceSocketClient.SubscribeBalanceOptions { get; } = new EndpointOptions<SubscribeBalancesRequest>(false)
+        EndpointOptions<SubscribeBalancesRequest> IBalanceSocketClient.SubscribeBalanceOptions { get; } = new EndpointOptions<SubscribeBalancesRequest>(true)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
@@ -39,23 +39,23 @@ namespace WhiteBit.Net.Clients.V4Api
             if (validationError != null)
                 return new ExchangeResult<UpdateSubscription>(Exchange, validationError);
 
-            var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
-            if (assets == null)
-            {
-                // request all assets
-                var client = new WhiteBitRestClient(x =>
-                {
-                    x.Environment = ClientOptions.Environment;
-                });
-                var assetsResult = await client.V4Api.ExchangeData.GetAssetsAsync().ConfigureAwait(false);
-                if (!assetsResult)
-                    return new ExchangeResult<UpdateSubscription>(Exchange, assetsResult.Error!);
-
-                assets = assetsResult.Data.Where(x => x.CanDeposit).Select(x => x.Asset).ToList();
-            }
-
             if (request.TradingMode == null || request.TradingMode == TradingMode.Spot)
             {
+                var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
+                if (assets == null)
+                {
+                    // request all assets
+                    var client = new WhiteBitRestClient(x =>
+                    {
+                        x.Environment = ClientOptions.Environment;
+                    });
+                    var assetsResult = await client.V4Api.ExchangeData.GetAssetsAsync().ConfigureAwait(false);
+                    if (!assetsResult)
+                        return new ExchangeResult<UpdateSubscription>(Exchange, assetsResult.Error!);
+
+                    assets = assetsResult.Data.Where(x => x.CanDeposit).Select(x => x.Asset).ToList();
+                }
+
                 var result = await SubscribeToSpotBalanceUpdatesAsync(
                     assets!,
                     update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x => new SharedBalance(x.Key, x.Value.Available, x.Value.Available + x.Value.Frozen)).ToArray())),
@@ -64,8 +64,24 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             else
             {
+                var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
+                if (assets == null)
+                {
+                    // request all assets
+                    var client = new WhiteBitRestClient(x =>
+                    {
+                        x.Environment = ClientOptions.Environment;
+                        x.ApiCredentials = ((WhiteBitAuthenticationProvider)AuthenticationProvider!).Credentials;
+                    });
+                    var assetsResult = await client.V4Api.Account.GetCollateralBalancesAsync().ConfigureAwait(false);
+                    if (!assetsResult)
+                        return new ExchangeResult<UpdateSubscription>(Exchange, assetsResult.Error!);
+
+                    assets = assetsResult.Data.Select(x => x.Key).Distinct().ToList();
+                }
+
                 var result = await SubscribeToMarginBalanceUpdatesAsync(
-                    assets!,
+                    assets,
                     update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x => new SharedBalance(x.Asset, x.AvailableWithoutBorrow, x.Balance)).ToArray())),
                     ct: ct).ConfigureAwait(false);
                 return new ExchangeResult<UpdateSubscription>(Exchange, result);
@@ -343,6 +359,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     handler(update.ToType<SharedPosition[]>(update.Data.Records.Select(x => new SharedPosition(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
                     {
                         AverageOpenPrice = x.BasePrice,
+                        PositionMode = SharedPositionMode.OneWay,
                         PositionSide = x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
                         UnrealizedPnl = x.UnrealizedPnl,
                         LiquidationPrice = x.LiquidationPrice,

@@ -3637,6 +3637,36 @@
             Tracker factory
             </summary>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <summary>
+            Create a new Spot user data tracker
+            </summary>
+            <param name="userIdentifier">User identifier</param>
+            <param name="config">Configuration</param>
+            <param name="credentials">Credentials</param>
+            <param name="environment">Environment</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserSpotDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig)">
+            <summary>
+            Create a new spot user data tracker
+            </summary>
+            <param name="config">Configuration</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <summary>
+            Create a new futures user data tracker
+            </summary>
+            <param name="userIdentifier">User identifier</param>
+            <param name="config">Configuration</param>
+            <param name="credentials">Credentials</param>
+            <param name="environment">Environment</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserFuturesDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig)">
+            <summary>
+            Create a new futures user data tracker
+            </summary>
+            <param name="config">Configuration</param>
+        </member>
         <member name="M:WhiteBit.Net.Objects.Internal.WhiteBitNonceProvider.GetNonce">
             <inheritdoc />
         </member>
@@ -7067,6 +7097,37 @@
         </member>
         <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
             <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserSpotDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserFuturesDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitUserSpotDataTracker">
+            <inheritdoc/>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitUserSpotDataTracker.#ctor(Microsoft.Extensions.Logging.ILogger{WhiteBit.Net.WhiteBitUserSpotDataTracker},WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient,WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient,System.String,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig)">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitUserFuturesDataTracker">
+            <inheritdoc/>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitUserFuturesDataTracker.WebsocketPositionUpdatesAreFullSnapshots">
+            <inheritdoc/>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitUserFuturesDataTracker.#ctor(Microsoft.Extensions.Logging.ILogger{WhiteBit.Net.WhiteBitUserFuturesDataTracker},WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient,WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient,System.String,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig)">
+            <summary>
+            ctor
+            </summary>
         </member>
         <member name="T:CryptoExchange.Net.Interfaces.CryptoClientExtensions">
             <summary>
