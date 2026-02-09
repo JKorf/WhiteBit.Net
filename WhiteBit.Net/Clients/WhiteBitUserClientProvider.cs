@@ -12,8 +12,8 @@ namespace WhiteBit.Net.Clients
     /// <inheritdoc />
     public class WhiteBitUserClientProvider : IWhiteBitUserClientProvider
     {
-        private static ConcurrentDictionary<string, IWhiteBitRestClient> _restClients = new ConcurrentDictionary<string, IWhiteBitRestClient>();
-        private static ConcurrentDictionary<string, IWhiteBitSocketClient> _socketClients = new ConcurrentDictionary<string, IWhiteBitSocketClient>();
+        private ConcurrentDictionary<string, IWhiteBitRestClient> _restClients = new ConcurrentDictionary<string, IWhiteBitRestClient>();
+        private ConcurrentDictionary<string, IWhiteBitSocketClient> _socketClients = new ConcurrentDictionary<string, IWhiteBitSocketClient>();
 
         private readonly IOptions<WhiteBitRestOptions> _restOptions;
         private readonly IOptions<WhiteBitSocketOptions> _socketOptions;
