@@ -241,7 +241,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetOpenOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetUserTradesAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -3243,7 +3243,7 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Get list of closed orders per symbol
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-orders" /></para>
@@ -3254,6 +3254,8 @@
             <param name="status">Filter by order status</param>
             <param name="limit">Max number of results</param>
             <param name="offset">Result offset</param>
+            <param name="startTime">Filter by start time</param>
+            <param name="endTime">Filter by end time</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetUserTradesAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">

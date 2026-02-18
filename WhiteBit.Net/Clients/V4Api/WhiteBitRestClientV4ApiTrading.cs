@@ -195,7 +195,16 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Closed Orders
 
         /// <inheritdoc />
-        public async Task<WebCallResult<Dictionary<string, WhiteBitClosedOrder[]>>> GetClosedOrdersAsync(string? symbol = null, long? orderId = null, string? clientOrderId = null, ClosedOrderStatus? status = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebCallResult<Dictionary<string, WhiteBitClosedOrder[]>>> GetClosedOrdersAsync(
+            string? symbol = null, 
+            long? orderId = null, 
+            string? clientOrderId = null,
+            ClosedOrderStatus? status = null,
+            int? limit = null, 
+            int? offset = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptional("market", symbol);
@@ -204,6 +213,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptionalEnum("status", status);
             parameters.AddOptional("limit", limit);
             parameters.AddOptional("offset", offset);
+            parameters.AddOptionalSeconds("startDate", startTime);
+            parameters.AddOptionalSeconds("endDate", endTime);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitClosedOrder[]>>(request, parameters, ct).ConfigureAwait(false);
