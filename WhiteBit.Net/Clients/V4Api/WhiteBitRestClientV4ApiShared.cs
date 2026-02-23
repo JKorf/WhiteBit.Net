@@ -335,7 +335,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
             var result = await Account.GetDepositWithdrawalHistoryAsync(
@@ -353,8 +353,6 @@ namespace WhiteBit.Net.Clients.V4Api
                 result.Data.Records.Select(x => x.CreateTime),
                 request.StartTime,
                 request.EndTime ?? DateTime.UtcNow,
-                limit,
-                direction,
                 pageParams);
 
             return result.AsExchangeResult(
@@ -393,7 +391,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
             var result = await Account.GetDepositWithdrawalHistoryAsync(
@@ -411,8 +409,6 @@ namespace WhiteBit.Net.Clients.V4Api
                 result.Data.Records.Select(x => x.CreateTime),
                 request.StartTime,
                 request.EndTime ?? DateTime.UtcNow,
-                limit,
-                direction,
                 pageParams);
 
             return result.AsExchangeResult(
@@ -617,7 +613,10 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        GetClosedOrdersOptions ISpotOrderRestClient.GetClosedSpotOrdersOptions { get; } = new GetClosedOrdersOptions(true, false, true, 100);
+        GetClosedOrdersOptions ISpotOrderRestClient.GetClosedSpotOrdersOptions { get; } = new GetClosedOrdersOptions(true, false, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
         async Task<ExchangeWebResult<SharedSpotOrder[]>> ISpotOrderRestClient.GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((ISpotOrderRestClient)this).GetClosedSpotOrdersOptions.ValidateRequest(Exchange, request, request.TradingMode, [TradingMode.Spot]);
@@ -626,7 +625,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
 
             // Get data
             var result = await Trading.GetClosedOrdersAsync(
@@ -645,10 +644,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 result.Data.Values.SelectMany(x => x.Select(x => x.CreateTime)),
                 request.StartTime,
                 request.EndTime ?? DateTime.UtcNow,
-                limit,
-                direction,
                 pageParams,
-                TimeSpan.FromDays(31));
+                TimeSpan.FromDays(31),
+                TimeSpan.FromDays(180));
 
             var data = result.Data.Where(x => !x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedSpotOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), 
@@ -709,7 +707,10 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        GetUserTradesOptions ISpotOrderRestClient.GetSpotUserTradesOptions { get; } = new GetUserTradesOptions(false, true, true, 100);
+        GetUserTradesOptions ISpotOrderRestClient.GetSpotUserTradesOptions { get; } = new GetUserTradesOptions(false, true, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
         async Task<ExchangeWebResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((ISpotOrderRestClient)this).GetSpotUserTradesOptions.ValidateRequest(Exchange, request, request.TradingMode, [TradingMode.Spot]);
@@ -718,7 +719,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
             var result = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
@@ -737,9 +738,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 result.Data.Select(x => x.Time),
                 request.StartTime,
                 request.EndTime ?? DateTime.UtcNow,
-                limit,
-                direction,
-                pageParams);
+                pageParams,
+                maxAge: TimeSpan.FromDays(180));
 
             return result.AsExchangeResult(
                        Exchange,
@@ -997,7 +997,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
             var result = await CollateralTrading.GetPositionHistoryAsync(
@@ -1017,8 +1017,6 @@ namespace WhiteBit.Net.Clients.V4Api
                 result.Data.Select(x => x.OpenTime),
                 request.StartTime,
                 request.EndTime ?? DateTime.UtcNow,
-                limit,
-                direction,
                 pageParams);
 
             return result.AsExchangeResult(
@@ -1208,7 +1206,10 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        GetClosedOrdersOptions IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new GetClosedOrdersOptions(false, true, true, 100);
+        GetClosedOrdersOptions IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new GetClosedOrdersOptions(false, true, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
         async Task<ExchangeWebResult<SharedFuturesOrder[]>> IFuturesOrderRestClient.GetClosedFuturesOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderRestClient)this).GetClosedFuturesOrdersOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedFuturesModes);
@@ -1217,7 +1218,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
 
             // Get data
             var result = await Trading.GetClosedOrdersAsync(
@@ -1236,10 +1237,9 @@ namespace WhiteBit.Net.Clients.V4Api
                result.Data.Values.SelectMany(x => x.Select(x => x.CreateTime)),
                request.StartTime,
                request.EndTime ?? DateTime.UtcNow,
-               limit,
-               direction,
                pageParams,
-               TimeSpan.FromDays(31));
+               TimeSpan.FromDays(31),
+               TimeSpan.FromDays(180));
 
             var data = result.Data.Where(x => x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedFuturesOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicFuturesId, xk.Key), 
@@ -1302,7 +1302,10 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        GetUserTradesOptions IFuturesOrderRestClient.GetFuturesUserTradesOptions { get; } = new GetUserTradesOptions(false, true, true, 100);
+        GetUserTradesOptions IFuturesOrderRestClient.GetFuturesUserTradesOptions { get; } = new GetUserTradesOptions(false, true, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
         async Task<ExchangeWebResult<SharedUserTrade[]>> IFuturesOrderRestClient.GetFuturesUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderRestClient)this).GetFuturesUserTradesOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedFuturesModes);
@@ -1311,7 +1314,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
             var result = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
@@ -1330,9 +1333,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 result.Data.Select(x => x.Time),
                 request.StartTime,
                 request.EndTime ?? DateTime.UtcNow,
-                limit,
-                direction,
-                pageParams);
+                pageParams,
+                maxAge: TimeSpan.FromDays(180));
 
             return result.AsExchangeResult(
                        Exchange,
@@ -1792,7 +1794,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var direction = DataDirection.Descending;
             var limit = request.Limit ?? 100;
-            var pageParams = Pagination.GetPaginationParameters(direction, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
             var result = await ExchangeData.GetFundingHistoryAsync(
@@ -1811,8 +1813,6 @@ namespace WhiteBit.Net.Clients.V4Api
                  result.Data.Select(x => x.FundingTime),
                  request.StartTime,
                  request.EndTime ?? DateTime.UtcNow,
-                 limit,
-                 direction,
                  pageParams);
 
             return result.AsExchangeResult(
