@@ -191,8 +191,8 @@ namespace WhiteBit.Net.Clients.V4Api
             CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
-            parameters.AddOptionalMilliseconds("startDate", startTime);
-            parameters.AddOptionalMilliseconds("endDate", endTime);
+            parameters.AddOptionalSeconds("startDate", startTime);
+            parameters.AddOptionalSeconds("endDate", endTime);
             parameters.AddOptional("limit", limit);
             parameters.AddOptional("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/funding-history/" + symbol, WhiteBitExchange.RateLimiter.WhiteBit, 1, false,

@@ -101,8 +101,19 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="status">Filter by order status</param>
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<Dictionary<string, WhiteBitClosedOrder[]>>> GetClosedOrdersAsync(string? symbol = null, long? orderId = null, string? clientOrderId = null, ClosedOrderStatus? status = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<WebCallResult<Dictionary<string, WhiteBitClosedOrder[]>>> GetClosedOrdersAsync(
+            string? symbol = null,
+            long? orderId = null, 
+            string? clientOrderId = null,
+            ClosedOrderStatus? status = null,
+            int? limit = null,
+            int? offset = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            CancellationToken ct = default);
 
         /// <summary>
         /// Get user trade history
