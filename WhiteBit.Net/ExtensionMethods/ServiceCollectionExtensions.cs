@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
+using System.Threading;
 using WhiteBit.Net;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Interfaces;
@@ -96,8 +97,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 return new WhiteBitRestClient(client, serviceProvider.GetRequiredService<ILoggerFactory>(), serviceProvider.GetRequiredService<IOptions<WhiteBitRestOptions>>());
             }).ConfigurePrimaryHttpMessageHandler((serviceProvider) => {
                 var options = serviceProvider.GetRequiredService<IOptions<WhiteBitRestOptions>>().Value;
-                return LibraryHelpers.CreateHttpClientMessageHandler(options.Proxy, options.HttpKeepAliveInterval);
-            });
+                return LibraryHelpers.CreateHttpClientMessageHandler(options);
+            }).SetHandlerLifetime(Timeout.InfiniteTimeSpan);
             services.Add(new ServiceDescriptor(typeof(IWhiteBitSocketClient), x => { return new WhiteBitSocketClient(x.GetRequiredService<IOptions<WhiteBitSocketOptions>>(), x.GetRequiredService<ILoggerFactory>()); }, socketClientLifeTime ?? ServiceLifetime.Singleton));
 
             services.AddTransient<ICryptoRestClient, CryptoRestClient>();
@@ -107,7 +108,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<ITrackerFactory, WhiteBitTrackerFactory>();
             services.AddSingleton<IWhiteBitUserClientProvider, WhiteBitUserClientProvider>(x =>
             new WhiteBitUserClientProvider(
-                x.GetRequiredService<HttpClient>(),
+                x.GetRequiredService<IHttpClientFactory>().CreateClient(typeof(IWhiteBitRestClient).Name),
                 x.GetRequiredService<ILoggerFactory>(),
                 x.GetRequiredService<IOptions<WhiteBitRestOptions>>(),
                 x.GetRequiredService<IOptions<WhiteBitSocketOptions>>()));
