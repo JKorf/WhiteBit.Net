@@ -24,6 +24,8 @@ namespace WhiteBit.Net.Converters
     [JsonSerializable(typeof(WhiteBitHedgeMode))]
     [JsonSerializable(typeof(WhiteBitOrderBookUpdate))]
     [JsonSerializable(typeof(WhiteBitFundingHistory[]))]
+    [JsonSerializable(typeof(WhiteBitAccountFundingHistory[]))]
+    [JsonSerializable(typeof(WhiteBitAccountFundingHistories))]
     [JsonSerializable(typeof(WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>))]
 
     // End manual defined attributes

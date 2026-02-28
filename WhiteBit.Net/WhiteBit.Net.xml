@@ -91,6 +91,9 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetCollateralAccountSummaryAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.GetAccountFundingHistoryAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiAccount.SetAccountLeverageAsync(System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -913,6 +916,21 @@
             </summary>
         </member>
         <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountBorrowUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountFundingHistories">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountFundingHistory">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Converters.WhiteBitSourceGenerationContext.WhiteBitAccountFundingHistoryArray">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
@@ -2776,6 +2794,23 @@
             </summary>
             <param name="ct">Cancellation token</param>
         </member>
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.GetAccountFundingHistoryAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously retrieves the account funding history for the specified trading pair.
+            <para><a href="https://docs.whitebit.com/private/http-trade-v4/#funding-history" /></para>
+            </summary>
+            <param name="symbol">The trading pair symbol for which to retrieve the funding history, such as "BTC_PERP". This value cannot be
+            null or empty.</param>
+            <param name="startTime">The optional UTC start time for the funding history retrieval. If specified, only records after this time
+            are returned.</param>
+            <param name="endTime">The optional UTC end time for the funding history retrieval. If specified, only records before this time are
+            returned.</param>
+            <param name="limit">The optional maximum number of records to return. If not specified, a default limit is applied.</param>
+            <param name="offset">The optional offset for pagination. Specifies the number of records to skip before returning results.</param>
+            <param name="ct">A cancellation token that can be used to cancel the asynchronous operation.</param>
+            <returns>A task that represents the asynchronous operation. The task result contains a WebCallResult with the funding
+            history records for the specified account and symbol.</returns>
+        </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiAccount.SetAccountLeverageAsync(System.Int32,System.Threading.CancellationToken)">
             <summary>
             Set leverage for the entire account, both spot margin and futures. Spot margin leverage is capped at x20.
@@ -3685,6 +3720,59 @@
         <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate.BorrowInfo">
             <summary>
             The borrow info the update relates to
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistories">
+            <summary>
+            Represents a paginated collection of funding history records for a WhiteBit account.
+            </summary>
+            <remarks>This record provides details about the pagination parameters, including the offset and limit,
+            as well as the set of funding history entries. Use this type to retrieve and navigate through funding histories
+            efficiently when working with large datasets.</remarks>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistories.Offset">
+            <summary>
+            Total
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistories.Limit">
+            <summary>
+            Total
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistories.Records">
+            <summary>
+            Records
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistory">
+            <summary>
+            The history of realized funding payments for an account.
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistory.FundingTime">
+            <summary>
+            Funding time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistory.FundingRate">
+            <summary>
+            Funding rate
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistory.SettlePrice">
+            <summary>
+            Settlement price
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistory.FundingCalcTime">
+            <summary>
+            Funding rate calculation time
+            </summary>
+        </member>
+        <member name="P:WhiteBit.Net.Objects.Models.WhiteBitAccountFundingHistory.Symbol">
+            <summary>
+            Symbol name
             </summary>
         </member>
         <member name="T:WhiteBit.Net.Objects.Models.WhiteBitAccountMarginPositionUpdate">
