@@ -1,15 +1,15 @@
+using CryptoExchange.Net;
+using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.SharedApis;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using WhiteBit.Net.Interfaces.Clients.V4Api;
-using CryptoExchange.Net.Objects;
 using System.Linq;
-using WhiteBit.Net.Objects.Models;
+using System.Threading;
+using System.Threading.Tasks;
 using WhiteBit.Net.Enums;
-using CryptoExchange.Net;
-using CryptoExchange.Net.Objects.Errors;
+using WhiteBit.Net.Interfaces.Clients.V4Api;
+using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -1005,7 +1005,9 @@ namespace WhiteBit.Net.Clients.V4Api
                     return closeOrders.AsExchangeError<SharedFuturesOrder>(Exchange, new ServerError(new ErrorInfo(ErrorType.UnknownOrder, "Order not found")));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
-                var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
+                var status = closedOrder.Status is OrderStatus.Canceled or OrderStatus.AutoCanceledUserMargin 
+                    ? SharedOrderStatus.Canceled 
+                    : SharedOrderStatus.Filled;
 
                 return closeOrders.AsExchangeResult(Exchange, request.Symbol.TradingMode, new SharedFuturesOrder(
                     ExchangeSymbolCache.ParseSymbol(_topicFuturesId, closedOrder.Symbol), 
@@ -1099,7 +1101,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
                 x.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                x.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled,
+                x.Status is OrderStatus.Canceled or OrderStatus.AutoCanceledUserMargin
+                    ? SharedOrderStatus.Canceled
+                    : SharedOrderStatus.Filled,
                 x.CreateTime)
             {
                 ClientOrderId = x.ClientOrderId == string.Empty ? null : x.ClientOrderId,

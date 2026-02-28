@@ -2251,6 +2251,11 @@
             Partially filled
             </summary>
         </member>
+        <member name="F:WhiteBit.Net.Enums.OrderStatus.AutoCanceledUserMargin">
+            <summary>
+            Auto canceled due to insufficient margin
+            </summary>
+        </member>
         <member name="T:WhiteBit.Net.Enums.OrderType">
             <summary>
             Order type
