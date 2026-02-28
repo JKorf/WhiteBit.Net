@@ -28,7 +28,6 @@ namespace WhiteBit.Net.Clients.V4Api
         #region fields 
         /// <inheritdoc />
         public new WhiteBitRestOptions ClientOptions => (WhiteBitRestOptions)base.ClientOptions;
-        internal static TimeSyncState _timeSyncState = new TimeSyncState("V4 Api");
 
         protected override ErrorMapping ErrorMapping { get; } = WhiteBitErrors.RestErrors;
         protected override IRestMessageHandler MessageHandler { get; } = new WhiteBitRestMessageHandler(WhiteBitErrors.RestErrors);
@@ -68,8 +67,6 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         /// <inheritdoc />
-        protected override IStreamMessageAccessor CreateAccessor() => new SystemTextJsonStreamMessageAccessor(WhiteBitExchange._serializerContext);
-        /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
         /// <inheritdoc />
@@ -97,14 +94,6 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
             => ExchangeData.GetServerTimeAsync();
-
-        /// <inheritdoc />
-        public override TimeSyncInfo? GetTimeSyncInfo()
-            => new TimeSyncInfo(_logger, ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp, ApiOptions.TimestampRecalculationInterval ?? ClientOptions.TimestampRecalculationInterval, _timeSyncState);
-
-        /// <inheritdoc />
-        public override TimeSpan? GetTimeOffset()
-            => _timeSyncState.TimeOffset;
 
         /// <inheritdoc />
         public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverDate = null)

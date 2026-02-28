@@ -34,9 +34,6 @@
         <member name="P:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.ExchangeName">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CreateAccessor">
-            <inheritdoc />
-        </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.CreateSerializer">
             <inheritdoc />
         </member>
@@ -44,12 +41,6 @@
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetServerTimestampAsync">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetTimeSyncInfo">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.GetTimeOffset">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4Api.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
@@ -250,7 +241,7 @@
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetOpenOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitRestClientV4ApiTrading.GetUserTradesAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -280,9 +271,6 @@
             <summary>
             ctor
             </summary>
-        </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateAccessor(System.Net.WebSockets.WebSocketMessageType)">
-            <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.CreateSerializer">
             <inheritdoc />
@@ -375,9 +363,6 @@
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.SubscribeToAccountBorrowEventUpdatesAsync(System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{WhiteBit.Net.Objects.Models.WhiteBitAccountBorrowUpdate}},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
         <member name="M:WhiteBit.Net.Clients.V4Api.WhiteBitSocketClientV4Api.GetAuthenticationRequestAsync(CryptoExchange.Net.Sockets.Default.SocketConnection)">
@@ -2506,6 +2491,14 @@
             Extension methods specific to using the WhiteBit API
             </summary>
         </member>
+        <member name="M:WhiteBit.Net.ExtensionMethods.WhiteBitExtensionMethods.ToPositionSide(CryptoExchange.Net.SharedApis.SharedPositionSide)">
+            <summary>
+            Converts a <see cref="T:CryptoExchange.Net.SharedApis.SharedPositionSide"/> to a <see cref="T:WhiteBit.Net.Enums.PositionSide"/>.
+            </summary>
+            <param name="side">The shared position side to convert.</param>
+            <returns>The corresponding <see cref="T:WhiteBit.Net.Enums.PositionSide"/> value.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the provided side is not supported.</exception>
+        </member>
         <member name="T:WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient">
             <summary>
             Client for accessing the WhiteBit Rest API. 
@@ -3255,7 +3248,7 @@
             <param name="offset">Result offset</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetClosedOrdersAsync(System.String,System.Nullable{System.Int64},System.String,System.Nullable{WhiteBit.Net.Enums.ClosedOrderStatus},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Get list of closed orders per symbol
             <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-orders" /></para>
@@ -3266,6 +3259,8 @@
             <param name="status">Filter by order status</param>
             <param name="limit">Max number of results</param>
             <param name="offset">Result offset</param>
+            <param name="startTime">Filter by start time</param>
+            <param name="endTime">Filter by end time</param>
             <param name="ct">Cancellation token</param>
         </member>
         <member name="M:WhiteBit.Net.Interfaces.Clients.V4Api.IWhiteBitRestClientV4ApiTrading.GetUserTradesAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -3648,6 +3643,36 @@
             <summary>
             Tracker factory
             </summary>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <summary>
+            Create a new Spot user data tracker
+            </summary>
+            <param name="userIdentifier">User identifier</param>
+            <param name="config">Configuration</param>
+            <param name="credentials">Credentials</param>
+            <param name="environment">Environment</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserSpotDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig)">
+            <summary>
+            Create a new spot user data tracker
+            </summary>
+            <param name="config">Configuration</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <summary>
+            Create a new futures user data tracker
+            </summary>
+            <param name="userIdentifier">User identifier</param>
+            <param name="config">Configuration</param>
+            <param name="credentials">Credentials</param>
+            <param name="environment">Environment</param>
+        </member>
+        <member name="M:WhiteBit.Net.Interfaces.IWhiteBitTrackerFactory.CreateUserFuturesDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig)">
+            <summary>
+            Create a new futures user data tracker
+            </summary>
+            <param name="config">Configuration</param>
         </member>
         <member name="M:WhiteBit.Net.Objects.Internal.WhiteBitNonceProvider.GetNonce">
             <inheritdoc />
@@ -6984,6 +7009,11 @@
             WhiteBit exchange information and configuration
             </summary>
         </member>
+        <member name="P:WhiteBit.Net.WhiteBitExchange.Metadata">
+            <summary>
+            Platform metadata
+            </summary>
+        </member>
         <member name="P:WhiteBit.Net.WhiteBitExchange.ExchangeName">
             <summary>
             Exchange name
@@ -7074,6 +7104,37 @@
         </member>
         <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
             <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserSpotDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserSpotDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserFuturesDataTracker(CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig)">
+            <inheritdoc />
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitTrackerFactory.CreateUserFuturesDataTracker(System.String,CryptoExchange.Net.Authentication.ApiCredentials,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig,WhiteBit.Net.WhiteBitEnvironment)">
+            <inheritdoc />
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitUserSpotDataTracker">
+            <inheritdoc/>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitUserSpotDataTracker.#ctor(Microsoft.Extensions.Logging.ILogger{WhiteBit.Net.WhiteBitUserSpotDataTracker},WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient,WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient,System.String,CryptoExchange.Net.Trackers.UserData.Objects.SpotUserDataTrackerConfig)">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="T:WhiteBit.Net.WhiteBitUserFuturesDataTracker">
+            <inheritdoc/>
+        </member>
+        <member name="P:WhiteBit.Net.WhiteBitUserFuturesDataTracker.WebsocketPositionUpdatesAreFullSnapshots">
+            <inheritdoc/>
+        </member>
+        <member name="M:WhiteBit.Net.WhiteBitUserFuturesDataTracker.#ctor(Microsoft.Extensions.Logging.ILogger{WhiteBit.Net.WhiteBitUserFuturesDataTracker},WhiteBit.Net.Interfaces.Clients.IWhiteBitRestClient,WhiteBit.Net.Interfaces.Clients.IWhiteBitSocketClient,System.String,CryptoExchange.Net.Trackers.UserData.Objects.FuturesUserDataTrackerConfig)">
+            <summary>
+            ctor
+            </summary>
         </member>
         <member name="T:CryptoExchange.Net.Interfaces.CryptoClientExtensions">
             <summary>

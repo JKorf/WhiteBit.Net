@@ -16,6 +16,8 @@ namespace WhiteBit.Net
         private static readonly IMessageSerializer _serializer = new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
         private readonly INonceProvider _nonceProvider;
 
+        public ApiCredentials Credentials => _credentials.Copy();
+
         public override ApiCredentialsType[] SupportedCredentialTypes => [ApiCredentialsType.Hmac];
 
         public WhiteBitAuthenticationProvider(ApiCredentials credentials, INonceProvider? nonceProvider) : base(credentials)

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WhiteBit.Net.Enums;
+using WhiteBit.Net.ExtensionMethods;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Models;
 
@@ -54,6 +55,44 @@ namespace WhiteBit.Net.Clients.V4Api
             return response;
         }
 
+        async Task<ExchangeResult<SharedSymbol[]>> ISpotSymbolRestClient.GetSpotSymbolsForBaseAssetAsync(string baseAsset)
+        {
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId))
+            {
+                var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                if (!symbols)
+                    return new ExchangeResult<SharedSymbol[]>(Exchange, symbols.Error!);
+            }
+
+            return new ExchangeResult<SharedSymbol[]>(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicSpotId, baseAsset));
+        }
+
+        async Task<ExchangeResult<bool>> ISpotSymbolRestClient.SupportsSpotSymbolAsync(SharedSymbol symbol)
+        {
+            if (symbol.TradingMode != TradingMode.Spot)
+                throw new ArgumentException(nameof(symbol), "Only Spot symbols allowed");
+
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId))
+            {
+                var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                if (!symbols)
+                    return new ExchangeResult<bool>(Exchange, symbols.Error!);
+            }
+
+            return new ExchangeResult<bool>(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, symbol));
+        }
+
+        async Task<ExchangeResult<bool>> ISpotSymbolRestClient.SupportsSpotSymbolAsync(string symbolName)
+        {
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId))
+            {
+                var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                if (!symbols)
+                    return new ExchangeResult<bool>(Exchange, symbols.Error!);
+            }
+
+            return new ExchangeResult<bool>(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, symbolName));
+        }
         #endregion
 
         #region Ticker client
@@ -287,83 +326,106 @@ namespace WhiteBit.Net.Clients.V4Api
             });
         }
 
-        GetDepositsOptions IDepositRestClient.GetDepositsOptions { get; } = new GetDepositsOptions(SharedPaginationSupport.Descending, false, 100);
-        async Task<ExchangeWebResult<SharedDeposit[]>> IDepositRestClient.GetDepositsAsync(GetDepositsRequest request, INextPageToken? pageToken, CancellationToken ct)
+        GetDepositsOptions IDepositRestClient.GetDepositsOptions { get; } = new GetDepositsOptions(false, true, false, 100);
+        async Task<ExchangeWebResult<SharedDeposit[]>> IDepositRestClient.GetDepositsAsync(GetDepositsRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IDepositRestClient)this).GetDepositsOptions.ValidateRequest(Exchange, request, TradingMode.Spot, SupportedTradingModes);
             if (validationError != null)
                 return new ExchangeWebResult<SharedDeposit[]>(Exchange, validationError);
 
-            // Determine page token
-            int? offset = null;
-            if (pageToken is OffsetToken offsetToken)
-                offset = offsetToken.Offset;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var deposits = await Account.GetDepositWithdrawalHistoryAsync(
+            var result = await Account.GetDepositWithdrawalHistoryAsync(
                 Enums.TransactionType.Deposit,
                 request.Asset,
-                limit: request.Limit ?? 100,
-                offset: offset,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct).ConfigureAwait(false);
-            if (!deposits)
-                return deposits.AsExchangeResult<SharedDeposit[]>(Exchange, null, default);
+            if (!result)
+                return result.AsExchangeResult<SharedDeposit[]>(Exchange, null, default);
 
-            // Determine next token
-            OffsetToken? nextToken = null;
-            if (deposits.Data.Total > deposits.Data.Offset + deposits.Data.Limit)
-                nextToken = new OffsetToken(deposits.Data.Offset + request.Limit ?? 100);
+            var nextPageRequest = Pagination.GetNextPageRequest(
+                () => Pagination.NextPageFromOffset(pageParams, limit),
+                result.Data.Records.Length,
+                result.Data.Records.Select(x => x.CreateTime),
+                request.StartTime,
+                request.EndTime ?? DateTime.UtcNow,
+                pageParams);
 
-            return deposits.AsExchangeResult<SharedDeposit[]>(Exchange, TradingMode.Spot, deposits.Data.Records.Select(x => new SharedDeposit(x.Asset, x.Quantity, x.TransactionStatus == Enums.TransactionStatus.Success, x.CreateTime)
-            {
-                Confirmations = x.Confirmations?.Actual,
-                Network = x.Network,
-                TransactionId = x.TransactionId,
-                Tag = x.Memo,
-                Id = x.UniqueId
-            }).ToArray(), nextToken);
+            return result.AsExchangeResult(
+                       Exchange,
+                       TradingMode.Spot,
+                       ExchangeHelpers.ApplyFilter(result.Data.Records, x => x.CreateTime, request.StartTime, request.EndTime, direction)
+                       .Select(x =>
+                            new SharedDeposit(
+                                x.Asset,
+                                x.Quantity,
+                                x.TransactionStatus == Enums.TransactionStatus.Success,
+                                x.CreateTime,
+                                x.TransactionStatus == TransactionStatus.Success ? SharedTransferStatus.Completed
+                                : x.TransactionStatus == TransactionStatus.UnconfirmedByUser || x.TransactionStatus == TransactionStatus.Canceled ? SharedTransferStatus.Failed
+                                : SharedTransferStatus.InProgress)
+                            {
+                                Confirmations = x.Confirmations?.Actual,
+                                Network = x.Network,
+                                TransactionId = x.TransactionId,
+                                Tag = x.Memo,
+                                Id = x.UniqueId
+                            })
+                       .ToArray(), nextPageRequest);
         }
 
         #endregion
 
         #region Withdrawal client
 
-        GetWithdrawalsOptions IWithdrawalRestClient.GetWithdrawalsOptions { get; } = new GetWithdrawalsOptions(SharedPaginationSupport.Descending, false, 100);
-        async Task<ExchangeWebResult<SharedWithdrawal[]>> IWithdrawalRestClient.GetWithdrawalsAsync(GetWithdrawalsRequest request, INextPageToken? pageToken, CancellationToken ct)
+        GetWithdrawalsOptions IWithdrawalRestClient.GetWithdrawalsOptions { get; } = new GetWithdrawalsOptions(false, true, false, 100);
+        async Task<ExchangeWebResult<SharedWithdrawal[]>> IWithdrawalRestClient.GetWithdrawalsAsync(GetWithdrawalsRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IWithdrawalRestClient)this).GetWithdrawalsOptions.ValidateRequest(Exchange, request, TradingMode.Spot, SupportedTradingModes);
             if (validationError != null)
                 return new ExchangeWebResult<SharedWithdrawal[]>(Exchange, validationError);
 
-            // Determine page token
-            int? offset = null;
-            if (pageToken is OffsetToken offsetToken)
-                offset = offsetToken.Offset;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var withdrawals = await Account.GetDepositWithdrawalHistoryAsync(
+            var result = await Account.GetDepositWithdrawalHistoryAsync(
                 Enums.TransactionType.Withdrawal,
                 request.Asset,
-                limit: request.Limit ?? 100,
-                offset: offset,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct).ConfigureAwait(false);
-            if (!withdrawals)
-                return withdrawals.AsExchangeResult<SharedWithdrawal[]>(Exchange, null, default);
+            if (!result)
+                return result.AsExchangeResult<SharedWithdrawal[]>(Exchange, null, default);
 
-            // Determine next token
-            OffsetToken? nextToken = null;
-            if (withdrawals.Data.Total > withdrawals.Data.Offset + withdrawals.Data.Limit)
-                nextToken = new OffsetToken(withdrawals.Data.Offset + request.Limit ?? 100);
+            var nextPageRequest = Pagination.GetNextPageRequest(
+                () => Pagination.NextPageFromOffset(pageParams, limit),
+                result.Data.Records.Length,
+                result.Data.Records.Select(x => x.CreateTime),
+                request.StartTime,
+                request.EndTime ?? DateTime.UtcNow,
+                pageParams);
 
-            return withdrawals.AsExchangeResult<SharedWithdrawal[]>(Exchange, TradingMode.Spot, withdrawals.Data.Records.Select(x => new SharedWithdrawal(x.Asset, x.Address, x.Quantity, x.TransactionStatus == Enums.TransactionStatus.Success, x.CreateTime)
-            {
-                Confirmations = x.Confirmations?.Actual,
-                Network = x.Network,
-                Tag = x.Memo,
-                TransactionId = x.TransactionId,
-                Fee = x.Fee,
-                Id = x.UniqueId
-            }).ToArray());
+            return result.AsExchangeResult(
+                       Exchange,
+                       TradingMode.Spot,
+                       ExchangeHelpers.ApplyFilter(result.Data.Records, x => x.CreateTime, request.StartTime, request.EndTime, direction)
+                       .Select(x => 
+                           new SharedWithdrawal(x.Asset, x.Address, x.Quantity, x.TransactionStatus == Enums.TransactionStatus.Success, x.CreateTime)
+                           {
+                               Confirmations = x.Confirmations?.Actual,
+                               Network = x.Network,
+                               Tag = x.Memo,
+                               TransactionId = x.TransactionId,
+                               Fee = x.Fee,
+                               Id = x.UniqueId
+                           })
+                    .ToArray(), nextPageRequest);
         }
 
         #endregion
@@ -427,7 +489,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var result = await Trading.PlaceSpotOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
-                request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.Limit ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
+                request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.LimitMaker ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
                 quantity: request.Quantity?.QuantityInBaseAsset,
                 quoteQuantity: request.Quantity?.QuantityInQuoteAsset,
                 price: request.Price,
@@ -475,6 +537,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     TriggerPrice = openOrder.TriggerPrice,
                     IsTriggerOrder = openOrder.TriggerPrice > 0
                 });
@@ -507,6 +570,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
                     Fee = closedOrder.Fee,
+                    FeeAsset = closedOrder.FeeAsset,
                     TriggerPrice = closedOrder.TriggerPrice,
                     IsTriggerOrder = closedOrder.TriggerPrice > 0
                 });
@@ -543,37 +607,48 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TriggerPrice = x.TriggerPrice,
                 IsTriggerOrder = x.TriggerPrice > 0
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetClosedOrdersRequest> ISpotOrderRestClient.GetClosedSpotOrdersOptions { get; } = new PaginatedEndpointOptions<GetClosedOrdersRequest>(SharedPaginationSupport.Ascending, true, 100, true);
-        async Task<ExchangeWebResult<SharedSpotOrder[]>> ISpotOrderRestClient.GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, INextPageToken? pageToken, CancellationToken ct)
+        GetClosedOrdersOptions ISpotOrderRestClient.GetClosedSpotOrdersOptions { get; } = new GetClosedOrdersOptions(true, false, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
+        async Task<ExchangeWebResult<SharedSpotOrder[]>> ISpotOrderRestClient.GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((ISpotOrderRestClient)this).GetClosedSpotOrdersOptions.ValidateRequest(Exchange, request, request.TradingMode, [TradingMode.Spot]);
             if (validationError != null)
                 return new ExchangeWebResult<SharedSpotOrder[]>(Exchange, validationError);
 
-            // Determine page token
-            int? offset = null;
-            if (pageToken is OffsetToken offsetToken)
-                offset = offsetToken.Offset;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
 
             // Get data
-            var orders = await Trading.GetClosedOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol),
-                offset: offset,
-                limit: request.Limit ?? 100,
+            var result = await Trading.GetClosedOrdersAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                startTime: pageParams.StartTime,
+                endTime: pageParams.EndTime,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct).ConfigureAwait(false);
-            if (!orders)
-                return orders.AsExchangeResult<SharedSpotOrder[]>(Exchange, null, default);
+            if (!result)
+                return result.AsExchangeResult<SharedSpotOrder[]>(Exchange, null, default);
 
-            // Determine next token
-            OffsetToken? nextToken = null;
-            if (orders.Data.Any())
-                nextToken = new OffsetToken((offset ?? 0) + request.Limit ?? 100);
+            var nextPageRequest = Pagination.GetNextPageRequest(
+                () => Pagination.NextPageFromOffset(pageParams, limit),
+                result.Data.Values.Count,
+                result.Data.Values.SelectMany(x => x.Select(x => x.CreateTime)),
+                request.StartTime,
+                request.EndTime ?? DateTime.UtcNow,
+                pageParams,
+                TimeSpan.FromDays(31),
+                TimeSpan.FromDays(180));
 
-            var data = orders.Data.Where(x => !x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedSpotOrder(
+            var data = result.Data.Where(x => !x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedSpotOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), 
                 xk.Key,
                 x.OrderId.ToString(),
@@ -589,11 +664,16 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TriggerPrice = x.TriggerPrice,
                 IsTriggerOrder = x.TriggerPrice > 0
             }));
 
-            return orders.AsExchangeResult<SharedSpotOrder[]>(Exchange, TradingMode.Spot, data.OrderByDescending(x => x.CreateTime).ToArray(), nextToken);
+            return result.AsExchangeResult(
+                       Exchange,
+                       TradingMode.Spot,
+                       ExchangeHelpers.ApplyFilter(data, x => x.CreateTime!.Value, request.StartTime, request.EndTime, direction).ToArray(),
+                       nextPageRequest);
         }
 
         EndpointOptions<GetOrderTradesRequest> ISpotOrderRestClient.GetSpotOrderTradesOptions { get; } = new EndpointOptions<GetOrderTradesRequest>(true);
@@ -627,51 +707,59 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetUserTradesRequest> ISpotOrderRestClient.GetSpotUserTradesOptions { get; } = new PaginatedEndpointOptions<GetUserTradesRequest>(SharedPaginationSupport.Descending, true, 100, true);
-        async Task<ExchangeWebResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotUserTradesAsync(GetUserTradesRequest request, INextPageToken? pageToken, CancellationToken ct)
+        GetUserTradesOptions ISpotOrderRestClient.GetSpotUserTradesOptions { get; } = new GetUserTradesOptions(false, true, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
+        async Task<ExchangeWebResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((ISpotOrderRestClient)this).GetSpotUserTradesOptions.ValidateRequest(Exchange, request, request.TradingMode, [TradingMode.Spot]);
             if (validationError != null)
                 return new ExchangeWebResult<SharedUserTrade[]>(Exchange, validationError);
 
-            // Determine page token
-            int? offset = null;
-            if (pageToken is OffsetToken offsetToken)
-                offset = offsetToken.Offset;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var orders = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
-                offset: offset,
-                startTime: request.StartTime,
-                endTime: request.EndTime,
-                limit: request.Limit ?? 100,
+            var result = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
+                startTime: pageParams.StartTime,
+                endTime: pageParams.EndTime,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct
                 ).ConfigureAwait(false);
-            if (!orders)
-                return orders.AsExchangeResult<SharedUserTrade[]>(Exchange, null, default);
+            if (!result)
+                return result.AsExchangeResult<SharedUserTrade[]>(Exchange, null, default);
 
-            // Get next token
-            OffsetToken? nextToken = null;
-            if (orders.Data.Any())
-                nextToken = new OffsetToken((offset ?? 0) + request.Limit ?? 100);
+            var nextPageRequest = Pagination.GetNextPageRequest(
+                () => Pagination.NextPageFromOffset(pageParams, limit),
+                result.Data.Length,
+                result.Data.Select(x => x.Time),
+                request.StartTime,
+                request.EndTime ?? DateTime.UtcNow,
+                pageParams,
+                maxAge: TimeSpan.FromDays(180));
 
-            var data = orders.Data.Select(y => new SharedUserTrade(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, y.Symbol),
-                y.Symbol,
-                y.OrderId.ToString(),
-                y.Id.ToString(),
-                y.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                y.Quantity,
-                y.Price,
-                y.Time)
-            {
-                ClientOrderId = y.ClientOrderId,
-                Fee = y.Fee,
-                FeeAsset = y.FeeAsset,
-                Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
-            }).ToArray();
-
-            return orders.AsExchangeResult<SharedUserTrade[]>(Exchange, TradingMode.Spot, data, nextToken);
+            return result.AsExchangeResult(
+                       Exchange,
+                       TradingMode.Spot,
+                       ExchangeHelpers.ApplyFilter(result.Data, x => x.Time, request.StartTime, request.EndTime, direction)
+                       .Select(y => new SharedUserTrade(
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, y.Symbol),
+                            y.Symbol,
+                            y.OrderId.ToString(),
+                            y.Id.ToString(),
+                            y.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
+                            y.Quantity,
+                            y.Price,
+                            y.Time)
+                        {
+                            ClientOrderId = y.ClientOrderId,
+                            Fee = y.Fee,
+                            FeeAsset = y.FeeAsset,
+                            Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
+                        }).ToArray(), nextPageRequest);
         }
 
         EndpointOptions<CancelOrderRequest> ISpotOrderRestClient.CancelSpotOrderOptions { get; } = new EndpointOptions<CancelOrderRequest>(true);
@@ -744,6 +832,45 @@ namespace WhiteBit.Net.Clients.V4Api
 
             ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, response.Data);
             return response;
+        }
+
+        async Task<ExchangeResult<SharedSymbol[]>> IFuturesSymbolRestClient.GetFuturesSymbolsForBaseAssetAsync(string baseAsset)
+        {
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId))
+            {
+                var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                if (!symbols)
+                    return new ExchangeResult<SharedSymbol[]>(Exchange, symbols.Error!);
+            }
+
+            return new ExchangeResult<SharedSymbol[]>(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicFuturesId, baseAsset));
+        }
+
+        async Task<ExchangeResult<bool>> IFuturesSymbolRestClient.SupportsFuturesSymbolAsync(SharedSymbol symbol)
+        {
+            if (symbol.TradingMode == TradingMode.Spot)
+                throw new ArgumentException(nameof(symbol), "Spot symbols not allowed");
+
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId))
+            {
+                var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                if (!symbols)
+                    return new ExchangeResult<bool>(Exchange, symbols.Error!);
+            }
+
+            return new ExchangeResult<bool>(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, symbol));
+        }
+
+        async Task<ExchangeResult<bool>> IFuturesSymbolRestClient.SupportsFuturesSymbolAsync(string symbolName)
+        {
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId))
+            {
+                var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                if (!symbols)
+                    return new ExchangeResult<bool>(Exchange, symbols.Error!);
+            }
+
+            return new ExchangeResult<bool>(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, symbolName));
         }
 
         #endregion
@@ -855,53 +982,60 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Position History client
 
-        GetPositionHistoryOptions IPositionHistoryRestClient.GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(SharedPaginationSupport.Descending, true, 100)
+        GetPositionHistoryOptions IPositionHistoryRestClient.GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(false, true, true, 100)
         {
             RequiredOptionalParameters = new List<ParameterDescription>
             {
                 new ParameterDescription(nameof(GetPositionHistoryRequest.Symbol), typeof(SharedSymbol), "The symbol to get position history for", "ETH_PERP")
             }
         };
-        async Task<ExchangeWebResult<SharedPositionHistory[]>> IPositionHistoryRestClient.GetPositionHistoryAsync(GetPositionHistoryRequest request, INextPageToken? pageToken, CancellationToken ct)
+        async Task<ExchangeWebResult<SharedPositionHistory[]>> IPositionHistoryRestClient.GetPositionHistoryAsync(GetPositionHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IPositionHistoryRestClient)this).GetPositionHistoryOptions.ValidateRequest(Exchange, request, request.Symbol?.TradingMode ?? request.TradingMode, SupportedFuturesModes);
             if (validationError != null)
                 return new ExchangeWebResult<SharedPositionHistory[]>(Exchange, validationError);
 
-            // Determine page token
-            int? offset = null;
-            if (pageToken is OffsetToken offsetToken)
-                offset = offsetToken.Offset;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var positions = await CollateralTrading.GetPositionHistoryAsync(
+            var result = await CollateralTrading.GetPositionHistoryAsync(
                 symbol: request.Symbol!.GetSymbol(FormatSymbol),
-                startTime: request.StartTime,
-                endTime: request.EndTime,
-                offset: offset,
-                limit: request.Limit ?? 100,
+                startTime: pageParams.StartTime,
+                endTime: pageParams.EndTime,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct
                 ).ConfigureAwait(false);
-            if (!positions)
-                return positions.AsExchangeResult<SharedPositionHistory[]>(Exchange, null, default);
+            if (!result)
+                return result.AsExchangeResult<SharedPositionHistory[]>(Exchange, null, default);
 
-            // Determine next token
-            OffsetToken? nextToken = null;
-            if (positions.Data.Count() == (request.Limit ?? 100))
-                nextToken = new OffsetToken((offset ?? 0) + request.Limit ?? 100);
+            var nextPageRequest = Pagination.GetNextPageRequest(
+                () => Pagination.NextPageFromOffset(pageParams, limit),
+                result.Data.Length,
+                result.Data.Select(x => x.OpenTime),
+                request.StartTime,
+                request.EndTime ?? DateTime.UtcNow,
+                pageParams);
 
-            return positions.AsExchangeResult<SharedPositionHistory[]>(Exchange, request.Symbol.TradingMode, positions.Data.Select(x => new SharedPositionHistory(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
-                x.Symbol,
-                x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
-                x.BasePrice,
-                x.OrderDetail.BasePrice,
-                x.OrderDetail.TradeQuantity,
-                x.OrderDetail.RealizedPnl ?? 0,
-                x.OpenTime)
-            {
-                PositionId = x.PositionId.ToString()
-            }).ToArray(), nextToken);
+            return result.AsExchangeResult(
+                       Exchange,
+                       request.Symbol.TradingMode,
+                       ExchangeHelpers.ApplyFilter(result.Data, x => x.OpenTime, request.StartTime, request.EndTime, direction)
+                       .Select(x => 
+                           new SharedPositionHistory(
+                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
+                                x.Symbol,
+                                x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
+                                x.BasePrice,
+                                x.OrderDetail.BasePrice,
+                                x.OrderDetail.TradeQuantity,
+                                x.OrderDetail.RealizedPnl ?? 0,
+                                x.OpenTime)
+                            {
+                                PositionId = x.PositionId.ToString()
+                            }).ToArray(), nextPageRequest);
         }
         #endregion
 
@@ -910,7 +1044,7 @@ namespace WhiteBit.Net.Clients.V4Api
         SharedFeeDeductionType IFuturesOrderRestClient.FuturesFeeDeductionType => SharedFeeDeductionType.AddToCost;
         SharedFeeAssetType IFuturesOrderRestClient.FuturesFeeAssetType => SharedFeeAssetType.QuoteAsset;
 
-        SharedOrderType[] IFuturesOrderRestClient.FuturesSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.Market };
+        SharedOrderType[] IFuturesOrderRestClient.FuturesSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.LimitMaker, SharedOrderType.Market };
         SharedTimeInForce[] IFuturesOrderRestClient.FuturesSupportedTimeInForce { get; } = new[] { SharedTimeInForce.GoodTillCanceled, SharedTimeInForce.ImmediateOrCancel, SharedTimeInForce.FillOrKill };
         SharedQuantitySupport IFuturesOrderRestClient.FuturesSupportedOrderQuantity { get; } = new SharedQuantitySupport(
                 SharedQuantityType.BaseAsset,
@@ -940,7 +1074,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var result = await CollateralTrading.PlaceOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
-                request.OrderType == SharedOrderType.Limit ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
+                (request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.LimitMaker) ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
                 quantity: request.Quantity?.QuantityInBaseAsset ?? request.Quantity?.QuantityInContracts,
                 price: request.Price,
                 postOnly: request.OrderType == SharedOrderType.LimitMaker ? true : null,
@@ -948,6 +1082,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 clientOrderId: request.ClientOrderId,
                 takeProfitPrice: request.TakeProfitPrice,
                 stopLossPrice: request.StopLossPrice,
+                positionSide: request.PositionSide.HasValue ? request.PositionSide.Value.ToPositionSide() : null,
                 ct: ct).ConfigureAwait(false);
 
             if (!result)
@@ -989,6 +1124,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled, openOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     TakeProfitPrice = openOrder.OtoData?.TakeProfit,
                     StopLossPrice = openOrder.OtoData?.StopLoss,
                     TriggerPrice = openOrder.TriggerPrice,
@@ -1025,6 +1161,7 @@ namespace WhiteBit.Net.Clients.V4Api
                         QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled, closedOrder.QuantityFilled),
                         TimeInForce = ParseTimeInForce(closedOrder),
                         Fee = closedOrder.Fee,
+                        FeeAsset = closedOrder.FeeAsset,
                         TakeProfitPrice = closedOrder.OtoData?.TakeProfit,
                         StopLossPrice = closedOrder.OtoData?.StopLoss,
                         TriggerPrice = closedOrder.TriggerPrice,
@@ -1063,6 +1200,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
@@ -1070,32 +1208,42 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetClosedOrdersRequest> IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new PaginatedEndpointOptions<GetClosedOrdersRequest>(SharedPaginationSupport.Descending, true, 100, true);
-        async Task<ExchangeWebResult<SharedFuturesOrder[]>> IFuturesOrderRestClient.GetClosedFuturesOrdersAsync(GetClosedOrdersRequest request, INextPageToken? pageToken, CancellationToken ct)
+        GetClosedOrdersOptions IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new GetClosedOrdersOptions(false, true, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
+        async Task<ExchangeWebResult<SharedFuturesOrder[]>> IFuturesOrderRestClient.GetClosedFuturesOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderRestClient)this).GetClosedFuturesOrdersOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedFuturesModes);
             if (validationError != null)
                 return new ExchangeWebResult<SharedFuturesOrder[]>(Exchange, validationError);
 
-            // Determine page token
-            int? offset = null;
-            if (pageToken is OffsetToken offsetToken)
-                offset = offsetToken.Offset;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
 
             // Get data
-            var orders = await Trading.GetClosedOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol),
-                offset: offset,
-                limit: request.Limit ?? 100,
+            var result = await Trading.GetClosedOrdersAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                startTime: pageParams.StartTime,
+                endTime: pageParams.EndTime,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct).ConfigureAwait(false);
-            if (!orders)
-                return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, null, default);
+            if (!result)
+                return result.AsExchangeResult<SharedFuturesOrder[]>(Exchange, null, default);
 
-            // Determine next token
-            OffsetToken? nextToken = null;
-            if (orders.Data.Any())
-                nextToken = new OffsetToken((offset ?? 0) + request.Limit ?? 100);
+            var nextPageRequest = Pagination.GetNextPageRequest(
+               () => Pagination.NextPageFromOffset(pageParams, limit),
+               result.Data.Values.Count,
+               result.Data.Values.SelectMany(x => x.Select(x => x.CreateTime)),
+               request.StartTime,
+               request.EndTime ?? DateTime.UtcNow,
+               pageParams,
+               TimeSpan.FromDays(31),
+               TimeSpan.FromDays(180));
 
-            var data = orders.Data.Where(x => x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedFuturesOrder(
+            var data = result.Data.Where(x => x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedFuturesOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicFuturesId, xk.Key), 
                 xk.Key,
                 x.OrderId.ToString(),
@@ -1113,13 +1261,18 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
                 IsTriggerOrder = x.TriggerPrice > 0
             }));
 
-            return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, request.Symbol.TradingMode, data.OrderByDescending(x => x.CreateTime).ToArray(), nextToken);
+            return result.AsExchangeResult(
+                       Exchange,
+                       request.Symbol.TradingMode,
+                       ExchangeHelpers.ApplyFilter(data, x => x.CreateTime!.Value, request.StartTime, request.EndTime, direction).ToArray(),
+                       nextPageRequest);
         }
 
         EndpointOptions<GetOrderTradesRequest> IFuturesOrderRestClient.GetFuturesOrderTradesOptions { get; } = new EndpointOptions<GetOrderTradesRequest>(true);
@@ -1148,52 +1301,66 @@ namespace WhiteBit.Net.Clients.V4Api
             {
                 ClientOrderId = x.ClientOrderId,
                 Fee = x.Fee,
+                FeeAsset = x.FeeAsset,
                 Role = x.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray());
         }
 
-        PaginatedEndpointOptions<GetUserTradesRequest> IFuturesOrderRestClient.GetFuturesUserTradesOptions { get; } = new PaginatedEndpointOptions<GetUserTradesRequest>(SharedPaginationSupport.Descending, true, 100, true);
-        async Task<ExchangeWebResult<SharedUserTrade[]>> IFuturesOrderRestClient.GetFuturesUserTradesAsync(GetUserTradesRequest request, INextPageToken? pageToken, CancellationToken ct)
+        GetUserTradesOptions IFuturesOrderRestClient.GetFuturesUserTradesOptions { get; } = new GetUserTradesOptions(false, true, true, 100)
+        {
+            MaxAge = TimeSpan.FromDays(180)
+        };
+        async Task<ExchangeWebResult<SharedUserTrade[]>> IFuturesOrderRestClient.GetFuturesUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderRestClient)this).GetFuturesUserTradesOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedFuturesModes);
             if (validationError != null)
                 return new ExchangeWebResult<SharedUserTrade[]>(Exchange, validationError);
 
-            // Determine page token
-            int? offset = null;
-            if (pageToken is OffsetToken offsetToken)
-                offset = offsetToken.Offset;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var orders = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
-                offset: offset,
-                limit: request.Limit ?? 100,
+            var result = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
+                startTime: pageParams.StartTime,
+                endTime: pageParams.EndTime,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct
                 ).ConfigureAwait(false);
-            if (!orders)
-                return orders.AsExchangeResult<SharedUserTrade[]>(Exchange, null, default);
+            if (!result)
+                return result.AsExchangeResult<SharedUserTrade[]>(Exchange, null, default);
 
-            // Get next token
-            OffsetToken? nextToken = null;
-            if (orders.Data.Any())
-                nextToken = new OffsetToken((offset ?? 0) + request.Limit ?? 100);
+            var nextPageRequest = Pagination.GetNextPageRequest(
+                () => Pagination.NextPageFromOffset(pageParams, limit),
+                result.Data.Length,
+                result.Data.Select(x => x.Time),
+                request.StartTime,
+                request.EndTime ?? DateTime.UtcNow,
+                pageParams,
+                maxAge: TimeSpan.FromDays(180));
 
-            var data = orders.Data.Select(y => new SharedUserTrade(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, y.Symbol), 
-                y.Symbol,
-                y.OrderId.ToString(),
-                y.Id.ToString(),
-                y.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                y.Quantity,
-                y.Price,
-                y.Time)
-            {
-                ClientOrderId = y.ClientOrderId,
-                Fee = y.Fee,
-                Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
-            }).ToArray();
-
-            return orders.AsExchangeResult<SharedUserTrade[]>(Exchange, TradingMode.PerpetualLinear, data, nextToken);
+            return result.AsExchangeResult(
+                       Exchange,
+                       TradingMode.Spot,
+                       ExchangeHelpers.ApplyFilter(result.Data, x => x.Time, request.StartTime, request.EndTime, direction)
+                       .Select(y => 
+                           new SharedUserTrade(
+                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, y.Symbol), 
+                                y.Symbol,
+                                y.OrderId.ToString(),
+                                y.Id.ToString(),
+                                y.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
+                                y.Quantity,
+                                y.Price,
+                                y.Time)
+                            {
+                                ClientOrderId = y.ClientOrderId,
+                                Fee = y.Fee,
+                                FeeAsset = y.FeeAsset,
+                                Role = y.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
+                            })
+                       .ToArray(), nextPageRequest);
         }
 
         EndpointOptions<CancelOrderRequest> IFuturesOrderRestClient.CancelFuturesOrderOptions { get; } = new EndpointOptions<CancelOrderRequest>(true);
@@ -1232,6 +1399,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 UnrealizedPnl = x.Pnl,
                 LiquidationPrice = x.LiquidationPrice == 0 ? null : x.LiquidationPrice,
                 AverageOpenPrice = x.BasePrice,
+                PositionMode = SharedPositionMode.OneWay,
                 PositionSide = x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short, 
                 TakeProfitPrice = x.TpSl?.TakeProfitPrice,
                 StopLossPrice = x.TpSl?.StopLossPrice
@@ -1355,6 +1523,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     ClientOrderId = openOrder.ClientOrderId
                 });
             }
@@ -1385,6 +1554,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
                     Fee = closedOrder.Fee,
+                    FeeAsset = closedOrder.FeeAsset,
                     ClientOrderId = closedOrder.ClientOrderId
                 });
             }
@@ -1432,6 +1602,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 triggerPrice: request.TriggerPrice,
                 price: request.OrderPrice,
                 clientOrderId: request.ClientOrderId,
+                positionSide: request.PositionSide.ToPositionSide(),
                 ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.AsExchangeResult<SharedId>(Exchange, null, default);
@@ -1485,6 +1656,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled, contractQuantity: openOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
                     Fee = openOrder.Fee,
+                    FeeAsset = openOrder.FeeAsset,
                     ClientOrderId = openOrder.ClientOrderId
                 });
             }
@@ -1516,7 +1688,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     OrderQuantity = new SharedOrderQuantity(closedOrder.Quantity, contractQuantity: closedOrder.Quantity),
                     QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled, contractQuantity: closedOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
-                    Fee = closedOrder.Fee
+                    Fee = closedOrder.Fee,
+                    FeeAsset = closedOrder.FeeAsset
                 });
             }
         }
@@ -1615,34 +1788,44 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Funding Rate client
-        GetFundingRateHistoryOptions IFundingRateRestClient.GetFundingRateHistoryOptions { get; } = new GetFundingRateHistoryOptions(SharedPaginationSupport.Descending, true, 100, false);
+        GetFundingRateHistoryOptions IFundingRateRestClient.GetFundingRateHistoryOptions { get; } = new GetFundingRateHistoryOptions(false, true, true, 100, false);
 
-        async Task<ExchangeWebResult<SharedFundingRate[]>> IFundingRateRestClient.GetFundingRateHistoryAsync(GetFundingRateHistoryRequest request, INextPageToken? pageToken, CancellationToken ct)
+        async Task<ExchangeWebResult<SharedFundingRate[]>> IFundingRateRestClient.GetFundingRateHistoryAsync(GetFundingRateHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
             var validationError = ((IFundingRateRestClient)this).GetFundingRateHistoryOptions.ValidateRequest(Exchange, request, request.TradingMode, SupportedTradingModes);
             if (validationError != null)
                 return new ExchangeWebResult<SharedFundingRate[]>(Exchange, validationError);
 
-            DateTime? fromTime = null;
-            if (pageToken is DateTimeToken token)
-                fromTime = token.LastTime;
+            var direction = DataDirection.Descending;
+            var limit = request.Limit ?? 100;
+            var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
             var result = await ExchangeData.GetFundingHistoryAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
-                startTime: fromTime ?? request.StartTime,
-                endTime: request.EndTime,
-                limit: request.Limit ?? 100,
+                startTime: pageParams.StartTime,
+                endTime: pageParams.EndTime,
+                limit: limit,
+                offset: pageParams.Offset,
                 ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.AsExchangeResult<SharedFundingRate[]>(Exchange, null, default);
 
-            DateTimeToken? nextToken = null;
-            if (result.Data.Count() == (request.Limit ?? 100))
-                nextToken = new DateTimeToken(result.Data.Min(x => x.FundingTime).AddSeconds(-1));
+            var nextPageRequest = Pagination.GetNextPageRequest(
+                 () => Pagination.NextPageFromOffset(pageParams, limit),
+                 result.Data.Length,
+                 result.Data.Select(x => x.FundingTime),
+                 request.StartTime,
+                 request.EndTime ?? DateTime.UtcNow,
+                 pageParams);
 
-            // Return
-            return result.AsExchangeResult(Exchange, request.Symbol.TradingMode, result.Data.Select(x => new SharedFundingRate(x.FundingRate, x.FundingTime)).ToArray(), nextToken);
+            return result.AsExchangeResult(
+                       Exchange,
+                       request.Symbol.TradingMode,
+                       ExchangeHelpers.ApplyFilter(result.Data, x => x.FundingTime, request.StartTime, request.EndTime, direction)
+                       .Select(x => 
+                           new SharedFundingRate(x.FundingRate, x.FundingTime))
+                       .ToArray(), nextPageRequest);
         }
         #endregion
 

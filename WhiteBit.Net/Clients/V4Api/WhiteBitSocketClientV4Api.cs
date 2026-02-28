@@ -36,15 +36,6 @@ namespace WhiteBit.Net.Clients.V4Api
     internal partial class WhiteBitSocketClientV4Api : SocketApiClient, IWhiteBitSocketClientV4Api
     {
         #region fields
-        private static readonly MessagePath _idPath = MessagePath.Get().Property("id");
-        private static readonly MessagePath _methodPath = MessagePath.Get().Property("method");
-        private static readonly MessagePath _index0SymbolPath = MessagePath.Get().Property("params").Index(0);
-        private static readonly MessagePath _index7SymbolPath = MessagePath.Get().Property("params").Index(0).Index(7);
-        private static readonly MessagePath _index2SymbolPath = MessagePath.Get().Property("params").Index(2);
-        private static readonly MessagePath _ordersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("market");
-        private static readonly MessagePath _otoOrdersSymbolPath = MessagePath.Get().Property("params").Index(1).Property("trigger_order").Property("market");
-        private static readonly MessagePath _orderExecutedSymbolPath = MessagePath.Get().Property("params").Property("market");
-        private static readonly MessagePath _bookTickerSymbolPath = MessagePath.Get().Property("params").Index(0).Index(2);
 
         /// <inheritdoc />
         public new WhiteBitSocketOptions ClientOptions => (WhiteBitSocketOptions)base.ClientOptions;
@@ -85,8 +76,6 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         /// <inheritdoc />
-        protected override IByteMessageAccessor CreateAccessor(WebSocketMessageType type) => new SystemTextJsonByteMessageAccessor(WhiteBitExchange._serializerContext);
-        /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
         public override ISocketMessageHandler CreateMessageConverter(WebSocketMessageType messageType) => new WhiteBitSocketMessageHandler();
@@ -118,10 +107,14 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitTradeUpdate>>((receiveTime, originalData, invocations, data) =>
             {
+                DateTime? timestamp = data.Data!.Trades.Length > 0 ? data.Data.Trades.Max(x => x.Timestamp) : null;
+                if (timestamp != null)
+                    UpdateTimeOffset(timestamp.Value);
+
                 onMessage(
                     new DataEvent<WhiteBitTradeUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
-                        .WithDataTimestamp(data.Data!.Trades.Length > 0 ? data.Data.Trades.Max(x => x.Timestamp) : null)
+                        .WithDataTimestamp(timestamp, GetTimeOffset())
                         .WithStreamId("trades")
                         .WithSymbol(data.Data.Symbol)
                     );
@@ -212,10 +205,14 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
             {
+                DateTime? timestamp = data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null;
+                if (timestamp != null)
+                    UpdateTimeOffset(timestamp.Value);
+
                 onMessage(
                     new DataEvent<WhiteBitBookTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!.First(), receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
-                        .WithDataTimestamp(data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null)
+                        .WithDataTimestamp(timestamp, GetTimeOffset())
                         .WithStreamId("bookTicker")
                         .WithSymbol(data.Data.First().Symbol)
                     );
@@ -230,10 +227,14 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
             {
+                DateTime? timestamp = data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null;
+                if (timestamp != null)
+                    UpdateTimeOffset(timestamp.Value);
+
                 onMessage(
                     new DataEvent<WhiteBitBookTickerUpdate>(WhiteBitExchange.ExchangeName, data.Data!.First(), receiveTime, originalData)
                         .WithUpdateType(SocketUpdateType.Update)
-                        .WithDataTimestamp(data.Data!.Length > 0 ? data.Data.Max(x => x.DataTime) : null)
+                        .WithDataTimestamp(timestamp, GetTimeOffset())
                         .WithStreamId("bookTicker")
                         .WithSymbol(data.Data.First().Symbol)
                     );
@@ -290,7 +291,7 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             depth.ValidateIntValues(nameof(depth), 1, 5, 10, 20, 30, 50, 100);
 
-            var subscription = new WhiteBitBookSubscription(_logger, this, symbol, depth, x => onMessage(x.WithDataTimestamp(x.Data.OrderBook.Timestamp)));
+            var subscription = new WhiteBitBookSubscription(_logger, this, symbol, depth, onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
 
@@ -415,7 +416,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> onMessage, CancellationToken ct = default)
         {
-            var subscription = new WhiteBitUserTradeSubscription(_logger, this, symbols.ToArray(), x => onMessage(x.WithDataTimestamp(x.Data.Time)));
+            var subscription = new WhiteBitUserTradeSubscription(_logger, this, symbols.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
@@ -427,10 +428,14 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitPositionsUpdate>>((receiveTime, originalData, invocations, data) =>
             {
+                DateTime? timestamp = data.Data!.Records.Length > 0 ? data.Data.Records.Max(x => x.UpdateTime) : null;
+                if (timestamp != null)
+                    UpdateTimeOffset(timestamp.Value);
+
                 onMessage(
                     new DataEvent<WhiteBitPositionsUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
-                        .WithDataTimestamp(data.Data!.Records.Length > 0 ? data.Data.Records.Max(x => x.UpdateTime) : null)
+                        .WithDataTimestamp(timestamp, GetTimeOffset())
                         .WithStreamId("positionsMargin")
                     );
             });
@@ -447,10 +452,13 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBorrow>>((receiveTime, originalData, invocations, data) =>
             {
+                if (data.Data!.UpdateTime != null)
+                    UpdateTimeOffset(data.Data.UpdateTime.Value);
+
                 onMessage(
                     new DataEvent<WhiteBitBorrow>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
-                        .WithDataTimestamp(data.Data!.UpdateTime)
+                        .WithDataTimestamp(data.Data!.UpdateTime, GetTimeOffset())
                         .WithStreamId("borrowsMargin")
                     );
             });
@@ -467,10 +475,12 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountMarginPositionUpdate>>((receiveTime, originalData, invocations, data) =>
             {
+                UpdateTimeOffset(data.Data!.PositionInfo.UpdateTime);
+
                 onMessage(
                     new DataEvent<WhiteBitAccountMarginPositionUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
-                        .WithDataTimestamp(data.Data!.PositionInfo.UpdateTime)
+                        .WithDataTimestamp(data.Data!.PositionInfo.UpdateTime, GetTimeOffset())
                         .WithStreamId("positionsAccountMargin")
                     );
             });
@@ -487,10 +497,13 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountBorrowUpdate>>((receiveTime, originalData, invocations, data) =>
             {
+                if (data.Data!.BorrowInfo.UpdateTime != null)
+                    UpdateTimeOffset(data.Data!.BorrowInfo.UpdateTime.Value);
+
                 onMessage(
                     new DataEvent<WhiteBitAccountBorrowUpdate>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
                         .WithUpdateType(invocations == 1 ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
-                        .WithDataTimestamp(data.Data!.BorrowInfo.UpdateTime)
+                        .WithDataTimestamp(data.Data!.BorrowInfo.UpdateTime, GetTimeOffset())
                         .WithStreamId("positionsAccountMargin")
                     );
             });
@@ -499,40 +512,6 @@ namespace WhiteBit.Net.Clients.V4Api
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
         }
         #endregion
-
-        /// <inheritdoc />
-        public override string? GetListenerIdentifier(IMessageAccessor message)
-        {
-            var id = message.GetValue<long?>(_idPath);
-            if (id != null)
-                return id.ToString();
-
-            var method = message.GetValue<string>(_methodPath);
-            if (method == null)
-                return null;
-
-            if (method.Equals("trades_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index0SymbolPath);
-            if (method.Equals("lastprice_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index0SymbolPath);
-            if (method.Equals("market_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index0SymbolPath);
-            if (method.Equals("candles_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index7SymbolPath);
-            if (method.Equals("depth_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_index2SymbolPath);
-            if (method.Equals("bookTicker_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_bookTickerSymbolPath);
-
-            if (method.Equals("ordersPending_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_ordersSymbolPath);
-            if (method.Equals("otoOrdersPending_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_otoOrdersSymbolPath);
-            if (method.Equals("ordersExecuted_update", StringComparison.Ordinal))
-                return method + "." + message.GetValue<string>(_orderExecutedSymbolPath);
-
-            return method;
-        }
 
         private async Task<CallResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
         {

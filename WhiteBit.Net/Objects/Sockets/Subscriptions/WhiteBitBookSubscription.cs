@@ -31,7 +31,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _depth = depth;
             Topic = "OrderBook";
 
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitBookUpdate>>(MessageLinkType.Full, "depth_update." + symbol, DoHandleMessage);
             MessageRouter = MessageRouter.CreateWithTopicFilter<WhiteBitSocketUpdate<WhiteBitBookUpdate>>("depth_update", symbol, DoHandleMessage);
         }
 
@@ -60,11 +59,15 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         /// <inheritdoc />
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<WhiteBitBookUpdate> message)
         {
+            _client.UpdateTimeOffset(message.Data!.OrderBook.EventTime);
+
             _handler.Invoke(
                 new DataEvent<WhiteBitBookUpdate>(WhiteBitExchange.ExchangeName, message.Data!, receiveTime, originalData)
                     .WithStreamId(message.Method)
                     .WithSymbol(message.Data!.Symbol)
+                    .WithDataTimestamp(message.Data!.OrderBook.EventTime, _client.GetTimeOffset())
                     .WithUpdateType(message.Data!.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
+                    .WithSequenceNumber(message.Data.OrderBook.UpdateId)
                 );
             return CallResult.SuccessResult;
         }

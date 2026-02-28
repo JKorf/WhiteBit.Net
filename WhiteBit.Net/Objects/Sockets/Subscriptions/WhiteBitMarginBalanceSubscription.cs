@@ -31,7 +31,6 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols.ToArray();
             Topic = "MarginBalance";
 
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>(MessageLinkType.Full, "balanceMargin_update", DoHandleMessage);
             MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>("balanceMargin_update", DoHandleMessage);
         }
 

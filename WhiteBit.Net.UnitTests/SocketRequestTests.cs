@@ -16,14 +16,13 @@ namespace WhiteBit.Net.UnitTests
     [TestFixture]
     public class SocketRequestTests
     {
-        private WhiteBitSocketClient CreateClient(bool useUpdatedDeserialization)
+        private WhiteBitSocketClient CreateClient()
         {
             var fact = new LoggerFactory();
             fact.AddProvider(new TraceLoggerProvider());
             var client = new WhiteBitSocketClient(Options.Create(new WhiteBitSocketOptions
             {
                 OutputOriginalData = true,
-                UseUpdatedDeserialization = useUpdatedDeserialization,
                 RequestTimeout = TimeSpan.FromSeconds(5),
                 ApiCredentials = new ApiCredentials("123", "123", "123"),
                 Environment = new WhiteBitEnvironment("UnitTest", "https://localhost", "wss://localhost")
@@ -31,21 +30,20 @@ namespace WhiteBit.Net.UnitTests
             return client;
         }
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public async Task ValidateExchangeApiCalls(bool useUpdatedDeserialization)
+        [Test]
+        public async Task ValidateExchangeApiCalls()
         {
             var tester = new SocketRequestValidator<WhiteBitSocketClient>("Socket/V4Api");
 
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetTradeHistoryAsync("ETH-USDT", 1), "GetTradeHistory", nestedJsonProperty: "result", ignoreProperties: [ ]);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetLastPriceAsync("ETH-USDT"), "GetLastPrice", nestedJsonProperty: "result", ignoreProperties: [ ]);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetTickerAsync("ETH-USDT"), "GetTicker", nestedJsonProperty: "result", ignoreProperties: [ ]);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetKlinesAsync("ETH-USDT", KlineInterval.SixHours, DateTime.UtcNow, DateTime.UtcNow), "GetKlines", nestedJsonProperty: "result", ignoreProperties: [ ]);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetOrderBookAsync("ETH-USDT", 1), "GetOrderBook", nestedJsonProperty: "result", ignoreProperties: [ ]);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetSpotBalancesAsync(), "GetSpotBalances", nestedJsonProperty: "result", ignoreProperties: [ ], skipResponseValidation: true);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetMarginBalancesAsync(), "GetMarginBalances", nestedJsonProperty: "result", ignoreProperties: [ ], skipResponseValidation: true);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetOpenOrdersAsync("ETH-USDT"), "GetOpenOrders", nestedJsonProperty: "result", ignoreProperties: [ ]);
-            await tester.ValidateAsync(CreateClient(useUpdatedDeserialization), client => client.V4Api.GetClosedOrdersAsync("ETH-USDT"), "GetClosedOrders", nestedJsonProperty: "result", ignoreProperties: [ ]);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetTradeHistoryAsync("ETH-USDT", 1), "GetTradeHistory", nestedJsonProperty: "result", ignoreProperties: [ ]);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetLastPriceAsync("ETH-USDT"), "GetLastPrice", nestedJsonProperty: "result", ignoreProperties: [ ]);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetTickerAsync("ETH-USDT"), "GetTicker", nestedJsonProperty: "result", ignoreProperties: [ ]);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetKlinesAsync("ETH-USDT", KlineInterval.SixHours, DateTime.UtcNow, DateTime.UtcNow), "GetKlines", nestedJsonProperty: "result", ignoreProperties: [ ]);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetOrderBookAsync("ETH-USDT", 1), "GetOrderBook", nestedJsonProperty: "result", ignoreProperties: [ ]);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetSpotBalancesAsync(), "GetSpotBalances", nestedJsonProperty: "result", ignoreProperties: [ ], skipResponseValidation: true);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetMarginBalancesAsync(), "GetMarginBalances", nestedJsonProperty: "result", ignoreProperties: [ ], skipResponseValidation: true);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetOpenOrdersAsync("ETH-USDT"), "GetOpenOrders", nestedJsonProperty: "result", ignoreProperties: [ ]);
+            await tester.ValidateAsync(CreateClient(), client => client.V4Api.GetClosedOrdersAsync("ETH-USDT"), "GetClosedOrders", nestedJsonProperty: "result", ignoreProperties: [ ]);
         }
     }
 }

@@ -15,7 +15,6 @@ namespace WhiteBit.Net.Objects.Sockets
         {
             _client = client;
 
-            MessageMatcher = MessageMatcher.Create<WhiteBitSocketResponse<T>>(MessageLinkType.Full, request.Id.ToString(), HandleMessage);
             MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketResponse<T>>(request.Id.ToString(), HandleMessage);
         }
 
