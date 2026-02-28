@@ -1,0 +1,27 @@
+POST
+/api/v4/collateral-account/funding-history
+true
+{
+  "records": [
+    {
+      "market": "BTC_PERP",
+      "fundingTime": "1772265600",
+      "fundingRate": "0.00000985",
+      "fundingAmount": "-0.013205241945",
+      "positionAmount": "0.021",
+      "settlementPrice": "63839.7",
+      "rateCalculatedTime": "1772236800"
+    },
+    {
+      "market": "BTC_PERP",
+      "fundingTime": "1772236800",
+      "fundingRate": "0.00007199",
+      "fundingAmount": "-0.004743104344",
+      "positionAmount": "0.001",
+      "settlementPrice": "65885.6",
+      "rateCalculatedTime": "1772208000"
+    }
+ ],
+  "limit": 100,
+  "offset": 0
+}
