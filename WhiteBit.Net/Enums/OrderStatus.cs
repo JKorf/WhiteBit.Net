@@ -29,6 +29,11 @@ namespace WhiteBit.Net.Enums
         /// Partially filled
         /// </summary>
         [Map("PARTIALLY_FILLED")]
-        PartiallyFilled
+        PartiallyFilled,
+        /// <summary>
+        /// Auto canceled due to insufficient margin
+        /// </summary>
+        [Map("AUTO_CANCELED_USER_MARGIN")]
+        AutoCanceledUserMargin
     }
 }
