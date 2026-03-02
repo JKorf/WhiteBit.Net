@@ -159,6 +159,29 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebCallResult<WhiteBitCollateralAccountSummary>> GetCollateralAccountSummaryAsync(CancellationToken ct = default);
 
         /// <summary>
+        /// Asynchronously retrieves the account funding history for the specified trading pair.
+        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#funding-history" /></para>
+        /// </summary>
+        /// <param name="symbol">The trading pair symbol for which to retrieve the funding history, such as "BTC_PERP". This value cannot be
+        /// null or empty.</param>
+        /// <param name="startTime">The optional UTC start time for the funding history retrieval. If specified, only records after this time
+        /// are returned.</param>
+        /// <param name="endTime">The optional UTC end time for the funding history retrieval. If specified, only records before this time are
+        /// returned.</param>
+        /// <param name="limit">The optional maximum number of records to return. If not specified, a default limit is applied.</param>
+        /// <param name="offset">The optional offset for pagination. Specifies the number of records to skip before returning results.</param>
+        /// <param name="ct">A cancellation token that can be used to cancel the asynchronous operation.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a WebCallResult with the funding
+        /// history records for the specified account and symbol.</returns>
+        Task<WebCallResult<WhiteBitAccountFundingHistories>> GetAccountFundingHistoryAsync(
+            string symbol,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            int? limit = null,
+            int? offset = null,
+            CancellationToken ct = default);
+
+        /// <summary>
         /// Set leverage for the entire account, both spot margin and futures. Spot margin leverage is capped at x20.
         /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#change-collateral-account-leverage" /></para>
         /// </summary>

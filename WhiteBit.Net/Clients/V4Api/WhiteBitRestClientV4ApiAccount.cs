@@ -283,6 +283,34 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
+        #region Get Account Funding History
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitAccountFundingHistories>> GetAccountFundingHistoryAsync(
+            string symbol,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            int? limit = null,
+            int? offset = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection
+            {
+                { "market", symbol }
+            };
+
+            parameters.AddOptionalSeconds("startDate", startTime);
+            parameters.AddOptionalSeconds("endDate", endTime);
+            parameters.AddOptional("limit", limit);
+            parameters.AddOptional("offset", offset);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, 
+                "/api/v4/collateral-account/funding-history", 
+                WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+            return await _baseClient.SendAsync<WhiteBitAccountFundingHistories>(request, parameters, ct).ConfigureAwait(false);
+        }
+        #endregion
+
         #region Set Account Leverage
 
         /// <inheritdoc />

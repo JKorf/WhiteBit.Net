@@ -57,6 +57,7 @@ namespace WhiteBit.Net.UnitTests
             await RunAndCheckResult(client => client.V4Api.Account.GetCollateralBalancesAsync(default, default), true);
             await RunAndCheckResult(client => client.V4Api.Account.GetCollateralBalanceSummaryAsync(default), true);
             await RunAndCheckResult(client => client.V4Api.Account.GetCollateralAccountSummaryAsync(default), true);
+            await RunAndCheckResult(client => client.V4Api.Account.GetAccountFundingHistoryAsync(default), true);
         }
 
         [Test]
