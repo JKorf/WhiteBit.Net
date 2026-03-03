@@ -13,7 +13,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Create a new sub account
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-sub-account" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-sub-account" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/create
+        /// </para>
         /// </summary>
         /// <param name="alias">Account name</param>
         /// <param name="email">If provided an invitation email will be send</param>
@@ -25,7 +30,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         
         /// <summary>
         /// Delete a sub account
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#delete-sub-account" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#delete-sub-account" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/delete
+        /// </para>
         /// </summary>
         /// <param name="id">Sub account id</param>
         /// <param name="ct">Cancellation token</param>
@@ -33,7 +43,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Edit a sub account
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/edit
+        /// </para>
         /// </summary>
         /// <param name="id">Sub account id</param>
         /// <param name="alias">Sub account alias</param>
@@ -44,7 +59,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get sub account list
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/list
+        /// </para>
         /// </summary>
         /// <param name="search">Search string</param>
         /// <param name="limit">Max number of results</param>
@@ -54,7 +74,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Transfer to or from sub account
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-transfer" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-transfer" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/transfer
+        /// </para>
         /// </summary>
         /// <param name="subaccountId">Sub account id</param>
         /// <param name="direction">Transfer direction</param>
@@ -65,7 +90,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Block a sub account
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#block-sub-account" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#block-sub-account" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/block
+        /// </para>
         /// </summary>
         /// <param name="id">Sub account id</param>
         /// <param name="ct">Cancellation token</param>
@@ -73,7 +103,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Unblock a sub account
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#unblock-sub-account" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#unblock-sub-account" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/unblock
+        /// </para>
         /// </summary>
         /// <param name="id">Sub account id</param>
         /// <param name="ct">Cancellation token</param>
@@ -81,7 +116,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get sub account balances
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-balances" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-balances" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/balances
+        /// </para>
         /// </summary>
         /// <param name="id">Sub account id</param>
         /// <param name="asset">Asset name</param>
@@ -90,7 +130,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get sub account transfer history
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-sub-account-transfer-history" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-sub-account-transfer-history" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/sub-account/transfer/history
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitSubaccountTransferHistory>> GetSubaccountTransferHistoryAsync(CancellationToken ct = default);

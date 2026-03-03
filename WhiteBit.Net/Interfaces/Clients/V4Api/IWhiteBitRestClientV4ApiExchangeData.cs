@@ -14,7 +14,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Get the current server time
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#server-time" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#server-time" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/time
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -22,35 +27,60 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get symbols list
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#market-info" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#market-info" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/markets
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitSymbol[]>> GetSymbolsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get system/platform status
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#maintenance-status" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#maintenance-status" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/platform/status
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitSystemStatus>> GetSystemStatusAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get tickers
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#market-activity" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#market-activity" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/ticker
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitTicker[]>> GetTickersAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get asset information
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#asset-status-list" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#asset-status-list" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/assets
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitAsset[]>> GetAssetsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get the order book for a symbol
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#orderbook" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#orderbook" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/orderbook/{symbol}
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
         /// <param name="limit">The order book depth, max 100</param>
@@ -60,7 +90,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get the most recent 100 trades
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#recent-trades" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#recent-trades" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/trades/{symbol}
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="side">Filter by trade side</param>
@@ -69,21 +104,36 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get withdrawal/deposit limits and fees
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#fee" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#fee" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/fee
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitDepositWithdraw>> GetDepositWithdrawalInfoAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get collateral symbols
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#collateral-markets-list" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#collateral-markets-list" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/collateral/markets
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<string[]>> GetCollateralSymbolsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get futures symbols
-        /// <para><a href="https://docs.whitebit.com/public/http-v4/#available-futures-markets-list" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/public/http-v4/#available-futures-markets-list" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/public/futures
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitFuturesSymbol[]>> GetFuturesSymbolsAsync(CancellationToken ct = default);

@@ -13,7 +13,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Get convert estimate
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert-estimate" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#convert-estimate" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/convert/estimate
+        /// </para>
         /// </summary>
         /// <param name="fromAsset">From asset</param>
         /// <param name="toAsset">To asset</param>
@@ -24,7 +29,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Accept/confirm a convert estimate
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert-confirm" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#convert-confirm" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/convert/confirm
+        /// </para>
         /// </summary>
         /// <param name="estimateId">Quote/estimate id</param>
         /// <param name="ct">Cancellation token</param>
@@ -32,7 +42,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get convert history
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#convert-history" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#convert-history" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/convert/history
+        /// </para>
         /// </summary>
         /// <param name="fromAsset">Filter by from asset</param>
         /// <param name="toAsset">Filter by to asset</param>
