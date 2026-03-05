@@ -15,14 +15,24 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Get main account balances
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#main-balance" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#main-balance" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/balance
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitMainBalance[]>> GetMainBalancesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get deposit address
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-cryptocurrency-deposit-address" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-cryptocurrency-deposit-address" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/address
+        /// </para>
         /// </summary>
         /// <param name="asset">The asset</param>
         /// <param name="network">Network to use</param>
@@ -31,7 +41,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get spot trading balances
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#trading-balance" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#trading-balance" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/trade-account/balance
+        /// </para>
         /// </summary>
         /// <param name="asset">Filter by asset</param>
         /// <param name="ct">Cancellation token</param>
@@ -39,7 +54,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get fiat deposit url, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-fiat-deposit-address" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-fiat-deposit-address" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/fiat-deposit-url
+        /// </para>
         /// </summary>
         /// <param name="asset">The asset</param>
         /// <param name="provider">The provider</param>
@@ -61,8 +81,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Withdraw fiat or crypto
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request-with-the-specific-withdraw-amount-fee-is-not-included" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request-with-the-specific-withdraw-amount-fee-is-not-included" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/withdraw<br />
+        /// POST /api/v4/main-account/withdraw-pay
+        /// </para>
         /// </summary>
         /// <param name="asset">The asset, for example `ETH`</param>
         /// <param name="quantity">Quantity to withdraw</param>
@@ -83,7 +109,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         
         /// <summary>
         /// Transfer between accounts
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#transfer-between-balances" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#transfer-between-balances" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/transfer
+        /// </para>
         /// </summary>
         /// <param name="fromAccount">From account</param>
         /// <param name="toAccount">To account</param>
@@ -94,7 +125,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get deposit/withdrawal history
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-depositwithdraw-history" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-depositwithdraw-history" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/history
+        /// </para>
         /// </summary>
         /// <param name="type">Filter by type</param>
         /// <param name="asset">Filter by asset</param>
@@ -109,7 +145,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Create a new deposit address, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-new-address-for-deposit" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-new-address-for-deposit" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/create-new-address
+        /// </para>
         /// </summary>
         /// <param name="asset">Asset name</param>
         /// <param name="network">Asset network</param>
@@ -119,14 +160,24 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get deposit/withdrawal settings
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#fees" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#fees" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/fee
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitDepositWithdrawalSetting[]>> GetDepositWithdrawalSettingsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get mining rewards history
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-rewards" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-rewards" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/mining/rewards
+        /// </para>
         /// </summary>
         /// <param name="accountName">Filter by account name</param>
         /// <param name="startTime">Filter by start time</param>
@@ -138,7 +189,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get collateral balances
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/balance
+        /// </para>
         /// </summary>
         /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="ct">Cancellation token</param>
@@ -146,21 +202,36 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get collateral balance summary
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance-summary" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance-summary" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/balance-summary
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitCollateralSummary[]>> GetCollateralBalanceSummaryAsync(CancellationToken ct = default);
         
         /// <summary>
         /// Get collateral account summary
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-summary" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-summary" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/summary
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitCollateralAccountSummary>> GetCollateralAccountSummaryAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Asynchronously retrieves the account funding history for the specified trading pair.
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#funding-history" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#funding-history" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/funding-history
+        /// </para>
         /// </summary>
         /// <param name="symbol">The trading pair symbol for which to retrieve the funding history, such as "BTC_PERP". This value cannot be
         /// null or empty.</param>
@@ -183,7 +254,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Set leverage for the entire account, both spot margin and futures. Spot margin leverage is capped at x20.
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#change-collateral-account-leverage" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#change-collateral-account-leverage" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/leverage
+        /// </para>
         /// </summary>
         /// <param name="leverage">New leverage setting</param>
         /// <param name="ct">Cancellation token</param>
@@ -191,21 +267,36 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get the users trading fees
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-all-market-fees" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-all-market-fees" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/market/fee
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitTradingFees>> GetTradingFeesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get current hedge mode status
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/hedge-mode
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitHedgeMode>> GetHedgeModeAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Set hedge mode
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/hedge-mode/update
+        /// </para>
         /// </summary>
         /// <param name="enableHedgeMode">Hedge mode enabled or not</param>
         /// <param name="ct">Cancellation token</param>

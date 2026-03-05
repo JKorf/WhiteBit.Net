@@ -15,11 +15,20 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Place a new order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-limit-order" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-buy-stock-market-order" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-limit-order" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-market-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-buy-stock-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-market-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/new<br />
+        /// POST /api/v4/order/market<br />
+        /// POST /api/v4/order/stock_market<br />
+        /// POST /api/v4/order/stop_limit<br />
+        /// POST /api/v4/order/stop_market
+        /// </para>
         /// </summary>
         /// <param name="symbol">Symbol, for example `ETH_USDT`</param>
         /// <param name="side">Order side</param>
@@ -52,7 +61,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Place multiple order in a single call. Only supports limit orders. Check the response data for individual order placement results
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#bulk-limit-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#bulk-limit-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/bulk
+        /// </para>
         /// </summary>
         /// <param name="requests">Orders to place, max 20</param>
         /// <param name="ct">Cancellation token</param>
@@ -62,7 +76,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Cancel an order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/cancel
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
         /// <param name="orderId">The order id, either this or `clientOrderId` has to be provided</param>
@@ -72,7 +91,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Cancel all orders
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-all-orders" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-all-orders" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/cancel/all
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter by symbol</param>
         /// <param name="orderProductTypes">Filter by order product types</param>
@@ -81,7 +105,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get list of currently open orders
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-orders" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-orders" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/orders
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter symbol, for example `ETH_USDT`</param>
         /// <param name="orderId">Filter by order id</param>
@@ -93,7 +122,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get list of closed orders per symbol
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-orders" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-orders" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/trade-account/order/history
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter by symbol, for example `ETH_USDT`</param>
         /// <param name="orderId">Filter by order id</param>
@@ -117,7 +151,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get user trade history
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-history" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-history" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/trade-account/executed-history
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter by symbol, for example `ETH_USDT`</param>
         /// <param name="clientOrderId">Filter by client order id</param>
@@ -130,7 +169,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get trades for a specific order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-deals" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-deals" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/trade-account/order
+        /// </para>
         /// </summary>
         /// <param name="orderId">The order id</param>
         /// <param name="limit">Max number of results</param>
@@ -140,7 +184,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Edit an order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#modify-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#modify-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/modify
+        /// </para>
         /// </summary>
         /// <param name="orderId">The order id, either this or `clientOrderId` should be provided</param>
         /// <param name="clientOrderId">Client order id, either this or `orderId` should be provided</param>
@@ -154,7 +203,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Set a kill switch. After the specified timeout all order fitting the parameters will be canceled unless the kill switch endpoint is called again to extend or cancel the timeout
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#sync-kill-switch-timer" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#sync-kill-switch-timer" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/kill-switch
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
         /// <param name="timeout">The timeout in seconds, or 0 to cancel the kill switch</param>
@@ -164,7 +218,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get the status of enabled kill switches
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#status-kill-switch-timer" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#status-kill-switch-timer" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/kill-switch/status
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter by symbol</param>
         /// <param name="ct">Cancellation token</param>

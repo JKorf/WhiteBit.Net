@@ -14,10 +14,18 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Place a new order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-limit-order" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-market-order" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-stop-limit-order" /></para>
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-trigger-market-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-stop-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-trigger-market-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/collateral/limit<br />
+        /// POST /api/v4/order/collateral/market<br />
+        /// POST /api/v4/order/collateral/stop-limit<br />
+        /// POST /api/v4/order/collateral/trigger-market
+        /// </para>
         /// </summary>
         /// <param name="symbol">Symbol</param>
         /// <param name="side">Order side</param>
@@ -53,7 +61,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get open positions
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#open-positions" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#open-positions" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/positions/open
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter by symbol</param>
         /// <param name="ct">Cancellation token</param>
@@ -61,7 +74,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get position history
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#positions-history" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#positions-history" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/collateral-account/positions/history
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
         /// <param name="positionId">Filter by position id</param>
@@ -74,7 +92,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get open conditional orders
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-conditional-orders" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-conditional-orders" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/conditional-orders
+        /// </para>
         /// </summary>
         /// <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
         /// <param name="limit">Max number of results</param>
@@ -84,7 +107,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Place a new OCO order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#create-collateral-oco-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-collateral-oco-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/collateral/oco
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
         /// <param name="orderSide">Order side</param>
@@ -108,7 +136,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Cancel an OCO order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-oco-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-oco-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/oco-cancel
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
         /// <param name="orderId">Order id</param>
@@ -117,7 +150,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         
         /// <summary>
         /// Cancel a conditional order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/conditional-cancel
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
         /// <param name="orderId">Order id</param>
@@ -126,7 +164,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Cancel an OTO order
-        /// <para><a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/oto-cancel
+        /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
         /// <param name="orderId">Order id</param>

@@ -12,7 +12,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Create a new WhiteBit Code for funds transfer
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#create-code" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-code" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/codes
+        /// </para>
         /// </summary>
         /// <param name="asset">The asset, for example `ETH`</param>
         /// <param name="quantity">Quantity</param>
@@ -23,7 +28,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Apply a WhiteBit code
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#apply-code" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#apply-code" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/codes/apply
+        /// </para>
         /// </summary>
         /// <param name="code">The WhiteBit code</param>
         /// <param name="passphrase">Code passphrase</param>
@@ -32,7 +42,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get generated code history
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-my-codes" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-my-codes" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v4/main-account/codes/my
+        /// </para>
         /// </summary>
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
@@ -41,7 +56,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get account code history
-        /// <para><a href="https://docs.whitebit.com/private/http-main-v4/#get-codes-history" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-codes-history" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/main-account/codes/history
+        /// </para>
         /// </summary>
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
