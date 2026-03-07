@@ -10,12 +10,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitTradingFee
     {
         /// <summary>
-        /// Taker fee rate
+        /// ["<c>taker</c>"] Taker fee rate
         /// </summary>
         [JsonPropertyName("taker")]
         public decimal TakerFee { get; set; }
         /// <summary>
-        /// Maker fee rate
+        /// ["<c>maker</c>"] Maker fee rate
         /// </summary>
         [JsonPropertyName("maker")]
         public decimal MakerFee { get; set; }

@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitBorrows
     {
         /// <summary>
-        /// Total
+        /// ["<c>total</c>"] Total
         /// </summary>
         [JsonPropertyName("total")]
         public decimal Total { get; set; }
         /// <summary>
-        /// Records
+        /// ["<c>records</c>"] Records
         /// </summary>
         [JsonPropertyName("records")]
         public WhiteBitBorrow[] Records { get; set; } = Array.Empty<WhiteBitBorrow>();
@@ -29,32 +29,32 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitBorrow
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
         [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Create time
+        /// ["<c>ctime</c>"] Create time
         /// </summary>
         [JsonPropertyName("ctime")]
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Update time
+        /// ["<c>mtime</c>"] Update time
         /// </summary>
         [JsonPropertyName("mtime")]
         public DateTime? UpdateTime { get; set; }
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Unrealized funding
+        /// ["<c>unrealized_funding</c>"] Unrealized funding
         /// </summary>
         [JsonPropertyName("unrealized_funding")]
         public decimal UnrealizedFunding { get; set; }
         /// <summary>
-        /// Liquidation price
+        /// ["<c>liq_price</c>"] Liquidation price
         /// </summary>
         [JsonPropertyName("liq_price")]
         public decimal LiquidationPrice { get; set; }

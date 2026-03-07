@@ -10,12 +10,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitMarginBalance
     {
         /// <summary>
-        /// Asset
+        /// ["<c>a</c>"] Asset
         /// </summary>
         [JsonPropertyName("a")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Balance
+        /// ["<c>balance</c>"] Balance
         /// </summary>
         [JsonPropertyName("balance")]
         public decimal Balance { get; set; }
@@ -24,7 +24,7 @@ namespace WhiteBit.Net.Objects.Models
         internal decimal BalanceInt { set => Balance = value; }
 
         /// <summary>
-        /// Borrow
+        /// ["<c>borrow</c>"] Borrow
         /// </summary>
         [JsonPropertyName("borrow")]
         public decimal Borrow { get; set; }
@@ -33,7 +33,7 @@ namespace WhiteBit.Net.Objects.Models
         internal decimal BorrowInt { set => Borrow = value; }
 
         /// <summary>
-        /// Available without borrow
+        /// ["<c>available_without_borrow</c>"] Available without borrow
         /// </summary>
         [JsonPropertyName("available_without_borrow")]
         public decimal AvailableWithoutBorrow { get; set; }
@@ -42,7 +42,7 @@ namespace WhiteBit.Net.Objects.Models
         internal decimal AvailableWithoutBorrowInt { set => AvailableWithoutBorrow = value; }
 
         /// <summary>
-        /// Available with borrow
+        /// ["<c>available_with_borrow</c>"] Available with borrow
         /// </summary>
         [JsonPropertyName("available_with_borrow")]
         public decimal AvailableWithBorrow { get; set; }

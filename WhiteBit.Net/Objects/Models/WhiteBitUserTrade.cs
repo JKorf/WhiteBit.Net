@@ -12,22 +12,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitUserTrades
     {
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public int Limit { get; set; }
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public int Offset { get; set; }
         /// <summary>
-        /// Total 
+        /// ["<c>total</c>"] Total 
         /// </summary>
         [JsonPropertyName("total")]
         public int Total { get; set; }
         /// <summary>
-        /// Records
+        /// ["<c>record</c>"] Records
         /// </summary>
         [JsonPropertyName("record")]
         public WhiteBitUserTrade[] Records { get; set; } = Array.Empty<WhiteBitUserTrade>();
@@ -44,12 +44,12 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Trade id
+        /// ["<c>id</c>"] Trade id
         /// </summary>
         [JsonPropertyName("id")]
         public long Id { get; set; }
         /// <summary>
-        /// Order id
+        /// ["<c>dealOrderId</c>"] Order id
         /// </summary>
         [JsonPropertyName("dealOrderId")]
         public long OrderId { get; set; }
@@ -58,48 +58,48 @@ namespace WhiteBit.Net.Objects.Models
         [JsonInclude, JsonPropertyName("deal_order_id")]
         internal long OrderIdInt2 { set { OrderId = value; } }
         /// <summary>
-        /// Client order id
+        /// ["<c>clientOrderId</c>"] Client order id
         /// </summary>
         [JsonPropertyName("clientOrderId")]
         public string? ClientOrderId { get; set; }
         /// <summary>
-        /// Trade time
+        /// ["<c>time</c>"] Trade time
         /// </summary>
         [JsonPropertyName("time")]
         public DateTime Time { get; set; }
         /// <summary>
-        /// Side
+        /// ["<c>side</c>"] Side
         /// </summary>
         [JsonPropertyName("side")]
         public OrderSide? OrderSide { get; set; }
         /// <summary>
-        /// Role of the trade
+        /// ["<c>role</c>"] Role of the trade
         /// </summary>
         [JsonPropertyName("role")]
         public TradeRole TradeRole { get; set; }
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Price
+        /// ["<c>price</c>"] Price
         /// </summary>
         [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <summary>
-        /// Value in quote asset
+        /// ["<c>deal</c>"] Value in quote asset
         /// </summary>
         [JsonPropertyName("deal")]
         public decimal Value { get; set; }
         /// <summary>
-        /// Fee
+        /// ["<c>fee</c>"] Fee
         /// </summary>
         [JsonPropertyName("fee")]
         public decimal Fee { get; set; }
 
         /// <summary>
-        /// Fee asset
+        /// ["<c>feeAsset</c>"] Fee asset
         /// </summary>
         [JsonPropertyName("feeAsset")]
         public string FeeAsset { get; set; } = string.Empty;

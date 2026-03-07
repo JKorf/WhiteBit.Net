@@ -10,17 +10,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOcoOrder
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public long Id { get; set; }
         /// <summary>
-        /// Stop loss order
+        /// ["<c>stop_loss</c>"] Stop loss order
         /// </summary>
         [JsonPropertyName("stop_loss")]
         public WhiteBitConditionalOrder StopLossOrder { get; set; } = null!;
         /// <summary>
-        /// Take profit order
+        /// ["<c>take_profit</c>"] Take profit order
         /// </summary>
         [JsonPropertyName("take_profit")]
         public WhiteBitConditionalOrder TakeProfitOrder { get; set; } = null!;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 
 namespace WhiteBit.Net.Objects.Models
@@ -12,19 +12,19 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitAccountFundingHistories
     {
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public int Offset { get; set; }
 
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public int Limit { get; set; }
 
         /// <summary>
-        /// Records
+        /// ["<c>records</c>"] Records
         /// </summary>
         [JsonPropertyName("records")]
         public WhiteBitAccountFundingHistory[] Records { get; set; } = [];
@@ -36,42 +36,42 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitAccountFundingHistory
     {
         /// <summary>
-        /// Funding time
+        /// ["<c>fundingTime</c>"] Funding time
         /// </summary>
         [JsonPropertyName("fundingTime")]
         public DateTime FundingTime { get; set; }
 
         /// <summary>
-        /// Funding rate
+        /// ["<c>fundingRate</c>"] Funding rate
         /// </summary>
         [JsonPropertyName("fundingRate")]
         public decimal FundingRate { get; set; }
 
         /// <summary>
-        /// Funding amount
+        /// ["<c>fundingAmount</c>"] Funding amount
         /// </summary>
         [JsonPropertyName("fundingAmount")]
         public decimal FundingAmount { get; set; }
         /// <summary>
-        /// Position amount
+        /// ["<c>positionAmount</c>"] Position amount
         /// </summary>
         [JsonPropertyName("positionAmount")]
         public decimal PositionAmount { get; set; }
 
         /// <summary>
-        /// Settlement price
+        /// ["<c>settlementPrice</c>"] Settlement price
         /// </summary>
         [JsonPropertyName("settlementPrice")]
         public decimal SettlePrice { get; set; }
 
         /// <summary>
-        /// Funding rate calculation time
+        /// ["<c>rateCalculatedTime</c>"] Funding rate calculation time
         /// </summary>
         [JsonPropertyName("rateCalculatedTime")]
         public DateTime FundingCalcTime { get; set; }
 
         /// <summary>
-        /// Symbol name
+        /// ["<c>market</c>"] Symbol name
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;

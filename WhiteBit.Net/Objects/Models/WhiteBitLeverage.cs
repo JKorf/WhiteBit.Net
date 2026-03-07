@@ -10,7 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitLeverage
     {
         /// <summary>
-        /// Leverage
+        /// ["<c>leverage</c>"] Leverage
         /// </summary>
         [JsonPropertyName("leverage")]
         public decimal Leverage { get; set; }

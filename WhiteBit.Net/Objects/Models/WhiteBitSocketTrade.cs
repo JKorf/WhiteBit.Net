@@ -12,28 +12,28 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSocketTrade
     {
         /// <summary>
-        /// Trade id
+        /// ["<c>id</c>"] Trade id
         /// </summary>
         [JsonPropertyName("id")]
         public long TradeId { get; set; }
         /// <summary>
-        /// Price
+        /// ["<c>price</c>"] Price
         /// </summary>
         [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <summary>
-        /// Base volume
+        /// ["<c>amount</c>"] Base volume
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Trade timestamp
+        /// ["<c>time</c>"] Trade timestamp
         /// </summary>
         [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Trade side
+        /// ["<c>type</c>"] Trade side
         /// </summary>
         [JsonPropertyName("type")]
         public OrderSide Side { get; set; }

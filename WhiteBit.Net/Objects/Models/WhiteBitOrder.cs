@@ -12,22 +12,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOrders
     {
         /// <summary>
-        /// Records
+        /// ["<c>records</c>"] Records
         /// </summary>
         [JsonPropertyName("records")]
         public WhiteBitOrder[] Records { get; set; } = Array.Empty<WhiteBitOrder>();
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public int Limit { get; set; }
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public int Offset { get; set; }
         /// <summary>
-        /// Total
+        /// ["<c>total</c>"] Total
         /// </summary>
         [JsonPropertyName("total")]
         public int Total { get; set; }
@@ -40,37 +40,37 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOrder
     {
         /// <summary>
-        /// Order id
+        /// ["<c>orderId</c>"] Order id
         /// </summary>
         [JsonPropertyName("orderId")]
         public long OrderId { get; set; }
         [JsonInclude, JsonPropertyName("id")]
         internal long OrderIdInt { set => OrderId = value; }
         /// <summary>
-        /// Client order id
+        /// ["<c>clientOrderId</c>"] Client order id
         /// </summary>
         [JsonPropertyName("clientOrderId")]
         public string? ClientOrderId { get; set; }
         [JsonInclude, JsonPropertyName("client_order_id")]
         internal string? ClientOrderIdInt { set => ClientOrderId = value; }
         /// <summary>
-        /// Symbol name
+        /// ["<c>market</c>"] Symbol name
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Order side
+        /// ["<c>side</c>"] Order side
         /// </summary>
         [JsonPropertyName("side")]
         public OrderSide OrderSide { get; set; }
         /// <summary>
-        /// Order type
+        /// ["<c>type</c>"] Order type
         /// </summary>
         [JsonPropertyName("type")]
         public OrderType OrderType { get; set; }
 
         /// <summary>
-        /// Create timestamp
+        /// ["<c>timestamp</c>"] Create timestamp
         /// </summary>
         [JsonPropertyName("timestamp")]
         public DateTime CreateTime { get; set; }
@@ -79,109 +79,109 @@ namespace WhiteBit.Net.Objects.Models
         internal DateTime CreateTimeInt { set { CreateTime = value; } }
 
         /// <summary>
-        /// Fill timestamp
+        /// ["<c>ftime</c>"] Fill timestamp
         /// </summary>
         [JsonPropertyName("ftime")]
         public DateTime? FillTime { get; set; }
         /// <summary>
-        /// Edit timestamp
+        /// ["<c>mtime</c>"] Edit timestamp
         /// </summary>
         [JsonPropertyName("mtime")]
         public DateTime? UpdateTime { get; set; }
 
         /// <summary>
-        /// Filled quantity in quote asset
+        /// ["<c>dealMoney</c>"] Filled quantity in quote asset
         /// </summary>
         [JsonPropertyName("dealMoney")]
         public decimal QuoteQuantityFilled { get; set; }
         [JsonInclude, JsonPropertyName("deal_money")]
         internal decimal QuoteQuantityFilledInt { set => QuoteQuantityFilled = value; }
         /// <summary>
-        /// Filled quantity
+        /// ["<c>dealStock</c>"] Filled quantity
         /// </summary>
         [JsonPropertyName("dealStock")]
         public decimal QuantityFilled { get; set; }
         [JsonInclude, JsonPropertyName("deal_stock")]
         internal decimal QuantityFilledInt { set => QuantityFilled = value; }
         /// <summary>
-        /// Order quantity
+        /// ["<c>amount</c>"] Order quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Taker fee
+        /// ["<c>takerFee</c>"] Taker fee
         /// </summary>
         [JsonPropertyName("takerFee")]
         public decimal? TakerFee { get; set; }
         /// <summary>
-        /// Maker fee
+        /// ["<c>makerFee</c>"] Maker fee
         /// </summary>
         [JsonPropertyName("makerFee")]
         public decimal? MakerFee { get; set; }
         /// <summary>
-        /// Remaining quantity to be filled
+        /// ["<c>left</c>"] Remaining quantity to be filled
         /// </summary>
         [JsonPropertyName("left")]
         public decimal? QuantityRemaining { get; set; }
         /// <summary>
-        /// Order fee
+        /// ["<c>dealFee</c>"] Order fee
         /// </summary>
         [JsonPropertyName("dealFee")]
         public decimal Fee { get; set; }
         [JsonInclude, JsonPropertyName("deal_fee")]
         internal decimal FeeInt { set => Fee = value; }
         /// <summary>
-        /// Fee asset
+        /// ["<c>fee_asset</c>"] Fee asset
         /// </summary>
         [JsonPropertyName("fee_asset")]
         public string? FeeAsset { get; set; }
         /// <summary>
-        /// Limit price
+        /// ["<c>price</c>"] Limit price
         /// </summary>
         [JsonPropertyName("price")]
         public decimal? Price { get; set; }
         /// <summary>
-        /// Post only
+        /// ["<c>postOnly</c>"] Post only
         /// </summary>
         [JsonPropertyName("postOnly")]
         public bool PostOnly { get; set; }
         [JsonInclude, JsonPropertyName("post_only")]
         internal bool PostOnlyInt { set => PostOnly = value; }
         /// <summary>
-        /// Immediate or cancel flag
+        /// ["<c>ioc</c>"] Immediate or cancel flag
         /// </summary>
         [JsonPropertyName("ioc")]
         public bool? ImmediateOrCancel { get; set; }
         /// <summary>
-        /// Trigger price
+        /// ["<c>activation_price</c>"] Trigger price
         /// </summary>
         [JsonPropertyName("activation_price")]
         public decimal? TriggerPrice { get; set; }
 
         /// <summary>
-        /// Closed order status
+        /// ["<c>status</c>"] Closed order status
         /// </summary>
         [JsonPropertyName("status")]
         public OrderStatus Status { get; set; }
         /// <summary>
-        /// Self Trade Prevention mode
+        /// ["<c>stp</c>"] Self Trade Prevention mode
         /// </summary>
         [JsonPropertyName("stp")]
         public SelfTradePreventionMode StpMode { get; set; }
         /// <summary>
-        /// Position side
+        /// ["<c>position_side</c>"] Position side
         /// </summary>
         [JsonPropertyName("position_side")]
         public PositionSide? PositionSide { get; set; }
 
         /// <summary>
-        /// Order source
+        /// ["<c>source</c>"] Order source
         /// </summary>
         [JsonPropertyName("source")]
         public string? Source { get; set; }
 
         /// <summary>
-        /// Take profit / stop loss data, not used for websocket updates
+        /// ["<c>oto</c>"] Take profit / stop loss data, not used for websocket updates
         /// </summary>
         [JsonPropertyName("oto")]
         public WhiteBitOto? OtoData { get; set; }
@@ -193,17 +193,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOto
     {
         /// <summary>
-        /// OTO Id
+        /// ["<c>otoId</c>"] OTO Id
         /// </summary>
         [JsonPropertyName("otoId")]
         public long OtoId { get; set; }
         /// <summary>
-        /// Stop loss price
+        /// ["<c>stopLoss</c>"] Stop loss price
         /// </summary>
         [JsonPropertyName("stopLoss")]
         public decimal? StopLoss { get; set; }
         /// <summary>
-        /// Take profit price
+        /// ["<c>takeProfit</c>"] Take profit price
         /// </summary>
         [JsonPropertyName("takeProfit")]
         public decimal? TakeProfit { get; set; }
@@ -216,12 +216,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConditionalOrder : WhiteBitOrder
     {
         /// <summary>
-        /// Trigger condition
+        /// ["<c>activation_condition</c>"] Trigger condition
         /// </summary>
         [JsonPropertyName("activation_condition")]
         public ActivationCondition? TriggerCondition { get; set; }
         /// <summary>
-        /// Activated
+        /// ["<c>activated</c>"] Activated
         /// </summary>
         [JsonPropertyName("activated")]
         public bool? Activated { get; set; }
@@ -234,22 +234,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitClosedOrders
     {
         /// <summary>
-        /// Records
+        /// ["<c>records</c>"] Records
         /// </summary>
         [JsonPropertyName("records")]
         public WhiteBitClosedOrder[] Records { get; set; } = Array.Empty<WhiteBitClosedOrder>();
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public int Limit { get; set; }
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public int Offset { get; set; }
         /// <summary>
-        /// Total
+        /// ["<c>total</c>"] Total
         /// </summary>
         [JsonPropertyName("total")]
         public int Total { get; set; }

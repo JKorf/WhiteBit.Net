@@ -11,37 +11,37 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConvertEstimate
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// From asset
+        /// ["<c>from</c>"] From asset
         /// </summary>
         [JsonPropertyName("from")]
         public string FromAsset { get; set; } = string.Empty;
         /// <summary>
-        /// To asset
+        /// ["<c>to</c>"] To asset
         /// </summary>
         [JsonPropertyName("to")]
         public string ToAsset { get; set; } = string.Empty;
         /// <summary>
-        /// From asset quantity
+        /// ["<c>give</c>"] From asset quantity
         /// </summary>
         [JsonPropertyName("give")]
         public decimal FromQuantity { get; set; }
         /// <summary>
-        /// To asset quantity
+        /// ["<c>receive</c>"] To asset quantity
         /// </summary>
         [JsonPropertyName("receive")]
         public decimal ToQuantity { get; set; }
         /// <summary>
-        /// Conversion rate
+        /// ["<c>rate</c>"] Conversion rate
         /// </summary>
         [JsonPropertyName("rate")]
         public decimal Rate { get; set; }
         /// <summary>
-        /// Expire timestamp
+        /// ["<c>expireAt</c>"] Expire timestamp
         /// </summary>
         [JsonPropertyName("expireAt")]
         public DateTime ExpireTime { get; set; }

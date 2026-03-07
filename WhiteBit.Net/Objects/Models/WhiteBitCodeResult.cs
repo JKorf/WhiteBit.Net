@@ -10,22 +10,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitCodeResult
     {
         /// <summary>
-        /// Message
+        /// ["<c>message</c>"] Message
         /// </summary>
         [JsonPropertyName("message")]
         public string Message { get; set; } = string.Empty;
         /// <summary>
-        /// Asset
+        /// ["<c>ticker</c>"] Asset
         /// </summary>
         [JsonPropertyName("ticker")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// External id
+        /// ["<c>external_id</c>"] External id
         /// </summary>
         [JsonPropertyName("external_id")]
         public string ExternalId { get; set; } = string.Empty;

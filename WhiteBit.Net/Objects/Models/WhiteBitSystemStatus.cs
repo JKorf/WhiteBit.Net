@@ -11,7 +11,7 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSystemStatus
     {
         /// <summary>
-        /// Status of the platform
+        /// ["<c>status</c>"] Status of the platform
         /// </summary>
         [JsonPropertyName("status")]
         public SystemStatus? SystemStatus { get; set; }

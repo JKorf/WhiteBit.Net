@@ -10,17 +10,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitCode
     {
         /// <summary>
-        /// Generated WhiteBit code
+        /// ["<c>code</c>"] Generated WhiteBit code
         /// </summary>
         [JsonPropertyName("code")]
         public string Code { get; set; } = string.Empty;
         /// <summary>
-        /// Message
+        /// ["<c>message</c>"] Message
         /// </summary>
         [JsonPropertyName("message")]
         public string Message { get; set; } = string.Empty;
         /// <summary>
-        /// External id
+        /// ["<c>external_id</c>"] External id
         /// </summary>
         [JsonPropertyName("external_id")]
         public string ExternalId { get; set; } = string.Empty;

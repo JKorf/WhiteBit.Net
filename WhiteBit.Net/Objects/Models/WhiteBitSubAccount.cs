@@ -10,42 +10,42 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSubAccount
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// Alias
+        /// ["<c>alias</c>"] Alias
         /// </summary>
         [JsonPropertyName("alias")]
         public string Alias { get; set; } = string.Empty;
         /// <summary>
-        /// User id
+        /// ["<c>userId</c>"] User id
         /// </summary>
         [JsonPropertyName("userId")]
         public string UserId { get; set; } = string.Empty;
         /// <summary>
-        /// Email
+        /// ["<c>email</c>"] Email
         /// </summary>
         [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
         [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
         /// <summary>
-        /// Color
+        /// ["<c>color</c>"] Color
         /// </summary>
         [JsonPropertyName("color")]
         public string Color { get; set; } = string.Empty;
         /// <summary>
-        /// Kyc
+        /// ["<c>kyc</c>"] Kyc
         /// </summary>
         [JsonPropertyName("kyc")]
         public WhiteBitSubAccountKyc Kyc { get; set; } = null!;
         /// <summary>
-        /// Permissions
+        /// ["<c>permissions</c>"] Permissions
         /// </summary>
         [JsonPropertyName("permissions")]
         public WhiteBitSubAccountPermissions Permissions { get; set; } = null!;
@@ -58,12 +58,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSubAccountKyc
     {
         /// <summary>
-        /// Share kyc
+        /// ["<c>shareKyc</c>"] Share kyc
         /// </summary>
         [JsonPropertyName("shareKyc")]
         public bool ShareKyc { get; set; }
         /// <summary>
-        /// Kyc status
+        /// ["<c>kycStatus</c>"] Kyc status
         /// </summary>
         [JsonPropertyName("kycStatus")]
         public string KycStatus { get; set; } = string.Empty;
@@ -76,12 +76,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSubAccountPermissions
     {
         /// <summary>
-        /// Spot enabled
+        /// ["<c>spotEnabled</c>"] Spot enabled
         /// </summary>
         [JsonPropertyName("spotEnabled")]
         public bool SpotEnabled { get; set; }
         /// <summary>
-        /// Collateral enabled
+        /// ["<c>collateralEnabled</c>"] Collateral enabled
         /// </summary>
         [JsonPropertyName("collateralEnabled")]
         public bool CollateralEnabled { get; set; }

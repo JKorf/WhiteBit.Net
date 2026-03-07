@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitMiningRewards
     {
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public decimal Offset { get; set; }
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public decimal Limit { get; set; }
         /// <summary>
-        /// Data
+        /// ["<c>data</c>"] Data
         /// </summary>
         [JsonPropertyName("data")]
         public WhiteBitMiningReward[] Data { get; set; } = Array.Empty<WhiteBitMiningReward>();
@@ -34,37 +34,37 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitMiningReward
     {
         /// <summary>
-        /// Mining account name
+        /// ["<c>miningAccountName</c>"] Mining account name
         /// </summary>
         [JsonPropertyName("miningAccountName")]
         public string AccountName { get; set; } = string.Empty;
         /// <summary>
-        /// Total reward
+        /// ["<c>totalReward</c>"] Total reward
         /// </summary>
         [JsonPropertyName("totalReward")]
         public decimal TotalReward { get; set; }
         /// <summary>
-        /// Reward
+        /// ["<c>reward</c>"] Reward
         /// </summary>
         [JsonPropertyName("reward")]
         public decimal Reward { get; set; }
         /// <summary>
-        /// Fee
+        /// ["<c>fee</c>"] Fee
         /// </summary>
         [JsonPropertyName("fee")]
         public decimal Fee { get; set; }
         /// <summary>
-        /// Fpps rate
+        /// ["<c>fppsRate</c>"] Fpps rate
         /// </summary>
         [JsonPropertyName("fppsRate")]
         public decimal FppsRate { get; set; }
         /// <summary>
-        /// Hash rate
+        /// ["<c>hashRate</c>"] Hash rate
         /// </summary>
         [JsonPropertyName("hashRate")]
         public decimal HashRate { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>date</c>"] Timestamp
         /// </summary>
         [JsonPropertyName("date")]
         public DateTime Timestamp { get; set; }

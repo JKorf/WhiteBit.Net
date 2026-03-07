@@ -12,52 +12,52 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitPositionHistory
     {
         /// <summary>
-        /// Position id
+        /// ["<c>positionId</c>"] Position id
         /// </summary>
         [JsonPropertyName("positionId")]
         public long PositionId { get; set; }
         /// <summary>
-        /// Symbol
+        /// ["<c>market</c>"] Symbol
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Open time
+        /// ["<c>openDate</c>"] Open time
         /// </summary>
         [JsonPropertyName("openDate")]
         public DateTime OpenTime { get; set; }
         /// <summary>
-        /// Update time
+        /// ["<c>modifyDate</c>"] Update time
         /// </summary>
         [JsonPropertyName("modifyDate")]
         public DateTime ModifyDate { get; set; }
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Base price
+        /// ["<c>basePrice</c>"] Base price
         /// </summary>
         [JsonPropertyName("basePrice")]
         public decimal BasePrice { get; set; }
         /// <summary>
-        /// Realized funding
+        /// ["<c>realizedFunding</c>"] Realized funding
         /// </summary>
         [JsonPropertyName("realizedFunding")]
         public decimal RealizedFunding { get; set; }
         /// <summary>
-        /// Liquidation price
+        /// ["<c>liquidationPrice</c>"] Liquidation price
         /// </summary>
         [JsonPropertyName("liquidationPrice")]
         public string? LiquidationPrice { get; set; }
         /// <summary>
-        /// Liquidation status
+        /// ["<c>liquidationState</c>"] Liquidation status
         /// </summary>
         [JsonPropertyName("liquidationState")]
         public LiquidationStatus? LiquidationStatus { get; set; }
         /// <summary>
-        /// Order detail
+        /// ["<c>orderDetail</c>"] Order detail
         /// </summary>
         [JsonPropertyName("orderDetail")]
         public WhiteBitPositionHistoryOrder OrderDetail { get; set; } = null!;
@@ -70,32 +70,32 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitPositionHistoryOrder
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public long Id { get; set; }
         /// <summary>
-        /// Trade quantity
+        /// ["<c>tradeAmount</c>"] Trade quantity
         /// </summary>
         [JsonPropertyName("tradeAmount")]
         public decimal TradeQuantity { get; set; }
         /// <summary>
-        /// Base price
+        /// ["<c>basePrice</c>"] Base price
         /// </summary>
         [JsonPropertyName("basePrice")]
         public decimal BasePrice { get; set; }
         /// <summary>
-        /// Trade fee
+        /// ["<c>tradeFee</c>"] Trade fee
         /// </summary>
         [JsonPropertyName("tradeFee")]
         public decimal TradeFee { get; set; }
         /// <summary>
-        /// Funding fee
+        /// ["<c>fundingFee</c>"] Funding fee
         /// </summary>
         [JsonPropertyName("fundingFee")]
         public decimal? FundingFee { get; set; }
         /// <summary>
-        /// Realized profit and loss
+        /// ["<c>realizedPnl</c>"] Realized profit and loss
         /// </summary>
         [JsonPropertyName("realizedPnl")]
         public decimal? RealizedPnl { get; set; }

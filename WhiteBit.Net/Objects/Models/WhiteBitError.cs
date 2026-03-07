@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitError
     {
         /// <summary>
-        /// Error code
+        /// ["<c>code</c>"] Error code
         /// </summary>
         [JsonPropertyName("code")]
         public int Code { get; set; }
         /// <summary>
-        /// Error message
+        /// ["<c>message</c>"] Error message
         /// </summary>
         [JsonPropertyName("message")]
         public string Message { get; set; } = string.Empty;
         /// <summary>
-        /// Error messages
+        /// ["<c>errors</c>"] Error messages
         /// </summary>
         [JsonPropertyName("errors")]
         public Dictionary<string, string[]>? Errors { get; set; }

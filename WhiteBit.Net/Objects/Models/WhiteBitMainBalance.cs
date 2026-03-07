@@ -14,7 +14,7 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Main balance
+        /// ["<c>main_balance</c>"] Main balance
         /// </summary>
         [JsonPropertyName("main_balance")]
         public decimal MainBalance { get; set; }

@@ -13,97 +13,97 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitFuturesSymbol
     {
         /// <summary>
-        /// Symbol name
+        /// ["<c>ticker_id</c>"] Symbol name
         /// </summary>
         [JsonPropertyName("ticker_id")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Base asset
+        /// ["<c>stock_currency</c>"] Base asset
         /// </summary>
         [JsonPropertyName("stock_currency")]
         public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Quote asset
+        /// ["<c>money_currency</c>"] Quote asset
         /// </summary>
         [JsonPropertyName("money_currency")]
         public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Last price
+        /// ["<c>last_price</c>"] Last price
         /// </summary>
         [JsonPropertyName("last_price")]
         public decimal LastPrice { get; set; }
         /// <summary>
-        /// Base asset volume
+        /// ["<c>stock_volume</c>"] Base asset volume
         /// </summary>
         [JsonPropertyName("stock_volume")]
         public decimal BaseVolume { get; set; }
         /// <summary>
-        /// Quote asset volume
+        /// ["<c>money_volume</c>"] Quote asset volume
         /// </summary>
         [JsonPropertyName("money_volume")]
         public decimal QuoteVolume { get; set; }
         /// <summary>
-        /// Best bid price
+        /// ["<c>bid</c>"] Best bid price
         /// </summary>
         [JsonPropertyName("bid")]
         public decimal BestBidPrice { get; set; }
         /// <summary>
-        /// Best ask price
+        /// ["<c>ask</c>"] Best ask price
         /// </summary>
         [JsonPropertyName("ask")]
         public decimal BestAskPrice { get; set; }
         /// <summary>
-        /// High price
+        /// ["<c>high</c>"] High price
         /// </summary>
         [JsonPropertyName("high")]
         public decimal HighPrice { get; set; }
         /// <summary>
-        /// Low price
+        /// ["<c>low</c>"] Low price
         /// </summary>
         [JsonPropertyName("low")]
         public decimal LowPrice { get; set; }
         /// <summary>
-        /// Product type
+        /// ["<c>product_type</c>"] Product type
         /// </summary>
         [JsonPropertyName("product_type")]
         public ProductType ProductType { get; set; }
         /// <summary>
-        /// Open interest
+        /// ["<c>open_interest</c>"] Open interest
         /// </summary>
         [JsonPropertyName("open_interest")]
         public decimal OpenInterest { get; set; }
         /// <summary>
-        /// Index price
+        /// ["<c>index_price</c>"] Index price
         /// </summary>
         [JsonPropertyName("index_price")]
         public decimal IndexPrice { get; set; }
         /// <summary>
-        /// Index name
+        /// ["<c>index_name</c>"] Index name
         /// </summary>
         [JsonPropertyName("index_name")]
         public string IndexName { get; set; } = string.Empty;
         /// <summary>
-        /// Index asset
+        /// ["<c>index_currency</c>"] Index asset
         /// </summary>
         [JsonPropertyName("index_currency")]
         public string IndexAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Funding rate
+        /// ["<c>funding_rate</c>"] Funding rate
         /// </summary>
         [JsonPropertyName("funding_rate")]
         public decimal FundingRate { get; set; }
         /// <summary>
-        /// Next funding rate timestamp
+        /// ["<c>next_funding_rate_timestamp</c>"] Next funding rate timestamp
         /// </summary>
         [JsonPropertyName("next_funding_rate_timestamp")]
         public DateTime NextFundingRateTime { get; set; }
         /// <summary>
-        /// Brackets
+        /// ["<c>brackets</c>"] Brackets
         /// </summary>
         [JsonPropertyName("brackets")]
         public Dictionary<string, long> Brackets { get; set; } = new Dictionary<string, long>()!;
         /// <summary>
-        /// Max leverage
+        /// ["<c>max_leverage</c>"] Max leverage
         /// </summary>
         [JsonPropertyName("max_leverage")]
         public decimal MaxLeverage { get; set; }

@@ -11,22 +11,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConvertHistory
     {
         /// <summary>
-        /// Records
+        /// ["<c>records</c>"] Records
         /// </summary>
         [JsonPropertyName("records")]
         public WhiteBitConvertHistoryEntry[] Records { get; set; } = Array.Empty<WhiteBitConvertHistoryEntry>();
         /// <summary>
-        /// Total results
+        /// ["<c>total</c>"] Total results
         /// </summary>
         [JsonPropertyName("total")]
         public int Total { get; set; }
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public int Limit { get; set; }
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public int Offset { get; set; }
@@ -39,32 +39,32 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConvertHistoryEntry
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>date</c>"] Timestamp
         /// </summary>
         [JsonPropertyName("date")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// From quantity
+        /// ["<c>give</c>"] From quantity
         /// </summary>
         [JsonPropertyName("give")]
         public decimal FromQuantity { get; set; }
         /// <summary>
-        /// To quantity
+        /// ["<c>receive</c>"] To quantity
         /// </summary>
         [JsonPropertyName("receive")]
         public decimal ToQuantity { get; set; }
         /// <summary>
-        /// Conversion rate
+        /// ["<c>rate</c>"] Conversion rate
         /// </summary>
         [JsonPropertyName("rate")]
         public decimal Rate { get; set; }
         /// <summary>
-        /// Path
+        /// ["<c>path</c>"] Path
         /// </summary>
         [JsonPropertyName("path")]
         public WhiteBitConvertHistoryEntryPath[] Path { get; set; } = Array.Empty<WhiteBitConvertHistoryEntryPath>();
@@ -77,17 +77,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConvertHistoryEntryPath
     {
         /// <summary>
-        /// From
+        /// ["<c>from</c>"] From
         /// </summary>
         [JsonPropertyName("from")]
         public string FromAsset { get; set; } = string.Empty;
         /// <summary>
-        /// To
+        /// ["<c>to</c>"] To
         /// </summary>
         [JsonPropertyName("to")]
         public string ToAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Conversion rate
+        /// ["<c>rate</c>"] Conversion rate
         /// </summary>
         [JsonPropertyName("rate")]
         public decimal Rate { get; set; }

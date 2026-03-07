@@ -10,12 +10,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConvertResult
     {
         /// <summary>
-        /// Final from quantity
+        /// ["<c>finalGive</c>"] Final from quantity
         /// </summary>
         [JsonPropertyName("finalGive")]
         public decimal FinalFromQuantity { get; set; }
         /// <summary>
-        /// Final to quantity
+        /// ["<c>finalReceive</c>"] Final to quantity
         /// </summary>
         [JsonPropertyName("finalReceive")]
         public decimal FinalToQuantity { get; set; }

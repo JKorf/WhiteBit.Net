@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSubAccounts
     {
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public decimal Offset { get; set; }
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public decimal Limit { get; set; }
         /// <summary>
-        /// Data
+        /// ["<c>data</c>"] Data
         /// </summary>
         [JsonPropertyName("data")]
         public WhiteBitSubAccount[] Data { get; set; } = Array.Empty<WhiteBitSubAccount>();

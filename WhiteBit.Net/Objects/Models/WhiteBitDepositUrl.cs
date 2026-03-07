@@ -10,7 +10,7 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositUrl
     {
         /// <summary>
-        /// The deposit url
+        /// ["<c>url</c>"] The deposit url
         /// </summary>
         [JsonPropertyName("url")]
         public string Url { get; set; } = string.Empty;

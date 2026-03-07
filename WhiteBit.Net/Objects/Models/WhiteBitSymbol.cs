@@ -11,72 +11,72 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSymbol
     {
         /// <summary>
-        /// Name
+        /// ["<c>name</c>"] Name
         /// </summary>
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// Base asset
+        /// ["<c>stock</c>"] Base asset
         /// </summary>
         [JsonPropertyName("stock")]
         public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Quote asset
+        /// ["<c>money</c>"] Quote asset
         /// </summary>
         [JsonPropertyName("money")]
         public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Base asset precision
+        /// ["<c>stockPrec</c>"] Base asset precision
         /// </summary>
         [JsonPropertyName("stockPrec")]
         public int BaseAssetPrecision { get; set; }
         /// <summary>
-        /// Quote asset precision
+        /// ["<c>moneyPrec</c>"] Quote asset precision
         /// </summary>
         [JsonPropertyName("moneyPrec")]
         public int QuoteAssetPrecision { get; set; }
         /// <summary>
-        /// Fee precision
+        /// ["<c>feePrec</c>"] Fee precision
         /// </summary>
         [JsonPropertyName("feePrec")]
         public decimal FeePrecision { get; set; }
         /// <summary>
-        /// Maker fee
+        /// ["<c>makerFee</c>"] Maker fee
         /// </summary>
         [JsonPropertyName("makerFee")]
         public decimal MakerFee { get; set; }
         /// <summary>
-        /// Taker fee
+        /// ["<c>takerFee</c>"] Taker fee
         /// </summary>
         [JsonPropertyName("takerFee")]
         public decimal TakerFee { get; set; }
         /// <summary>
-        /// Min order quantity
+        /// ["<c>minAmount</c>"] Min order quantity
         /// </summary>
         [JsonPropertyName("minAmount")]
         public decimal MinOrderQuantity { get; set; }
         /// <summary>
-        /// Min order value
+        /// ["<c>minTotal</c>"] Min order value
         /// </summary>
         [JsonPropertyName("minTotal")]
         public decimal MinOrderValue { get; set; }
         /// <summary>
-        /// Max order value
+        /// ["<c>maxTotal</c>"] Max order value
         /// </summary>
         [JsonPropertyName("maxTotal")]
         public decimal MaxOrderValue { get; set; }
         /// <summary>
-        /// If trading is enabled
+        /// ["<c>tradesEnabled</c>"] If trading is enabled
         /// </summary>
         [JsonPropertyName("tradesEnabled")]
         public bool TradingEnabled { get; set; }
         /// <summary>
-        /// Is margin trading enabled
+        /// ["<c>isCollateral</c>"] Is margin trading enabled
         /// </summary>
         [JsonPropertyName("isCollateral")]
         public bool IsMarginEnabled { get; set; }
         /// <summary>
-        /// Type of symbol
+        /// ["<c>type</c>"] Type of symbol
         /// </summary>
         [JsonPropertyName("type")]
         public SymbolType SymbolType { get; set; }

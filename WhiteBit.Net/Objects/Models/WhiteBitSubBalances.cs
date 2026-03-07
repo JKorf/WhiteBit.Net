@@ -15,17 +15,17 @@ namespace WhiteBit.Net.Objects.Models
         public string Asset { get; set; } = string.Empty;
 
         /// <summary>
-        /// Main
+        /// ["<c>main</c>"] Main
         /// </summary>
         [JsonPropertyName("main")]
         public decimal Main { get; set; }
         /// <summary>
-        /// Spot
+        /// ["<c>spot</c>"] Spot
         /// </summary>
         [JsonPropertyName("spot")]
         public decimal Spot { get; set; }
         /// <summary>
-        /// Collateral
+        /// ["<c>collateral</c>"] Collateral
         /// </summary>
         [JsonPropertyName("collateral")]
         public decimal Collateral { get; set; }

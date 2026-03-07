@@ -12,17 +12,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSubaccountTransferHistory
     {
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public decimal Offset { get; set; }
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public decimal Limit { get; set; }
         /// <summary>
-        /// Data
+        /// ["<c>data</c>"] Data
         /// </summary>
         [JsonPropertyName("data")]
         public WhiteBitSubaccountTransferEntry[] Data { get; set; } = Array.Empty<WhiteBitSubaccountTransferEntry>();
@@ -35,27 +35,27 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitSubaccountTransferEntry
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// Transfer direction
+        /// ["<c>direction</c>"] Transfer direction
         /// </summary>
         [JsonPropertyName("direction")]
         public SubTransferDirection Direction { get; set; }
         /// <summary>
-        /// Asset
+        /// ["<c>currency</c>"] Asset
         /// </summary>
         [JsonPropertyName("currency")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Creation time
+        /// ["<c>createdAt</c>"] Creation time
         /// </summary>
         [JsonPropertyName("createdAt")]
         public decimal CreateTime { get; set; }

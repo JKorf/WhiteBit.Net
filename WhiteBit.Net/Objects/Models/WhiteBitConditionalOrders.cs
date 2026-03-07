@@ -12,22 +12,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConditionalOrdersResult
     {
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public decimal Limit { get; set; }
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public decimal Offset { get; set; }
         /// <summary>
-        /// Total results
+        /// ["<c>total</c>"] Total results
         /// </summary>
         [JsonPropertyName("total")]
         public decimal Total { get; set; }
         /// <summary>
-        /// Records
+        /// ["<c>records</c>"] Records
         /// </summary>
         [JsonPropertyName("records")]
         public WhiteBitConditionalOrders[] Records { get; set; } = Array.Empty<WhiteBitConditionalOrders>();
@@ -40,37 +40,37 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitConditionalOrders
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public long Id { get; set; }
         /// <summary>
-        /// Order type
+        /// ["<c>type</c>"] Order type
         /// </summary>
         [JsonPropertyName("type")]
         public ConditionalOrderType ConditionalOrderType { get; set; }
         /// <summary>
-        /// Stop loss order
+        /// ["<c>stop_loss</c>"] Stop loss order
         /// </summary>
         [JsonPropertyName("stop_loss")]
         public WhiteBitConditionalOrder? StopLossOrder { get; set; } = null!;
         /// <summary>
-        /// Take profit order
+        /// ["<c>take_profit</c>"] Take profit order
         /// </summary>
         [JsonPropertyName("take_profit")]
         public WhiteBitConditionalOrder? TakeProfitOrder { get; set; } = null!;
         /// <summary>
-        /// Stop loss price
+        /// ["<c>stopLossPrice</c>"] Stop loss price
         /// </summary>
         [JsonPropertyName("stopLossPrice")]
         public decimal? StopLossPrice { get; set; }
         /// <summary>
-        /// Take profit price
+        /// ["<c>takeProfitPrice</c>"] Take profit price
         /// </summary>
         [JsonPropertyName("takeProfitPrice")]
         public decimal? TakeProfitPrice { get; set; }
         /// <summary>
-        /// Conditional order
+        /// ["<c>conditionalOrder</c>"] Conditional order
         /// </summary>
         [JsonPropertyName("conditionalOrder")]
         public WhiteBitConditionalOrder? ConditionalOrder { get; set; } = null!;

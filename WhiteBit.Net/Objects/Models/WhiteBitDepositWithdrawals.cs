@@ -12,22 +12,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositWithdrawals
     {
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
         [JsonPropertyName("limit")]
         public int Limit { get; set; }
         /// <summary>
-        /// Offset
+        /// ["<c>offset</c>"] Offset
         /// </summary>
         [JsonPropertyName("offset")]
         public int Offset { get; set; }
         /// <summary>
-        /// Records
+        /// ["<c>records</c>"] Records
         /// </summary>
         [JsonPropertyName("records")]
         public WhiteBitDepositWithdrawal[] Records { get; set; } = Array.Empty<WhiteBitDepositWithdrawal>();
         /// <summary>
-        /// Total number of results
+        /// ["<c>total</c>"] Total number of results
         /// </summary>
         [JsonPropertyName("total")]
         public int Total { get; set; }
@@ -40,82 +40,82 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositWithdrawal
     {
         /// <summary>
-        /// Address
+        /// ["<c>address</c>"] Address
         /// </summary>
         [JsonPropertyName("address")]
         public string Address { get; set; } = string.Empty;
         /// <summary>
-        /// Unique id
+        /// ["<c>uniqueId</c>"] Unique id
         /// </summary>
         [JsonPropertyName("uniqueId")]
         public string? UniqueId { get; set; }
         /// <summary>
-        /// Creation time
+        /// ["<c>createdAt</c>"] Creation time
         /// </summary>
         [JsonPropertyName("createdAt")]
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Asset name
+        /// ["<c>currency</c>"] Asset name
         /// </summary>
         [JsonPropertyName("currency")]
         public string AssetName { get; set; } = string.Empty;
         /// <summary>
-        /// Asset
+        /// ["<c>ticker</c>"] Asset
         /// </summary>
         [JsonPropertyName("ticker")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Transaction type
+        /// ["<c>method</c>"] Transaction type
         /// </summary>
         [JsonPropertyName("method")]
         public TransactionType TransactionType { get; set; }
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Description
+        /// ["<c>description</c>"] Description
         /// </summary>
         [JsonPropertyName("description")]
         public string? Description { get; set; }
         /// <summary>
-        /// Memo
+        /// ["<c>memo</c>"] Memo
         /// </summary>
         [JsonPropertyName("memo")]
         public string? Memo { get; set; }
         /// <summary>
-        /// Fee
+        /// ["<c>fee</c>"] Fee
         /// </summary>
         [JsonPropertyName("fee")]
         public decimal Fee { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
         [JsonPropertyName("status")]
         public TransactionStatus? TransactionStatus { get; set; }
         /// <summary>
-        /// Network
+        /// ["<c>network</c>"] Network
         /// </summary>
         [JsonPropertyName("network")]
         public string? Network { get; set; }
         /// <summary>
-        /// Transaction hash
+        /// ["<c>transactionHash</c>"] Transaction hash
         /// </summary>
         [JsonPropertyName("transactionHash")]
         public string TransactionHash { get; set; } = string.Empty;
         /// <summary>
-        /// Transaction id
+        /// ["<c>transactionId</c>"] Transaction id
         /// </summary>
         [JsonPropertyName("transactionId")]
         public string TransactionId { get; set; } = string.Empty;
         /// <summary>
-        /// Details
+        /// ["<c>details</c>"] Details
         /// </summary>
         [JsonPropertyName("details")]
         public WhiteBitDepositWithdrawalDetails Details { get; set; } = null!;
         /// <summary>
-        /// Confirmations
+        /// ["<c>confirmations</c>"] Confirmations
         /// </summary>
         [JsonPropertyName("confirmations")]
         public WhiteBitDepositWithdrawalConfirmations Confirmations { get; set; } = null!;
@@ -128,7 +128,7 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositWithdrawalDetails
     {
         /// <summary>
-        /// Partial
+        /// ["<c>partial</c>"] Partial
         /// </summary>
         [JsonPropertyName("partial")]
         public WhiteBitDepositWithdrawalPartial Partial { get; set; } = null!;
@@ -141,22 +141,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositWithdrawalPartial
     {
         /// <summary>
-        /// Request quantity
+        /// ["<c>requestAmount</c>"] Request quantity
         /// </summary>
         [JsonPropertyName("requestAmount")]
         public decimal RequestQuantity { get; set; }
         /// <summary>
-        /// Processed quantity
+        /// ["<c>processedAmount</c>"] Processed quantity
         /// </summary>
         [JsonPropertyName("processedAmount")]
         public decimal ProcessedQuantity { get; set; }
         /// <summary>
-        /// Processed fee
+        /// ["<c>processedFee</c>"] Processed fee
         /// </summary>
         [JsonPropertyName("processedFee")]
         public decimal ProcessedFee { get; set; }
         /// <summary>
-        /// Normalize transaction
+        /// ["<c>normalizeTransaction</c>"] Normalize transaction
         /// </summary>
         [JsonPropertyName("normalizeTransaction")]
         public string? NormalizeTransaction { get; set; }
@@ -169,12 +169,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositWithdrawalConfirmations
     {
         /// <summary>
-        /// Actual
+        /// ["<c>actual</c>"] Actual
         /// </summary>
         [JsonPropertyName("actual")]
         public int Actual { get; set; }
         /// <summary>
-        /// Required
+        /// ["<c>required</c>"] Required
         /// </summary>
         [JsonPropertyName("required")]
         public int Required { get; set; }

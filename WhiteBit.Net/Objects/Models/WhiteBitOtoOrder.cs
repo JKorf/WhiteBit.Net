@@ -11,27 +11,27 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOtoOrder
     {
         /// <summary>
-        /// Id
+        /// ["<c>id</c>"] Id
         /// </summary>
         [JsonPropertyName("id")]
         public long Id { get; set; }
         /// <summary>
-        /// Trigger order
+        /// ["<c>trigger_order</c>"] Trigger order
         /// </summary>
         [JsonPropertyName("trigger_order")]
         public WhiteBitOrder TriggerOrder { get; set; } = null!;
         /// <summary>
-        /// Stop loss price
+        /// ["<c>stop_loss_price</c>"] Stop loss price
         /// </summary>
         [JsonPropertyName("stop_loss_price")]
         public decimal? StopLossPrice { get; set; }
         /// <summary>
-        /// Take profit price
+        /// ["<c>take_profit_price</c>"] Take profit price
         /// </summary>
         [JsonPropertyName("take_profit_price")]
         public decimal? TakeProfitPrice { get; set; }
         /// <summary>
-        /// Conditional order type
+        /// ["<c>conditional_order_type</c>"] Conditional order type
         /// </summary>
         [JsonPropertyName("conditional_order_type")]
         public ConditionalType ConditionalType { get; set; }

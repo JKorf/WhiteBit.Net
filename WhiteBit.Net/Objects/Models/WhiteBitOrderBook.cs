@@ -13,22 +13,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOrderBook
     {
         /// <summary>
-        /// Symbol
+        /// ["<c>ticker_id</c>"] Symbol
         /// </summary>
         [JsonPropertyName("ticker_id")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>timestamp</c>"] Timestamp
         /// </summary>
         [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Asks list
+        /// ["<c>asks</c>"] Asks list
         /// </summary>
         [JsonPropertyName("asks")]
         public WhiteBitOrderBookEntry[] Asks { get; set; } = Array.Empty<WhiteBitOrderBookEntry>();
         /// <summary>
-        /// Bids list
+        /// ["<c>bids</c>"] Bids list
         /// </summary>
         [JsonPropertyName("bids")]
         public WhiteBitOrderBookEntry[] Bids { get; set; } = Array.Empty<WhiteBitOrderBookEntry>();
@@ -40,17 +40,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOrderBookUpdate: WhiteBitOrderBook
     {
         /// <summary>
-        /// Update id
+        /// ["<c>update_id</c>"] Update id
         /// </summary>
         [JsonPropertyName("update_id")]
         public long UpdateId { get; set; }
         /// <summary>
-        /// Previous update id
+        /// ["<c>past_update_id</c>"] Previous update id
         /// </summary>
         [JsonPropertyName("past_update_id")]
         public long? PrevUpdateId { get; set; }
         /// <summary>
-        /// Event time
+        /// ["<c>event_time</c>"] Event time
         /// </summary>
         [JsonPropertyName("event_time")]
         public DateTime EventTime { get; set; }

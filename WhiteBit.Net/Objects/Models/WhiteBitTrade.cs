@@ -12,17 +12,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitTrade
     {
         /// <summary>
-        /// Trade id
+        /// ["<c>tradeID</c>"] Trade id
         /// </summary>
         [JsonPropertyName("tradeID")]
         public long TradeId { get; set; }
         /// <summary>
-        /// Price
+        /// ["<c>price</c>"] Price
         /// </summary>
         [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <summary>
-        /// Quote volume
+        /// ["<c>base_volume</c>"] Quote volume
         /// </summary>
         [JsonPropertyName("base_volume")]
         // THE VOLUME PROPERTIES ARE INCORRECTLY INVERSED IN THE API RESPONSE
@@ -34,13 +34,13 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("quote_volume")]
         public decimal BaseVolume { get; set; }
         /// <summary>
-        /// Trade timestamp
+        /// ["<c>trade_timestamp</c>"] Trade timestamp
         /// </summary>
         [JsonPropertyName("trade_timestamp")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Trade side
+        /// ["<c>type</c>"] Trade side
         /// </summary>
         [JsonPropertyName("type")]
         public OrderSide Side { get; set; }

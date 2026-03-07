@@ -14,12 +14,12 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         public bool Success => Error?.Code == 0;
         /// <summary>
-        /// Error message on fail
+        /// ["<c>error</c>"] Error message on fail
         /// </summary>
         [JsonPropertyName("error")]
         public WhiteBitError Error { get; set; } = new();
         /// <summary>
-        /// Order result
+        /// ["<c>result</c>"] Order result
         /// </summary>
         [JsonPropertyName("result")]
         public WhiteBitOrder? Result { get; set; }

@@ -12,108 +12,108 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitPosition
     {
         /// <summary>
-        /// Position id
+        /// ["<c>positionId</c>"] Position id
         /// </summary>
         [JsonPropertyName("positionId")]
         public long PositionId { get; set; }
         [JsonInclude, JsonPropertyName("id")]
         internal long PositionIdInt { get => PositionId; set => PositionId = value; }
         /// <summary>
-        /// Symbol
+        /// ["<c>market</c>"] Symbol
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Open timestamp
+        /// ["<c>openDate</c>"] Open timestamp
         /// </summary>
         [JsonPropertyName("openDate")]
         public DateTime OpenTime { get; set; }
         [JsonInclude, JsonPropertyName("ctime")]
         internal DateTime OpenTimeInt { get => OpenTime; set => OpenTime = value; }
         /// <summary>
-        /// Update timestamp
+        /// ["<c>modifyDate</c>"] Update timestamp
         /// </summary>
         [JsonPropertyName("modifyDate")]
         public DateTime UpdateTime { get; set; }
         [JsonInclude, JsonPropertyName("mtime")]
         internal DateTime UpdateTimeInt { get => UpdateTime; set => UpdateTime = value; }
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Position value
+        /// ["<c>amount_in_money</c>"] Position value
         /// </summary>
         [JsonPropertyName("amount_in_money")]
         public decimal? Value { get; set; }
         /// <summary>
-        /// Base price
+        /// ["<c>basePrice</c>"] Base price
         /// </summary>
         [JsonPropertyName("basePrice")]
         public decimal? BasePrice { get; set; }
         [JsonInclude, JsonPropertyName("base_price")]
         internal decimal? BasePriceInt { get => BasePrice; set => BasePrice = value; }
         /// <summary>
-        /// Liquidation price
+        /// ["<c>liquidationPrice</c>"] Liquidation price
         /// </summary>
         [JsonPropertyName("liquidationPrice")]
         public decimal? LiquidationPrice { get; set; }
         [JsonInclude, JsonPropertyName("liq_price")]
         internal decimal? LiquidationPriceInt { get => LiquidationPrice; set => LiquidationPrice = value; }
         /// <summary>
-        /// Liquidation status
+        /// ["<c>liquidationState</c>"] Liquidation status
         /// </summary>
         [JsonPropertyName("liquidationState")]
         public LiquidationStatus? LiquidationStatus { get; set; }
         [JsonInclude, JsonPropertyName("liq_stage")]
         internal LiquidationStatus? LiquidationStatusInt { get => LiquidationStatus; set => LiquidationStatus = value; }
         /// <summary>
-        /// Profit and loss
+        /// ["<c>pnl</c>"] Profit and loss
         /// </summary>
         [JsonPropertyName("pnl")]
         public decimal? Pnl { get; set; }
         /// <summary>
-        /// Profit and loss percentage
+        /// ["<c>pnlPercent</c>"] Profit and loss percentage
         /// </summary>
         [JsonPropertyName("pnlPercent")]
         public decimal? PnlPercent { get; set; }
         /// <summary>
-        /// Amount of funds in open position
+        /// ["<c>margin</c>"] Amount of funds in open position
         /// </summary>
         [JsonPropertyName("margin")]
         public decimal Margin { get; set; }
         /// <summary>
-        /// Free funds
+        /// ["<c>freeMargin</c>"] Free funds
         /// </summary>
         [JsonPropertyName("freeMargin")]
         public decimal FreeMargin { get; set; }
         [JsonInclude, JsonPropertyName("free_margin")]
         internal decimal FreeMarginInt { get => FreeMargin; set => FreeMargin = value; }
         /// <summary>
-        /// Funding
+        /// ["<c>funding</c>"] Funding
         /// </summary>
         [JsonPropertyName("funding")]
         public decimal Funding { get; set; }
         /// <summary>
-        /// Unrealized funding
+        /// ["<c>unrealizedFunding</c>"] Unrealized funding
         /// </summary>
         [JsonPropertyName("unrealizedFunding")]
         public decimal UnrealizedFunding { get; set; }
         [JsonInclude, JsonPropertyName("unrealized_funding")]
         internal decimal UnrealizedFundingInt { get => UnrealizedFunding; set => UnrealizedFunding = value; }
         /// <summary>
-        /// Realized profit and loss
+        /// ["<c>realized_pnl</c>"] Realized profit and loss
         /// </summary>
         [JsonPropertyName("realized_pnl")]
         public decimal? RealizedPnl { get; set; }
         /// <summary>
-        /// Position side
+        /// ["<c>position_side</c>"] Position side
         /// </summary>
         [JsonPropertyName("position_side")]
         public PositionSide PositionSide { get; set; }
         /// <summary>
-        /// Info on attached TP / SL orders for the position. Not available in websocket updates
+        /// ["<c>tpsl</c>"] Info on attached TP / SL orders for the position. Not available in websocket updates
         /// </summary>
         [JsonPropertyName("tpsl")]
         public WhiteBitPositionTpSl? TpSl { get; set; }
@@ -126,22 +126,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitPositionTpSl
     {
         /// <summary>
-        /// Take profit order id
+        /// ["<c>takeProfitId</c>"] Take profit order id
         /// </summary>
         [JsonPropertyName("takeProfitId")]
         public long? TakeProfitId { get; set; }
         /// <summary>
-        /// Take profit price
+        /// ["<c>takeProfit</c>"] Take profit price
         /// </summary>
         [JsonPropertyName("takeProfit")]
         public decimal? TakeProfitPrice { get; set; }
         /// <summary>
-        /// Stop loss order id
+        /// ["<c>stopLossId</c>"] Stop loss order id
         /// </summary>
         [JsonPropertyName("stopLossId")]
         public long? StopLossId { get; set; }
         /// <summary>
-        /// Stop loss price
+        /// ["<c>stopLoss</c>"] Stop loss price
         /// </summary>
         [JsonPropertyName("stopLoss")]
         public decimal? StopLossPrice { get; set; }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 
 namespace WhiteBit.Net.Objects.Models
@@ -9,27 +9,27 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitFundingHistory
     {
         /// <summary>
-        /// Funding time
+        /// ["<c>fundingTime</c>"] Funding time
         /// </summary>
         [JsonPropertyName("fundingTime")]
         public DateTime FundingTime { get; set; }
         /// <summary>
-        /// Funding rate
+        /// ["<c>fundingRate</c>"] Funding rate
         /// </summary>
         [JsonPropertyName("fundingRate")]
         public decimal FundingRate { get; set; }
         /// <summary>
-        /// Settlement price
+        /// ["<c>settlementPrice</c>"] Settlement price
         /// </summary>
         [JsonPropertyName("settlementPrice")]
         public decimal SettlePrice { get; set; }
         /// <summary>
-        /// Funding rate calculation time
+        /// ["<c>rateCalculatedTime</c>"] Funding rate calculation time
         /// </summary>
         [JsonPropertyName("rateCalculatedTime")]
         public DateTime FundingCalcTime { get; set; }
         /// <summary>
-        /// Symbol name
+        /// ["<c>market</c>"] Symbol name
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;

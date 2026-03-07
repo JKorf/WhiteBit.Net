@@ -10,12 +10,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositAddressInfo
     {
         /// <summary>
-        /// Account
+        /// ["<c>account</c>"] Account
         /// </summary>
         [JsonPropertyName("account")]
         public WhiteBitDepositAddress Account { get; set; } = null!;
         /// <summary>
-        /// Fee info
+        /// ["<c>required</c>"] Fee info
         /// </summary>
         [JsonPropertyName("required")]
         public WhiteBitDepositWithdrawDetails FeeInfo { get; set; } = null!;
@@ -28,12 +28,12 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositAddress
     {
         /// <summary>
-        /// Address
+        /// ["<c>address</c>"] Address
         /// </summary>
         [JsonPropertyName("address")]
         public string Address { get; set; } = string.Empty;
         /// <summary>
-        /// Memo
+        /// ["<c>memo</c>"] Memo
         /// </summary>
         [JsonPropertyName("memo")]
         public decimal Memo { get; set; }

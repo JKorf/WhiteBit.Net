@@ -12,22 +12,22 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitKillSwitch
     {
         /// <summary>
-        /// Symbol
+        /// ["<c>market</c>"] Symbol
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Start time
+        /// ["<c>startTime</c>"] Start time
         /// </summary>
         [JsonPropertyName("startTime")]
         public DateTime? StartTime { get; set; }
         /// <summary>
-        /// Cancellation time
+        /// ["<c>cancellationTime</c>"] Cancellation time
         /// </summary>
         [JsonPropertyName("cancellationTime")]
         public DateTime? CancellationTime { get; set; }
         /// <summary>
-        /// Product types the kill switch is applied to
+        /// ["<c>types</c>"] Product types the kill switch is applied to
         /// </summary>
         [JsonPropertyName("types")]
         public OrderProductType[]? OrderProductTypes { get; set; }

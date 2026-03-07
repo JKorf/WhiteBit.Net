@@ -10,32 +10,32 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositWithdrawalSetting
     {
         /// <summary>
-        /// Asset
+        /// ["<c>ticker</c>"] Asset
         /// </summary>
         [JsonPropertyName("ticker")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Name
+        /// ["<c>name</c>"] Name
         /// </summary>
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// Can deposit
+        /// ["<c>can_deposit</c>"] Can deposit
         /// </summary>
         [JsonPropertyName("can_deposit")]
         public bool CanDeposit { get; set; }
         /// <summary>
-        /// Can withdraw
+        /// ["<c>can_withdraw</c>"] Can withdraw
         /// </summary>
         [JsonPropertyName("can_withdraw")]
         public bool CanWithdraw { get; set; }
         /// <summary>
-        /// Deposit info
+        /// ["<c>deposit</c>"] Deposit info
         /// </summary>
         [JsonPropertyName("deposit")]
         public WhiteBitDepositWithdrawalSettingDetails Deposit { get; set; } = null!;
         /// <summary>
-        /// Withdraw info
+        /// ["<c>withdraw</c>"] Withdraw info
         /// </summary>
         [JsonPropertyName("withdraw")]
         public WhiteBitDepositWithdrawalSettingDetails Withdraw { get; set; } = null!;
@@ -48,32 +48,32 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitDepositWithdrawalSettingDetails
     {
         /// <summary>
-        /// Min fee amount when flex fee is enabled
+        /// ["<c>minFlex</c>"] Min fee amount when flex fee is enabled
         /// </summary>
         [JsonPropertyName("minFlex")]
         public decimal MinFlex { get; set; }
         /// <summary>
-        /// Max fee amount when flex fee is enabled
+        /// ["<c>maxFlex</c>"] Max fee amount when flex fee is enabled
         /// </summary>
         [JsonPropertyName("maxFlex")]
         public decimal MaxFlex { get; set; }
         /// <summary>
-        /// Flex fee percentage
+        /// ["<c>percentFlex</c>"] Flex fee percentage
         /// </summary>
         [JsonPropertyName("percentFlex")]
         public decimal PercentFlex { get; set; }
         /// <summary>
-        /// Fixed fee
+        /// ["<c>fixed</c>"] Fixed fee
         /// </summary>
         [JsonPropertyName("fixed")]
         public decimal Fixed { get; set; }
         /// <summary>
-        /// Min quantity
+        /// ["<c>minAmount</c>"] Min quantity
         /// </summary>
         [JsonPropertyName("minAmount")]
         public decimal MinQuantity { get; set; }
         /// <summary>
-        /// Max quantity
+        /// ["<c>maxAmount</c>"] Max quantity
         /// </summary>
         [JsonPropertyName("maxAmount")]
         public decimal MaxQuantity { get; set; }

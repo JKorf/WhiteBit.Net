@@ -10,42 +10,42 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitCollateralAccountSummary
     {
         /// <summary>
-        /// Total equity of collateral balance including lending funds in USDT
+        /// ["<c>equity</c>"] Total equity of collateral balance including lending funds in USDT
         /// </summary>
         [JsonPropertyName("equity")]
         public decimal Equity { get; set; }
         /// <summary>
-        /// Amount of funds in open position USDT
+        /// ["<c>margin</c>"] Amount of funds in open position USDT
         /// </summary>
         [JsonPropertyName("margin")]
         public decimal Margin { get; set; }
         /// <summary>
-        /// Free funds for trading
+        /// ["<c>freeMargin</c>"] Free funds for trading
         /// </summary>
         [JsonPropertyName("freeMargin")]
         public decimal FreeMargin { get; set; }
         /// <summary>
-        /// Funding that will be paid on next position stage change (order, liquidation, etc)
+        /// ["<c>unrealizedFunding</c>"] Funding that will be paid on next position stage change (order, liquidation, etc)
         /// </summary>
         [JsonPropertyName("unrealizedFunding")]
         public decimal UnrealizedFunding { get; set; }
         /// <summary>
-        /// Current profit and loss in USDT
+        /// ["<c>pnl</c>"] Current profit and loss in USDT
         /// </summary>
         [JsonPropertyName("pnl")]
         public decimal Pnl { get; set; }
         /// <summary>
-        /// Current leverage of account which affect amount of lending funds
+        /// ["<c>leverage</c>"] Current leverage of account which affect amount of lending funds
         /// </summary>
         [JsonPropertyName("leverage")]
         public decimal Leverage { get; set; }
         /// <summary>
-        /// Margin fraction
+        /// ["<c>marginFraction</c>"] Margin fraction
         /// </summary>
         [JsonPropertyName("marginFraction")]
         public decimal MarginFraction { get; set; }
         /// <summary>
-        /// Maintenance margin fraction
+        /// ["<c>maintenanceMarginFraction</c>"] Maintenance margin fraction
         /// </summary>
         [JsonPropertyName("maintenanceMarginFraction")]
         public decimal MaintenanceMarginFraction { get; set; }

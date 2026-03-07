@@ -11,7 +11,7 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitTime
     {
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] Timestamp
         /// </summary>
         [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }

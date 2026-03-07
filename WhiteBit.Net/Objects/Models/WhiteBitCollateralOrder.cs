@@ -12,102 +12,102 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitCollateralOrder
     {
         /// <summary>
-        /// Order id
+        /// ["<c>orderId</c>"] Order id
         /// </summary>
         [JsonPropertyName("orderId")]
         public long OrderId { get; set; }
         /// <summary>
-        /// Client order id
+        /// ["<c>clientOrderId</c>"] Client order id
         /// </summary>
         [JsonPropertyName("clientOrderId")]
         public string? ClientOrderId { get; set; }
         /// <summary>
-        /// Symbol
+        /// ["<c>market</c>"] Symbol
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Order side
+        /// ["<c>side</c>"] Order side
         /// </summary>
         [JsonPropertyName("side")]
         public OrderSide OrderSide { get; set; }
         /// <summary>
-        /// Order type
+        /// ["<c>type</c>"] Order type
         /// </summary>
         [JsonPropertyName("type")]
         public OrderType OrderType { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>timestamp</c>"] Timestamp
         /// </summary>
         [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Filled quantity in quote asset
+        /// ["<c>dealMoney</c>"] Filled quantity in quote asset
         /// </summary>
         [JsonPropertyName("dealMoney")]
         public decimal QuoteQuantityFilled { get; set; }
         /// <summary>
-        /// Filled quantity
+        /// ["<c>dealStock</c>"] Filled quantity
         /// </summary>
         [JsonPropertyName("dealStock")]
         public decimal QuantityFilled { get; set; }
         /// <summary>
-        /// Order quantity
+        /// ["<c>amount</c>"] Order quantity
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Taker fee
+        /// ["<c>takerFee</c>"] Taker fee
         /// </summary>
         [JsonPropertyName("takerFee")]
         public decimal TakerFee { get; set; }
         /// <summary>
-        /// Maker fee
+        /// ["<c>makerFee</c>"] Maker fee
         /// </summary>
         [JsonPropertyName("makerFee")]
         public decimal MakerFee { get; set; }
         /// <summary>
-        /// Left
+        /// ["<c>left</c>"] Left
         /// </summary>
         [JsonPropertyName("left")]
         public decimal Left { get; set; }
         /// <summary>
-        /// Deal fee
+        /// ["<c>dealFee</c>"] Deal fee
         /// </summary>
         [JsonPropertyName("dealFee")]
         public decimal DealFee { get; set; }
         /// <summary>
-        /// Price
+        /// ["<c>price</c>"] Price
         /// </summary>
         [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <summary>
-        /// Post only
+        /// ["<c>postOnly</c>"] Post only
         /// </summary>
         [JsonPropertyName("postOnly")]
         public bool PostOnly { get; set; }
         /// <summary>
-        /// Immediate or cancel
+        /// ["<c>ioc</c>"] Immediate or cancel
         /// </summary>
         [JsonPropertyName("ioc")]
         public bool ImmediateOrCancel { get; set; }
         /// <summary>
-        /// Closed order status
+        /// ["<c>status</c>"] Closed order status
         /// </summary>
         [JsonPropertyName("status")]
         public OrderStatus Status { get; set; }
         /// <summary>
-        /// Self Trade Prevention mode
+        /// ["<c>stp</c>"] Self Trade Prevention mode
         /// </summary>
         [JsonPropertyName("stp")]
         public SelfTradePreventionMode StpMode { get; set; }
         /// <summary>
-        /// Position side
+        /// ["<c>positionSide</c>"] Position side
         /// </summary>
         [JsonPropertyName("positionSide")]
         public PositionSide PositionSide { get; set; }
         /// <summary>
-        /// Take profit or stop loss configuration
+        /// ["<c>oto</c>"] Take profit or stop loss configuration
         /// </summary>
         [JsonPropertyName("oto")]
         public WhiteBitCollateralOrderConfig? OneTriggersOtherConfig { get; set; }
@@ -120,17 +120,17 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitCollateralOrderConfig
     {
         /// <summary>
-        /// OTO id
+        /// ["<c>otoId</c>"] OTO id
         /// </summary>
         [JsonPropertyName("otoId")]
         public long OtoId { get; set; }
         /// <summary>
-        /// Stop loss price
+        /// ["<c>stopLoss</c>"] Stop loss price
         /// </summary>
         [JsonPropertyName("stopLoss")]
         public decimal? StopLossPrice { get; set; }
         /// <summary>
-        /// Take profit price
+        /// ["<c>takeProfit</c>"] Take profit price
         /// </summary>
         [JsonPropertyName("takeProfit")]
         public decimal? TakeProfitPrice { get; set; }

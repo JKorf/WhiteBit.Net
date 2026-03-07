@@ -15,12 +15,12 @@ namespace WhiteBit.Net.Objects.Models
         public string Asset { get; set; } = string.Empty;
 
         /// <summary>
-        /// Available balance
+        /// ["<c>available</c>"] Available balance
         /// </summary>
         [JsonPropertyName("available")]
         public decimal Available { get; set; }
         /// <summary>
-        /// Frozen balance
+        /// ["<c>freeze</c>"] Frozen balance
         /// </summary>
         [JsonPropertyName("freeze")]
         public decimal Frozen { get; set; }

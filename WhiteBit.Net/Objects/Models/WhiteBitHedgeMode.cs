@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace WhiteBit.Net.Objects.Models
 {
@@ -8,7 +8,7 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitHedgeMode
     {
         /// <summary>
-        /// In hedge mode
+        /// ["<c>hedgeMode</c>"] In hedge mode
         /// </summary>
         [JsonPropertyName("hedgeMode")]
         public bool HedgeMode { get; set; }

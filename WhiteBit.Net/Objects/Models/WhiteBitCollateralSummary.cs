@@ -10,27 +10,27 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitCollateralSummary
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
         [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Balance
+        /// ["<c>balance</c>"] Balance
         /// </summary>
         [JsonPropertyName("balance")]
         public decimal Balance { get; set; }
         /// <summary>
-        /// Borrow
+        /// ["<c>borrow</c>"] Borrow
         /// </summary>
         [JsonPropertyName("borrow")]
         public decimal Borrow { get; set; }
         /// <summary>
-        /// Available without borrow
+        /// ["<c>availableWithoutBorrow</c>"] Available without borrow
         /// </summary>
         [JsonPropertyName("availableWithoutBorrow")]
         public decimal AvailableWithoutBorrow { get; set; }
         /// <summary>
-        /// Available with borrow
+        /// ["<c>availableWithBorrow</c>"] Available with borrow
         /// </summary>
         [JsonPropertyName("availableWithBorrow")]
         public decimal AvailableWithBorrow { get; set; }

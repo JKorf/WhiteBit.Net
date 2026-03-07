@@ -14,37 +14,37 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Base id
+        /// ["<c>base_id</c>"] Base id
         /// </summary>
         [JsonPropertyName("base_id")]
         public long? BaseId { get; set; }
         /// <summary>
-        /// Quote id
+        /// ["<c>quote_id</c>"] Quote id
         /// </summary>
         [JsonPropertyName("quote_id")]
         public long? QuoteId { get; set; }
         /// <summary>
-        /// Last trade price
+        /// ["<c>last_price</c>"] Last trade price
         /// </summary>
         [JsonPropertyName("last_price")]
         public decimal LastPrice { get; set; }
         /// <summary>
-        /// Quote volume
+        /// ["<c>quote_volume</c>"] Quote volume
         /// </summary>
         [JsonPropertyName("quote_volume")]
         public decimal QuoteVolume { get; set; }
         /// <summary>
-        /// Base volume
+        /// ["<c>base_volume</c>"] Base volume
         /// </summary>
         [JsonPropertyName("base_volume")]
         public decimal BaseVolume { get; set; }
         /// <summary>
-        /// Is frozen
+        /// ["<c>isFrozen</c>"] Is frozen
         /// </summary>
         [JsonPropertyName("isFrozen")]
         public bool IsFrozen { get; set; }
         /// <summary>
-        /// Change percentage
+        /// ["<c>change</c>"] Change percentage
         /// </summary>
         [JsonPropertyName("change")]
         public decimal ChangePercentage { get; set; }

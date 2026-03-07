@@ -11,7 +11,7 @@ namespace WhiteBit.Net.Objects.Models
     public record WhiteBitOrderRequest
     {
         /// <summary>
-        /// Order side
+        /// ["<c>side</c>"] Order side
         /// </summary>
         [JsonPropertyName("side")]
         public OrderSide OrderSide { get; set; }
@@ -26,7 +26,7 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("price"), JsonConverter(typeof(DecimalStringWriterConverter))]
         public decimal Price { get; set; }
         /// <summary>
-        /// Symbol
+        /// ["<c>market</c>"] Symbol
         /// </summary>
         [JsonPropertyName("market")]
         public string Symbol { get; set; } = string.Empty;
