@@ -30,18 +30,18 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/stop_market
         /// </para>
         /// </summary>
-        /// <param name="symbol">Symbol, for example `ETH_USDT`</param>
-        /// <param name="side">Order side</param>
+        /// <param name="symbol">["<c>market</c>"] Symbol, for example `ETH_USDT`</param>
+        /// <param name="side">["<c>side</c>"] Order side</param>
         /// <param name="type">Order type</param>
-        /// <param name="quantity">Quantity of the order in base asset</param>
-        /// <param name="quoteQuantity">Quantity of the order in quote asset, only supported for market buy orders</param>
-        /// <param name="price">Limit price</param>
-        /// <param name="postOnly">Post only flag</param>
-        /// <param name="immediateOrCancel">Immediate or cancel flag</param>
-        /// <param name="bboRole">BBO role</param>
-        /// <param name="triggerPrice">Trigger price</param>
-        /// <param name="clientOrderId">Client order id</param>
-        /// <param name="stpMode">Self trade prevention mode</param>
+        /// <param name="quantity">["<c>amount</c>"] Quantity of the order in base asset</param>
+        /// <param name="quoteQuantity">["<c>amount</c>"] Quantity of the order in quote asset, only supported for market buy orders</param>
+        /// <param name="price">["<c>price</c>"] Limit price</param>
+        /// <param name="postOnly">["<c>postOnly</c>"] Post only flag</param>
+        /// <param name="immediateOrCancel">["<c>ioc</c>"] Immediate or cancel flag</param>
+        /// <param name="bboRole">["<c>bboRole</c>"] BBO role</param>
+        /// <param name="triggerPrice">["<c>activation_price</c>"] Trigger price</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] Client order id</param>
+        /// <param name="stpMode">["<c>stp</c>"] Self trade prevention mode</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<WhiteBitOrder>> PlaceSpotOrderAsync(
@@ -68,7 +68,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/bulk
         /// </para>
         /// </summary>
-        /// <param name="requests">Orders to place, max 20</param>
+        /// <param name="requests">["<c>orders</c>"] Orders to place, max 20</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<CallResult<WhiteBitOrderResponse>[]>> PlaceSpotMultipleOrdersAsync(
             IEnumerable<WhiteBitOrderRequest> requests,
@@ -83,9 +83,9 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/cancel
         /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
-        /// <param name="orderId">The order id, either this or `clientOrderId` has to be provided</param>
-        /// <param name="clientOrderId">The client order id, either this or `id` should be provided</param>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_USDT`</param>
+        /// <param name="orderId">["<c>orderId</c>"] The order id, either this or `clientOrderId` has to be provided</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] The client order id, either this or `id` should be provided</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default);
 
@@ -98,8 +98,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/cancel/all
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
-        /// <param name="orderProductTypes">Filter by order product types</param>
+        /// <param name="symbol">["<c>market</c>"] Filter by symbol</param>
+        /// <param name="orderProductTypes">["<c>type</c>"] Filter by order product types</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> CancelAllOrdersAsync(string? symbol = null, IEnumerable<OrderProductType>? orderProductTypes = null, CancellationToken ct = default);
 
@@ -112,11 +112,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/orders
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter symbol, for example `ETH_USDT`</param>
-        /// <param name="orderId">Filter by order id</param>
-        /// <param name="clientOrderId">Filter by client order id</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="symbol">["<c>market</c>"] Filter symbol, for example `ETH_USDT`</param>
+        /// <param name="orderId">["<c>orderId</c>"] Filter by order id</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] Filter by client order id</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOrder[]>> GetOpenOrdersAsync(string? symbol = null, long? orderId = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -129,14 +129,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/trade-account/order/history
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol, for example `ETH_USDT`</param>
-        /// <param name="orderId">Filter by order id</param>
-        /// <param name="clientOrderId">Filter by client order id</param>
-        /// <param name="status">Filter by order status</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
+        /// <param name="symbol">["<c>market</c>"] Filter by symbol, for example `ETH_USDT`</param>
+        /// <param name="orderId">["<c>orderId</c>"] Filter by order id</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] Filter by client order id</param>
+        /// <param name="status">["<c>status</c>"] Filter by order status</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
+        /// <param name="startTime">["<c>startDate</c>"] Filter by start time</param>
+        /// <param name="endTime">["<c>endDate</c>"] Filter by end time</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<Dictionary<string, WhiteBitClosedOrder[]>>> GetClosedOrdersAsync(
             string? symbol = null,
@@ -158,12 +158,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/trade-account/executed-history
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol, for example `ETH_USDT`</param>
-        /// <param name="clientOrderId">Filter by client order id</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="symbol">["<c>market</c>"] Filter by symbol, for example `ETH_USDT`</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] Filter by client order id</param>
+        /// <param name="startTime">["<c>startTime</c>"] Filter by start time</param>
+        /// <param name="endTime">["<c>endTime</c>"] Filter by end time</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitUserTrade[]>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -176,9 +176,9 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/trade-account/order
         /// </para>
         /// </summary>
-        /// <param name="orderId">The order id</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="orderId">["<c>orderId</c>"] The order id</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitUserTrade[]>> GetOrderTradesAsync(long orderId, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -191,13 +191,13 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/modify
         /// </para>
         /// </summary>
-        /// <param name="orderId">The order id, either this or `clientOrderId` should be provided</param>
-        /// <param name="clientOrderId">Client order id, either this or `orderId` should be provided</param>
-        /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
-        /// <param name="quantity">New quantity</param>
-        /// <param name="quoteQuantity">New quote quantity</param>
-        /// <param name="price">New price</param>
-        /// <param name="triggerPrice">New trigger price</param>
+        /// <param name="orderId">["<c>orderId</c>"] The order id, either this or `clientOrderId` should be provided</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] Client order id, either this or `orderId` should be provided</param>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_USDT`</param>
+        /// <param name="quantity">["<c>amount</c>"] New quantity</param>
+        /// <param name="quoteQuantity">["<c>total</c>"] New quote quantity</param>
+        /// <param name="price">["<c>price</c>"] New price</param>
+        /// <param name="triggerPrice">["<c>activationPrice</c>"] New trigger price</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOrder>> EditOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, decimal? quantity = null, decimal? quoteQuantity = null, decimal? price = null, decimal? triggerPrice = null, CancellationToken ct = default);
 
@@ -210,9 +210,9 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/kill-switch
         /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
-        /// <param name="timeout">The timeout in seconds, or 0 to cancel the kill switch</param>
-        /// <param name="symbolProductTypes">Symbol product types</param>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_USDT`</param>
+        /// <param name="timeout">["<c>timeout</c>"] The timeout in seconds, or 0 to cancel the kill switch</param>
+        /// <param name="symbolProductTypes">["<c>types</c>"] Symbol product types</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> SetKillSwitchAsync(string symbol, int timeout, IEnumerable<OrderProductType>? symbolProductTypes = null, CancellationToken ct = default);
 
@@ -225,7 +225,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/kill-switch/status
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="symbol">["<c>market</c>"] Filter by symbol</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitKillSwitch[]>> GetKillSwitchStatusAsync(string? symbol = null, CancellationToken ct = default);
     }

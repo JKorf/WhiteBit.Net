@@ -83,8 +83,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETH_USDT`</param>
-        /// <param name="limit">The order book depth, max 100</param>
-        /// <param name="mergeLevel">Aggregation level</param>
+        /// <param name="limit">["<c>limit</c>"] The order book depth, max 100</param>
+        /// <param name="mergeLevel">["<c>level</c>"] Aggregation level</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, int? mergeLevel = null, CancellationToken ct = default);
 
@@ -98,7 +98,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
-        /// <param name="side">Filter by trade side</param>
+        /// <param name="side">["<c>type</c>"] Filter by trade side</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitTrade[]>> GetRecentTradesAsync(string symbol, OrderSide? side = null, CancellationToken ct = default);
 
@@ -142,10 +142,10 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get funding rate history
         /// </summary>
         /// <param name="symbol">Symbol name, for example `BTC_PERP`</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="startTime">["<c>startDate</c>"] Filter by start time</param>
+        /// <param name="endTime">["<c>endDate</c>"] Filter by end time</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitFundingHistory[]>> GetFundingHistoryAsync(
             string symbol,

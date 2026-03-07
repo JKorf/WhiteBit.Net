@@ -34,8 +34,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/main-account/address
         /// </para>
         /// </summary>
-        /// <param name="asset">The asset</param>
-        /// <param name="network">Network to use</param>
+        /// <param name="asset">["<c>ticker</c>"] The asset</param>
+        /// <param name="network">["<c>network</c>"] Network to use</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitDepositAddressInfo>> GetDepositAddressAsync(string asset, string? network = null, CancellationToken ct = default);
 
@@ -48,7 +48,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/trade-account/balance
         /// </para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">["<c>ticker</c>"] Filter by asset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(string? asset = null, CancellationToken ct = default);
 
@@ -61,21 +61,21 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/main-account/fiat-deposit-url
         /// </para>
         /// </summary>
-        /// <param name="asset">The asset</param>
-        /// <param name="provider">The provider</param>
-        /// <param name="quantity">The quantity</param>
-        /// <param name="clientOrderId">Client order id</param>
-        /// <param name="successLink">Success redirect link</param>
-        /// <param name="failureLink">Failure redirect link</param>
-        /// <param name="returnLink">Redirect link when user cancels</param>
-        /// <param name="customerFirstName">Customer first name</param>
-        /// <param name="customerLastName">Customer last name</param>
-        /// <param name="customerEmail">Customer email</param>
-        /// <param name="customerAddressLine1">Customer address line 1</param>
-        /// <param name="customerAddressLine2">Customer address line 2</param>
-        /// <param name="customerCity">Customer city</param>
-        /// <param name="customerZipCode">Customer zip code</param>
-        /// <param name="customerCountryCode">Customer country code</param>
+        /// <param name="asset">["<c>ticker</c>"] The asset</param>
+        /// <param name="provider">["<c>provider</c>"] The provider</param>
+        /// <param name="quantity">["<c>amount</c>"] The quantity</param>
+        /// <param name="clientOrderId">["<c>uniqueId</c>"] Client order id</param>
+        /// <param name="successLink">["<c>successLink</c>"] Success redirect link</param>
+        /// <param name="failureLink">["<c>failureLink</c>"] Failure redirect link</param>
+        /// <param name="returnLink">["<c>returnLink</c>"] Redirect link when user cancels</param>
+        /// <param name="customerFirstName">["<c>customer.firstName</c>"] Customer first name</param>
+        /// <param name="customerLastName">["<c>customer.lastName</c>"] Customer last name</param>
+        /// <param name="customerEmail">["<c>customer.email</c>"] Customer email</param>
+        /// <param name="customerAddressLine1">["<c>customer.address.addressLine1</c>"] Customer address line 1</param>
+        /// <param name="customerAddressLine2">["<c>customer.address.addressLine2</c>"] Customer address line 2</param>
+        /// <param name="customerCity">["<c>customer.address.city</c>"] Customer city</param>
+        /// <param name="customerZipCode">["<c>customer.address.zipCode</c>"] Customer zip code</param>
+        /// <param name="customerCountryCode">["<c>customer.address.countryCode</c>"] Customer country code</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitDepositUrl>> GetFiatDepositAddressAsync(string asset, string provider, decimal quantity, string clientOrderId, string? successLink = null, string? failureLink = null, string? returnLink = null, string? customerFirstName = null, string? customerLastName = null, string? customerEmail = null, string? customerAddressLine1 = null, string? customerAddressLine2 = null, string? customerCity = null, string? customerZipCode = null, string? customerCountryCode = null, CancellationToken ct = default);
 
@@ -90,20 +90,20 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/main-account/withdraw-pay
         /// </para>
         /// </summary>
-        /// <param name="asset">The asset, for example `ETH`</param>
-        /// <param name="quantity">Quantity to withdraw</param>
-        /// <param name="address">Target address (wallet address for cryptocurrencies, identifier/card number for fiat currencies)</param>
-        /// <param name="uniqueId">Unique id</param>
+        /// <param name="asset">["<c>ticker</c>"] The asset, for example `ETH`</param>
+        /// <param name="quantity">["<c>amount</c>"] Quantity to withdraw</param>
+        /// <param name="address">["<c>address</c>"] Target address (wallet address for cryptocurrencies, identifier/card number for fiat currencies)</param>
+        /// <param name="uniqueId">["<c>uniqueId</c>"] Unique id</param>
         /// <param name="deductFeeFromOutput">True: fee is deducted from the output amount, false: fee is deducted from the send amount</param>
-        /// <param name="memo">Memo</param>
-        /// <param name="provider">Provider name for fiat withdrawal</param>
-        /// <param name="network">Network for crypto withdrawal</param>
-        /// <param name="partialEnable">Partial enable for fiat withdrawal</param>
-        /// <param name="beneficiaryFirstName">Beneficiary first name for fiat withdrawal</param>
-        /// <param name="beneficiaryLastName">Beneficiary last name for fiat withdrawal</param>
-        /// <param name="beneficiaryTin">Beneficiary TAX payer number</param>
-        /// <param name="beneficiaryPhone">Beneficiary phone number</param>
-        /// <param name="beneficiaryEmail">Beneficiary email</param>
+        /// <param name="memo">["<c>memo</c>"] Memo</param>
+        /// <param name="provider">["<c>provider</c>"] Provider name for fiat withdrawal</param>
+        /// <param name="network">["<c>network</c>"] Network for crypto withdrawal</param>
+        /// <param name="partialEnable">["<c>partialEnable</c>"] Partial enable for fiat withdrawal</param>
+        /// <param name="beneficiaryFirstName">["<c>beneficiary.firstName</c>"] Beneficiary first name for fiat withdrawal</param>
+        /// <param name="beneficiaryLastName">["<c>beneficiary.lastName</c>"] Beneficiary last name for fiat withdrawal</param>
+        /// <param name="beneficiaryTin">["<c>beneficiary.tin</c>"] Beneficiary TAX payer number</param>
+        /// <param name="beneficiaryPhone">["<c>beneficiary.phone</c>"] Beneficiary phone number</param>
+        /// <param name="beneficiaryEmail">["<c>beneficiary.email</c>"] Beneficiary email</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> WithdrawAsync(string asset, decimal quantity, string address, string uniqueId, bool deductFeeFromOutput, string? memo = null, string? provider = null, string? network = null, bool? partialEnable = null, string? beneficiaryFirstName = null, string? beneficiaryLastName = null, string? beneficiaryTin = null, string? beneficiaryPhone = null, string? beneficiaryEmail = null, CancellationToken ct = default);
         
@@ -116,10 +116,10 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/main-account/transfer
         /// </para>
         /// </summary>
-        /// <param name="fromAccount">From account</param>
-        /// <param name="toAccount">To account</param>
-        /// <param name="asset">The asset, for example `ETH`</param>
-        /// <param name="quantity">Quantity to transfer</param>
+        /// <param name="fromAccount">["<c>from</c>"] From account</param>
+        /// <param name="toAccount">["<c>to</c>"] To account</param>
+        /// <param name="asset">["<c>ticker</c>"] The asset, for example `ETH`</param>
+        /// <param name="quantity">["<c>amount</c>"] Quantity to transfer</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> TransferAsync(AccountType fromAccount, AccountType toAccount, string asset, decimal quantity, CancellationToken ct = default);
 
@@ -132,14 +132,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/main-account/history
         /// </para>
         /// </summary>
-        /// <param name="type">Filter by type</param>
-        /// <param name="asset">Filter by asset</param>
-        /// <param name="address">Filter by address</param>
-        /// <param name="memo">Filter by memo</param>
-        /// <param name="addresses">Filter by multiple addresses</param>
-        /// <param name="uniqueId">Filter by uniqueId</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="type">["<c>transactionMethod</c>"] Filter by type</param>
+        /// <param name="asset">["<c>ticker</c>"] Filter by asset</param>
+        /// <param name="address">["<c>address</c>"] Filter by address</param>
+        /// <param name="memo">["<c>memo</c>"] Filter by memo</param>
+        /// <param name="addresses">["<c>addresses</c>"] Filter by multiple addresses</param>
+        /// <param name="uniqueId">["<c>uniqueId</c>"] Filter by uniqueId</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitDepositWithdrawals>> GetDepositWithdrawalHistoryAsync(TransactionType? type = null, string? asset = null, string? address = null, string? memo = null, string? addresses = null, string? uniqueId = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -152,9 +152,9 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/main-account/create-new-address
         /// </para>
         /// </summary>
-        /// <param name="asset">Asset name</param>
-        /// <param name="network">Asset network</param>
-        /// <param name="addressType">Address type for BTC/LTC: p2sh-segwit, bech32</param>
+        /// <param name="asset">["<c>ticker</c>"] Asset name</param>
+        /// <param name="network">["<c>network</c>"] Asset network</param>
+        /// <param name="addressType">["<c>type</c>"] Address type for BTC/LTC: p2sh-segwit, bech32</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitDepositAddressInfo>> CreateDepositAddressAsync(string asset, string? network = null, string? addressType = null, CancellationToken ct = default);
 
@@ -179,11 +179,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/mining/rewards
         /// </para>
         /// </summary>
-        /// <param name="accountName">Filter by account name</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="accountName">["<c>account</c>"] Filter by account name</param>
+        /// <param name="startTime">["<c>from</c>"] Filter by start time</param>
+        /// <param name="endTime">["<c>to</c>"] Filter by end time</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitMiningRewards>> GetMiningRewardHistoryAsync(string? accountName = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -196,7 +196,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/collateral-account/balance
         /// </para>
         /// </summary>
-        /// <param name="asset">Filter by asset, for example `ETH`</param>
+        /// <param name="asset">["<c>ticker</c>"] Filter by asset, for example `ETH`</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<Dictionary<string, decimal>>> GetCollateralBalancesAsync(string? asset = null, CancellationToken ct = default);
 
@@ -233,14 +233,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/collateral-account/funding-history
         /// </para>
         /// </summary>
-        /// <param name="symbol">The trading pair symbol for which to retrieve the funding history, such as "BTC_PERP". This value cannot be
+        /// <param name="symbol">["<c>market</c>"] The trading pair symbol for which to retrieve the funding history, such as "BTC_PERP". This value cannot be
         /// null or empty.</param>
-        /// <param name="startTime">The optional UTC start time for the funding history retrieval. If specified, only records after this time
+        /// <param name="startTime">["<c>startDate</c>"] The optional UTC start time for the funding history retrieval. If specified, only records after this time
         /// are returned.</param>
-        /// <param name="endTime">The optional UTC end time for the funding history retrieval. If specified, only records before this time are
+        /// <param name="endTime">["<c>endDate</c>"] The optional UTC end time for the funding history retrieval. If specified, only records before this time are
         /// returned.</param>
-        /// <param name="limit">The optional maximum number of records to return. If not specified, a default limit is applied.</param>
-        /// <param name="offset">The optional offset for pagination. Specifies the number of records to skip before returning results.</param>
+        /// <param name="limit">["<c>limit</c>"] The optional maximum number of records to return. If not specified, a default limit is applied.</param>
+        /// <param name="offset">["<c>offset</c>"] The optional offset for pagination. Specifies the number of records to skip before returning results.</param>
         /// <param name="ct">A cancellation token that can be used to cancel the asynchronous operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a WebCallResult with the funding
         /// history records for the specified account and symbol.</returns>
@@ -261,7 +261,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/collateral-account/leverage
         /// </para>
         /// </summary>
-        /// <param name="leverage">New leverage setting</param>
+        /// <param name="leverage">["<c>leverage</c>"] New leverage setting</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitLeverage>> SetAccountLeverageAsync(int leverage, CancellationToken ct = default);
 
@@ -298,7 +298,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/collateral-account/hedge-mode/update
         /// </para>
         /// </summary>
-        /// <param name="enableHedgeMode">Hedge mode enabled or not</param>
+        /// <param name="enableHedgeMode">["<c>hedgeMode</c>"] Hedge mode enabled or not</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitHedgeMode>> SetHedgeModeAsync(bool enableHedgeMode, CancellationToken ct = default);
 

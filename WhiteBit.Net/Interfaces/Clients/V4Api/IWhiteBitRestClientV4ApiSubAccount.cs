@@ -20,11 +20,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/create
         /// </para>
         /// </summary>
-        /// <param name="alias">Account name</param>
-        /// <param name="email">If provided an invitation email will be send</param>
-        /// <param name="shareKyc">If KYC is shared with main account</param>
-        /// <param name="spotEnabled">Whether spot trading is enabled</param>
-        /// <param name="collateralEnabled">Whether collateral trading is enabled</param>
+        /// <param name="alias">["<c>alias</c>"] Account name</param>
+        /// <param name="email">["<c>email</c>"] If provided an invitation email will be send</param>
+        /// <param name="shareKyc">["<c>shareKyc</c>"] If KYC is shared with main account</param>
+        /// <param name="spotEnabled">["<c>permissions.spotEnabled</c>"] Whether spot trading is enabled</param>
+        /// <param name="collateralEnabled">["<c>permissions.collateralEnabled</c>"] Whether collateral trading is enabled</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitSubAccount>> CreateSubAccountAsync(string alias, string? email = null, bool? shareKyc = null, string? spotEnabled = null, string? collateralEnabled = null, CancellationToken ct = default);
         
@@ -37,7 +37,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/delete
         /// </para>
         /// </summary>
-        /// <param name="id">Sub account id</param>
+        /// <param name="id">["<c>id</c>"] Sub account id</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> DeleteSubAccountAsync(string id, CancellationToken ct = default);
 
@@ -50,10 +50,10 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/edit
         /// </para>
         /// </summary>
-        /// <param name="id">Sub account id</param>
-        /// <param name="alias">Sub account alias</param>
-        /// <param name="spotEnabled">Spot trading enabled</param>
-        /// <param name="collateralEnabled">Collateral trading enabled</param>
+        /// <param name="id">["<c>id</c>"] Sub account id</param>
+        /// <param name="alias">["<c>alias</c>"] Sub account alias</param>
+        /// <param name="spotEnabled">["<c>permissions.spotEnabled</c>"] Spot trading enabled</param>
+        /// <param name="collateralEnabled">["<c>permissions.collateralEnabled</c>"] Collateral trading enabled</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> EditSubAccountAsync(string id, string alias, string spotEnabled, string collateralEnabled, CancellationToken ct = default);
 
@@ -66,9 +66,9 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/list
         /// </para>
         /// </summary>
-        /// <param name="search">Search string</param>
+        /// <param name="search">["<c>search</c>"] Search string</param>
         /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitSubAccounts>> GetSubAccountsAsync(string? search = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -81,10 +81,10 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/transfer
         /// </para>
         /// </summary>
-        /// <param name="subaccountId">Sub account id</param>
-        /// <param name="direction">Transfer direction</param>
-        /// <param name="asset">The asset, for example `ETH`</param>
-        /// <param name="quantity">Quantity</param>
+        /// <param name="subaccountId">["<c>id</c>"] Sub account id</param>
+        /// <param name="direction">["<c>direction</c>"] Transfer direction</param>
+        /// <param name="asset">["<c>ticker</c>"] The asset, for example `ETH`</param>
+        /// <param name="quantity">["<c>amount</c>"] Quantity</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> SubaccountTransferAsync(string subaccountId, SubTransferDirection direction, string asset, decimal quantity, CancellationToken ct = default);
 
@@ -97,7 +97,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/block
         /// </para>
         /// </summary>
-        /// <param name="id">Sub account id</param>
+        /// <param name="id">["<c>id</c>"] Sub account id</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> BlockSubaccountAsync(string id, CancellationToken ct = default);
 
@@ -110,7 +110,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/unblock
         /// </para>
         /// </summary>
-        /// <param name="id">Sub account id</param>
+        /// <param name="id">["<c>id</c>"] Sub account id</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> UnblockSubaccountAsync(string id, CancellationToken ct = default);
 
@@ -123,8 +123,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/sub-account/balances
         /// </para>
         /// </summary>
-        /// <param name="id">Sub account id</param>
-        /// <param name="asset">Asset name</param>
+        /// <param name="id">["<c>id</c>"] Sub account id</param>
+        /// <param name="asset">["<c>ticker</c>"] Asset name</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitSubBalances[]>> GetSubaccountBalancesAsync(string id, string? asset = null, CancellationToken ct = default);
 

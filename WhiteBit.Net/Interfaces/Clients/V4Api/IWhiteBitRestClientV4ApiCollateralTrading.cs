@@ -27,20 +27,20 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/collateral/trigger-market
         /// </para>
         /// </summary>
-        /// <param name="symbol">Symbol</param>
-        /// <param name="side">Order side</param>
+        /// <param name="symbol">["<c>market</c>"] Symbol</param>
+        /// <param name="side">["<c>side</c>"] Order side</param>
         /// <param name="type">Order type</param>
-        /// <param name="quantity">Quantity of the order in base asset</param>
-        /// <param name="price">Limit price</param>
-        /// <param name="postOnly">Post only flag</param>
-        /// <param name="immediateOrCancel">Immediate or cancel flag</param>
-        /// <param name="stopLossPrice">Stop loss price</param>
-        /// <param name="takeProfitPrice">Take profit price</param>
-        /// <param name="bboRole">BBO role</param>
-        /// <param name="triggerPrice">Trigger price</param>
-        /// <param name="clientOrderId">Client order id</param>
-        /// <param name="stpMode">Self trade prevention mode</param>
-        /// <param name="positionSide">Position side, required when in hedge mode</param>
+        /// <param name="quantity">["<c>amount</c>"] Quantity of the order in base asset</param>
+        /// <param name="price">["<c>price</c>"] Limit price</param>
+        /// <param name="postOnly">["<c>postOnly</c>"] Post only flag</param>
+        /// <param name="immediateOrCancel">["<c>ioc</c>"] Immediate or cancel flag</param>
+        /// <param name="stopLossPrice">["<c>stopLoss</c>"] Stop loss price</param>
+        /// <param name="takeProfitPrice">["<c>takeProfit</c>"] Take profit price</param>
+        /// <param name="bboRole">["<c>bboRole</c>"] BBO role</param>
+        /// <param name="triggerPrice">["<c>activation_price</c>"] Trigger price</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] Client order id</param>
+        /// <param name="stpMode">["<c>stp</c>"] Self trade prevention mode</param>
+        /// <param name="positionSide">["<c>positionSide</c>"] Position side, required when in hedge mode</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
             string symbol,
@@ -68,7 +68,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/collateral-account/positions/open
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="symbol">["<c>market</c>"] Filter by symbol</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitPosition[]>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default);
 
@@ -81,12 +81,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/collateral-account/positions/history
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
-        /// <param name="positionId">Filter by position id</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="symbol">["<c>market</c>"] Filter by symbol, for example `ETHUSDT`</param>
+        /// <param name="positionId">["<c>positionId</c>"] Filter by position id</param>
+        /// <param name="startTime">["<c>startDate</c>"] Filter by start time</param>
+        /// <param name="endTime">["<c>endDate</c>"] Filter by end time</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitPositionHistory[]>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -99,9 +99,9 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/conditional-orders
         /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="offset">Result offset</param>
+        /// <param name="symbol">["<c>market</c>"] Filter by symbol, for example `ETHUSDT`</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
+        /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitConditionalOrdersResult>> GetOpenConditionalOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
 
@@ -114,14 +114,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/collateral/oco
         /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
-        /// <param name="orderSide">Order side</param>
-        /// <param name="quantity">Quantity</param>
-        /// <param name="price">Limit price</param>
-        /// <param name="triggerPrice">Trigger price</param>
-        /// <param name="stopLimitPrice">Stop limit price</param>
-        /// <param name="clientOrderId">Client order id</param>
-        /// <param name="positionSide">Position side, required when in hedge mode</param>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_PERP`</param>
+        /// <param name="orderSide">["<c>side</c>"] Order side</param>
+        /// <param name="quantity">["<c>amount</c>"] Quantity</param>
+        /// <param name="price">["<c>price</c>"] Limit price</param>
+        /// <param name="triggerPrice">["<c>activation_price</c>"] Trigger price</param>
+        /// <param name="stopLimitPrice">["<c>stop_limit_price</c>"] Stop limit price</param>
+        /// <param name="clientOrderId">["<c>clientOrderId</c>"] Client order id</param>
+        /// <param name="positionSide">["<c>positionSide</c>"] Position side, required when in hedge mode</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
             string symbol,
@@ -143,8 +143,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/oco-cancel
         /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
-        /// <param name="orderId">Order id</param>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_PERP`</param>
+        /// <param name="orderId">["<c>orderId</c>"] Order id</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOcoOrder>> CancelOcoOrderAsync(string symbol, long orderId, CancellationToken ct = default);
         
@@ -157,8 +157,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/conditional-cancel
         /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
-        /// <param name="orderId">Order id</param>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_PERP`</param>
+        /// <param name="orderId">["<c>id</c>"] Order id</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> CancelConditionalOrderAsync(string symbol, long orderId, CancellationToken ct = default);
 
@@ -171,8 +171,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// POST /api/v4/order/oto-cancel
         /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol, for example `ETH_PERP`</param>
-        /// <param name="orderId">Order id</param>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_PERP`</param>
+        /// <param name="orderId">["<c>otoId</c>"] Order id</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult> CancelOTOOrderAsync(string symbol, long orderId, CancellationToken ct = default);
 
