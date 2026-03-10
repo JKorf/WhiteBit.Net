@@ -1128,7 +1128,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     TakeProfitPrice = openOrder.OtoData?.TakeProfit,
                     StopLossPrice = openOrder.OtoData?.StopLoss,
                     TriggerPrice = openOrder.TriggerPrice,
-                    IsTriggerOrder = openOrder.TriggerPrice > 0
+                    IsTriggerOrder = openOrder.TriggerPrice > 0,
+                    UpdateTime = openOrder.UpdateTime
                 });
             }
             else
@@ -1165,7 +1166,8 @@ namespace WhiteBit.Net.Clients.V4Api
                         TakeProfitPrice = closedOrder.OtoData?.TakeProfit,
                         StopLossPrice = closedOrder.OtoData?.StopLoss,
                         TriggerPrice = closedOrder.TriggerPrice,
-                        IsTriggerOrder = closedOrder.TriggerPrice > 0
+                        IsTriggerOrder = closedOrder.TriggerPrice > 0,
+                        UpdateTime = closedOrder.FillTime ?? closedOrder.UpdateTime
                 });
             }            
         }
@@ -1184,7 +1186,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var data = orders.Data.Where(x => x.Symbol.EndsWith("_PERP"));
 
-            return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, SupportedFuturesModes, data.Select(x => new SharedFuturesOrder(
+            return orders.AsExchangeResult<SharedFuturesOrder[]>(Exchange, SupportedFuturesModes, [.. data.Select(x => new SharedFuturesOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
@@ -1204,8 +1206,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
-                IsTriggerOrder = x.TriggerPrice > 0
-            }).ToArray());
+                IsTriggerOrder = x.TriggerPrice > 0,
+                UpdateTime = x.UpdateTime
+            })]);
         }
 
         GetClosedOrdersOptions IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new GetClosedOrdersOptions(false, true, true, 100)
@@ -1265,7 +1268,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
-                IsTriggerOrder = x.TriggerPrice > 0
+                IsTriggerOrder = x.TriggerPrice > 0,
+                UpdateTime = x.FillTime ?? x.UpdateTime
             }));
 
             return result.AsExchangeResult(
