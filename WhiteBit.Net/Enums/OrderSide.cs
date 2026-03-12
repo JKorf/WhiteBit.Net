@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum OrderSide
     {
         /// <summary>
-        /// Buy
+        /// ["<c>buy</c>"] Buy
         /// </summary>
         [Map("buy", "2")]
         Buy,
         /// <summary>
-        /// Sell
+        /// ["<c>sell</c>"] Sell
         /// </summary>
         [Map("sell", "1")]
         Sell

@@ -11,27 +11,27 @@ namespace WhiteBit.Net.Enums
     public enum OrderStatus
     {
         /// <summary>
-        /// Unfilled
+        /// ["<c>Open</c>"] Unfilled
         /// </summary>
         [Map("Open")]
         Open,
         /// <summary>
-        /// Canceled
+        /// ["<c>Canceled</c>"] Canceled
         /// </summary>
         [Map("Canceled", "2")]
         Canceled,
         /// <summary>
-        /// Filled
+        /// ["<c>Filled</c>"] Filled
         /// </summary>
         [Map("Filled", "1")]
         Filled,
         /// <summary>
-        /// Partially filled
+        /// ["<c>PARTIALLY_FILLED</c>"] Partially filled
         /// </summary>
         [Map("PARTIALLY_FILLED")]
         PartiallyFilled,
         /// <summary>
-        /// Auto canceled due to insufficient margin
+        /// ["<c>AUTO_CANCELED_USER_MARGIN</c>"] Auto canceled due to insufficient margin
         /// </summary>
         [Map("AUTO_CANCELED_USER_MARGIN")]
         AutoCanceledUserMargin

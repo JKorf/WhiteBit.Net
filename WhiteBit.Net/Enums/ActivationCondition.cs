@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum ActivationCondition
     {
         /// <summary>
-        /// Price condition higher than x
+        /// ["<c>gte</c>"] Price condition higher than x
         /// </summary>
         [Map("gte")]
         GreaterThanOrEqual,
         /// <summary>
-        /// Price condition lower than x
+        /// ["<c>lte</c>"] Price condition lower than x
         /// </summary>
         [Map("lte")]
         LessThanOrEqu

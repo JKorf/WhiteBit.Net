@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum SystemStatus
     {
         /// <summary>
-        /// System operational
+        /// ["<c>1</c>"] System operational
         /// </summary>
         [Map("1")]
         Operational,
         /// <summary>
-        /// System maintenance
+        /// ["<c>0</c>"] System maintenance
         /// </summary>
         [Map("0")]
         Maintenance

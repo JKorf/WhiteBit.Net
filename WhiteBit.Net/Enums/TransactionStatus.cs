@@ -11,47 +11,47 @@ namespace WhiteBit.Net.Enums
     public enum TransactionStatus
     {
         /// <summary>
-        /// Pending
+        /// ["<c>1</c>"] Pending
         /// </summary>
         [Map("1", "2", "6", "10", "11", "12", "13", "14", "15", "16", "17")]
         Pending,
         /// <summary>
-        /// Success
+        /// ["<c>3</c>"] Success
         /// </summary>
         [Map("3", "7")]
         Success,
         /// <summary>
-        /// Canceled
+        /// ["<c>4</c>"] Canceled
         /// </summary>
         [Map("4", "9")]
         Canceled,
         /// <summary>
-        /// Unconfirmed by user
+        /// ["<c>5</c>"] Unconfirmed by user
         /// </summary>
         [Map("5")]
         UnconfirmedByUser,
         /// <summary>
-        /// Frozen
+        /// ["<c>31</c>"] Frozen
         /// </summary>
         [Map("31")]
         Frozen,
         /// <summary>
-        /// Uncredited
+        /// ["<c>22</c>"] Uncredited
         /// </summary>
         [Map("22")]
         Uncredited,
         /// <summary>
-        /// Partial success
+        /// ["<c>18</c>"] Partial success
         /// </summary>
         [Map("18")]
         PartialSuccess,
         /// <summary>
-        /// Awaiting Travel Rule verification
+        /// ["<c>27</c>"] Awaiting Travel Rule verification
         /// </summary>
         [Map("27")]
         AwaitingVerification,
         /// <summary>
-        /// Travel Rule verification in progress
+        /// ["<c>28</c>"] Travel Rule verification in progress
         /// </summary>
         [Map("28")]
         ConfirmationInProgress

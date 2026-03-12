@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Enums
     public enum ClosedOrderStatus
     {
         /// <summary>
-        /// All, for filtering
+        /// ["<c>All</c>"] All, for filtering
         /// </summary>
         [Map("All")]
         All,
         /// <summary>
-        /// Canceled
+        /// ["<c>Canceled</c>"] Canceled
         /// </summary>
         [Map("Canceled", "2")]
         Canceled,
         /// <summary>
-        /// Filled
+        /// ["<c>Filled</c>"] Filled
         /// </summary>
         [Map("Filled", "1")]
         Filled

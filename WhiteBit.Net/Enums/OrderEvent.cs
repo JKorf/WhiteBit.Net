@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Enums
     public enum OrderEvent
     {
         /// <summary>
-        /// New order
+        /// ["<c>1</c>"] New order
         /// </summary>
         [Map("1")]
         New,
         /// <summary>
-        /// Update
+        /// ["<c>2</c>"] Update
         /// </summary>
         [Map("2")]
         Update,
         /// <summary>
-        /// Finished
+        /// ["<c>3</c>"] Finished
         /// </summary>
         [Map("3")]
         Finished

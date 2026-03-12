@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Enums
     public enum ClosedOrderFilter
     {
         /// <summary>
-        /// Limit and market orders
+        /// ["<c>0</c>"] Limit and market orders
         /// </summary>
         [Map("0")]
         LimitAndMarket = 0,
         /// <summary>
-        /// Only limit orders
+        /// ["<c>1</c>"] Only limit orders
         /// </summary>
         [Map("1")]
         Limit = 1,
         /// <summary>
-        /// Only market orders
+        /// ["<c>2</c>"] Only market orders
         /// </summary>
         [Map("2")]
         Market = 2

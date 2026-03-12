@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Enums
     public enum AccountType
     {
         /// <summary>
-        /// Main account
+        /// ["<c>main</c>"] Main account
         /// </summary>
         [Map("main")]
         Main,
         /// <summary>
-        /// Spot account
+        /// ["<c>spot</c>"] Spot account
         /// </summary>
         [Map("spot")]
         Spot,
         /// <summary>
-        /// Collateral account
+        /// ["<c>collateral</c>"] Collateral account
         /// </summary>
         [Map("collateral")]
         Collateral

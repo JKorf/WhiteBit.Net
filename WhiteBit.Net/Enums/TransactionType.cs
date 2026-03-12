@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum TransactionType
     {
         /// <summary>
-        /// Deposit
+        /// ["<c>1</c>"] Deposit
         /// </summary>
         [Map("1")]
         Deposit = 1,
         /// <summary>
-        /// Withdrawal
+        /// ["<c>2</c>"] Withdrawal
         /// </summary>
         [Map("2")]
         Withdrawal = 2

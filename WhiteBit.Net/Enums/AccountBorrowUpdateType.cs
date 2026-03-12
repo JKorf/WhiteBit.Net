@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum AccountBorrowUpdateType
     {
         /// <summary>
-        /// Margin call
+        /// ["<c>1</c>"] Margin call
         /// </summary>
         [Map("1")]
         MarginCall,
         /// <summary>
-        /// Liquidation
+        /// ["<c>2</c>"] Liquidation
         /// </summary>
         [Map("2")]
         Liquidation

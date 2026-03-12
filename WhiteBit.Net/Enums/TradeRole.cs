@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum TradeRole
     {
         /// <summary>
-        /// Maker
+        /// ["<c>1</c>"] Maker
         /// </summary>
         [Map("1")]
         Maker,
         /// <summary>
-        /// Taker
+        /// ["<c>2</c>"] Taker
         /// </summary>
         [Map("2")]
         Taker

@@ -11,72 +11,72 @@ namespace WhiteBit.Net.Enums
     public enum KlineInterval
     {
         /// <summary>
-        /// One minute
+        /// ["<c>60</c>"] One minute
         /// </summary>
         [Map("60")]
         OneMinute = 60,
         /// <summary>
-        /// Three minutes
+        /// ["<c>180</c>"] Three minutes
         /// </summary>
         [Map("180")]
         ThreeMinutes = 60 * 3,
         /// <summary>
-        /// Five minutes
+        /// ["<c>300</c>"] Five minutes
         /// </summary>
         [Map("300")]
         FiveMinutes = 60 * 5,
         /// <summary>
-        /// Fifteen minutes
+        /// ["<c>900</c>"] Fifteen minutes
         /// </summary>
         [Map("900")]
         FifteenMinutes = 60 * 15,
         /// <summary>
-        /// Thirty minutes
+        /// ["<c>1800</c>"] Thirty minutes
         /// </summary>
         [Map("1800")]
         ThirtyMinutes = 60 * 30,
         /// <summary>
-        /// One hour
+        /// ["<c>3600</c>"] One hour
         /// </summary>
         [Map("3600")]
         OneHour = 60 * 60,
         /// <summary>
-        /// Two hours
+        /// ["<c>7200</c>"] Two hours
         /// </summary>
         [Map("7200")]
         TwoHours = 60 * 60 * 2,
         /// <summary>
-        /// Four hours
+        /// ["<c>14400</c>"] Four hours
         /// </summary>
         [Map("14400")]
         FourHours = 60 * 60 * 4,
         /// <summary>
-        /// Six hours
+        /// ["<c>21600</c>"] Six hours
         /// </summary>
         [Map("21600")]
         SixHours = 60 * 60 * 6,
         /// <summary>
-        /// Twelve hours
+        /// ["<c>43200</c>"] Twelve hours
         /// </summary>
         [Map("43200")]
         TwelveHours = 60 * 60 * 12,
         /// <summary>
-        /// One day
+        /// ["<c>86400</c>"] One day
         /// </summary>
         [Map("86400")]
         OneDay = 60 * 60 * 24,
         /// <summary>
-        /// Three days
+        /// ["<c>259200</c>"] Three days
         /// </summary>
         [Map("259200")]
         ThreeDays = 60 * 60 * 24 * 3,
         /// <summary>
-        /// One week
+        /// ["<c>604800</c>"] One week
         /// </summary>
         [Map("604800")]
         OneWeek = 60 * 60 * 24 * 7,
         /// <summary>
-        /// One month
+        /// ["<c>2592000</c>"] One month
         /// </summary>
         [Map("2592000")]
         OneMonth = 60 * 60 * 24 * 30

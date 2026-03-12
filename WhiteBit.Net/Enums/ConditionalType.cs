@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum ConditionalType
     {
         /// <summary>
-        /// Stop loss
+        /// ["<c>margin_stop_loss</c>"] Stop loss
         /// </summary>
         [Map("margin_stop_loss")]
         MarginStopLoss,
         /// <summary>
-        /// Take profit
+        /// ["<c>margin_take_profit</c>"] Take profit
         /// </summary>
         [Map("margin_take_profit")]
         MarginTakeProfit

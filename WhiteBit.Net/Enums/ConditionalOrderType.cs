@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum ConditionalOrderType
     {
         /// <summary>
-        /// OTO
+        /// ["<c>oto</c>"] OTO
         /// </summary>
         [Map("oto")]
         OneTriggersOther,
         /// <summary>
-        /// OCO
+        /// ["<c>oco</c>"] OCO
         /// </summary>
         [Map("oco")]
         OneCancelsOther

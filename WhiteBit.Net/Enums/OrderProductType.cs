@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Enums
     public enum OrderProductType
     {
         /// <summary>
-        /// Spot
+        /// ["<c>Spot</c>"] Spot
         /// </summary>
         [Map("Spot")]
         Spot,
         /// <summary>
-        /// Margin
+        /// ["<c>Margin</c>"] Margin
         /// </summary>
         [Map("Margin")]
         Margin,
         /// <summary>
-        /// Futures
+        /// ["<c>Futures</c>"] Futures
         /// </summary>
         [Map("Futures")]
         Futures

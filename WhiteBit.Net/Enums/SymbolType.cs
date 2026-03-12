@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum SymbolType
     {
         /// <summary>
-        /// Spot symbol
+        /// ["<c>spot</c>"] Spot symbol
         /// </summary>
         [Map("spot")]
         Spot,
         /// <summary>
-        /// Futures symbol
+        /// ["<c>futures</c>"] Futures symbol
         /// </summary>
         [Map("futures")]
         Futures

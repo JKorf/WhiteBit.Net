@@ -11,22 +11,22 @@ namespace WhiteBit.Net.Enums
     public enum SelfTradePreventionMode
     {
         /// <summary>
-        /// None
+        /// ["<c>no</c>"] None
         /// </summary>
         [Map("no")]
         None,
         /// <summary>
-        /// Cancel both pre-existing and new order
+        /// ["<c>cancel_both</c>"] Cancel both pre-existing and new order
         /// </summary>
         [Map("cancel_both")]
         CancelBoth,
         /// <summary>
-        /// Cancel the new order
+        /// ["<c>cancel_new</c>"] Cancel the new order
         /// </summary>
         [Map("cancel_new")]
         CancelNew,
         /// <summary>
-        /// Cancel the pre-exisiting order
+        /// ["<c>cancel_old</c>"] Cancel the pre-exisiting order
         /// </summary>
         [Map("cancel_old")]
         CancelOld

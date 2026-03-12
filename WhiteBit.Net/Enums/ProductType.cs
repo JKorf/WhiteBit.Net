@@ -11,17 +11,17 @@ namespace WhiteBit.Net.Enums
     public enum ProductType
     {
         /// <summary>
-        /// Delivery futures
+        /// ["<c>Futures</c>"] Delivery futures
         /// </summary>
         [Map("Futures")]
         Futures,
         /// <summary>
-        /// Perpetual
+        /// ["<c>Perpetual</c>"] Perpetual
         /// </summary>
         [Map("Perpetual")]
         Perpetual,
         /// <summary>
-        /// Options
+        /// ["<c>Options</c>"] Options
         /// </summary>
         [Map("Options")]
         Options

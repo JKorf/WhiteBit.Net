@@ -11,12 +11,12 @@ namespace WhiteBit.Net.Enums
     public enum LiquidationStatus
     {
         /// <summary>
-        /// Margin call
+        /// ["<c>margin_call</c>"] Margin call
         /// </summary>
         [Map("margin_call")]
         MarginCall,
         /// <summary>
-        /// Liquidation
+        /// ["<c>liquidation</c>"] Liquidation
         /// </summary>
         [Map("liquidation")]
         Liquidation,
