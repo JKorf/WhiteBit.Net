@@ -24,7 +24,7 @@ namespace WhiteBit.Net.UnitTests
             {
                 OutputOriginalData = true,
                 RequestTimeout = TimeSpan.FromSeconds(5),
-                ApiCredentials = new ApiCredentials("123", "123", "123"),
+                ApiCredentials = new WhiteBitCredentials("123", "123"),
                 Environment = new WhiteBitEnvironment("UnitTest", "https://localhost", "wss://localhost")
             }), fact);
             return client;

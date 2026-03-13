@@ -11,16 +11,14 @@ using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net
 {
-    internal class WhiteBitAuthenticationProvider : AuthenticationProvider
+    internal class WhiteBitAuthenticationProvider : AuthenticationProvider<WhiteBitCredentials, HMACCredential>
     {
         private static readonly IMessageSerializer _serializer = new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
         private readonly INonceProvider _nonceProvider;
 
-        public ApiCredentials Credentials => _credentials.Copy();
-
         public override ApiCredentialsType[] SupportedCredentialTypes => [ApiCredentialsType.Hmac];
 
-        public WhiteBitAuthenticationProvider(ApiCredentials credentials, INonceProvider? nonceProvider) : base(credentials)
+        public WhiteBitAuthenticationProvider(WhiteBitCredentials credentials, INonceProvider? nonceProvider) : base(credentials)
         {
             _nonceProvider = nonceProvider ?? new WhiteBitNonceProvider();
         }
@@ -36,7 +34,7 @@ namespace WhiteBit.Net
             request.BodyParameters.Add("nonce", nonce);
             request.BodyParameters.Add("nonceWindow", ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow);
             request.Headers ??= new Dictionary<string, string>();
-            request.Headers.Add("X-TXC-APIKEY", ApiKey);
+            request.Headers.Add("X-TXC-APIKEY", Credential.PublicKey);
 
             var payload = GetSerializedBody(_serializer, request.BodyParameters);
             var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(payload));

@@ -6,7 +6,7 @@ namespace WhiteBit.Net.Objects.Options
     /// <summary>
     /// Options for the WhiteBitRestClient
     /// </summary>
-    public class WhiteBitRestOptions : RestExchangeOptions<WhiteBitEnvironment>
+    public class WhiteBitRestOptions : RestExchangeOptions<WhiteBitEnvironment, WhiteBitCredentials>
     {
         /// <summary>
         /// Default options for new clients
@@ -28,7 +28,7 @@ namespace WhiteBit.Net.Objects.Options
         /// <summary>
         /// V4 API options
         /// </summary>
-        public RestApiOptions V4Options { get; private set; } = new RestApiOptions();
+        public RestApiOptions<WhiteBitCredentials> V4Options { get; private set; } = new RestApiOptions<WhiteBitCredentials>();
 
         /// <summary>
         /// When true, request nonces are allowed to be out of order by the server at least as they are within a 5 second window. This allows concurrent requests to succeed during high traffic.

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using WhiteBit.Net.Clients;
+using WhiteBit.Net.Clients.V4Api;
 using WhiteBit.Net.Interfaces.Clients;
 using WhiteBit.Net.Objects.Internal;
 
@@ -20,7 +21,7 @@ namespace WhiteBit.Net.UnitTests
         [Test]
         public void CheckSignatureExample1()
         {
-            var authProvider = new WhiteBitAuthenticationProvider(new ApiCredentials("XXX", "XXX"), new TestNonceProvider(1499827319559));
+            var authProvider = new WhiteBitAuthenticationProvider(new WhiteBitCredentials("XXX", "XXX"), new TestNonceProvider(1499827319559));
             var client = (RestApiClient)new WhiteBitRestClient().V4Api;
 
             CryptoExchange.Net.Testing.TestHelpers.CheckSignature(
@@ -141,8 +142,8 @@ namespace WhiteBit.Net.UnitTests
 
             Assert.That(((BaseApiClient)restClient.V4Api).OutputOriginalData, Is.True);
             Assert.That(((BaseApiClient)socketClient.V4Api).OutputOriginalData, Is.False);
-            Assert.That(((BaseApiClient)restClient.V4Api).AuthenticationProvider.ApiKey, Is.EqualTo("123"));
-            Assert.That(((BaseApiClient)socketClient.V4Api).AuthenticationProvider.ApiKey, Is.EqualTo("456"));
+            Assert.That(((WhiteBitRestClientV4Api)restClient.V4Api).AuthenticationProvider.PublicKey, Is.EqualTo("123"));
+            Assert.That(((WhiteBitRestClientV4Api)socketClient.V4Api).AuthenticationProvider.PublicKey, Is.EqualTo("456"));
             Assert.That(((BaseApiClient)restClient.V4Api).ClientOptions.Proxy.Host, Is.EqualTo("host"));
             Assert.That(((BaseApiClient)restClient.V4Api).ClientOptions.Proxy.Port, Is.EqualTo(80));
             Assert.That(((BaseApiClient)socketClient.V4Api).ClientOptions.Proxy.Host, Is.EqualTo("host2"));

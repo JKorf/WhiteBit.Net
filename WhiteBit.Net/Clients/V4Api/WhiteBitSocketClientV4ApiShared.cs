@@ -71,7 +71,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     var client = new WhiteBitRestClient(x =>
                     {
                         x.Environment = ClientOptions.Environment;
-                        x.ApiCredentials = ((WhiteBitAuthenticationProvider)AuthenticationProvider!).Credentials;
+                        x.ApiCredentials = (WhiteBitCredentials?)AuthenticationProvider!.ApiCredentials.Copy();
                     });
                     var assetsResult = await client.V4Api.Account.GetCollateralBalancesAsync().ConfigureAwait(false);
                     if (!assetsResult)

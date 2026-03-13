@@ -27,7 +27,7 @@ namespace WhiteBit.Net.UnitTests
             return new WhiteBitSocketClient(Options.Create(new WhiteBitSocketOptions
             {
                 OutputOriginalData = true,
-                ApiCredentials = Authenticated ? new CryptoExchange.Net.Authentication.ApiCredentials(key, sec) : null
+                ApiCredentials = Authenticated ? new WhiteBitCredentials(key, sec) : null
             }), loggerFactory);
         }
 

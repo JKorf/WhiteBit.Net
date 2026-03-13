@@ -6,7 +6,7 @@ namespace WhiteBit.Net.Objects.Options
     /// <summary>
     /// WhiteBit options
     /// </summary>
-    public class WhiteBitOptions : LibraryOptions<WhiteBitRestOptions, WhiteBitSocketOptions, ApiCredentials, WhiteBitEnvironment>
+    public class WhiteBitOptions : LibraryOptions<WhiteBitRestOptions, WhiteBitSocketOptions, WhiteBitCredentials, WhiteBitEnvironment>
     {
     }
 }

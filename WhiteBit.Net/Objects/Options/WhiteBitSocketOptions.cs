@@ -6,7 +6,7 @@ namespace WhiteBit.Net.Objects.Options
     /// <summary>
     /// Options for the WhiteBitSocketClient
     /// </summary>
-    public class WhiteBitSocketOptions : SocketExchangeOptions<WhiteBitEnvironment>
+    public class WhiteBitSocketOptions : SocketExchangeOptions<WhiteBitEnvironment, WhiteBitCredentials>
     {
         /// <summary>
         /// Default options for new clients
@@ -33,7 +33,7 @@ namespace WhiteBit.Net.Objects.Options
         /// <summary>
         /// V4 API options
         /// </summary>
-        public SocketApiOptions V4Options { get; private set; } = new SocketApiOptions();
+        public SocketApiOptions<WhiteBitCredentials> V4Options { get; private set; } = new SocketApiOptions<WhiteBitCredentials>();
 
 
         internal WhiteBitSocketOptions Set(WhiteBitSocketOptions targetOptions)

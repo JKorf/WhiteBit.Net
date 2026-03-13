@@ -33,7 +33,7 @@ namespace WhiteBit.Net.Clients.V4Api
     /// <summary>
     /// Client providing access to the WhiteBit V4 websocket Api
     /// </summary>
-    internal partial class WhiteBitSocketClientV4Api : SocketApiClient, IWhiteBitSocketClientV4Api
+    internal partial class WhiteBitSocketClientV4Api : SocketApiClient<WhiteBitEnvironment, WhiteBitAuthenticationProvider, WhiteBitCredentials>, IWhiteBitSocketClientV4Api
     {
         #region fields
 
@@ -81,7 +81,7 @@ namespace WhiteBit.Net.Clients.V4Api
         public override ISocketMessageHandler CreateMessageConverter(WebSocketMessageType messageType) => new WhiteBitSocketMessageHandler();
 
         /// <inheritdoc />
-        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        protected override WhiteBitAuthenticationProvider CreateAuthenticationProvider(WhiteBitCredentials credentials)
             => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
         #region Trades
@@ -549,7 +549,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (ApiCredentials == null)
                 return new CallResult<string>(new NoApiCredentialsError());
 
-            if (_tokenCache.TryGetValue(ApiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
+            if (_tokenCache.TryGetValue(ApiCredentials.PublicKey, out var token) && token.Expire > DateTime.UtcNow)
                 return new CallResult<string>(token.Token);
 
             if (ClientOptions.Environment.Name == "UnitTest")
@@ -569,7 +569,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return result.As<string>(default);
             }
 
-            _tokenCache[ApiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
+            _tokenCache[ApiCredentials.PublicKey] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
             return result.As<string>(result.Data);
         }
 

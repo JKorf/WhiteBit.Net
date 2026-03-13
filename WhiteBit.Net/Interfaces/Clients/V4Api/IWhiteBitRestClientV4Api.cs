@@ -6,7 +6,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     /// <summary>
     /// WhiteBit V4 API endpoints
     /// </summary>
-    public interface IWhiteBitRestClientV4Api : IRestApiClient, IDisposable
+    public interface IWhiteBitRestClientV4Api : IRestApiClient<WhiteBitCredentials>, IDisposable
     {
         /// <summary>
         /// Endpoints related to account settings, info or actions
