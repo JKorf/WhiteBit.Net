@@ -34,7 +34,7 @@ namespace WhiteBit.Net
             request.BodyParameters.Add("nonce", nonce);
             request.BodyParameters.Add("nonceWindow", ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow);
             request.Headers ??= new Dictionary<string, string>();
-            request.Headers.Add("X-TXC-APIKEY", Credential.PublicKey);
+            request.Headers.Add("X-TXC-APIKEY", Credential.Key);
 
             var payload = GetSerializedBody(_serializer, request.BodyParameters);
             var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(payload));
