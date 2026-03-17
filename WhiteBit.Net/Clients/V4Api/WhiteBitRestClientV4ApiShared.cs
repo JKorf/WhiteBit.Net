@@ -365,9 +365,7 @@ namespace WhiteBit.Net.Clients.V4Api
                                 x.Quantity,
                                 x.TransactionStatus == Enums.TransactionStatus.Success,
                                 x.CreateTime,
-                                x.TransactionStatus == TransactionStatus.Success ? SharedTransferStatus.Completed
-                                : x.TransactionStatus == TransactionStatus.UnconfirmedByUser || x.TransactionStatus == TransactionStatus.Canceled ? SharedTransferStatus.Failed
-                                : SharedTransferStatus.InProgress)
+                                ParseTransferStatus(x.TransactionStatus))
                             {
                                 Confirmations = x.Confirmations?.Actual,
                                 Network = x.Network,
@@ -376,6 +374,23 @@ namespace WhiteBit.Net.Clients.V4Api
                                 Id = x.UniqueId
                             })
                        .ToArray(), nextPageRequest);
+        }
+
+        private SharedTransferStatus ParseTransferStatus(TransactionStatus? transactionStatus)
+        {
+            if (transactionStatus == TransactionStatus.Success)
+                return SharedTransferStatus.Completed;
+
+            if (transactionStatus == TransactionStatus.UnconfirmedByUser || transactionStatus == TransactionStatus.Canceled)
+                return SharedTransferStatus.Failed;
+
+            if (transactionStatus == TransactionStatus.AwaitingVerification
+                || transactionStatus == TransactionStatus.ConfirmationInProgress
+                || transactionStatus == TransactionStatus.Pending
+                || transactionStatus == TransactionStatus.Uncredited)
+                return SharedTransferStatus.InProgress;
+
+            return SharedTransferStatus.Unknown;
         }
 
         #endregion
@@ -1702,7 +1717,10 @@ namespace WhiteBit.Net.Clients.V4Api
             if (closedOrder.Status == OrderStatus.Filled)
                 return SharedTriggerOrderStatus.Filled;
 
-            return SharedTriggerOrderStatus.CanceledOrRejected;
+            if (closedOrder.Status == OrderStatus.Canceled || closedOrder.Status == OrderStatus.AutoCanceledUserMargin)
+                return SharedTriggerOrderStatus.CanceledOrRejected;
+
+            return SharedTriggerOrderStatus.Unknown;
         }
 
         EndpointOptions<CancelOrderRequest> IFuturesTriggerOrderRestClient.CancelFuturesTriggerOrderOptions { get; } = new EndpointOptions<CancelOrderRequest>(true);
