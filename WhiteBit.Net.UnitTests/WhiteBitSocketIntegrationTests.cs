@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 using WhiteBit.Net.Objects.Models;
+using CryptoExchange.Net.Authentication;
 
 namespace WhiteBit.Net.UnitTests
 {

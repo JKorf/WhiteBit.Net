@@ -10,6 +10,7 @@ using CryptoExchange.Net.Objects;
 using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Models;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
 
 namespace WhiteBit.Net.Clients.V4Api
 {

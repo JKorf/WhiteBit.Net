@@ -1,3 +1,4 @@
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Testing;
 using NUnit.Framework;

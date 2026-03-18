@@ -1,3 +1,4 @@
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects.Options;
 
@@ -28,7 +29,7 @@ namespace WhiteBit.Net.Objects.Options
         /// <summary>
         /// V4 API options
         /// </summary>
-        public RestApiOptions<WhiteBitCredentials> V4Options { get; private set; } = new RestApiOptions<WhiteBitCredentials>();
+        public RestApiOptions V4Options { get; private set; } = new RestApiOptions();
 
         /// <summary>
         /// When true, request nonces are allowed to be out of order by the server at least as they are within a 5 second window. This allows concurrent requests to succeed during high traffic.

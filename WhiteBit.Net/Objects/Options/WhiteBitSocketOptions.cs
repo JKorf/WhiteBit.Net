@@ -1,3 +1,4 @@
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects.Options;
 
@@ -33,7 +34,7 @@ namespace WhiteBit.Net.Objects.Options
         /// <summary>
         /// V4 API options
         /// </summary>
-        public SocketApiOptions<WhiteBitCredentials> V4Options { get; private set; } = new SocketApiOptions<WhiteBitCredentials>();
+        public SocketApiOptions V4Options { get; private set; } = new SocketApiOptions();
 
 
         internal WhiteBitSocketOptions Set(WhiteBitSocketOptions targetOptions)

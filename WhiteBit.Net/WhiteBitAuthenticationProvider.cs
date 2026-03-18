@@ -11,14 +11,13 @@ using WhiteBit.Net.Objects.Options;
 
 namespace WhiteBit.Net
 {
-    internal class WhiteBitAuthenticationProvider : AuthenticationProvider<WhiteBitCredentials, HMACCredential>
+    internal class WhiteBitAuthenticationProvider : AuthenticationProvider<WhiteBitCredentials, WhiteBitCredentials>
     {
         private static readonly IMessageSerializer _serializer = new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
         private readonly INonceProvider _nonceProvider;
 
-        public override ApiCredentialsType[] SupportedCredentialTypes => [ApiCredentialsType.HMAC];
 
-        public WhiteBitAuthenticationProvider(WhiteBitCredentials credentials, INonceProvider? nonceProvider) : base(credentials)
+        public WhiteBitAuthenticationProvider(WhiteBitCredentials credentials, INonceProvider? nonceProvider) : base(credentials, credentials)
         {
             _nonceProvider = nonceProvider ?? new WhiteBitNonceProvider();
         }
