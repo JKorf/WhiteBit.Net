@@ -110,8 +110,6 @@ namespace Microsoft.Extensions.DependencyInjection
             }).SetHandlerLifetime(Timeout.InfiniteTimeSpan);
             services.Add(new ServiceDescriptor(typeof(IWhiteBitSocketClient), x => { return new WhiteBitSocketClient(x.GetRequiredService<IOptions<WhiteBitSocketOptions>>(), x.GetRequiredService<ILoggerFactory>()); }, socketClientLifeTime ?? ServiceLifetime.Singleton));
 
-            services.AddTransient<ICryptoRestClient, CryptoRestClient>();
-            services.AddSingleton<ICryptoSocketClient, CryptoSocketClient>();
             services.AddTransient<IWhiteBitOrderBookFactory, WhiteBitOrderBookFactory>();
             services.AddTransient<IWhiteBitTrackerFactory, WhiteBitTrackerFactory>();
             services.AddTransient<ITrackerFactory, WhiteBitTrackerFactory>();
