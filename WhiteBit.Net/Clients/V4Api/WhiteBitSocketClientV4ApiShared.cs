@@ -10,6 +10,7 @@ using CryptoExchange.Net.Objects;
 using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Models;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
@@ -71,7 +72,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     var client = new WhiteBitRestClient(x =>
                     {
                         x.Environment = ClientOptions.Environment;
-                        x.ApiCredentials = ((WhiteBitAuthenticationProvider)AuthenticationProvider!).Credentials;
+                        x.ApiCredentials = (WhiteBitCredentials?)AuthenticationProvider!.ApiCredentials.Copy();
                     });
                     var assetsResult = await client.V4Api.Account.GetCollateralBalancesAsync().ConfigureAwait(false);
                     if (!assetsResult)

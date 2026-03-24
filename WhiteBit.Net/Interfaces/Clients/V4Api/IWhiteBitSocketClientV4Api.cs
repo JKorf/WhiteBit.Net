@@ -7,13 +7,14 @@ using WhiteBit.Net.Objects.Models;
 using System.Collections.Generic;
 using WhiteBit.Net.Enums;
 using CryptoExchange.Net.Interfaces.Clients;
+using CryptoExchange.Net.Authentication;
 
 namespace WhiteBit.Net.Interfaces.Clients.V4Api
 {
     /// <summary>
     /// WhiteBit V4 streams
     /// </summary>
-    public interface IWhiteBitSocketClientV4Api : ISocketApiClient, IDisposable
+    public interface IWhiteBitSocketClientV4Api : ISocketApiClient<WhiteBitCredentials>, IDisposable
     {
         /// <summary>
         /// Get trades for a symbol

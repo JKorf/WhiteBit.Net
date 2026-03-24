@@ -1,3 +1,4 @@
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Testing;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,7 @@ namespace WhiteBit.Net.UnitTests
             var client = new WhiteBitSocketClient(Options.Create(new WhiteBitSocketOptions
             {
                 Environment = new WhiteBitEnvironment("UnitTest", "https://localhost", "wss://localhost"),
-                ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "456")
+                ApiCredentials = new WhiteBitCredentials("123", "456")
             }), loggerFactory);
             var tester = new SocketSubscriptionValidator<WhiteBitSocketClient>(client, "Subscriptions/V4", "wss://api.whitebit.com");
             await tester.ValidateAsync<WhiteBitTradeUpdate>((client, handler) => client.V4Api.SubscribeToTradeUpdatesAsync("ETH_USDT", handler), "Trades", nestedJsonProperty: "params");

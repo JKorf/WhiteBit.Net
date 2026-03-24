@@ -29,7 +29,7 @@ namespace WhiteBit.Net.UnitTests
             return new WhiteBitRestClient(null, loggerFactory, Options.Create(new Objects.Options.WhiteBitRestOptions
             {
                 OutputOriginalData = true,
-                ApiCredentials = Authenticated ? new ApiCredentials(key, sec) : null
+                ApiCredentials = Authenticated ? new WhiteBitCredentials(key, sec) : null
             }));
         }
 
@@ -57,7 +57,7 @@ namespace WhiteBit.Net.UnitTests
             await RunAndCheckResult(client => client.V4Api.Account.GetCollateralBalancesAsync(default, default), true);
             await RunAndCheckResult(client => client.V4Api.Account.GetCollateralBalanceSummaryAsync(default), true);
             await RunAndCheckResult(client => client.V4Api.Account.GetCollateralAccountSummaryAsync(default), true);
-            await RunAndCheckResult(client => client.V4Api.Account.GetAccountFundingHistoryAsync(default), true);
+            await RunAndCheckResult(client => client.V4Api.Account.GetAccountFundingHistoryAsync("ETH_USDT", default, default, default, default, default), true);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace WhiteBit.Net.UnitTests
         public async Task TestTrading()
         {
             await RunAndCheckResult(client => client.V4Api.Trading.GetOpenOrdersAsync(default, default, default, default, default, default), true);
-            await RunAndCheckResult(client => client.V4Api.Trading.GetClosedOrdersAsync(default, default, default, default, default, default, default), true);
+            await RunAndCheckResult(client => client.V4Api.Trading.GetClosedOrdersAsync(default, default, default, default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.V4Api.Trading.GetUserTradesAsync(default, default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.V4Api.Trading.GetKillSwitchStatusAsync(default, default), true);
 

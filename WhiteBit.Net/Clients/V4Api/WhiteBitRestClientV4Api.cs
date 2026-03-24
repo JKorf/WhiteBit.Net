@@ -23,7 +23,7 @@ using WhiteBit.Net.Objects.Options;
 namespace WhiteBit.Net.Clients.V4Api
 {
     /// <inheritdoc cref="IWhiteBitRestClientV4Api" />
-    internal partial class WhiteBitRestClientV4Api : RestApiClient, IWhiteBitRestClientV4Api
+    internal partial class WhiteBitRestClientV4Api : RestApiClient<WhiteBitEnvironment, WhiteBitAuthenticationProvider, WhiteBitCredentials>, IWhiteBitRestClientV4Api
     {
         #region fields 
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
 
         /// <inheritdoc />
-        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        protected override WhiteBitAuthenticationProvider CreateAuthenticationProvider(WhiteBitCredentials credentials)
             => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
         internal Task<WebCallResult> SendAsync(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)

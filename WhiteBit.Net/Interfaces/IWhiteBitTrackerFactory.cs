@@ -17,7 +17,7 @@ namespace WhiteBit.Net.Interfaces
         /// <param name="config">Configuration</param>
         /// <param name="credentials">Credentials</param>
         /// <param name="environment">Environment</param>
-        IUserSpotDataTracker CreateUserSpotDataTracker(string userIdentifier, ApiCredentials credentials, SpotUserDataTrackerConfig? config = null, WhiteBitEnvironment? environment = null);
+        IUserSpotDataTracker CreateUserSpotDataTracker(string userIdentifier, WhiteBitCredentials credentials, SpotUserDataTrackerConfig? config = null, WhiteBitEnvironment? environment = null);
         /// <summary>
         /// Create a new spot user data tracker
         /// </summary>
@@ -31,7 +31,7 @@ namespace WhiteBit.Net.Interfaces
         /// <param name="config">Configuration</param>
         /// <param name="credentials">Credentials</param>
         /// <param name="environment">Environment</param>
-        IUserFuturesDataTracker CreateUserFuturesDataTracker(string userIdentifier, ApiCredentials credentials, FuturesUserDataTrackerConfig? config = null, WhiteBitEnvironment? environment = null);
+        IUserFuturesDataTracker CreateUserFuturesDataTracker(string userIdentifier, WhiteBitCredentials credentials, FuturesUserDataTrackerConfig? config = null, WhiteBitEnvironment? environment = null);
         /// <summary>
         /// Create a new futures user data tracker
         /// </summary>

@@ -49,7 +49,7 @@ namespace WhiteBit.Net.Clients
         }
 
         /// <inheritdoc />
-        public void InitializeUserClient(string userIdentifier, ApiCredentials credentials, WhiteBitEnvironment? environment = null)
+        public void InitializeUserClient(string userIdentifier, WhiteBitCredentials credentials, WhiteBitEnvironment? environment = null)
         {
             CreateRestClient(userIdentifier, credentials, environment);
             CreateSocketClient(userIdentifier, credentials, environment);
@@ -63,7 +63,7 @@ namespace WhiteBit.Net.Clients
         }
 
         /// <inheritdoc />
-        public IWhiteBitRestClient GetRestClient(string userIdentifier, ApiCredentials? credentials = null, WhiteBitEnvironment? environment = null)
+        public IWhiteBitRestClient GetRestClient(string userIdentifier, WhiteBitCredentials? credentials = null, WhiteBitEnvironment? environment = null)
         {
             if (!_restClients.TryGetValue(userIdentifier, out var client) || client.Disposed)
                 client = CreateRestClient(userIdentifier, credentials, environment);
@@ -72,7 +72,7 @@ namespace WhiteBit.Net.Clients
         }
 
         /// <inheritdoc />
-        public IWhiteBitSocketClient GetSocketClient(string userIdentifier, ApiCredentials? credentials = null, WhiteBitEnvironment? environment = null)
+        public IWhiteBitSocketClient GetSocketClient(string userIdentifier, WhiteBitCredentials? credentials = null, WhiteBitEnvironment? environment = null)
         {
             if (!_socketClients.TryGetValue(userIdentifier, out var client) || client.Disposed)
                 client = CreateSocketClient(userIdentifier, credentials, environment);
@@ -80,7 +80,7 @@ namespace WhiteBit.Net.Clients
             return client;
         }
 
-        private IWhiteBitRestClient CreateRestClient(string userIdentifier, ApiCredentials? credentials, WhiteBitEnvironment? environment)
+        private IWhiteBitRestClient CreateRestClient(string userIdentifier, WhiteBitCredentials? credentials, WhiteBitEnvironment? environment)
         {
             var clientRestOptions = SetRestEnvironment(environment);
             var client = new WhiteBitRestClient(_httpClient, _loggerFactory, clientRestOptions);
@@ -92,7 +92,7 @@ namespace WhiteBit.Net.Clients
             return client;
         }
 
-        private IWhiteBitSocketClient CreateSocketClient(string userIdentifier, ApiCredentials? credentials, WhiteBitEnvironment? environment)
+        private IWhiteBitSocketClient CreateSocketClient(string userIdentifier, WhiteBitCredentials? credentials, WhiteBitEnvironment? environment)
         {
             var clientSocketOptions = SetSocketEnvironment(environment);
             var client = new WhiteBitSocketClient(clientSocketOptions!, _loggerFactory);

@@ -13,7 +13,7 @@ using CryptoExchange.Net.Objects.Options;
 namespace WhiteBit.Net.Clients
 {
     /// <inheritdoc cref="IWhiteBitRestClient" />
-    public class WhiteBitRestClient : BaseRestClient, IWhiteBitRestClient
+    public class WhiteBitRestClient : BaseRestClient<WhiteBitEnvironment, WhiteBitCredentials>, IWhiteBitRestClient
     {
         #region Api clients
 
@@ -50,12 +50,6 @@ namespace WhiteBit.Net.Clients
 
         #endregion
 
-        /// <inheritdoc />
-        public void SetOptions(UpdateOptions options)
-        {
-            V4Api.SetOptions(options);
-        }
-
         /// <summary>
         /// Set the default options to be used when creating new clients
         /// </summary>
@@ -63,12 +57,6 @@ namespace WhiteBit.Net.Clients
         public static void SetDefaultOptions(Action<WhiteBitRestOptions> optionsDelegate)
         {
             WhiteBitRestOptions.Default = ApplyOptionsDelegate(optionsDelegate);
-        }
-
-        /// <inheritdoc />
-        public void SetApiCredentials(ApiCredentials credentials)
-        {
-            V4Api.SetApiCredentials(credentials);
         }
     }
 }

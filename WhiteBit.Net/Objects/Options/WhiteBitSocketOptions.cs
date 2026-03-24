@@ -1,3 +1,4 @@
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects.Options;
 
@@ -6,7 +7,7 @@ namespace WhiteBit.Net.Objects.Options
     /// <summary>
     /// Options for the WhiteBitSocketClient
     /// </summary>
-    public class WhiteBitSocketOptions : SocketExchangeOptions<WhiteBitEnvironment>
+    public class WhiteBitSocketOptions : SocketExchangeOptions<WhiteBitEnvironment, WhiteBitCredentials>
     {
         /// <summary>
         /// Default options for new clients

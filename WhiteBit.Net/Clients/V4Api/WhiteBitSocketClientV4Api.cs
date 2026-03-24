@@ -33,7 +33,7 @@ namespace WhiteBit.Net.Clients.V4Api
     /// <summary>
     /// Client providing access to the WhiteBit V4 websocket Api
     /// </summary>
-    internal partial class WhiteBitSocketClientV4Api : SocketApiClient, IWhiteBitSocketClientV4Api
+    internal partial class WhiteBitSocketClientV4Api : SocketApiClient<WhiteBitEnvironment, WhiteBitAuthenticationProvider, WhiteBitCredentials>, IWhiteBitSocketClientV4Api
     {
         #region fields
 
@@ -81,7 +81,7 @@ namespace WhiteBit.Net.Clients.V4Api
         public override ISocketMessageHandler CreateMessageConverter(WebSocketMessageType messageType) => new WhiteBitSocketMessageHandler();
 
         /// <inheritdoc />
-        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        protected override WhiteBitAuthenticationProvider CreateAuthenticationProvider(WhiteBitCredentials credentials)
             => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
         #region Trades

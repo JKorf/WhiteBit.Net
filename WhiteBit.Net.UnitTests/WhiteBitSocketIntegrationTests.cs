@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 using WhiteBit.Net.Objects.Models;
+using CryptoExchange.Net.Authentication;
 
 namespace WhiteBit.Net.UnitTests
 {
@@ -27,7 +28,7 @@ namespace WhiteBit.Net.UnitTests
             return new WhiteBitSocketClient(Options.Create(new WhiteBitSocketOptions
             {
                 OutputOriginalData = true,
-                ApiCredentials = Authenticated ? new CryptoExchange.Net.Authentication.ApiCredentials(key, sec) : null
+                ApiCredentials = Authenticated ? new WhiteBitCredentials(key, sec) : null
             }), loggerFactory);
         }
 

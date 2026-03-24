@@ -12,7 +12,7 @@ using WhiteBit.Net.Objects.Options;
 namespace WhiteBit.Net.Clients
 {
     /// <inheritdoc cref="IWhiteBitSocketClient" />
-    public class WhiteBitSocketClient : BaseSocketClient, IWhiteBitSocketClient
+    public class WhiteBitSocketClient : BaseSocketClient<WhiteBitEnvironment, WhiteBitCredentials>, IWhiteBitSocketClient
     {
         #region fields
         #endregion
@@ -47,12 +47,6 @@ namespace WhiteBit.Net.Clients
         }
         #endregion
 
-        /// <inheritdoc />
-        public void SetOptions(UpdateOptions options)
-        {
-            V4Api.SetOptions(options);
-        }
-
         /// <summary>
         /// Set the default options to be used when creating new clients
         /// </summary>
@@ -60,12 +54,6 @@ namespace WhiteBit.Net.Clients
         public static void SetDefaultOptions(Action<WhiteBitSocketOptions> optionsDelegate)
         {
             WhiteBitSocketOptions.Default = ApplyOptionsDelegate(optionsDelegate);
-        }
-
-        /// <inheritdoc />
-        public void SetApiCredentials(ApiCredentials credentials)
-        {
-            V4Api.SetApiCredentials(credentials);
         }
     }
 }
