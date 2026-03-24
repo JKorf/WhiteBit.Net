@@ -46,23 +46,40 @@ WhiteBit.Net is available on [GitHub packages](https://github.com/JKorf/WhiteBit
 The NuGet package files are added along side the source with the latest GitHub release which can found [here](https://github.com/JKorf/WhiteBit.Net/releases).
 
 ## How to use
-* REST Endpoints
-	```csharp
-	// Get the ETH/USDT ticker via rest request
-	var restClient = new WhiteBitRestClient();
-	var tickerResult = await restClient.V4Api.ExchangeData.GetTickersAsync();
-	var symbol = tickerResult.Data.Single(x => x.Symbol == "ETH_USDT");
-	var lastPrice = symbol.LastPrice;
-	```
-* Websocket streams
-	```csharp
-	// Subscribe to ETH/USDT ticker updates via the websocket API
-	var socketClient = new WhiteBitSocketClient();
-	var tickerSubscriptionResult = socketClient.V4Api.SubscribeToTickerUpdatesAsync("ETH_USDT", (update) =>
-	{
-	    var lastPrice = update.Data.Ticker.LastPrice;
-	});
-	```
+*Basic request:* 
+```csharp
+// Get the ETH/USDT ticker via rest request
+var restClient = new WhiteBitRestClient();
+var tickerResult = await restClient.V4Api.ExchangeData.GetTickersAsync();
+var symbol = tickerResult.Data.Single(x => x.Symbol == "ETH_USDT");
+var lastPrice = symbol.LastPrice;
+```
+		
+*Place order:*
+```csharp
+var restClient = new WhiteBitRestClient(opts => {
+	opts.ApiCredentials = new WhiteBitCredentials("APIKEY", "APISECRET");
+});
+
+// Place Limit order to go long 0.1 for ETH at 2000
+var orderResult = await restClient.V4Api.CollateralTrading.PlaceOrderAsync(
+    "ETH_PERP",
+    OrderSide.Buy,
+    NewOrderType.Limit,
+    0.1m,
+    2000
+    );
+```
+
+*WebSocket subscription:* 
+```csharp
+// Subscribe to ETH/USDT ticker updates via the websocket API
+var socketClient = new WhiteBitSocketClient();
+var tickerSubscriptionResult = socketClient.V4Api.SubscribeToTickerUpdatesAsync("ETH_USDT", (update) =>
+{
+	var lastPrice = update.Data.Ticker.LastPrice;
+});
+```
 
 For information on the clients, dependency injection, response processing and more see the [documentation](https://cryptoexchange.jkorf.dev?library=WhiteBit.Net), or have a look at the examples [here](https://github.com/JKorf/WhiteBit.Net/tree/main/Examples) or [here](https://github.com/JKorf/CryptoExchange.Net/tree/master/Examples).
 
