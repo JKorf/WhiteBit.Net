@@ -43,5 +43,8 @@ namespace WhiteBit.Net
             Secret = secret;
             return this;
         }
+
+        /// <inheritdoc />
+        public override ApiCredentials Copy() => new WhiteBitCredentials(this);
     }
 }
