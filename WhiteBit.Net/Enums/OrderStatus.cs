@@ -13,17 +13,17 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// ["<c>Open</c>"] Unfilled
         /// </summary>
-        [Map("Open")]
+        [Map("Open", "OPEN")]
         Open,
         /// <summary>
         /// ["<c>Canceled</c>"] Canceled
         /// </summary>
-        [Map("Canceled", "2")]
+        [Map("Canceled", "CANCELED", "2")]
         Canceled,
         /// <summary>
         /// ["<c>Filled</c>"] Filled
         /// </summary>
-        [Map("Filled", "1")]
+        [Map("Filled", "FILLED", "1")]
         Filled,
         /// <summary>
         /// ["<c>PARTIALLY_FILLED</c>"] Partially filled
