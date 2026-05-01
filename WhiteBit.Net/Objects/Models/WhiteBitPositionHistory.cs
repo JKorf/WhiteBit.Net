@@ -57,6 +57,16 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("liquidationState")]
         public LiquidationStatus? LiquidationStatus { get; set; }
         /// <summary>
+        /// ["<c>side</c>"] Position side
+        /// </summary>
+        [JsonPropertyName("side")]
+        public PositionSide PositionSide { get; set; }
+        /// <summary>
+        /// ["<c>isHedge</c>"] Is hedge
+        /// </summary>
+        [JsonPropertyName("isHedge")]
+        public bool IsHedge { get; set; }
+        /// <summary>
         /// ["<c>orderDetail</c>"] Order detail
         /// </summary>
         [JsonPropertyName("orderDetail")]
