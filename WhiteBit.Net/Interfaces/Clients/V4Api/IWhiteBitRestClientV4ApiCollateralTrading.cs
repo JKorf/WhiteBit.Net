@@ -41,6 +41,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="clientOrderId">["<c>clientOrderId</c>"] Client order id</param>
         /// <param name="stpMode">["<c>stp</c>"] Self trade prevention mode</param>
         /// <param name="positionSide">["<c>positionSide</c>"] Position side, required when in hedge mode</param>
+        /// <param name="reduceOnly">["<c>reduceOnly</c>"] Reduce only order</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
             string symbol,
@@ -57,6 +58,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
             string? clientOrderId = null,
             SelfTradePreventionMode? stpMode = null,
             PositionSide? positionSide = null,
+            bool? reduceOnly = null,
             CancellationToken ct = default);
 
         /// <summary>
@@ -122,6 +124,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="stopLimitPrice">["<c>stop_limit_price</c>"] Stop limit price</param>
         /// <param name="clientOrderId">["<c>clientOrderId</c>"] Client order id</param>
         /// <param name="positionSide">["<c>positionSide</c>"] Position side, required when in hedge mode</param>
+        /// <param name="reduceOnly">["<c>reduceOnly</c>"] Reduce only</param>
         /// <param name="ct">Cancellation token</param>
         Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
             string symbol,
@@ -132,6 +135,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
             decimal stopLimitPrice,
             string? clientOrderId = null,
             PositionSide? positionSide = null,
+            bool? reduceOnly = null,
             CancellationToken ct = default);
 
         /// <summary>

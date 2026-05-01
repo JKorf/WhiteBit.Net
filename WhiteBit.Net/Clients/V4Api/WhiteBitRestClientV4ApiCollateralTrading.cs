@@ -43,6 +43,7 @@ namespace WhiteBit.Net.Clients.V4Api
             string? clientOrderId = null,
             SelfTradePreventionMode? stpMode = null,
             PositionSide? positionSide = null,
+            bool? reduceOnly = null,
             CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
@@ -59,6 +60,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddOptionalString("takeProfit", takeProfitPrice);
             parameters.AddOptionalEnum("stp", stpMode);
             parameters.AddOptionalEnum("positionSide", positionSide);
+            parameters.AddOptional("reduceOnly", reduceOnly);
 
             string path;
             if (type == NewOrderType.Limit)
@@ -144,6 +146,7 @@ namespace WhiteBit.Net.Clients.V4Api
             decimal stopLimitPrice,
             string? clientOrderId = null, 
             PositionSide? positionSide = null,
+            bool? reduceOnly = null,
             CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
@@ -155,6 +158,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.AddString("stop_limit_price", stopLimitPrice);
             parameters.AddOptional("clientOrderId", clientOrderId);
             parameters.AddOptionalEnum("positionSide", positionSide);
+            parameters.AddOptional("reduceOnly", reduceOnly);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/collateral/oco", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
             var result = await _baseClient.SendAsync<WhiteBitOcoOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;

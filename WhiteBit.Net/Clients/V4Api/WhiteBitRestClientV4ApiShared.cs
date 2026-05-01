@@ -1069,10 +1069,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         string IFuturesOrderRestClient.GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
 
-        PlaceFuturesOrderOptions IFuturesOrderRestClient.PlaceFuturesOrderOptions { get; } = new PlaceFuturesOrderOptions(true)
-        {
-            RequestNotes = "ReduceOnly is not supported"
-        };
+        PlaceFuturesOrderOptions IFuturesOrderRestClient.PlaceFuturesOrderOptions { get; } = new PlaceFuturesOrderOptions(true);
         async Task<ExchangeWebResult<SharedId>> IFuturesOrderRestClient.PlaceFuturesOrderAsync(PlaceFuturesOrderRequest request, CancellationToken ct)
         {
             var validationError = ((IFuturesOrderRestClient)this).PlaceFuturesOrderOptions.ValidateRequest(
@@ -1098,6 +1095,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 takeProfitPrice: request.TakeProfitPrice,
                 stopLossPrice: request.StopLossPrice,
                 positionSide: request.PositionSide.HasValue ? request.PositionSide.Value.ToPositionSide() : null,
+                reduceOnly: request.ReduceOnly,
                 ct: ct).ConfigureAwait(false);
 
             if (!result)
