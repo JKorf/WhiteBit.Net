@@ -7,6 +7,8 @@ using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Converters
 {
+    [JsonSerializable(typeof(WhiteBitCancelOrdersResult[]))]
+    [JsonSerializable(typeof(WhiteBitCancelRequest[]))]
     [JsonSerializable(typeof(OrderEvent))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitSocketTrade[]>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<decimal>))]

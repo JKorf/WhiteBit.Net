@@ -157,6 +157,21 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
+        #region Cancel Orders
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<WhiteBitCancelOrdersResult[]>> CancelOrdersAsync(IEnumerable<WhiteBitCancelRequest> requests, CancellationToken ct = default)
+        {
+            var parameters = new ParameterCollection();
+            parameters.Add("orders", requests.ToArray());
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel/bulk", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+                limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+            var result = await _baseClient.SendAsync<WhiteBitCancelOrdersResult[]>(request, parameters, ct).ConfigureAwait(false);
+            return result;
+        }
+
+        #endregion
+
         #region Cancel All Orders
 
         /// <inheritdoc />

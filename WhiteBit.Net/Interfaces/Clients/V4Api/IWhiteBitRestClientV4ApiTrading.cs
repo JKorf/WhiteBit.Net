@@ -90,6 +90,19 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default);
 
         /// <summary>
+        /// Cancel multiple orders
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/cancel-bulk-order" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/order/cancel
+        /// </para>
+        /// </summary>
+        /// <param name="requests">Order requests</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<WebCallResult<WhiteBitCancelOrdersResult[]>> CancelOrdersAsync(IEnumerable<WhiteBitCancelRequest> requests, CancellationToken ct = default);
+
+        /// <summary>
         /// Cancel all orders
         /// <para>
         /// Docs:<br />
