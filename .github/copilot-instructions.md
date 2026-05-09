@@ -75,4 +75,4 @@ For exchange-agnostic code, use `CryptoExchange.Net.SharedApis` from `.V4Api.Sha
 
 ## Reference
 
-For detailed patterns and pitfalls see `CLAUDE.md`, `llms.txt`, `llms-full.txt`, `docs/ai-api-map.md`, and `Examples/ai-friendly/` in this repository.
+For detailed patterns and pitfalls see `AGENTS.md`, `llms.txt`, `llms-full.txt`, `docs/ai-api-map.md`, and `Examples/ai-friendly/` in this repository.

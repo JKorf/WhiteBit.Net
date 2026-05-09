@@ -97,7 +97,7 @@ Use `CryptoExchange.Net.SharedApis` through `new WhiteBitRestClient().V4Api.Shar
 
 ## Reference
 
-- Skill: `CLAUDE.md`
+- Skill: `AGENTS.md`
 - LLM index: `llms.txt`
 - Full LLM context: `llms-full.txt`
 - API map: `docs/ai-api-map.md`
