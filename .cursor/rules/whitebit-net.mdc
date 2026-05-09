@@ -1,0 +1,104 @@
+---
+description: Conventions for using WhiteBit.Net when working with the WhiteBit cryptocurrency exchange in C#/.NET. Apply when generating code that interacts with WhiteBit APIs.
+globs:
+  - "**/*.cs"
+  - "**/*.csproj"
+alwaysApply: false
+---
+
+# WhiteBit.Net Conventions
+
+Use **WhiteBit.Net** for WhiteBit exchange access. Do not write raw `HttpClient` calls to WhiteBit endpoints.
+
+## Client Setup
+
+```csharp
+using WhiteBit.Net;
+using WhiteBit.Net.Clients;
+
+var restClient = new WhiteBitRestClient(options =>
+{
+    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
+});
+```
+
+For public market data only, use `new WhiteBitRestClient()` without credentials.
+
+## Result Pattern
+
+Always check `.Success` before reading `.Data`.
+
+```csharp
+var tickers = await restClient.V4Api.ExchangeData.GetTickersAsync();
+if (!tickers.Success) { Console.WriteLine(tickers.Error); return; }
+var eth = tickers.Data.Single(x => x.Symbol == "ETH_USDT");
+```
+
+## API Surface
+
+- `restClient.V4Api.ExchangeData`
+- `restClient.V4Api.Account`
+- `restClient.V4Api.Trading`
+- `restClient.V4Api.CollateralTrading`
+- `restClient.V4Api.Convert`
+- `restClient.V4Api.Codes`
+- `restClient.V4Api.SubAccount`
+- `restClient.V4Api.SharedClient`
+- `socketClient.V4Api`
+- `socketClient.V4Api.SharedClient`
+
+## Spot Orders
+
+```csharp
+var order = await restClient.V4Api.Trading.PlaceSpotOrderAsync(
+    "ETH_USDT",
+    OrderSide.Buy,
+    NewOrderType.Limit,
+    quantity: 0.1m,
+    price: 2000m);
+```
+
+## Collateral / Futures Orders
+
+```csharp
+var order = await restClient.V4Api.CollateralTrading.PlaceOrderAsync(
+    "ETH_PERP",
+    OrderSide.Buy,
+    NewOrderType.Market,
+    quantity: 0.1m);
+```
+
+Use `positionSide` only when hedge mode is intended. Use `reduceOnly: true` when closing without flipping a position.
+
+## WebSocket Pattern
+
+```csharp
+var socketClient = new WhiteBitSocketClient();
+var sub = await socketClient.V4Api.SubscribeToTickerUpdatesAsync(
+    "ETH_USDT",
+    update => Console.WriteLine(update.Data.Ticker.LastPrice));
+if (!sub.Success) { Console.WriteLine(sub.Error); return; }
+await socketClient.UnsubscribeAsync(sub.Data);
+```
+
+## Multi-Exchange Code
+
+Use `CryptoExchange.Net.SharedApis` through `new WhiteBitRestClient().V4Api.SharedClient` or `new WhiteBitSocketClient().V4Api.SharedClient`.
+
+## Hard Rules
+
+- Never use raw WhiteBit URLs or manual request signing.
+- Never use `ApiCredentials`; use `WhiteBitCredentials`.
+- Never use nonexistent `SpotApi`, `FuturesApi`, or `GeneralApi` roots.
+- Never use Binance-style symbols in direct WhiteBit calls; use `ETH_USDT` and `ETH_PERP`.
+- Never skip the `.Success` check.
+- Never block async calls with `.Result` or `.Wait()`.
+- Always unsubscribe WebSocket subscriptions.
+
+## Reference
+
+- Skill: `CLAUDE.md`
+- LLM index: `llms.txt`
+- Full LLM context: `llms-full.txt`
+- API map: `docs/ai-api-map.md`
+- Examples: `Examples/ai-friendly/`

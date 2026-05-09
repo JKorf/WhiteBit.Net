@@ -1,0 +1,595 @@
+# WhiteBit.Net Full LLM Context
+
+> Detailed AI/LLM reference for generating correct C#/.NET code with WhiteBit.Net. Use this file when `llms.txt` is too brief and the task needs concrete examples, endpoint routing guidance, or anti-hallucination rules.
+
+WhiteBit.Net is a strongly typed .NET client library for the WhiteBit REST and WebSocket APIs. It is part of the CryptoExchange.Net ecosystem and uses the same result, shared API, logging, rate limiting, and socket patterns as other JKorf exchange libraries.
+
+Current package version in this repository: 3.10.0.
+CryptoExchange.Net dependency: 11.1.0.
+Target frameworks: netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
+Native AOT: supported on compatible .NET targets.
+
+Primary documentation:
+- README.md: overview, installation, feature table, release notes, basic examples
+- docs site: https://cryptoexchange.jkorf.dev/WhiteBit.Net/
+- API quick map: `docs/ai-api-map.md`
+- source interfaces: `WhiteBit.Net/Interfaces/Clients/**`
+- AI examples: `Examples/ai-friendly/`
+- assistant skill: `CLAUDE.md`
+
+## Golden Rules For AI Code Generation
+
+- Use `WhiteBitRestClient` for REST and `WhiteBitSocketClient` for WebSocket. Do not generate raw `HttpClient` calls to WhiteBit endpoints.
+- Use `WhiteBitCredentials`, not generic `ApiCredentials`.
+- Include `using WhiteBit.Net;` when using `WhiteBitCredentials` or `WhiteBitEnvironment`.
+- Direct client calls are rooted at `V4Api`; do not generate `SpotApi`, `FuturesApi`, or `GeneralApi` members.
+- Always check `.Success` before reading `.Data`.
+- REST methods return `WebCallResult<T>` or `WebCallResult`.
+- WebSocket requests and subscriptions return `CallResult<T>` or `CallResult`.
+- Reuse clients. Do not instantiate a REST or socket client per request in production code.
+- Prefer dependency injection for long-running services.
+- Store WebSocket subscriptions and unsubscribe during shutdown.
+- Do not call `.Result` or `.Wait()` on async methods.
+- Do not invent endpoint names. If unsure, inspect `WhiteBit.Net/Interfaces/Clients/**`.
+- Use WhiteBit symbol formats in direct calls: spot `ETH_USDT`, perpetual/collateral `ETH_PERP`.
+- For multi-exchange code, use `CryptoExchange.Net.SharedApis` interfaces from `.V4Api.SharedClient`.
+
+## Installation
+
+```bash
+dotnet add package WhiteBit.Net
+```
+
+## Required Usings
+
+Typical REST/trading code:
+
+```csharp
+using WhiteBit.Net;
+using WhiteBit.Net.Clients;
+using WhiteBit.Net.Enums;
+```
+
+Shared API code:
+
+```csharp
+using CryptoExchange.Net.SharedApis;
+using WhiteBit.Net.Clients;
+```
+
+Retry/error helper code:
+
+```csharp
+using CryptoExchange.Net.Objects;
+```
+
+Dependency injection setup:
+
+```csharp
+using Microsoft.Extensions.DependencyInjection;
+using WhiteBit.Net;
+```
+
+## Client Setup
+
+Public market data does not require credentials:
+
+```csharp
+var client = new WhiteBitRestClient();
+
+var tickers = await client.V4Api.ExchangeData.GetTickersAsync();
+if (!tickers.Success)
+{
+    Console.WriteLine(tickers.Error);
+    return;
+}
+
+var eth = tickers.Data.Single(x => x.Symbol == "ETH_USDT");
+Console.WriteLine(eth.LastPrice);
+```
+
+Private account and trading endpoints require credentials:
+
+```csharp
+var client = new WhiteBitRestClient(options =>
+{
+    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
+});
+```
+
+Socket client with credentials:
+
+```csharp
+var socketClient = new WhiteBitSocketClient(options =>
+{
+    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
+});
+```
+
+Environment:
+
+```csharp
+var live = new WhiteBitRestClient(options => options.Environment = WhiteBitEnvironment.Live);
+```
+
+WhiteBit.Net currently exposes `WhiteBitEnvironment.Live`. For tests or proxies, use `WhiteBitEnvironment.CreateCustom(...)`.
+
+## Dependency Injection
+
+Current DI shape:
+
+```csharp
+services.AddWhiteBit(options =>
+{
+    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
+});
+```
+
+Inject:
+
+```csharp
+using WhiteBit.Net.Interfaces.Clients;
+
+public class MyService
+{
+    private readonly IWhiteBitRestClient _restClient;
+    private readonly IWhiteBitSocketClient _socketClient;
+
+    public MyService(IWhiteBitRestClient restClient, IWhiteBitSocketClient socketClient)
+    {
+        _restClient = restClient;
+        _socketClient = socketClient;
+    }
+}
+```
+
+## Result Handling Pattern
+
+Always branch on `.Success`.
+
+```csharp
+var result = await client.V4Api.ExchangeData.GetTickersAsync();
+if (!result.Success)
+{
+    Console.WriteLine($"Code: {result.Error?.Code}");
+    Console.WriteLine($"Message: {result.Error?.Message}");
+    return;
+}
+
+var ticker = result.Data.Single(x => x.Symbol == "ETH_USDT");
+Console.WriteLine(ticker.LastPrice);
+```
+
+Retry only transient errors:
+
+```csharp
+async Task<WebCallResult<T>> WithRetry<T>(Func<Task<WebCallResult<T>>> call, int maxAttempts = 3)
+{
+    WebCallResult<T> last = default!;
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++)
+    {
+        last = await call();
+        if (last.Success)
+            return last;
+
+        if (last.Error?.IsTransient != true)
+            return last;
+
+        await Task.Delay(TimeSpan.FromMilliseconds(250 * Math.Pow(2, attempt)));
+    }
+
+    return last;
+}
+```
+
+## Main API Surface
+
+REST:
+
+```text
+WhiteBitRestClient
+  .V4Api
+    .ExchangeData
+    .Account
+    .Trading
+    .CollateralTrading
+    .Convert
+    .Codes
+    .SubAccount
+    .SharedClient
+```
+
+WebSocket:
+
+```text
+WhiteBitSocketClient
+  .V4Api
+    public requests/subscriptions
+    private requests/subscriptions
+    .SharedClient
+```
+
+Important: WhiteBit.Net does not have separate `SpotApi`, `FuturesApi`, or `GeneralApi` roots.
+
+## Intent To Method Map
+
+For a broader quick reference, see `docs/ai-api-map.md`.
+
+Common REST tasks:
+
+```text
+Get server time -> client.V4Api.ExchangeData.GetServerTimeAsync()
+Get symbols -> client.V4Api.ExchangeData.GetSymbolsAsync()
+Get tickers -> client.V4Api.ExchangeData.GetTickersAsync()
+Get spot order book -> client.V4Api.ExchangeData.GetOrderBookAsync("ETH_USDT")
+Get recent trades -> client.V4Api.ExchangeData.GetRecentTradesAsync("ETH_USDT")
+Get main balances -> client.V4Api.Account.GetMainBalancesAsync()
+Get spot balances -> client.V4Api.Account.GetSpotBalancesAsync()
+Transfer between account types -> client.V4Api.Account.TransferAsync(...)
+Get collateral balances -> client.V4Api.Account.GetCollateralBalancesAsync()
+Set account leverage -> client.V4Api.Account.SetAccountLeverageAsync(leverage)
+Get hedge mode -> client.V4Api.Account.GetHedgeModeAsync()
+Set hedge mode -> client.V4Api.Account.SetHedgeModeAsync(enable)
+Place spot order -> client.V4Api.Trading.PlaceSpotOrderAsync(...)
+Get open spot orders -> client.V4Api.Trading.GetOpenOrdersAsync(symbol)
+Cancel spot order -> client.V4Api.Trading.CancelOrderAsync(symbol, orderId)
+Place collateral/futures order -> client.V4Api.CollateralTrading.PlaceOrderAsync(...)
+Get open positions -> client.V4Api.CollateralTrading.GetOpenPositionsAsync(symbol)
+Get position history -> client.V4Api.CollateralTrading.GetPositionHistoryAsync(symbol)
+Convert estimate -> client.V4Api.Convert.GetConvertEstimateAsync(...)
+Confirm convert -> client.V4Api.Convert.ConfirmConvertAsync(estimateId)
+WhiteBit Codes -> client.V4Api.Codes.*
+Sub-accounts -> client.V4Api.SubAccount.*
+```
+
+Common WebSocket tasks:
+
+```text
+Subscribe ticker -> socketClient.V4Api.SubscribeToTickerUpdatesAsync(symbol, handler)
+Subscribe klines -> socketClient.V4Api.SubscribeToKlineUpdatesAsync(symbol, interval, handler)
+Subscribe order book -> socketClient.V4Api.SubscribeToOrderBookUpdatesAsync(symbol, depth, handler)
+Subscribe trades -> socketClient.V4Api.SubscribeToTradeUpdatesAsync(symbol, handler)
+Subscribe spot balances -> socketClient.V4Api.SubscribeToSpotBalanceUpdatesAsync(assets, handler)
+Subscribe open orders -> socketClient.V4Api.SubscribeToOpenOrderUpdatesAsync(symbols, handler)
+Subscribe closed orders -> socketClient.V4Api.SubscribeToClosedOrderUpdatesAsync(...)
+Subscribe user trades -> socketClient.V4Api.SubscribeToUserTradeUpdatesAsync(symbols, handler)
+Subscribe positions -> socketClient.V4Api.SubscribeToPositionUpdatesAsync(handler)
+```
+
+## Spot Order Example
+
+```csharp
+using WhiteBit.Net;
+using WhiteBit.Net.Clients;
+using WhiteBit.Net.Enums;
+
+var client = new WhiteBitRestClient(options =>
+{
+    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
+});
+
+var order = await client.V4Api.Trading.PlaceSpotOrderAsync(
+    symbol: "ETH_USDT",
+    side: OrderSide.Buy,
+    type: NewOrderType.Limit,
+    quantity: 0.1m,
+    price: 2000m);
+
+if (!order.Success)
+{
+    Console.WriteLine(order.Error);
+    return;
+}
+
+Console.WriteLine(order.Data.OrderId);
+```
+
+For market buy orders that specify quote currency amount, use `quoteQuantity`:
+
+```csharp
+var order = await client.V4Api.Trading.PlaceSpotOrderAsync(
+    symbol: "ETH_USDT",
+    side: OrderSide.Buy,
+    type: NewOrderType.Market,
+    quoteQuantity: 100m);
+```
+
+## Collateral / Futures Order Example
+
+```csharp
+using WhiteBit.Net;
+using WhiteBit.Net.Clients;
+using WhiteBit.Net.Enums;
+
+var client = new WhiteBitRestClient(options =>
+{
+    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
+});
+
+var leverage = await client.V4Api.Account.SetAccountLeverageAsync(5);
+if (!leverage.Success)
+{
+    Console.WriteLine(leverage.Error);
+    return;
+}
+
+var order = await client.V4Api.CollateralTrading.PlaceOrderAsync(
+    symbol: "ETH_PERP",
+    side: OrderSide.Buy,
+    type: NewOrderType.Market,
+    quantity: 0.1m);
+
+if (!order.Success)
+{
+    Console.WriteLine(order.Error);
+    return;
+}
+```
+
+Hedge mode note: if the account is in hedge mode, add `positionSide: PositionSide.Long` or `positionSide: PositionSide.Short`. In one-way mode, omit `positionSide`.
+
+Use `reduceOnly: true` when closing a collateral/futures position if you want to avoid flipping the position.
+
+## WebSocket Subscription Example
+
+```csharp
+using WhiteBit.Net.Clients;
+using WhiteBit.Net.Enums;
+
+var socketClient = new WhiteBitSocketClient();
+
+var tickerSub = await socketClient.V4Api.SubscribeToTickerUpdatesAsync(
+    "ETH_USDT",
+    update => Console.WriteLine(update.Data.Ticker.LastPrice));
+
+if (!tickerSub.Success)
+{
+    Console.WriteLine(tickerSub.Error);
+    return;
+}
+
+Console.ReadLine();
+
+await socketClient.UnsubscribeAsync(tickerSub.Data);
+```
+
+Multiple subscriptions should all be checked before `.Data` is used.
+
+```csharp
+var klineSub = await socketClient.V4Api.SubscribeToKlineUpdatesAsync(
+    "ETH_USDT",
+    KlineInterval.OneMinute,
+    update =>
+    {
+        foreach (var kline in update.Data)
+            Console.WriteLine(kline.ClosePrice);
+    });
+
+if (!klineSub.Success)
+{
+    await socketClient.UnsubscribeAsync(tickerSub.Data);
+    Console.WriteLine(klineSub.Error);
+    return;
+}
+```
+
+## SharedApis Multi-Exchange Pattern
+
+Use CryptoExchange.Net.SharedApis when the user asks for code that can work against WhiteBit and other exchanges.
+
+```csharp
+using CryptoExchange.Net.SharedApis;
+using WhiteBit.Net.Clients;
+
+ISpotTickerRestClient tickerClient = new WhiteBitRestClient().V4Api.SharedClient;
+var symbol = new SharedSymbol(TradingMode.Spot, "ETH", "USDT");
+
+var ticker = await tickerClient.GetSpotTickerAsync(new GetTickerRequest(symbol));
+if (!ticker.Success)
+{
+    Console.WriteLine(ticker.Error);
+    return;
+}
+
+Console.WriteLine(ticker.Data.LastPrice);
+```
+
+Shared WebSocket subscriptions return an `UpdateSubscription` in `.Data`. For shared interface variables, unsubscribe through the concrete socket client:
+
+```csharp
+var socketClient = new WhiteBitSocketClient();
+ITickerSocketClient tickerSocket = socketClient.V4Api.SharedClient;
+
+var sub = await tickerSocket.SubscribeToTickerUpdatesAsync(
+    new SubscribeTickerRequest(new SharedSymbol(TradingMode.Spot, "ETH", "USDT")),
+    update => Console.WriteLine(update.Data.LastPrice));
+
+if (!sub.Success)
+{
+    Console.WriteLine(sub.Error);
+    return;
+}
+
+Console.ReadLine();
+
+await socketClient.UnsubscribeAsync(sub.Data);
+```
+
+Do not call `tickerSocket.UnsubscribeAsync(...)` on `ITickerSocketClient`; that shared interface does not expose the method.
+
+## Symbol And Quantity Handling
+
+For direct WhiteBit calls, use the exchange's symbol names exactly as returned by `GetSymbolsAsync()` or `GetFuturesSymbolsAsync()`.
+
+```csharp
+var symbols = await client.V4Api.ExchangeData.GetSymbolsAsync();
+if (!symbols.Success)
+{
+    Console.WriteLine(symbols.Error);
+    return;
+}
+
+var symbol = symbols.Data.Single(x => x.Name == "ETH_USDT");
+Console.WriteLine(symbol.MinOrderQuantity);
+Console.WriteLine(symbol.MinOrderValue);
+```
+
+WhiteBit symbol metadata exposes precision, fees, minimum order quantity/value, max order value, trading enabled flag, margin enabled flag, and symbol type. Use this data to validate user input before placing orders.
+
+## Error Handling Notes
+
+WhiteBit.Net returns API/network/rate-limit errors through `.Error` on result objects. It generally does not throw for normal API failures. Exceptions are for misconfiguration, disposal, cancellation, or programming errors.
+
+Common handling categories:
+
+```text
+Authentication or signature errors: check `WhiteBitCredentials`, environment, permissions, and clock/time handling.
+Validation errors: fix symbol format, order type, quantity, price, trigger price, or account type.
+Insufficient balance: permanent for the attempted order; surface to caller.
+Unknown order: may be expected for already-filled, canceled, or wrong symbol/order id combinations.
+Rate limit/network/server errors: retry only when `result.Error?.IsTransient == true`.
+```
+
+## AI-Friendly Examples
+
+Use these examples when generating code:
+
+```text
+Examples/ai-friendly/01-spot-quickstart.cs
+  Client setup, public ticker lookup, authenticated spot balances, limit spot order, order query, cancellation.
+
+Examples/ai-friendly/02-collateral-futures.cs
+  Account leverage, collateral/futures market order, open positions, reduce-only close.
+
+Examples/ai-friendly/03-websocket.cs
+  Public ticker stream, kline stream, authenticated balance/order streams, success checks, teardown.
+
+Examples/ai-friendly/04-multi-exchange.cs
+  CryptoExchange.Net SharedApis REST and socket patterns.
+
+Examples/ai-friendly/05-error-handling.cs
+  WebCallResult pattern, transient retry, WhiteBit validation examples, symbol metadata handling.
+```
+
+These files are intended to be copied into a console `Program.cs` after `dotnet add package WhiteBit.Net`.
+
+## Anti-Hallucination Checklist
+
+Before finalizing generated code:
+
+- Does it compile with the current package?
+- Does it include `using WhiteBit.Net;` when using credentials or environments?
+- Does every REST/socket result check `.Success` before `.Data`?
+- Does it use the correct API branch: `V4Api.ExchangeData`, `Account`, `Trading`, `CollateralTrading`, `Convert`, `Codes`, or `SubAccount`?
+- Does it avoid raw WhiteBit URLs and manual signing?
+- Does it avoid nonexistent `WhiteBitClient`, `SpotApi`, `FuturesApi`, and `GeneralApi` members?
+- Does it use direct WhiteBit symbols like `ETH_USDT` and `ETH_PERP`?
+- Does it avoid `.Result` and `.Wait()`?
+- Are WebSocket subscriptions unsubscribed on shutdown?
+- For shared socket interfaces, does it keep the concrete socket client for `UnsubscribeAsync(sub.Data)`?
+- For hedge-mode code, is `positionSide` only included when hedge mode is intended?
+- For order quantities/prices, does it inspect symbol metadata or use caller-provided validated values?
+
+## Source Of Truth For Method Names
+
+When unsure, inspect these files instead of guessing:
+
+```text
+WhiteBit.Net/Interfaces/Clients/IWhiteBitRestClient.cs
+WhiteBit.Net/Interfaces/Clients/IWhiteBitSocketClient.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4Api.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiExchangeData.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiAccount.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiTrading.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiCollateralTrading.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiConvert.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiCodes.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiSubAccount.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitSocketClientV4Api.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitRestClientV4ApiShared.cs
+WhiteBit.Net/Interfaces/Clients/V4Api/IWhiteBitSocketClientV4ApiShared.cs
+```
+
+Prefer interface files over memory when generating endpoint names, parameters, callback names, and return types.
+
+## Common Wrong Patterns To Avoid
+
+Wrong:
+
+```csharp
+var client = new WhiteBitClient();
+```
+
+Use:
+
+```csharp
+var client = new WhiteBitRestClient();
+```
+
+Wrong:
+
+```csharp
+options.ApiCredentials = new ApiCredentials("key", "secret");
+```
+
+Use:
+
+```csharp
+options.ApiCredentials = new WhiteBitCredentials("key", "secret");
+```
+
+Wrong:
+
+```csharp
+var result = await client.V4Api.ExchangeData.GetTickersAsync();
+Console.WriteLine(result.Data.First().LastPrice);
+```
+
+Use:
+
+```csharp
+var result = await client.V4Api.ExchangeData.GetTickersAsync();
+if (!result.Success)
+{
+    Console.WriteLine(result.Error);
+    return;
+}
+Console.WriteLine(result.Data.First().LastPrice);
+```
+
+Wrong:
+
+```csharp
+restClient.SpotApi.Trading.PlaceOrderAsync(...);
+```
+
+Use:
+
+```csharp
+restClient.V4Api.Trading.PlaceSpotOrderAsync(...);
+```
+
+Wrong:
+
+```csharp
+restClient.FuturesApi.Trading.PlaceOrderAsync(...);
+```
+
+Use:
+
+```csharp
+restClient.V4Api.CollateralTrading.PlaceOrderAsync(...);
+```
+
+Wrong:
+
+```csharp
+await sharedTickerSocket.UnsubscribeAsync(sub.Data);
+```
+
+Use:
+
+```csharp
+await socketClient.UnsubscribeAsync(sub.Data);
+```

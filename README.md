@@ -83,6 +83,20 @@ var tickerSubscriptionResult = socketClient.V4Api.SubscribeToTickerUpdatesAsync(
 
 For information on the clients, dependency injection, response processing and more see the [documentation](https://cryptoexchange.jkorf.dev?library=WhiteBit.Net), or have a look at the examples [here](https://github.com/JKorf/WhiteBit.Net/tree/main/Examples) or [here](https://github.com/JKorf/CryptoExchange.Net/tree/master/Examples).
 
+## AI / LLM documentation
+
+WhiteBit.Net includes AI-oriented documentation and examples for code generation tools:
+
+|File|Purpose|
+|--|--|
+|[`CLAUDE.md`](CLAUDE.md)|Assistant skill with core WhiteBit.Net patterns, pitfalls, and examples|
+|[`llms.txt`](llms.txt)|Short LLM index with links to docs, examples, and critical usage rules|
+|[`llms-full.txt`](llms-full.txt)|Detailed LLM context with endpoint routing, code patterns, and anti-hallucination checks|
+|[`docs/ai-api-map.md`](docs/ai-api-map.md)|Table-style intent-to-method map for V4 REST, WebSocket, and SharedApis|
+|[`Examples/ai-friendly`](Examples/ai-friendly)|Compilable single-file examples for common REST, WebSocket, shared API, and error handling workflows|
+
+GitHub Copilot and Cursor instructions are also provided in `.github/copilot-instructions.md` and `.cursor/rules/whitebit-net.mdc`; both point back to the root AI context files.
+
 ## CryptoExchange.Net
 WhiteBit.Net is based on the [CryptoExchange.Net](https://github.com/JKorf/CryptoExchange.Net) base library. Other exchange API implementations based on the CryptoExchange.Net base library are available and follow the same logic.
 
