@@ -1,13 +1,11 @@
 # Examples
 
-### WhiteBit.Examples.Api
-A minimal API showing how to integrate WhiteBit.Net in a web API project
+| Project | Topic |
+|---|---|
+| `WhiteBit.Examples.Api` | Minimal ASP.NET Core API integration, dependency injection, public ticker endpoint, private balances endpoint |
+| `WhiteBit.Examples.Console` | Basic REST ticker request and WebSocket ticker subscription |
+| `WhiteBit.Examples.V4OrderPlacement` | Spot and futures V4 order placement, order status lookup, and cancellation |
+| `WhiteBit.Examples.OrderBook` | Client-side order book implementation with live console display |
+| `WhiteBit.Examples.Tracker` | Trade tracker with rolling market statistics |
 
-### WhiteBit.Examples.Console
-A simple console client demonstrating basic usage
-
-### WhiteBit.Examples.OrderBook
-Example of using the client side order book implementation
-
-### WhiteBit.Examples.Tracker
-Example of using the trade tracker
+The `ai-friendly` folder contains standalone copy/paste examples intended for quick onboarding and AI coding assistant context.

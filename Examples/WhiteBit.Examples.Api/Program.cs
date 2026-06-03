@@ -1,3 +1,4 @@
+using WhiteBit.Net;
 using WhiteBit.Net.Interfaces.Clients;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,8 @@ builder.Services.AddWhiteBit();
 /*
 builder.Services.AddWhiteBit(options =>
 {    
-   options.ApiCredentials = new ApiCredentials("<APIKEY>", "<APISECRET>");
+   options.ApiCredentials = new WhiteBitCredentials()
+        .WithHMAC("<APIKEY>", "<APISECRET>");
    options.Rest.RequestTimeout = TimeSpan.FromSeconds(5);
 });
 */
@@ -27,8 +29,13 @@ app.UseHttpsRedirection();
 app.MapGet("/{Symbol}", async ([FromServices] IWhiteBitRestClient client, string symbol) =>
 {
     var tickers = await client.V4Api.ExchangeData.GetTickersAsync();
-    var ticker = tickers.Data.Single(x => x.Symbol == symbol);
-    return ticker.LastPrice;
+    if (!tickers.Success)
+        return Results.Problem(tickers.Error?.Message, statusCode: 502);
+
+    var ticker = tickers.Data.SingleOrDefault(x => x.Symbol == symbol);
+    return ticker == null
+        ? Results.NotFound($"Symbol {symbol} not found")
+        : Results.Ok(ticker.LastPrice);
 })
 .WithOpenApi();
 
@@ -36,7 +43,9 @@ app.MapGet("/{Symbol}", async ([FromServices] IWhiteBitRestClient client, string
 app.MapGet("/Balances", async ([FromServices] IWhiteBitRestClient client) =>
 {
     var result = await client.V4Api.Account.GetSpotBalancesAsync();
-    return (object)(result.Success ? result.Data : result.Error!);
+    return result.Success
+        ? Results.Ok(result.Data)
+        : Results.Problem(result.Error?.Message, statusCode: 502);
 })
 .WithOpenApi();
 
