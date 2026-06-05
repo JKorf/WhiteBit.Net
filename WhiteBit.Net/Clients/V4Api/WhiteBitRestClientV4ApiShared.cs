@@ -834,13 +834,13 @@ namespace WhiteBit.Net.Clients.V4Api
             var response = futuresSymbols.Result.AsExchangeResult<SharedFuturesSymbol[]>(Exchange, request.TradingMode == null ? SupportedTradingModes : new[] { request.TradingMode.Value },
                 futuresSymbols.Result.Data.Select(s =>
                 {
-                    var symbol = symbols.Result.Data.Single(x => x.Name == s.Symbol);
+                    var symbol = symbols.Result.Data.SingleOrDefault(x => x.Name == s.Symbol);
                     return new SharedFuturesSymbol(s.ProductType == ProductType.Perpetual ? TradingMode.PerpetualLinear : TradingMode.DeliveryLinear, s.BaseAsset, s.QuoteAsset, s.Symbol, true)
                     {
-                        MinTradeQuantity = symbol.MinOrderQuantity,
-                        MinNotionalValue = symbol.MinOrderValue,
-                        QuantityDecimals = symbol.BaseAssetPrecision,
-                        PriceDecimals = symbol.QuoteAssetPrecision,
+                        MinTradeQuantity = symbol?.MinOrderQuantity,
+                        MinNotionalValue = symbol?.MinOrderValue,
+                        QuantityDecimals = symbol?.BaseAssetPrecision,
+                        PriceDecimals = symbol?.QuoteAssetPrecision,
                         ContractSize = 1,
                     };
                 }).ToArray());
