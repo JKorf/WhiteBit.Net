@@ -35,7 +35,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             IndividualSubscriptionCount = symbols.Length;
 
             Topic = "UserTrade";
-            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>("deals_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<WhiteBitUserTradeUpdate>>("deals_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -72,7 +72,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                 .WithDataTimestamp(message.Data.Time, _client.GetTimeOffset())
                 .WithUpdateType(SocketUpdateType.Update)
                 );
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

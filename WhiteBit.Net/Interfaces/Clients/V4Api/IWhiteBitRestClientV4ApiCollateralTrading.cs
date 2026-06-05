@@ -43,7 +43,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="positionSide">["<c>positionSide</c>"] Position side, required when in hedge mode</param>
         /// <param name="reduceOnly">["<c>reduceOnly</c>"] Reduce only order</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
+        Task<HttpResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
             string symbol,
             OrderSide side,
             NewOrderType type,
@@ -72,7 +72,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">["<c>market</c>"] Filter by symbol</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitPosition[]>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitPosition[]>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get position history
@@ -90,7 +90,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitPositionHistory[]>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitPositionHistory[]>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get open conditional orders
@@ -105,7 +105,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitConditionalOrdersResult>> GetOpenConditionalOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitConditionalOrdersResult>> GetOpenConditionalOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Place a new OCO order
@@ -126,7 +126,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="positionSide">["<c>positionSide</c>"] Position side, required when in hedge mode</param>
         /// <param name="reduceOnly">["<c>reduceOnly</c>"] Reduce only</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
+        Task<HttpResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
             string symbol,
             OrderSide orderSide,
             decimal quantity,
@@ -150,7 +150,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_PERP`</param>
         /// <param name="orderId">["<c>orderId</c>"] Order id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOcoOrder>> CancelOcoOrderAsync(string symbol, long orderId, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitOcoOrder>> CancelOcoOrderAsync(string symbol, long orderId, CancellationToken ct = default);
         
         /// <summary>
         /// Cancel a conditional order
@@ -164,7 +164,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_PERP`</param>
         /// <param name="orderId">["<c>id</c>"] Order id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult> CancelConditionalOrderAsync(string symbol, long orderId, CancellationToken ct = default);
+        Task<HttpResult> CancelConditionalOrderAsync(string symbol, long orderId, CancellationToken ct = default);
 
         /// <summary>
         /// Cancel an OTO order
@@ -178,7 +178,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_PERP`</param>
         /// <param name="orderId">["<c>otoId</c>"] Order id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult> CancelOTOOrderAsync(string symbol, long orderId, CancellationToken ct = default);
+        Task<HttpResult> CancelOTOOrderAsync(string symbol, long orderId, CancellationToken ct = default);
 
     }
 }

@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols.ToArray();
             Topic = "MarginBalance";
 
-            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>("balanceMargin_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<WhiteBitMarginBalance[]>>("balanceMargin_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                     .WithUpdateType(SocketUpdateType.Update)
                 );
 
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

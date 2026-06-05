@@ -28,7 +28,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
+        public async Task<HttpResult<WhiteBitCollateralOrder>> PlaceOrderAsync(
             string symbol,
             OrderSide side,
             NewOrderType type,
@@ -46,21 +46,21 @@ namespace WhiteBit.Net.Clients.V4Api
             bool? reduceOnly = null,
             CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
-            parameters.AddEnum("side", side);
-            parameters.AddOptionalString("amount", quantity);
-            parameters.AddOptionalString("price", price);
-            parameters.AddOptional("clientOrderId", clientOrderId);
-            parameters.AddOptional("postOnly", postOnly);
-            parameters.AddOptional("ioc", immediateOrCancel);
-            parameters.AddOptional("bboRole", bboRole);
-            parameters.AddOptionalString("activation_price", triggerPrice);
-            parameters.AddOptionalString("stopLoss", stopLossPrice);
-            parameters.AddOptionalString("takeProfit", takeProfitPrice);
-            parameters.AddOptionalEnum("stp", stpMode);
-            parameters.AddOptionalEnum("positionSide", positionSide);
-            parameters.AddOptional("reduceOnly", reduceOnly);
+            parameters.Add("side", side);
+            parameters.Add("amount", quantity);
+            parameters.Add("price", price);
+            parameters.Add("clientOrderId", clientOrderId);
+            parameters.Add("postOnly", postOnly);
+            parameters.Add("ioc", immediateOrCancel);
+            parameters.Add("bboRole", bboRole);
+            parameters.Add("activation_price", triggerPrice);
+            parameters.Add("stopLoss", stopLossPrice);
+            parameters.Add("takeProfit", takeProfitPrice);
+            parameters.Add("stp", stpMode);
+            parameters.Add("positionSide", positionSide);
+            parameters.Add("reduceOnly", reduceOnly);
 
             string path;
             if (type == NewOrderType.Limit)
@@ -85,10 +85,10 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Open Positions
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitPosition[]>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitPosition[]>> GetOpenPositionsAsync(string? symbol = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("market", symbol);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/positions/open", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitPosition[]>(request, parameters, ct).ConfigureAwait(false);
@@ -100,15 +100,15 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Position History
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitPositionHistory[]>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitPositionHistory[]>> GetPositionHistoryAsync(string? symbol = null, long? positionId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("market", symbol);
-            parameters.AddOptional("positionId", positionId);
-            parameters.AddOptionalMilliseconds("startDate", startTime);
-            parameters.AddOptionalMilliseconds("endDate", endTime);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("positionId", positionId);
+            parameters.Add("startDate", startTime);
+            parameters.Add("endDate", endTime);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/positions/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitPositionHistory[]>(request, parameters, ct).ConfigureAwait(false);
@@ -120,12 +120,12 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Open Conditional Orders
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitConditionalOrdersResult>> GetOpenConditionalOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitConditionalOrdersResult>> GetOpenConditionalOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/conditional-orders", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConditionalOrdersResult>(request, parameters, ct).ConfigureAwait(false);
@@ -137,7 +137,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Oco Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
+        public async Task<HttpResult<WhiteBitOcoOrder>> PlaceOcoOrderAsync(
             string symbol,
             OrderSide orderSide,
             decimal quantity,
@@ -149,16 +149,16 @@ namespace WhiteBit.Net.Clients.V4Api
             bool? reduceOnly = null,
             CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
-            parameters.AddEnum("side", orderSide);
-            parameters.AddString("amount", quantity);
-            parameters.AddString("price", price);
-            parameters.AddString("activation_price", triggerPrice);
-            parameters.AddString("stop_limit_price", stopLimitPrice);
-            parameters.AddOptional("clientOrderId", clientOrderId);
-            parameters.AddOptionalEnum("positionSide", positionSide);
-            parameters.AddOptional("reduceOnly", reduceOnly);
+            parameters.Add("side", orderSide);
+            parameters.Add("amount", quantity);
+            parameters.Add("price", price);
+            parameters.Add("activation_price", triggerPrice);
+            parameters.Add("stop_limit_price", stopLimitPrice);
+            parameters.Add("clientOrderId", clientOrderId);
+            parameters.Add("positionSide", positionSide);
+            parameters.Add("reduceOnly", reduceOnly);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/collateral/oco", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
             var result = await _baseClient.SendAsync<WhiteBitOcoOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -169,9 +169,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Cancel Oco Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOcoOrder>> CancelOcoOrderAsync(string symbol, long orderId, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitOcoOrder>> CancelOcoOrderAsync(string symbol, long orderId, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
             parameters.Add("orderId", orderId);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/oco-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
@@ -185,9 +185,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Cancel Conditional Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult> CancelConditionalOrderAsync(string symbol, long orderId, CancellationToken ct = default)
+        public async Task<HttpResult> CancelConditionalOrderAsync(string symbol, long orderId, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
             parameters.Add("id", orderId);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/conditional-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
@@ -201,9 +201,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Cancel OTO Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult> CancelOTOOrderAsync(string symbol, long orderId, CancellationToken ct = default)
+        public async Task<HttpResult> CancelOTOOrderAsync(string symbol, long orderId, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
             parameters.Add("otoId", orderId);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/oto-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,

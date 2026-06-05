@@ -23,7 +23,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default);
+        Task<HttpResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get symbols list
@@ -35,7 +35,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitSymbol[]>> GetSymbolsAsync(CancellationToken ct = default);
+        Task<HttpResult<WhiteBitSymbol[]>> GetSymbolsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get system/platform status
@@ -47,7 +47,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitSystemStatus>> GetSystemStatusAsync(CancellationToken ct = default);
+        Task<HttpResult<WhiteBitSystemStatus>> GetSystemStatusAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get tickers
@@ -59,7 +59,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitTicker[]>> GetTickersAsync(CancellationToken ct = default);
+        Task<HttpResult<WhiteBitTicker[]>> GetTickersAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get asset information
@@ -71,7 +71,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitAsset[]>> GetAssetsAsync(CancellationToken ct = default);
+        Task<HttpResult<WhiteBitAsset[]>> GetAssetsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get the order book for a symbol
@@ -86,7 +86,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">["<c>limit</c>"] The order book depth, max 100</param>
         /// <param name="mergeLevel">["<c>level</c>"] Aggregation level</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, int? mergeLevel = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, int? mergeLevel = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get the most recent 100 trades
@@ -100,7 +100,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="side">["<c>type</c>"] Filter by trade side</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitTrade[]>> GetRecentTradesAsync(string symbol, OrderSide? side = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitTrade[]>> GetRecentTradesAsync(string symbol, OrderSide? side = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get withdrawal/deposit limits and fees
@@ -112,7 +112,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitDepositWithdraw>> GetDepositWithdrawalInfoAsync(CancellationToken ct = default);
+        Task<HttpResult<WhiteBitDepositWithdraw>> GetDepositWithdrawalInfoAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get collateral symbols
@@ -124,7 +124,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<string[]>> GetCollateralSymbolsAsync(CancellationToken ct = default);
+        Task<HttpResult<string[]>> GetCollateralSymbolsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get futures symbols
@@ -136,7 +136,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitFuturesSymbol[]>> GetFuturesSymbolsAsync(CancellationToken ct = default);
+        Task<HttpResult<WhiteBitFuturesSymbol[]>> GetFuturesSymbolsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get funding rate history
@@ -147,7 +147,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitFundingHistory[]>> GetFundingHistoryAsync(
+        Task<HttpResult<WhiteBitFundingHistory[]>> GetFundingHistoryAsync(
             string symbol,
             DateTime? startTime = null,
             DateTime? endTime = null,

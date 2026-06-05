@@ -28,7 +28,7 @@ namespace WhiteBit.Net
                 return;
 
             var nonce = _nonceProvider.GetNonce().ToString();
-            request.BodyParameters ??= new Dictionary<string, object>();
+            request.BodyParameters ??= new Parameters(WhiteBitExchange._parameterSerializationSettings);
             request.BodyParameters.Add("request", request.Path);
             request.BodyParameters.Add("nonce", nonce);
             request.BodyParameters.Add("nonceWindow", ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow);

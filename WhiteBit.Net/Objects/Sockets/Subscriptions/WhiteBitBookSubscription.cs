@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _depth = depth;
             Topic = "OrderBook";
 
-            MessageRouter = MessageRouter.CreateWithTopicFilter<WhiteBitSocketUpdate<WhiteBitBookUpdate>>("depth_update", symbol, DoHandleMessage);
+            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<WhiteBitBookUpdate>>("depth_update", symbol, DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                     .WithUpdateType(message.Data!.Snapshot ? SocketUpdateType.Snapshot : SocketUpdateType.Update)
                     .WithSequenceNumber(message.Data.OrderBook.UpdateId)
                 );
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

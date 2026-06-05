@@ -26,7 +26,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="spotEnabled">["<c>permissions.spotEnabled</c>"] Whether spot trading is enabled</param>
         /// <param name="collateralEnabled">["<c>permissions.collateralEnabled</c>"] Whether collateral trading is enabled</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitSubAccount>> CreateSubAccountAsync(string alias, string? email = null, bool? shareKyc = null, string? spotEnabled = null, string? collateralEnabled = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitSubAccount>> CreateSubAccountAsync(string alias, string? email = null, bool? shareKyc = null, string? spotEnabled = null, string? collateralEnabled = null, CancellationToken ct = default);
         
         /// <summary>
         /// Delete a sub account
@@ -39,7 +39,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="id">["<c>id</c>"] Sub account id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult> DeleteSubAccountAsync(string id, CancellationToken ct = default);
+        Task<HttpResult> DeleteSubAccountAsync(string id, CancellationToken ct = default);
 
         /// <summary>
         /// Edit a sub account
@@ -55,7 +55,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="spotEnabled">["<c>permissions.spotEnabled</c>"] Spot trading enabled</param>
         /// <param name="collateralEnabled">["<c>permissions.collateralEnabled</c>"] Collateral trading enabled</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult> EditSubAccountAsync(string id, string alias, string spotEnabled, string collateralEnabled, CancellationToken ct = default);
+        Task<HttpResult> EditSubAccountAsync(string id, string alias, string spotEnabled, string collateralEnabled, CancellationToken ct = default);
 
         /// <summary>
         /// Get sub account list
@@ -70,7 +70,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitSubAccounts>> GetSubAccountsAsync(string? search = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitSubAccounts>> GetSubAccountsAsync(string? search = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Transfer to or from sub account
@@ -86,7 +86,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="asset">["<c>ticker</c>"] The asset, for example `ETH`</param>
         /// <param name="quantity">["<c>amount</c>"] Quantity</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult> SubaccountTransferAsync(string subaccountId, SubTransferDirection direction, string asset, decimal quantity, CancellationToken ct = default);
+        Task<HttpResult> SubaccountTransferAsync(string subaccountId, SubTransferDirection direction, string asset, decimal quantity, CancellationToken ct = default);
 
         /// <summary>
         /// Block a sub account
@@ -99,7 +99,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="id">["<c>id</c>"] Sub account id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult> BlockSubaccountAsync(string id, CancellationToken ct = default);
+        Task<HttpResult> BlockSubaccountAsync(string id, CancellationToken ct = default);
 
         /// <summary>
         /// Unblock a sub account
@@ -112,7 +112,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="id">["<c>id</c>"] Sub account id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult> UnblockSubaccountAsync(string id, CancellationToken ct = default);
+        Task<HttpResult> UnblockSubaccountAsync(string id, CancellationToken ct = default);
 
         /// <summary>
         /// Get sub account balances
@@ -126,7 +126,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="id">["<c>id</c>"] Sub account id</param>
         /// <param name="asset">["<c>ticker</c>"] Asset name</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitSubBalances[]>> GetSubaccountBalancesAsync(string id, string? asset = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitSubBalances[]>> GetSubaccountBalancesAsync(string id, string? asset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get sub account transfer history
@@ -138,7 +138,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitSubaccountTransferHistory>> GetSubaccountTransferHistoryAsync(CancellationToken ct = default);
+        Task<HttpResult<WhiteBitSubaccountTransferHistory>> GetSubaccountTransferHistoryAsync(CancellationToken ct = default);
 
     }
 }

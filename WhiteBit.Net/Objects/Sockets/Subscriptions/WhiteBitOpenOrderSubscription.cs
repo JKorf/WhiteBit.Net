@@ -39,8 +39,8 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             var routes = new List<MessageRoute>();
             foreach (var symbol in symbols)
             {
-                routes.Add(MessageRoute<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>.CreateWithTopicFilter("ordersPending_update", symbol, DoHandleMessage));
-                routes.Add(MessageRoute<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>.CreateWithTopicFilter("otoOrdersPending_update", symbol, DoHandleMessage));
+                routes.Add(EventRoute<WhiteBitSocketUpdate<WhiteBitOrderUpdate>>.CreateWithTopicFilter("ordersPending_update", symbol, DoHandleMessage));
+                routes.Add(EventRoute<WhiteBitSocketUpdate<WhiteBitOtoOrderUpdate>>.CreateWithTopicFilter("otoOrdersPending_update", symbol, DoHandleMessage));
             }
 
             MessageRouter = MessageRouter.Create(routes.ToArray());
@@ -77,7 +77,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                         .WithSymbol(message.Data!.Order.TriggerOrder?.Symbol)
                         .WithUpdateType(SocketUpdateType.Update)
                 );
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
 
         /// <inheritdoc />
@@ -89,7 +89,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                         .WithSymbol(message.Data!.Order.Symbol)
                         .WithUpdateType(SocketUpdateType.Update)
                 );
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

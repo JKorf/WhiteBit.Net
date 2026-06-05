@@ -34,7 +34,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _interval = interval;
             Topic = "Klines";
 
-            MessageRouter = MessageRouter.CreateWithTopicFilter<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>("candles_update", symbol, DoHandleMessage);
+            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<WhiteBitKlineUpdate[]>>("candles_update", symbol, DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -69,7 +69,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                     .WithUpdateType(SocketUpdateType.Update)
                 );
 
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

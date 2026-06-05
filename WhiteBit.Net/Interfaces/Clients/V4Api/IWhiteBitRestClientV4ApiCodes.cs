@@ -24,7 +24,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="passphrase">Passphrase for applying the code</param>
         /// <param name="description">Description</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitCode>> CreateCodeAsync(string asset, decimal quantity, string? passphrase = null, string? description = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitCode>> CreateCodeAsync(string asset, decimal quantity, string? passphrase = null, string? description = null, CancellationToken ct = default);
 
         /// <summary>
         /// Apply a WhiteBit code
@@ -38,7 +38,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="code">The WhiteBit code</param>
         /// <param name="passphrase">Code passphrase</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitCodeResult>> ApplyCodeAsync(string code, string? passphrase = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitCodeResult>> ApplyCodeAsync(string code, string? passphrase = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get generated code history
@@ -52,7 +52,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitGeneratedCodes>> GetCreatedCodesAsync(int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitGeneratedCodes>> GetCreatedCodesAsync(int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get account code history
@@ -66,7 +66,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitGeneratedCodes>> GetCodeHistoryAsync(int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitGeneratedCodes>> GetCodeHistoryAsync(int? limit = null, int? offset = null, CancellationToken ct = default);
 
     }
 }

@@ -1,6 +1,6 @@
 // 05-error-handling.cs
 //
-// Demonstrates: WebCallResult patterns, retry logic, common WhiteBit routing
+// Demonstrates: HttpResult patterns, retry logic, common WhiteBit routing
 // and validation scenarios.
 //
 // Setup: dotnet add package WhiteBit.Net
@@ -16,7 +16,7 @@ var client = new WhiteBitRestClient(options =>
 });
 
 // ---- 1. THE BASIC PATTERN ----
-// Every REST method returns WebCallResult<T> or WebCallResult.
+// Every REST method returns HttpResult<T> or HttpResult.
 // .Success is true/false. .Data is valid only when .Success is true.
 // .Error contains structured error info when .Success is false.
 
@@ -39,11 +39,11 @@ else
 // Retry only on transient errors: network blips, temporary server errors, rate limits.
 // Do not retry validation errors, permission errors, or insufficient balance.
 
-async Task<WebCallResult<T>> WithRetry<T>(
-    Func<Task<WebCallResult<T>>> call,
+async Task<HttpResult<T>> WithRetry<T>(
+    Func<Task<HttpResult<T>>> call,
     int maxAttempts = 3)
 {
-    WebCallResult<T> last = default!;
+    HttpResult<T> last = default!;
     for (var attempt = 1; attempt <= maxAttempts; attempt++)
     {
         last = await call();
@@ -134,7 +134,7 @@ if (!order.Success)
 }
 
 // ---- 5. EXCEPTIONS VS ERROR RESULTS ----
-// WhiteBit.Net returns exchange and network errors via WebCallResult.Error.
+// WhiteBit.Net returns exchange and network errors via HttpResult.Error.
 // Exceptions are usually for misconfiguration, disposal, cancellation, or programming errors.
 
 // Common variations:

@@ -54,7 +54,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region constructor/destructor
         internal WhiteBitRestClientV4Api(ILogger logger, HttpClient? httpClient, WhiteBitRestOptions options)
-            : base(logger, httpClient, options.Environment.RestClientAddress, options, options.V4Options)
+            : base(logger, WhiteBitExchange.ExchangeName, httpClient, options.Environment.RestClientAddress, options, options.V4Options)
         {
             Account = new WhiteBitRestClientV4ApiAccount(this);
             Convert = new WhiteBitRestClientV4ApiConvert(this);
@@ -73,26 +73,43 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override WhiteBitAuthenticationProvider CreateAuthenticationProvider(WhiteBitCredentials credentials)
             => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
-        internal Task<WebCallResult> SendAsync(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)
+        internal Task<HttpResult> SendAsync(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null)
             => SendToAddressAsync(BaseAddress, definition, parameters, cancellationToken, weight);
 
-        internal async Task<WebCallResult> SendToAddressAsync(string baseAddress, RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)
+        internal async Task<HttpResult> SendToAddressAsync(string baseAddress, RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null)
         {
-            var result = await base.SendAsync(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            var result = await base.SendAsync<object>(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            if (!result.Success && result.Error is DeserializeError)
+                return new HttpResult<object>(result.Exchange, result.Data, null)
+                {
+                    ResponseStatusCode = result.ResponseStatusCode,
+                    HttpVersion = result.HttpVersion,
+                    ResponseHeaders = result.ResponseHeaders,
+                    ResponseTime = result.ResponseTime,
+                    ResponseLength = result.ResponseLength,
+                    OriginalData = result.OriginalData,
+                    RequestId = result.RequestId,
+                    RequestUrl = result.RequestUrl,
+                    RequestBody = result.RequestBody,
+                    RequestMethod = result.RequestMethod,
+                    RequestHeaders = result.RequestHeaders,
+                    DataSource = result.DataSource,
+                };
+
             return result;
         }
 
-        internal Task<WebCallResult<T>> SendAsync<T>(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
+        internal Task<HttpResult<T>> SendAsync<T>(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
             => SendToAddressAsync<T>(BaseAddress, definition, parameters, cancellationToken, weight);
 
-        internal async Task<WebCallResult<T>> SendToAddressAsync<T>(string baseAddress, RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
+        internal async Task<HttpResult<T>> SendToAddressAsync<T>(string baseAddress, RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
         {
             var result = await base.SendAsync<T>(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
             return result;
         }
 
         /// <inheritdoc />
-        protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
+        protected override Task<HttpResult<DateTime>> GetServerTimestampAsync()
             => ExchangeData.GetServerTimeAsync();
 
         /// <inheritdoc />

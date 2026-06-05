@@ -31,9 +31,11 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols;
             Topic = topic;
 
-            IndividualSubscriptionCount = symbols?.Length ?? 1;
+            IndividualSubscriptionCount = symbols?.Length == 0 ? 1 : symbols?.Length ?? 1;
 
-            MessageRouter = MessageRouter.CreateWithOptionalTopicFilters<WhiteBitSocketUpdate<T>>($"{topic}_update", symbols, DoHandleMessage);
+            MessageRouter = symbols?.Length > 0
+                ? MessageRouter.CreateForEvent<WhiteBitSocketUpdate<T>>($"{topic}_update", symbols, DoHandleMessage)
+                : MessageRouter.CreateForEvent<WhiteBitSocketUpdate<T>>($"{topic}_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -62,7 +64,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
         public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketUpdate<T> message)
         {
             _handler.Invoke(receiveTime, originalData, ConnectionInvocations, message);
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

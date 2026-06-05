@@ -63,6 +63,11 @@ namespace WhiteBit.Net
         public static ExchangeType Type { get; } = ExchangeType.CEX;
 
         internal static JsonSerializerOptions _serializerContext = SerializerOptions.WithConverters(JsonSerializerContextCache.GetOrCreate<WhiteBitSourceGenerationContext>(), new ClosedOrdersConverter());
+        internal static ParameterSerializationSettings _parameterSerializationSettings = new ParameterSerializationSettings
+        {
+            Decimal = DecimalSerialization.String,
+            Sort = false
+        };
 
         /// <summary>
         /// Aliases for WhiteBit assets

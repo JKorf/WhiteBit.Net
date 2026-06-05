@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrder>> PlaceSpotOrderAsync(
+        public async Task<HttpResult<WhiteBitOrder>> PlaceSpotOrderAsync(
             string symbol,
             OrderSide side,
             NewOrderType type,
@@ -48,19 +48,19 @@ namespace WhiteBit.Net.Clients.V4Api
             CancellationToken ct = default)
         {
             if (quoteQuantity != null && type != NewOrderType.Market && side != OrderSide.Buy)
-                return new WebCallResult<WhiteBitOrder>(ArgumentError.Invalid(nameof(quoteQuantity), "quoteQuantity parameter only supported for buy market orders"));
+                return HttpResult.Fail<WhiteBitOrder>(WhiteBitExchange.ExchangeName, ArgumentError.Invalid(nameof(quoteQuantity), "quoteQuantity parameter only supported for buy market orders"));
 
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
-            parameters.AddEnum("side", side);
-            parameters.AddString("amount", quantity ?? quoteQuantity ?? 0);
-            parameters.AddOptionalString("price", price);
-            parameters.AddOptional("clientOrderId", clientOrderId);
-            parameters.AddOptional("postOnly", postOnly);
-            parameters.AddOptional("ioc", immediateOrCancel);
-            parameters.AddOptional("bboRole", bboRole);
-            parameters.AddOptionalString("activation_price", triggerPrice);
-            parameters.AddOptionalEnum("stp", stpMode);
+            parameters.Add("side", side);
+            parameters.Add("amount", quantity ?? quoteQuantity ?? 0);
+            parameters.Add("price", price);
+            parameters.Add("clientOrderId", clientOrderId);
+            parameters.Add("postOnly", postOnly);
+            parameters.Add("ioc", immediateOrCancel);
+            parameters.Add("bboRole", bboRole);
+            parameters.Add("activation_price", triggerPrice);
+            parameters.Add("stp", stpMode);
 
             string path;
             if (type == NewOrderType.Limit)
@@ -102,23 +102,23 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Place Multiple Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<CallResult<WhiteBitOrderResponse>[]>> PlaceSpotMultipleOrdersAsync(
+        public async Task<HttpResult<CallResult<WhiteBitOrderResponse>[]>> PlaceSpotMultipleOrdersAsync(
             IEnumerable<WhiteBitOrderRequest> requests,
             CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("orders", requests.ToArray());
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/bulk", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
             var resultData = await _baseClient.SendAsync<WhiteBitOrderResponse[]>(request, parameters, ct).ConfigureAwait(false);
-            if (!resultData)
-                return resultData.As<CallResult<WhiteBitOrderResponse>[]>(default);
+            if (!resultData.Success)
+                return HttpResult.Fail<CallResult<WhiteBitOrderResponse>[]>(resultData);
 
             var result = new List<CallResult<WhiteBitOrderResponse>>();
             foreach (var item in resultData.Data)
             {
                 if (item.Error?.Code == null)
                 {
-                    result.Add(new CallResult<WhiteBitOrderResponse>(item));
+                    result.Add(CallResult.Ok(item));
                 }
                 else
                 {
@@ -128,14 +128,14 @@ namespace WhiteBit.Net.Clients.V4Api
                     else
                         error = new ServerError(item.Error.Code, _baseClient.GetErrorInfo(item.Error.Code, item.Error.Message!));
 
-                    result.Add(new CallResult<WhiteBitOrderResponse>(error));
+                    result.Add(CallResult.Fail<WhiteBitOrderResponse>(error));
                 }
             }
 
             if (result.All(x => !x.Success))
-                return resultData.AsErrorWithData(new ServerError(new ErrorInfo(ErrorType.AllOrdersFailed, "All orders failed")), result.ToArray());
+                return HttpResult.Fail(resultData, new ServerError(new ErrorInfo(ErrorType.AllOrdersFailed, "All orders failed")), result.ToArray());
 
-            return resultData.As(result.ToArray());
+            return HttpResult.Ok(resultData, result.ToArray());
         }
 
         #endregion
@@ -143,12 +143,12 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Cancel Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
-            parameters.AddOptional("orderId", orderId);
-            parameters.AddOptional("clientOrderId", clientOrderId);
+            parameters.Add("orderId", orderId);
+            parameters.Add("clientOrderId", clientOrderId);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrder>(request, parameters, ct).ConfigureAwait(false);
@@ -160,9 +160,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Cancel Orders
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitCancelOrdersResult[]>> CancelOrdersAsync(IEnumerable<WhiteBitCancelRequest> requests, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitCancelOrdersResult[]>> CancelOrdersAsync(IEnumerable<WhiteBitCancelRequest> requests, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("orders", requests.ToArray());
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel/bulk", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
@@ -175,11 +175,11 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Cancel All Orders
 
         /// <inheritdoc />
-        public async Task<WebCallResult> CancelAllOrdersAsync(string? symbol = null, IEnumerable<OrderProductType>? orderProductTypes = null, CancellationToken ct = default)
+        public async Task<HttpResult> CancelAllOrdersAsync(string? symbol = null, IEnumerable<OrderProductType>? orderProductTypes = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("market", symbol);
-            parameters.AddOptional("type", orderProductTypes?.Select(EnumConverter.GetString).ToArray());
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("type", orderProductTypes?.Select(EnumConverter.GetString).ToArray());
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/cancel/all", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
@@ -191,14 +191,14 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Open Orders
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrder[]>> GetOpenOrdersAsync(string? symbol = null, long? orderId = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitOrder[]>> GetOpenOrdersAsync(string? symbol = null, long? orderId = null, string? clientOrderId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("market", symbol);
-            parameters.AddOptional("orderId", orderId);
-            parameters.AddOptional("clientOrderId", clientOrderId);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("orderId", orderId);
+            parameters.Add("clientOrderId", clientOrderId);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/orders", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrder[]>(request, parameters, ct).ConfigureAwait(false);
@@ -210,7 +210,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Closed Orders
 
         /// <inheritdoc />
-        public async Task<WebCallResult<Dictionary<string, WhiteBitClosedOrder[]>>> GetClosedOrdersAsync(
+        public async Task<HttpResult<Dictionary<string, WhiteBitClosedOrder[]>>> GetClosedOrdersAsync(
             string? symbol = null, 
             long? orderId = null, 
             string? clientOrderId = null,
@@ -221,23 +221,23 @@ namespace WhiteBit.Net.Clients.V4Api
             DateTime? endTime = null,
             CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("market", symbol);
-            parameters.AddOptional("orderId", orderId);
-            parameters.AddOptional("clientOrderId", clientOrderId);
-            parameters.AddOptionalEnum("status", status);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
-            parameters.AddOptionalSeconds("startDate", startTime);
-            parameters.AddOptionalSeconds("endDate", endTime);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("orderId", orderId);
+            parameters.Add("clientOrderId", clientOrderId);
+            parameters.Add("status", status);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
+            parameters.Add("startDate", startTime);
+            parameters.Add("endDate", endTime);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitClosedOrder[]>>(request, parameters, ct).ConfigureAwait(false);
-            if (!result)
+            if (!result.Success)
                 return result;
 
             if (result.Data == null)
-                return result.As(new Dictionary<string, WhiteBitClosedOrder[]>());
+                return HttpResult.Ok(result, new Dictionary<string, WhiteBitClosedOrder[]>());
 
             foreach (var symbolOrders in result.Data)
             {
@@ -253,15 +253,15 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get User Trades
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitUserTrade[]>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, DateTime? startDate = null, DateTime? endDate = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitUserTrade[]>> GetUserTradesAsync(string? symbol = null, string? clientOrderId = null, DateTime? startDate = null, DateTime? endDate = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("market", symbol);
-            parameters.AddOptional("clientOrderId", clientOrderId);
-            parameters.AddOptionalSeconds("startTime", startDate);
-            parameters.AddOptionalSeconds("endTime", endDate);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("clientOrderId", clientOrderId);
+            parameters.Add("startTime", startDate);
+            parameters.Add("endTime", endDate);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/executed-history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             if (symbol != null)
@@ -272,8 +272,8 @@ namespace WhiteBit.Net.Clients.V4Api
             else
             {
                 var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitUserTrade[]>>(request, parameters, ct).ConfigureAwait(false);
-                if (!result)
-                    return result.As<WhiteBitUserTrade[]>(default);
+                if (!result.Success)
+                    return HttpResult.Fail<WhiteBitUserTrade[]>(result);
 
                 foreach (var item in result.Data)
                 {
@@ -281,7 +281,7 @@ namespace WhiteBit.Net.Clients.V4Api
                         x.Symbol = item.Key;
                 }
 
-                return result.As<WhiteBitUserTrade[]>(result.Data.Values.SelectMany(x => x).OrderByDescending(x => x.Time).ToArray());
+                return HttpResult.Ok(result, result.Data.Values.SelectMany(x => x).OrderByDescending(x => x.Time).ToArray());
             }
         }
 
@@ -290,16 +290,16 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Order Trades
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitUserTrade[]>> GetOrderTradesAsync(long orderId, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitUserTrade[]>> GetOrderTradesAsync(long orderId, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("orderId", orderId);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/trade-account/order", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOffsetResult<WhiteBitUserTrade>>(request, parameters, ct).ConfigureAwait(false);
-            return result.As<WhiteBitUserTrade[]>(result.Data?.Records);
+            return HttpResult.Ok(result, result.Data?.Records);
         }
 
         #endregion
@@ -307,16 +307,16 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Edit Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrder>> EditOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, decimal? quantity = null, decimal? quoteQuantity = null, decimal? price = null, decimal? triggerPrice = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitOrder>> EditOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, decimal? quantity = null, decimal? quoteQuantity = null, decimal? price = null, decimal? triggerPrice = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("orderId", orderId);
-            parameters.AddOptional("clientOrderId", clientOrderId);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("orderId", orderId);
+            parameters.Add("clientOrderId", clientOrderId);
             parameters.Add("market", symbol);
-            parameters.AddOptionalString("amount", quantity);
-            parameters.AddOptionalString("total", quoteQuantity);
-            parameters.AddOptionalString("price", price);
-            parameters.AddOptionalString("activationPrice", triggerPrice);
+            parameters.Add("amount", quantity);
+            parameters.Add("total", quoteQuantity);
+            parameters.Add("price", price);
+            parameters.Add("activationPrice", triggerPrice);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/modify", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrder>(request, parameters, ct).ConfigureAwait(false);
@@ -328,14 +328,14 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Set Kill Switch
 
         /// <inheritdoc />
-        public async Task<WebCallResult> SetKillSwitchAsync(string symbol, int timeout, IEnumerable<OrderProductType>? orderProductTypes = null, CancellationToken ct = default)
+        public async Task<HttpResult> SetKillSwitchAsync(string symbol, int timeout, IEnumerable<OrderProductType>? orderProductTypes = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
 #pragma warning disable CS8604 // Possible null reference argument. Works as intended
             parameters.Add("timeout", timeout == 0 ? null : timeout.ToString());
 #pragma warning restore CS8604 // Possible null reference argument.
-            parameters.AddOptional("types", orderProductTypes?.Select(EnumConverter.GetString).ToArray());
+            parameters.Add("types", orderProductTypes?.Select(EnumConverter.GetString).ToArray());
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/kill-switch", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
@@ -347,10 +347,10 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Kill Switch
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitKillSwitch[]>> GetKillSwitchStatusAsync(string? symbol = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitKillSwitch[]>> GetKillSwitchStatusAsync(string? symbol = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("market", symbol);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
             var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/kill-switch/status", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitKillSwitch[]>(request, parameters, ct).ConfigureAwait(false);

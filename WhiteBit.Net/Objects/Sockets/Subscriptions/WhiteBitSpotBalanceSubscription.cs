@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _symbols = symbols.ToArray();
             Topic = "SpotBalance";
 
-            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>("balanceSpot_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<Dictionary<string, WhiteBitTradeBalance>[]>>("balanceSpot_update", DoHandleMessage);
         }
 
         /// <inheritdoc />
@@ -67,7 +67,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler.Invoke(
                 new DataEvent<Dictionary<string, WhiteBitTradeBalance>>(WhiteBitExchange.ExchangeName, balances, receiveTime, originalData)
                     .WithUpdateType(SocketUpdateType.Update));
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

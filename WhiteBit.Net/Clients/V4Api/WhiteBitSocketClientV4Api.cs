@@ -52,7 +52,7 @@ namespace WhiteBit.Net.Clients.V4Api
         /// ctor
         /// </summary>
         internal WhiteBitSocketClientV4Api(ILogger logger, WhiteBitSocketOptions options) :
-            base(logger, options.Environment.SocketClientAddress!, options, options.V4Options)
+            base(logger, WhiteBitExchange.ExchangeName, options.Environment.SocketClientAddress!, options, options.V4Options)
         {
             RateLimiter = WhiteBitExchange.RateLimiter.WhiteBitSocket;
             AllowTopicsOnTheSameConnection = false;
@@ -87,7 +87,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Trades
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitSocketTrade[]>(
                 "trades_request",
@@ -99,11 +99,11 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default)
             => await SubscribeToTradeUpdatesAsync([symbol], onMessage, ct).ConfigureAwait(false);
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitTradeUpdate>>((receiveTime, originalData, invocations, data) =>
             {
@@ -129,22 +129,25 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Last Price
 
         /// <inheritdoc />
-        public async Task<CallResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default)
+        public async Task<WebSocketResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default)
         {
             var result = await QueryAsync<decimal?>(
                 "lastprice_request",
                 false,
                 ct,
                 symbol).ConfigureAwait(false);
-            return result.As(result.Data ?? default);
+            if (!result.Success)
+                return WebSocketResult.Fail<decimal>(result);
+
+            return WebSocketResult.Ok(result, result.Data ?? default);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(string symbol, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(string symbol, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default)
             => await SubscribeToLastPriceUpdatesAsync([symbol], onMessage, ct).ConfigureAwait(false);
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitLastPriceUpdate>>((receiveTime, originalData, invocations, data) =>
             {
@@ -165,7 +168,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Ticker
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitSocketTicker>(
                 "market_request",
@@ -176,11 +179,11 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default)
             => await SubscribeToTickerUpdatesAsync([symbol], onMessage, ct).ConfigureAwait(false);
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitTickerUpdate>>((receiveTime, originalData, invocations, data) =>
             {
@@ -201,7 +204,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Book Ticker
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
             {
@@ -223,7 +226,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBookTickerUpdate[]>>((receiveTime, originalData, invocations, data) =>
             {
@@ -249,7 +252,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Kline
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitKlineUpdate[]>(
                 "candles_request",
@@ -262,7 +265,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitKlineSubscription(_logger, this, symbol, interval, onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -273,7 +276,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Order book
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default)
         {
             depth.ValidateIntBetween(nameof(depth), 0, 100);
 
@@ -287,7 +290,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth, Action<DataEvent<WhiteBitBookUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth, Action<DataEvent<WhiteBitBookUpdate>> onMessage, CancellationToken ct = default)
         {
             depth.ValidateIntValues(nameof(depth), 1, 5, 10, 20, 30, 50, 100);
 
@@ -300,24 +303,24 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Spot Balances
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitTradeBalance>>(
                 "balanceSpot_request",
                 true,
                 ct).ConfigureAwait(false);
 
-            if (!result)
-                return result.As<WhiteBitTradeBalance[]>(default);
+            if (!result.Success)
+                return WebSocketResult.Fail<WhiteBitTradeBalance[]>(result);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitTradeBalance[]>(result.Data.Values.ToArray());
+            return WebSocketResult.Ok(result, result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSpotBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToSpotBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitSpotBalanceSubscription(_logger, this, assets.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -327,24 +330,24 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Margin Balances
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitMarginBalance>>(
                 "balanceMargin_request",
                 true,
                 ct).ConfigureAwait(false);
 
-            if (!result)
-                return result.As<WhiteBitMarginBalance[]>(default);
+            if (!result.Success)
+                return WebSocketResult.Fail<WhiteBitMarginBalance[]>(result);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitMarginBalance[]>(result.Data.Values.ToArray());
+            return WebSocketResult.Ok(result, result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<WhiteBitMarginBalance[]>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<WhiteBitMarginBalance[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitMarginBalanceSubscription(_logger, this, assets.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -354,7 +357,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Open Orders
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitOrders>(
                 "ordersPending_request",
@@ -366,7 +369,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onOrderMessage, Action<DataEvent<WhiteBitOtoOrderUpdate>>? onOtoOrdersMessage = null, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onOrderMessage, Action<DataEvent<WhiteBitOtoOrderUpdate>>? onOtoOrdersMessage = null, CancellationToken ct = default)
         {
             var subscription = new WhiteBitOpenOrderSubscription(_logger, this, symbols.ToArray(), onOrderMessage, onOtoOrdersMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -376,7 +379,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Closed Orders
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitClosedOrders>(
                 "ordersExecuted_request",
@@ -392,7 +395,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<WhiteBitClosedOrder[]>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<WhiteBitClosedOrder[]>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitClosedOrderSubscription(_logger, this, symbols.ToArray(), (int)filter, onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -402,7 +405,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region User Trades
 
         /// <inheritdoc />
-        public async Task<CallResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<WebSocketResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitUserTrades>(
                 "deals_request",
@@ -414,7 +417,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> onMessage, CancellationToken ct = default)
         {
             var subscription = new WhiteBitUserTradeSubscription(_logger, this, symbols.ToArray(), onMessage);
             return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
@@ -424,7 +427,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Positions
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitPositionsUpdate>>((receiveTime, originalData, invocations, data) =>
             {
@@ -448,7 +451,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Borrow
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitBorrow>>((receiveTime, originalData, invocations, data) =>
             {
@@ -471,7 +474,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Account Borrow Events
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountMarginPositionUpdate>>((receiveTime, originalData, invocations, data) =>
             {
@@ -493,7 +496,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Account Borrow Events
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToAccountBorrowEventUpdatesAsync(Action<DataEvent<WhiteBitAccountBorrowUpdate>> onMessage, CancellationToken ct = default)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToAccountBorrowEventUpdatesAsync(Action<DataEvent<WhiteBitAccountBorrowUpdate>> onMessage, CancellationToken ct = default)
         {
             var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAccountBorrowUpdate>>((receiveTime, originalData, invocations, data) =>
             {
@@ -513,7 +516,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        private async Task<CallResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
+        private async Task<WebSocketResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
         {
             var query = new WhiteBitQuery<T>(this, new WhiteBitSocketRequest
             {
@@ -523,14 +526,14 @@ namespace WhiteBit.Net.Clients.V4Api
             }, auth);
 
             var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
-            return result.As<T>(result.Data == null ? default : result.Data.Result);
+            return WebSocketResult.Ok(result, result.Data == null ? default : result.Data.Result);
         }
 
         /// <inheritdoc />
         protected override async Task<Query?> GetAuthenticationRequestAsync(SocketConnection connection)
         {
             var token = await GetTokenAsync().ConfigureAwait(false);
-            if (!token)
+            if (!token.Success)
                 return null;
 
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(this, new WhiteBitSocketRequest
@@ -544,16 +547,16 @@ namespace WhiteBit.Net.Clients.V4Api
             }, false);
         }
 
-        private async Task<CallResult<string>> GetTokenAsync()
+        private async Task<WebSocketResult<string>> GetTokenAsync()
         {
             if (ApiCredentials == null)
-                return new CallResult<string>(new NoApiCredentialsError());
+                return WebSocketResult.Fail<string>(ExchangeName, new NoApiCredentialsError());
 
             if (_tokenCache.TryGetValue(ApiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
-                return new CallResult<string>(token.Token);
+                return new WebSocketResult<string>(ExchangeName, token.Token, null);
 
             if (ClientOptions.Environment.Name == "UnitTest")
-                return new CallResult<string>("123");
+                return new WebSocketResult<string>(ExchangeName, "123", null);
 
             _logger.LogDebug("Requesting websocket token");
             var restClient = new WhiteBitRestClient(x =>
@@ -563,14 +566,14 @@ namespace WhiteBit.Net.Clients.V4Api
             });
 
             var result = await ((WhiteBitRestClientV4ApiAccount)restClient.V4Api.Account).GetWebsocketTokenAsync().ConfigureAwait(false);
-            if (!result)
+            if (!result.Success)
             {
                 _logger.LogWarning("Failed to retrieve websocket token: {Error}", result.Error);
-                return result.As<string>(default);
+                return WebSocketResult.Fail<string>(ExchangeName, result.Error!);
             }
 
             _tokenCache[ApiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
-            return result.As<string>(result.Data);
+            return new WebSocketResult<string>(ExchangeName, result.Data, null);
         }
 
         private class CachedToken

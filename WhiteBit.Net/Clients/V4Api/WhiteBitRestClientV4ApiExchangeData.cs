@@ -28,12 +28,12 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Server Time
 
         /// <inheritdoc />
-        public async Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
+        public async Task<HttpResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
         {
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/time", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitTime>(request, null, ct).ConfigureAwait(false);
-            return result.As(result.Data?.Timestamp ?? default);
+            return HttpResult.Ok(result, result.Data?.Timestamp ?? default);
         }
 
         #endregion
@@ -41,9 +41,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Symbols
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitSymbol[]>> GetSymbolsAsync(CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitSymbol[]>> GetSymbolsAsync(CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/markets", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitSymbol[]>(request, parameters, ct).ConfigureAwait(false);
@@ -55,9 +55,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get System Status
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitSystemStatus>> GetSystemStatusAsync(CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitSystemStatus>> GetSystemStatusAsync(CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/platform/status", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitSystemStatus>(request, parameters, ct).ConfigureAwait(false);
@@ -69,19 +69,19 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Tickers
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitTicker[]>> GetTickersAsync(CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitTicker[]>> GetTickersAsync(CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/ticker", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitTicker>>(request, parameters, ct).ConfigureAwait(false);
-            if (!result)
-                return result.As<WhiteBitTicker[]>(default);
+            if (!result.Success)
+                return HttpResult.Fail<WhiteBitTicker[]>(result);
 
             foreach (var item in result.Data)
                 item.Value.Symbol = item.Key;
 
-            return result.As<WhiteBitTicker[]>(result.Data.Select(x => x.Value).ToArray());
+            return HttpResult.Ok(result, result.Data.Select(x => x.Value).ToArray());
         }
 
         #endregion
@@ -89,19 +89,19 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Assets
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitAsset[]>> GetAssetsAsync(CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitAsset[]>> GetAssetsAsync(CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/assets", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitAsset>>(request, parameters, ct).ConfigureAwait(false);
-            if (!result)
-                return result.As<WhiteBitAsset[]>(default);
+            if (!result.Success)
+                return HttpResult.Fail<WhiteBitAsset[]>(result);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return result.As<WhiteBitAsset[]>(result.Data?.Values.ToArray());
+            return HttpResult.Ok(result, result.Data?.Values.ToArray());
         }
 
         #endregion
@@ -109,11 +109,11 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Order Book
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, int? mergeLevel = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, int? mergeLevel = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("level", mergeLevel);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("limit", limit);
+            parameters.Add("level", mergeLevel);
             var request = _definitions.GetOrCreate(HttpMethod.Get, $"/api/v4/public/orderbook/{symbol}", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(600, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOrderBook>(request, parameters, ct).ConfigureAwait(false);
@@ -125,10 +125,10 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Recent Trades
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitTrade[]>> GetRecentTradesAsync(string symbol, OrderSide? side = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitTrade[]>> GetRecentTradesAsync(string symbol, OrderSide? side = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptionalEnum("type", side);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("type", side);
             var request = _definitions.GetOrCreate(HttpMethod.Get, $"/api/v4/public/trades/{symbol}", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitTrade[]>(request, parameters, ct).ConfigureAwait(false);
@@ -140,9 +140,9 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Deposit Withdrawal Info
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitDepositWithdraw>> GetDepositWithdrawalInfoAsync(CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitDepositWithdraw>> GetDepositWithdrawalInfoAsync(CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/fee", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitDepositWithdraw>(request, parameters, ct).ConfigureAwait(false);
@@ -154,13 +154,13 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Colleteral Symbols
 
         /// <inheritdoc />
-        public async Task<WebCallResult<string[]>> GetCollateralSymbolsAsync(CancellationToken ct = default)
+        public async Task<HttpResult<string[]>> GetCollateralSymbolsAsync(CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/collateral/markets", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitResponse<string[]>>(request, parameters, ct).ConfigureAwait(false);
-            return result.As<string[]>(result.Data?.Result);
+            return HttpResult.Ok(result, result.Data?.Result);
         }
 
         #endregion
@@ -168,13 +168,13 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Futures Symbols
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitFuturesSymbol[]>> GetFuturesSymbolsAsync(CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitFuturesSymbol[]>> GetFuturesSymbolsAsync(CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/futures", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitResponse<WhiteBitFuturesSymbol[]>>(request, parameters, ct).ConfigureAwait(false);
-            return result.As<WhiteBitFuturesSymbol[]>(result.Data?.Result);
+            return HttpResult.Ok(result, result.Data?.Result);
         }
 
         #endregion
@@ -182,7 +182,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Funding History
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitFundingHistory[]>> GetFundingHistoryAsync(
+        public async Task<HttpResult<WhiteBitFundingHistory[]>> GetFundingHistoryAsync(
             string symbol,
             DateTime? startTime = null,
             DateTime? endTime = null,
@@ -190,11 +190,11 @@ namespace WhiteBit.Net.Clients.V4Api
             int? offset = null,
             CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptionalSeconds("startDate", startTime);
-            parameters.AddOptionalSeconds("endDate", endTime);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("startDate", startTime);
+            parameters.Add("endDate", endTime);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/public/funding-history/" + symbol, WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
                 limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             return await _baseClient.SendAsync<WhiteBitFundingHistory[]>(request, parameters, ct).ConfigureAwait(false);
