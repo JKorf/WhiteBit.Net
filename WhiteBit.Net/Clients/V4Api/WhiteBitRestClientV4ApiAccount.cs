@@ -175,7 +175,7 @@ namespace WhiteBit.Net.Clients.V4Api
         public async Task<HttpResult<WhiteBitDepositWithdrawals>> GetDepositWithdrawalHistoryAsync(TransactionType? type = null, string? asset = null, string? address = null, string? memo = null, string? addresses = null, string? uniqueId = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
-            parameters.AddAsInt("transactionMethod", type);
+            parameters.Add("transactionMethod", type, EnumSerialization.Number);
             parameters.Add("ticker", asset);
             parameters.Add("address", address);
             parameters.Add("memo", memo);
