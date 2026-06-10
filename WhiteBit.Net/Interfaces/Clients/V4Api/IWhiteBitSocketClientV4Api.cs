@@ -24,7 +24,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="fromId">Filter by returning results later than the trade with this id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebSocketResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to public trade updates
@@ -71,7 +71,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebSocketResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default);
+        Task<QueryResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
         /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-1" /></para>
@@ -97,7 +97,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebSocketResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
         /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-2" /></para>
@@ -126,7 +126,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebSocketResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to order book updates
@@ -147,7 +147,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="depth">Order book depth, max 100</param>
         /// <param name="priceInterval">0 - no interval default. Available values: "0.00000001", "0.0000001", "0.000001", "0.00001", "0.0001", "0.001", "0.01", "0.1"</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebSocketResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to order book updates
@@ -166,7 +166,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        Task<WebSocketResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default);
+        Task<QueryResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to spot balance updates
@@ -184,7 +184,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        Task<WebSocketResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default);
+        Task<QueryResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to margin balance updates
@@ -204,7 +204,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results, max 100</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
-        Task<WebSocketResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to open order updates
@@ -226,7 +226,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results, max 100</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
-        Task<WebSocketResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to closed order updates
@@ -247,7 +247,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results, max 100</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
-        Task<WebSocketResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to user trade updates

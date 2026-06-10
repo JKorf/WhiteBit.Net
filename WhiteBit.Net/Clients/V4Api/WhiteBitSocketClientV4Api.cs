@@ -87,7 +87,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Trades
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitSocketTrade[]>(
                 "trades_request",
@@ -129,7 +129,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Last Price
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default)
+        public async Task<QueryResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default)
         {
             var result = await QueryAsync<decimal?>(
                 "lastprice_request",
@@ -137,9 +137,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 ct,
                 symbol).ConfigureAwait(false);
             if (!result.Success)
-                return WebSocketResult.Fail<decimal>(result);
+                return QueryResult.Fail<decimal>(result);
 
-            return WebSocketResult.Ok(result, result.Data ?? default);
+            return QueryResult.Ok(result, result.Data ?? default);
         }
 
         /// <inheritdoc />
@@ -168,7 +168,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Ticker
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitSocketTicker>(
                 "market_request",
@@ -252,7 +252,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Kline
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitKlineUpdate[]>(
                 "candles_request",
@@ -276,7 +276,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Order book
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default)
         {
             depth.ValidateIntBetween(nameof(depth), 0, 100);
 
@@ -303,7 +303,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Spot Balances
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitTradeBalance>>(
                 "balanceSpot_request",
@@ -311,12 +311,12 @@ namespace WhiteBit.Net.Clients.V4Api
                 ct).ConfigureAwait(false);
 
             if (!result.Success)
-                return WebSocketResult.Fail<WhiteBitTradeBalance[]>(result);
+                return QueryResult.Fail<WhiteBitTradeBalance[]>(result);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return WebSocketResult.Ok(result, result.Data.Values.ToArray());
+            return QueryResult.Ok(result, result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />
@@ -330,7 +330,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Margin Balances
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default)
         {
             var result = await QueryAsync<Dictionary<string, WhiteBitMarginBalance>>(
                 "balanceMargin_request",
@@ -338,12 +338,12 @@ namespace WhiteBit.Net.Clients.V4Api
                 ct).ConfigureAwait(false);
 
             if (!result.Success)
-                return WebSocketResult.Fail<WhiteBitMarginBalance[]>(result);
+                return QueryResult.Fail<WhiteBitMarginBalance[]>(result);
 
             foreach (var item in result.Data)
                 item.Value.Asset = item.Key;
 
-            return WebSocketResult.Ok(result, result.Data.Values.ToArray());
+            return QueryResult.Ok(result, result.Data.Values.ToArray());
         }
 
         /// <inheritdoc />
@@ -357,7 +357,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Open Orders
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitOrders>(
                 "ordersPending_request",
@@ -379,7 +379,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Closed Orders
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitClosedOrders>(
                 "ordersExecuted_request",
@@ -405,7 +405,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region User Trades
 
         /// <inheritdoc />
-        public async Task<WebSocketResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<QueryResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
             return await QueryAsync<WhiteBitUserTrades>(
                 "deals_request",
@@ -516,7 +516,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        private async Task<WebSocketResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
+        private async Task<QueryResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
         {
             var query = new WhiteBitQuery<T>(this, new WhiteBitSocketRequest
             {
@@ -527,9 +527,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
             if (!result.Success)
-                return WebSocketResult.Fail<T>(result);
+                return QueryResult.Fail<T>(result);
 
-            return WebSocketResult.Ok(result, result.Data.Result);
+            return QueryResult.Ok(result, result.Data.Result);
         }
 
         /// <inheritdoc />
