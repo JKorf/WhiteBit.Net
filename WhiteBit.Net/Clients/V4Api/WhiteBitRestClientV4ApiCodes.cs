@@ -30,7 +30,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("amount", quantity);
             parameters.Add("passphrase", passphrase);
             parameters.Add("description", description);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/main-account/codes", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/main-account/codes", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitCode>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -46,7 +46,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("code", code);
             parameters.Add("passphrase", passphrase);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/main-account/codes/apply", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/main-account/codes/apply", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(60, TimeSpan.FromSeconds(1), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitCodeResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -62,7 +62,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("limit", limit);
             parameters.Add("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "/api/v4/main-account/codes/my", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Get, _baseClient.BaseAddress, "/api/v4/main-account/codes/my", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitGeneratedCodes>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -78,7 +78,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("limit", limit);
             parameters.Add("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/main-account/codes/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/main-account/codes/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitGeneratedCodes>(request, parameters, ct).ConfigureAwait(false);
             return result;

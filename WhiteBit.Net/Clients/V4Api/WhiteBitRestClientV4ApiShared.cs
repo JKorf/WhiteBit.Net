@@ -20,16 +20,15 @@ namespace WhiteBit.Net.Clients.V4Api
         private const string _topicSpotId = "WhiteBitSpot";
         private const string _topicFuturesId = "WhiteBitFutures";
 
-        public string Exchange => _exchange;
-
         public TradingMode[] SupportedTradingModes => new[] { TradingMode.Spot, TradingMode.PerpetualLinear };
         public TradingMode[] SupportedFuturesModes => new[] { TradingMode.PerpetualLinear };
 
         public void SetDefaultExchangeParameter(string key, object value) => ExchangeParameters.SetStaticParameter(Exchange, key, value);
         public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
+        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(this);
 
         #region Spot Symbol client
-        EndpointOptions<GetSymbolsRequest, ISpotSymbolRestClient> ISpotSymbolRestClient.GetSpotSymbolsOptions { get; } = new EndpointOptions<GetSymbolsRequest, ISpotSymbolRestClient>(_exchange, false);
+        GetSpotSymbolsOptions ISpotSymbolRestClient.GetSpotSymbolsOptions { get; } = new GetSpotSymbolsOptions(_exchange, false);
 
         async Task<HttpResult<SharedSpotSymbol[]>> ISpotSymbolRestClient.GetSpotSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
         {
@@ -51,7 +50,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 PriceDecimals = s.QuoteAssetPrecision
             }).ToArray());
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, response.Data);
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, response.Data!);
             return response;
         }
 
@@ -140,7 +139,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Book Ticker client
 
-        EndpointOptions<GetBookTickerRequest, IBookTickerRestClient> IBookTickerRestClient.GetBookTickerOptions { get; } = new EndpointOptions<GetBookTickerRequest, IBookTickerRestClient>(_exchange, false);
+        GetBookTickerOptions IBookTickerRestClient.GetBookTickerOptions { get; } = new GetBookTickerOptions(_exchange, false);
         async Task<HttpResult<SharedBookTicker>> IBookTickerRestClient.GetBookTickerAsync(GetBookTickerRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetBookTickerOptions.ValidateRequest(request, this);
@@ -250,7 +249,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Asset client
-        EndpointOptions<GetAssetsRequest, IAssetsRestClient> IAssetsRestClient.GetAssetsOptions { get; } = new EndpointOptions<GetAssetsRequest, IAssetsRestClient>(_exchange, true);
+        GetAssetsOptions IAssetsRestClient.GetAssetsOptions { get; } = new GetAssetsOptions(_exchange, true);
 
         async Task<HttpResult<SharedAsset[]>> IAssetsRestClient.GetAssetsAsync(GetAssetsRequest request, CancellationToken ct)
         {
@@ -277,7 +276,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        EndpointOptions<GetAssetRequest, IAssetsRestClient> IAssetsRestClient.GetAssetOptions { get; } = new EndpointOptions<GetAssetRequest, IAssetsRestClient>(_exchange, false);
+        GetAssetOptions IAssetsRestClient.GetAssetOptions { get; } = new GetAssetOptions(_exchange, false);
         async Task<HttpResult<SharedAsset>> IAssetsRestClient.GetAssetAsync(GetAssetRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetAssetOptions.ValidateRequest(request, this);
@@ -308,7 +307,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Deposit client
 
-        EndpointOptions<GetDepositAddressesRequest, IDepositRestClient> IDepositRestClient.GetDepositAddressesOptions { get; } = new EndpointOptions<GetDepositAddressesRequest, IDepositRestClient>(_exchange, true);
+        GetDepositAddressesOptions IDepositRestClient.GetDepositAddressesOptions { get; } = new GetDepositAddressesOptions(_exchange, true);
         async Task<HttpResult<SharedDepositAddress[]>> IDepositRestClient.GetDepositAddressesAsync(GetDepositAddressesRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetDepositAddressesOptions.ValidateRequest(request, this);
@@ -385,7 +384,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 || transactionStatus == TransactionStatus.ConfirmationInProgress
                 || transactionStatus == TransactionStatus.Pending
                 || transactionStatus == TransactionStatus.Uncredited)
+            {
                 return SharedTransferStatus.InProgress;
+            }
 
             return SharedTransferStatus.Unknown;
         }
@@ -506,7 +507,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        EndpointOptions<GetOrderRequest, ISpotOrderRestClient> ISpotOrderRestClient.GetSpotOrderOptions { get; } = new EndpointOptions<GetOrderRequest, ISpotOrderRestClient>(_exchange, true);
+        GetSpotOrderOptions ISpotOrderRestClient.GetSpotOrderOptions { get; } = new GetSpotOrderOptions(_exchange, true);
         async Task<HttpResult<SharedSpotOrder>> ISpotOrderRestClient.GetSpotOrderAsync(GetOrderRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetSpotOrderOptions.ValidateRequest(request, this);
@@ -579,7 +580,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }
         }
 
-        EndpointOptions<GetOpenOrdersRequest, ISpotOrderRestClient> ISpotOrderRestClient.GetOpenSpotOrdersOptions { get; } = new EndpointOptions<GetOpenOrdersRequest, ISpotOrderRestClient>(_exchange, true);
+        GetOpenSpotOrdersOptions ISpotOrderRestClient.GetOpenSpotOrdersOptions { get; } = new GetOpenSpotOrdersOptions(_exchange, true);
         async Task<HttpResult<SharedSpotOrder[]>> ISpotOrderRestClient.GetOpenSpotOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetOpenSpotOrdersOptions.ValidateRequest(request, this);
@@ -674,7 +675,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(data, x => x.CreateTime!.Value, request.StartTime, request.EndTime, direction).ToArray(), nextPageRequest);
         }
 
-        EndpointOptions<GetOrderTradesRequest, ISpotOrderRestClient> ISpotOrderRestClient.GetSpotOrderTradesOptions { get; } = new EndpointOptions<GetOrderTradesRequest, ISpotOrderRestClient>(_exchange, true);
+        GetSpotOrderTradesOptions ISpotOrderRestClient.GetSpotOrderTradesOptions { get; } = new GetSpotOrderTradesOptions(_exchange, true);
         async Task<HttpResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetSpotOrderTradesOptions.ValidateRequest(request, this);
@@ -757,7 +758,7 @@ namespace WhiteBit.Net.Clients.V4Api
                         }).ToArray(), nextPageRequest);
         }
 
-        EndpointOptions<CancelOrderRequest, ISpotOrderRestClient> ISpotOrderRestClient.CancelSpotOrderOptions { get; } = new EndpointOptions<CancelOrderRequest, ISpotOrderRestClient>(_exchange, true);
+        CancelSpotOrderOptions ISpotOrderRestClient.CancelSpotOrderOptions { get; } = new CancelSpotOrderOptions(_exchange, true);
         async Task<HttpResult<SharedId>> ISpotOrderRestClient.CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.CancelSpotOrderOptions.ValidateRequest(request, this);
@@ -796,7 +797,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Futures Symbol client
 
-        EndpointOptions<GetSymbolsRequest, IFuturesSymbolRestClient> IFuturesSymbolRestClient.GetFuturesSymbolsOptions { get; } = new EndpointOptions<GetSymbolsRequest, IFuturesSymbolRestClient>(_exchange, false);
+        GetFuturesSymbolsOptions IFuturesSymbolRestClient.GetFuturesSymbolsOptions { get; } = new GetFuturesSymbolsOptions(_exchange, false);
         async Task<HttpResult<SharedFuturesSymbol[]>> IFuturesSymbolRestClient.GetFuturesSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetFuturesSymbolsOptions.ValidateRequest(request, this);
@@ -827,7 +828,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     };
                 }).ToArray());
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, response.Data);
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, response.Data!);
             return response;
         }
 
@@ -925,7 +926,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Leverage client
         SharedLeverageSettingMode ILeverageRestClient.LeverageSettingType => SharedLeverageSettingMode.PerAccount;
 
-        EndpointOptions<GetLeverageRequest, ILeverageRestClient> ILeverageRestClient.GetLeverageOptions { get; } = new EndpointOptions<GetLeverageRequest, ILeverageRestClient>(_exchange, true);
+        GetLeverageOptions ILeverageRestClient.GetLeverageOptions { get; } = new GetLeverageOptions(_exchange, true);
         async Task<HttpResult<SharedLeverage>> ILeverageRestClient.GetLeverageAsync(GetLeverageRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetLeverageOptions.ValidateRequest(request, this);
@@ -956,7 +957,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Open Interest client
 
-        EndpointOptions<GetOpenInterestRequest, IOpenInterestRestClient> IOpenInterestRestClient.GetOpenInterestOptions { get; } = new EndpointOptions<GetOpenInterestRequest, IOpenInterestRestClient>(_exchange, true);
+        GetOpenInterestOptions IOpenInterestRestClient.GetOpenInterestOptions { get; } = new GetOpenInterestOptions(_exchange, true);
         async Task<HttpResult<SharedOpenInterest>> IOpenInterestRestClient.GetOpenInterestAsync(GetOpenInterestRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetOpenInterestOptions.ValidateRequest(request, this);
@@ -1076,7 +1077,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        EndpointOptions<GetOrderRequest, IFuturesOrderRestClient> IFuturesOrderRestClient.GetFuturesOrderOptions { get; } = new EndpointOptions<GetOrderRequest, IFuturesOrderRestClient>(_exchange, true);
+        GetFuturesOrderOptions IFuturesOrderRestClient.GetFuturesOrderOptions { get; } = new GetFuturesOrderOptions(_exchange, true);
         async Task<HttpResult<SharedFuturesOrder>> IFuturesOrderRestClient.GetFuturesOrderAsync(GetOrderRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetFuturesOrderOptions.ValidateRequest(request, this);
@@ -1157,7 +1158,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }            
         }
 
-        EndpointOptions<GetOpenOrdersRequest, IFuturesOrderRestClient> IFuturesOrderRestClient.GetOpenFuturesOrdersOptions { get; } = new EndpointOptions<GetOpenOrdersRequest, IFuturesOrderRestClient>(_exchange, true);
+        GetOpenFuturesOrdersOptions IFuturesOrderRestClient.GetOpenFuturesOrdersOptions { get; } = new GetOpenFuturesOrdersOptions(_exchange, true);
         async Task<HttpResult<SharedFuturesOrder[]>> IFuturesOrderRestClient.GetOpenFuturesOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetOpenFuturesOrdersOptions.ValidateRequest(request, this);
@@ -1260,7 +1261,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(data, x => x.CreateTime!.Value, request.StartTime, request.EndTime, direction).ToArray(), nextPageRequest);
         }
 
-        EndpointOptions<GetOrderTradesRequest, IFuturesOrderRestClient> IFuturesOrderRestClient.GetFuturesOrderTradesOptions { get; } = new EndpointOptions<GetOrderTradesRequest, IFuturesOrderRestClient>(_exchange, true);
+        GetFuturesOrderTradesOptions IFuturesOrderRestClient.GetFuturesOrderTradesOptions { get; } = new GetFuturesOrderTradesOptions(_exchange, true);
         async Task<HttpResult<SharedUserTrade[]>> IFuturesOrderRestClient.GetFuturesOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetFuturesOrderTradesOptions.ValidateRequest(request, this);
@@ -1345,7 +1346,7 @@ namespace WhiteBit.Net.Clients.V4Api
                        .ToArray(), nextPageRequest);
         }
 
-        EndpointOptions<CancelOrderRequest, IFuturesOrderRestClient> IFuturesOrderRestClient.CancelFuturesOrderOptions { get; } = new EndpointOptions<CancelOrderRequest, IFuturesOrderRestClient>(_exchange, true);
+        CancelFuturesOrderOptions IFuturesOrderRestClient.CancelFuturesOrderOptions { get; } = new CancelFuturesOrderOptions(_exchange, true);
         async Task<HttpResult<SharedId>> IFuturesOrderRestClient.CancelFuturesOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.CancelFuturesOrderOptions.ValidateRequest(request, this);
@@ -1362,7 +1363,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
         }
 
-        EndpointOptions<GetPositionsRequest, IFuturesOrderRestClient> IFuturesOrderRestClient.GetPositionsOptions { get; } = new EndpointOptions<GetPositionsRequest, IFuturesOrderRestClient>(_exchange, true);
+        GetPositionsOptions IFuturesOrderRestClient.GetPositionsOptions { get; } = new GetPositionsOptions(_exchange, true);
         async Task<HttpResult<SharedPosition[]>> IFuturesOrderRestClient.GetPositionsAsync(GetPositionsRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetPositionsOptions.ValidateRequest(request, this);
@@ -1388,7 +1389,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        EndpointOptions<ClosePositionRequest, IFuturesOrderRestClient> IFuturesOrderRestClient.ClosePositionOptions { get; } = new EndpointOptions<ClosePositionRequest, IFuturesOrderRestClient>(_exchange, true)
+        ClosePositionOptions IFuturesOrderRestClient.ClosePositionOptions { get; } = new ClosePositionOptions(_exchange, true)
         {
             RequiredOptionalParameters = new List<ParameterDescription>
             {
@@ -1418,7 +1419,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Fee Client
-        EndpointOptions<GetFeeRequest, IFeeRestClient> IFeeRestClient.GetFeeOptions { get; } = new EndpointOptions<GetFeeRequest, IFeeRestClient>(_exchange, false);
+        GetFeeOptions IFeeRestClient.GetFeeOptions { get; } = new GetFeeOptions(_exchange, false);
 
         async Task<HttpResult<SharedFee>> IFeeRestClient.GetFeesAsync(GetFeeRequest request, CancellationToken ct)
         {
@@ -1469,7 +1470,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        EndpointOptions<GetOrderRequest, ISpotTriggerOrderRestClient> ISpotTriggerOrderRestClient.GetSpotTriggerOrderOptions { get; } = new EndpointOptions<GetOrderRequest, ISpotTriggerOrderRestClient>(_exchange, true)
+        GetSpotTriggerOrderOptions ISpotTriggerOrderRestClient.GetSpotTriggerOrderOptions { get; } = new GetSpotTriggerOrderOptions(_exchange, true)
         {
         };
         async Task<HttpResult<SharedSpotTriggerOrder>> ISpotTriggerOrderRestClient.GetSpotTriggerOrderAsync(GetOrderRequest request, CancellationToken ct)
@@ -1542,7 +1543,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }
         }
 
-        EndpointOptions<CancelOrderRequest, ISpotTriggerOrderRestClient> ISpotTriggerOrderRestClient.CancelSpotTriggerOrderOptions { get; } = new EndpointOptions<CancelOrderRequest, ISpotTriggerOrderRestClient>(_exchange, true);
+        CancelSpotTriggerOrderOptions ISpotTriggerOrderRestClient.CancelSpotTriggerOrderOptions { get; } = new CancelSpotTriggerOrderOptions(_exchange, true);
         async Task<HttpResult<SharedId>> ISpotTriggerOrderRestClient.CancelSpotTriggerOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.CancelSpotTriggerOrderOptions.ValidateRequest(request, this);
@@ -1601,7 +1602,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return request.OrderDirection == SharedTriggerOrderDirection.Enter ? OrderSide.Sell : OrderSide.Buy;
         }
 
-        EndpointOptions<GetOrderRequest, IFuturesTriggerOrderRestClient> IFuturesTriggerOrderRestClient.GetFuturesTriggerOrderOptions { get; } = new EndpointOptions<GetOrderRequest, IFuturesTriggerOrderRestClient>(_exchange, true)
+        GetFuturesTriggerOrderOptions IFuturesTriggerOrderRestClient.GetFuturesTriggerOrderOptions { get; } = new GetFuturesTriggerOrderOptions(_exchange, true)
         {
         };
         async Task<HttpResult<SharedFuturesTriggerOrder>> IFuturesTriggerOrderRestClient.GetFuturesTriggerOrderAsync(GetOrderRequest request, CancellationToken ct)
@@ -1690,7 +1691,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return SharedTriggerOrderStatus.Unknown;
         }
 
-        EndpointOptions<CancelOrderRequest, IFuturesTriggerOrderRestClient> IFuturesTriggerOrderRestClient.CancelFuturesTriggerOrderOptions { get; } = new EndpointOptions<CancelOrderRequest, IFuturesTriggerOrderRestClient>(_exchange, true);
+        CancelFuturesTriggerOrderOptions IFuturesTriggerOrderRestClient.CancelFuturesTriggerOrderOptions { get; } = new CancelFuturesTriggerOrderOptions(_exchange, true);
         async Task<HttpResult<SharedId>> IFuturesTriggerOrderRestClient.CancelFuturesTriggerOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.CancelFuturesTriggerOrderOptions.ValidateRequest(request, this);
@@ -1713,7 +1714,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Tp/SL Client
-        EndpointOptions<SetTpSlRequest, IFuturesTpSlRestClient> IFuturesTpSlRestClient.SetFuturesTpSlOptions { get; } = new EndpointOptions<SetTpSlRequest, IFuturesTpSlRestClient>(_exchange, true)
+        SetFuturesTpSlOptions IFuturesTpSlRestClient.SetFuturesTpSlOptions { get; } = new SetFuturesTpSlOptions(_exchange, true)
         {
             RequiredOptionalParameters = new List<ParameterDescription>
             {
@@ -1742,7 +1743,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        EndpointOptions<CancelTpSlRequest, IFuturesTpSlRestClient> IFuturesTpSlRestClient.CancelFuturesTpSlOptions { get; } = new EndpointOptions<CancelTpSlRequest, IFuturesTpSlRestClient>(_exchange, true)
+        CancelFuturesTpSlOptions IFuturesTpSlRestClient.CancelFuturesTpSlOptions { get; } = new CancelFuturesTpSlOptions(_exchange, true)
         {
             RequiredOptionalParameters = new List<ParameterDescription>
             {

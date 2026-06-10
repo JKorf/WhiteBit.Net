@@ -526,7 +526,10 @@ namespace WhiteBit.Net.Clients.V4Api
             }, auth);
 
             var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
-            return WebSocketResult.Ok(result, result.Data == null ? default : result.Data.Result);
+            if (!result.Success)
+                return WebSocketResult.Fail<T>(result);
+
+            return WebSocketResult.Ok(result, result.Data.Result);
         }
 
         /// <inheritdoc />
@@ -550,13 +553,13 @@ namespace WhiteBit.Net.Clients.V4Api
         private async Task<WebSocketResult<string>> GetTokenAsync()
         {
             if (ApiCredentials == null)
-                return WebSocketResult.Fail<string>(ExchangeName, new NoApiCredentialsError());
+                return WebSocketResult.Fail<string>(Exchange, new NoApiCredentialsError());
 
             if (_tokenCache.TryGetValue(ApiCredentials.Key, out var token) && token.Expire > DateTime.UtcNow)
-                return new WebSocketResult<string>(ExchangeName, token.Token, null);
+                return new WebSocketResult<string>(Exchange, token.Token, null);
 
             if (ClientOptions.Environment.Name == "UnitTest")
-                return new WebSocketResult<string>(ExchangeName, "123", null);
+                return new WebSocketResult<string>(Exchange, "123", null);
 
             _logger.LogDebug("Requesting websocket token");
             var restClient = new WhiteBitRestClient(x =>
@@ -569,11 +572,11 @@ namespace WhiteBit.Net.Clients.V4Api
             if (!result.Success)
             {
                 _logger.LogWarning("Failed to retrieve websocket token: {Error}", result.Error);
-                return WebSocketResult.Fail<string>(ExchangeName, result.Error!);
+                return WebSocketResult.Fail<string>(Exchange, result.Error!);
             }
 
             _tokenCache[ApiCredentials.Key] = new CachedToken { Token = result.Data, Expire = DateTime.UtcNow.AddSeconds(60) };
-            return new WebSocketResult<string>(ExchangeName, result.Data, null);
+            return new WebSocketResult<string>(Exchange, result.Data, null);
         }
 
         private class CachedToken

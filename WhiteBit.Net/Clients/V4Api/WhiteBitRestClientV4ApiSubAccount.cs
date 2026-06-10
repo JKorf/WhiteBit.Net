@@ -36,7 +36,7 @@ namespace WhiteBit.Net.Clients.V4Api
             permissions.Add("spotEnabled", spotEnabled);
             permissions.Add("collateralEnabled", collateralEnabled);
             parameters.Add("permissions", permissions);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/create", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/create", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitSubAccount>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -51,7 +51,7 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("id", id);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/delete", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/delete", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -71,7 +71,7 @@ namespace WhiteBit.Net.Clients.V4Api
             permissions.Add("spotEnabled", spotEnabled);
             permissions.Add("collateralEnabled", collateralEnabled);
             parameters.Add("permissions", permissions);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/edit", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/edit", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -88,7 +88,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("search", search);
             parameters.Add("", limit);
             parameters.Add("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/list", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/list", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitSubAccounts>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -106,7 +106,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("direction", direction);
             parameters.Add("ticker", asset);
             parameters.Add("amount", quantity);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/transfer", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/transfer", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding)); ;
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -121,7 +121,7 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("id", id);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/block", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/block", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -136,7 +136,7 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("id", id);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/unblock", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/unblock", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -152,7 +152,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("id", id);
             parameters.Add("ticker", asset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/balances", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/balances", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<Dictionary<string, WhiteBitSubBalances>>(request, parameters, ct).ConfigureAwait(false);
             if (!result.Success)
@@ -172,7 +172,7 @@ namespace WhiteBit.Net.Clients.V4Api
         public async Task<HttpResult<WhiteBitSubaccountTransferHistory>> GetSubaccountTransferHistoryAsync(CancellationToken ct = default)
         {
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/sub-account/transfer/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/sub-account/transfer/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitSubaccountTransferHistory>(request, parameters, ct).ConfigureAwait(false);
             return result;

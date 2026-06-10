@@ -30,7 +30,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("to", toAsset);
             parameters.Add("amount", quantity);
             parameters.Add("direction", fromOrToQuantity);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/convert/estimate", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/convert/estimate", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConvertEstimate>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -45,7 +45,7 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("quoteId", estimateId);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/convert/confirm", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/convert/confirm", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConvertResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -66,7 +66,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("to", endTime);
             parameters.Add("limit", limit);
             parameters.Add("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/convert/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/convert/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConvertHistory>(request, parameters, ct).ConfigureAwait(false);
             return result;

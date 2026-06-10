@@ -19,16 +19,16 @@ namespace WhiteBit.Net.Clients.V4Api
         private const string _exchange = "WhiteBit";
         private const string _topicSpotId = "WhiteBitSpot";
         private const string _topicFuturesId = "WhiteBitFutures";
-        public string Exchange => _exchange;
 
         public TradingMode[] SupportedTradingModes => new[] { TradingMode.Spot, TradingMode.PerpetualLinear };
         public TradingMode[] SupportedFuturesModes => new[] { TradingMode.PerpetualLinear };
 
         public void SetDefaultExchangeParameter(string key, object value) => ExchangeParameters.SetStaticParameter(Exchange, key, value);
         public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
+        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(this);
 
         #region Balance client
-        EndpointOptions<SubscribeBalancesRequest, IBalanceSocketClient> IBalanceSocketClient.SubscribeBalanceOptions { get; } = new EndpointOptions<SubscribeBalancesRequest, IBalanceSocketClient>(_exchange, true)
+        SubscribeBalanceOptions IBalanceSocketClient.SubscribeBalanceOptions { get; } = new SubscribeBalanceOptions(_exchange, true)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
@@ -43,7 +43,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             if (request.TradingMode == null || request.TradingMode == TradingMode.Spot)
             {
-                var assets = ExchangeParameters.GetProcessValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
+                var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
                 if (assets == null)
                 {
                     // request all assets
@@ -66,7 +66,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             else
             {
-                var assets = ExchangeParameters.GetProcessValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
+                var assets = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "BalanceAssets");
                 if (assets == null)
                 {
                     // request all assets
@@ -94,7 +94,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Book Ticker client
 
-        EndpointOptions<SubscribeBookTickerRequest, IBookTickerSocketClient> IBookTickerSocketClient.SubscribeBookTickerOptions { get; } = new EndpointOptions<SubscribeBookTickerRequest, IBookTickerSocketClient>(_exchange, false);
+        SubscribeBookTickerOptions IBookTickerSocketClient.SubscribeBookTickerOptions { get; } = new SubscribeBookTickerOptions(_exchange, false);
         async Task<WebSocketResult<UpdateSubscription>> IBookTickerSocketClient.SubscribeToBookTickerUpdatesAsync(SubscribeBookTickerRequest request, Action<DataEvent<SharedBookTicker>> handler, CancellationToken ct)
         {
             var validationError = SharedClient.SubscribeBookTickerOptions.ValidateRequest(request, this);
@@ -178,7 +178,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Trade client
 
-        EndpointOptions<SubscribeTradeRequest, ITradeSocketClient> ITradeSocketClient.SubscribeTradeOptions { get; } = new EndpointOptions<SubscribeTradeRequest, ITradeSocketClient>(_exchange, false)
+        SubscribeTradeOptions ITradeSocketClient.SubscribeTradeOptions { get; } = new SubscribeTradeOptions(_exchange, false)
         {
             SupportsMultipleSymbols = true,
             MaxSymbolCount = 100
@@ -210,7 +210,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region User Trade client
 
-        EndpointOptions<SubscribeUserTradeRequest, IUserTradeSocketClient> IUserTradeSocketClient.SubscribeUserTradeOptions { get; } = new EndpointOptions<SubscribeUserTradeRequest, IUserTradeSocketClient>(_exchange, true)
+        SubscribeUserTradeOptions IUserTradeSocketClient.SubscribeUserTradeOptions { get; } = new SubscribeUserTradeOptions(_exchange, true)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
@@ -223,7 +223,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
-            var symbols = ExchangeParameters.GetProcessValue<List<string>>(request.ExchangeParameters, Exchange, "UserTradeSymbols");
+            var symbols = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "UserTradeSymbols");
             if (symbols == null)
             {
                 // request all symbols
@@ -270,7 +270,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Spot Order client
 
-        EndpointOptions<SubscribeSpotOrderRequest, ISpotOrderSocketClient> ISpotOrderSocketClient.SubscribeSpotOrderOptions { get; } = new EndpointOptions<SubscribeSpotOrderRequest, ISpotOrderSocketClient>(_exchange, false)
+        SubscribeSpotOrderOptions ISpotOrderSocketClient.SubscribeSpotOrderOptions { get; } = new SubscribeSpotOrderOptions(_exchange, false)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
@@ -283,7 +283,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
-            var symbols = ExchangeParameters.GetProcessValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
+            var symbols = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
             if (symbols == null)
             {
                 // request all symbols
@@ -342,7 +342,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Position client
-        EndpointOptions<SubscribePositionRequest, IPositionSocketClient> IPositionSocketClient.SubscribePositionOptions { get; } = new EndpointOptions<SubscribePositionRequest, IPositionSocketClient>(_exchange, false);
+        SubscribePositionOptions IPositionSocketClient.SubscribePositionOptions { get; } = new SubscribePositionOptions(_exchange, false);
         async Task<WebSocketResult<UpdateSubscription>> IPositionSocketClient.SubscribeToPositionUpdatesAsync(SubscribePositionRequest request, Action<DataEvent<SharedPosition[]>> handler, CancellationToken ct)
         {
             var validationError = SharedClient.SubscribePositionOptions.ValidateRequest(request, this);
@@ -373,7 +373,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Futures Order client
 
-        EndpointOptions<SubscribeFuturesOrderRequest, IFuturesOrderSocketClient> IFuturesOrderSocketClient.SubscribeFuturesOrderOptions { get; } = new EndpointOptions<SubscribeFuturesOrderRequest, IFuturesOrderSocketClient>(_exchange, false)
+        SubscribeFuturesOrderOptions IFuturesOrderSocketClient.SubscribeFuturesOrderOptions { get; } = new SubscribeFuturesOrderOptions(_exchange, false)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
@@ -386,7 +386,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
-            var symbols = ExchangeParameters.GetProcessValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
+            var symbols = ExchangeParameters.GetValue<List<string>>(request.ExchangeParameters, Exchange, "OrderSymbols");
             if (symbols == null)
             {
                 // request all symbols

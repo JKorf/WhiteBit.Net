@@ -73,38 +73,18 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override WhiteBitAuthenticationProvider CreateAuthenticationProvider(WhiteBitCredentials credentials)
             => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
-        internal Task<HttpResult> SendAsync(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null)
-            => SendToAddressAsync(BaseAddress, definition, parameters, cancellationToken, weight);
-
-        internal async Task<HttpResult> SendToAddressAsync(string baseAddress, RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null)
+        internal async Task<HttpResult> SendAsync(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null)
         {
-            var result = await base.SendAsync<object>(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            var result = await base.SendAsync<Unit>(definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
             if (!result.Success && result.Error is DeserializeError)
-                return new HttpResult<object>(result.Exchange, result.Data, null)
-                {
-                    ResponseStatusCode = result.ResponseStatusCode,
-                    HttpVersion = result.HttpVersion,
-                    ResponseHeaders = result.ResponseHeaders,
-                    ResponseTime = result.ResponseTime,
-                    ResponseLength = result.ResponseLength,
-                    OriginalData = result.OriginalData,
-                    RequestId = result.RequestId,
-                    RequestUrl = result.RequestUrl,
-                    RequestBody = result.RequestBody,
-                    RequestMethod = result.RequestMethod,
-                    RequestHeaders = result.RequestHeaders,
-                    DataSource = result.DataSource,
-                };
+                return HttpResult.Ok(result); // Deserialize error without data expected is not an issue
 
             return result;
         }
 
-        internal Task<HttpResult<T>> SendAsync<T>(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
-            => SendToAddressAsync<T>(BaseAddress, definition, parameters, cancellationToken, weight);
-
-        internal async Task<HttpResult<T>> SendToAddressAsync<T>(string baseAddress, RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
+        internal async Task<HttpResult<T>> SendAsync<T>(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
         {
-            var result = await base.SendAsync<T>(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            var result = await base.SendAsync<T>(definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
             return result;
         }
 

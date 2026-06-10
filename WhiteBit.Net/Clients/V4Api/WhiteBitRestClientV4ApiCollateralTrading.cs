@@ -74,7 +74,7 @@ namespace WhiteBit.Net.Clients.V4Api
             else
                 throw new ArgumentException("Unknown path for order type");
 
-            var request = _definitions.GetOrCreate(HttpMethod.Post, path, WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, path, WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitCollateralOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -89,7 +89,7 @@ namespace WhiteBit.Net.Clients.V4Api
         {
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/positions/open", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/collateral-account/positions/open", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitPosition[]>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -109,7 +109,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("endDate", endTime);
             parameters.Add("limit", limit);
             parameters.Add("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/collateral-account/positions/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/collateral-account/positions/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(12000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitPositionHistory[]>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -126,7 +126,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("market", symbol);
             parameters.Add("limit", limit);
             parameters.Add("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/conditional-orders", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/conditional-orders", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(1000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConditionalOrdersResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -159,7 +159,7 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("clientOrderId", clientOrderId);
             parameters.Add("positionSide", positionSide);
             parameters.Add("reduceOnly", reduceOnly);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/collateral/oco", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/order/collateral/oco", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
             var result = await _baseClient.SendAsync<WhiteBitOcoOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
         }
@@ -174,7 +174,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
             parameters.Add("orderId", orderId);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/oco-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/order/oco-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitOcoOrder>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -190,7 +190,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
             parameters.Add("id", orderId);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/conditional-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/order/conditional-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -206,7 +206,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
             parameters.Add("otoId", orderId);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/order/oto-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/order/oto-cancel", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync(request, parameters, ct).ConfigureAwait(false);
             return result;
