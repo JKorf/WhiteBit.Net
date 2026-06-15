@@ -45,7 +45,7 @@ namespace WhiteBit.Net.Clients
         {
             Initialize(options.Value);
 
-            V4Api = AddApiClient(new WhiteBitRestClientV4Api(_logger, httpClient, options.Value));
+            V4Api = AddApiClient(new WhiteBitRestClientV4Api(loggerFactory, httpClient, options.Value));
         }
 
         #endregion

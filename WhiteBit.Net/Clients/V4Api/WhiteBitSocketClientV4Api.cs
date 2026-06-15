@@ -45,14 +45,13 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override ErrorMapping ErrorMapping => WhiteBitErrors.SocketErrors;
         #endregion
 
-
         #region constructor/destructor
 
         /// <summary>
         /// ctor
         /// </summary>
-        internal WhiteBitSocketClientV4Api(ILogger logger, WhiteBitSocketOptions options) :
-            base(logger, WhiteBitExchange.ExchangeName, options.Environment.SocketClientAddress!, options, options.V4Options)
+        internal WhiteBitSocketClientV4Api(ILoggerFactory? loggerFactory, WhiteBitSocketOptions options) :
+            base(loggerFactory, WhiteBitExchange.ExchangeName, options.Environment.SocketClientAddress!, options, options.V4Options)
         {
             RateLimiter = WhiteBitExchange.RateLimiter.WhiteBitSocket;
             AllowTopicsOnTheSameConnection = false;

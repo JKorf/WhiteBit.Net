@@ -53,16 +53,16 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region constructor/destructor
-        internal WhiteBitRestClientV4Api(ILogger logger, HttpClient? httpClient, WhiteBitRestOptions options)
-            : base(logger, WhiteBitExchange.ExchangeName, httpClient, options.Environment.RestClientAddress, options, options.V4Options)
+        internal WhiteBitRestClientV4Api(ILoggerFactory? loggerFactory, HttpClient? httpClient, WhiteBitRestOptions options)
+            : base(loggerFactory, WhiteBitExchange.ExchangeName, httpClient, options.Environment.RestClientAddress, options, options.V4Options)
         {
             Account = new WhiteBitRestClientV4ApiAccount(this);
             Convert = new WhiteBitRestClientV4ApiConvert(this);
             Codes = new WhiteBitRestClientV4ApiCodes(this);
             SubAccount = new WhiteBitRestClientV4ApiSubAccount(this);
-            ExchangeData = new WhiteBitRestClientV4ApiExchangeData(logger, this);
-            Trading = new WhiteBitRestClientV4ApiTrading(logger, this);
-            CollateralTrading = new WhiteBitRestClientV4ApiCollateralTrading(logger, this);
+            ExchangeData = new WhiteBitRestClientV4ApiExchangeData(_logger, this);
+            Trading = new WhiteBitRestClientV4ApiTrading(_logger, this);
+            CollateralTrading = new WhiteBitRestClientV4ApiCollateralTrading(_logger, this);
         }
         #endregion
 
