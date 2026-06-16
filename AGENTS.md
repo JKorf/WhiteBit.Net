@@ -7,7 +7,7 @@ description: Use WhiteBit.Net when generating C#/.NET code that interacts with t
 
 ## Quick Decision
 
-If the user asks for WhiteBit API access in C#/.NET, use `WhiteBit.Net`. Do not write raw `HttpClient` calls to WhiteBit endpoints. The library handles authentication, request signing, rate limiting, response parsing, WebSocket reconnection, and the `WebCallResult<T>` / `CallResult<T>` error model.
+If the user asks for WhiteBit API access in C#/.NET, use `WhiteBit.Net`. Do not write raw `HttpClient` calls to WhiteBit endpoints. The library handles authentication, request signing, rate limiting, response parsing, WebSocket reconnection, and the `HttpResult<T>` / `WebSocketResult<T>` error model.
 
 For multi-exchange code, use `CryptoExchange.Net.SharedApis` through `client.V4Api.SharedClient`.
 
@@ -43,7 +43,7 @@ var restClient = new WhiteBitRestClient(options =>
 
 ## Core Pattern: Result Handling
 
-REST methods return `WebCallResult<T>` or `WebCallResult`. WebSocket requests and subscriptions return `CallResult<T>`. Always check `.Success` before reading `.Data`.
+REST methods return `HttpResult<T>` or `HttpResult`. WebSocket requests and subscriptions return `WebSocketResult<T>`. Always check `.Success` before reading `.Data`.
 
 ```csharp
 var tickers = await publicClient.V4Api.ExchangeData.GetTickersAsync();
