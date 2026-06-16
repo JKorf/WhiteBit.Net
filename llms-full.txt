@@ -5,7 +5,7 @@
 WhiteBit.Net is a strongly typed .NET client library for the WhiteBit REST and WebSocket APIs. It is part of the CryptoExchange.Net ecosystem and uses the same result, shared API, logging, rate limiting, and socket patterns as other JKorf exchange libraries.
 
 Current package version in this repository: 3.11.1.
-CryptoExchange.Net dependency: 11.1.0.
+CryptoExchange.Net dependency on this branch: 12.0.0-beta1.
 Target frameworks: netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
 Native AOT: supported on compatible .NET targets.
 
@@ -24,8 +24,10 @@ Primary documentation:
 - Include `using WhiteBit.Net;` when using `WhiteBitCredentials` or `WhiteBitEnvironment`.
 - Direct client calls are rooted at `V4Api`; do not generate `SpotApi`, `FuturesApi`, or `GeneralApi` members.
 - Always check `.Success` before reading `.Data`.
-- REST methods return `HttpResult<T>` or `HttpResult`.
-- WebSocket requests and subscriptions return `WebSocketResult<T>` or `CallResult`.
+- Direct REST and SharedApis REST methods return `HttpResult<T>` or `HttpResult`.
+- WebSocket request/response methods return `QueryResult<T>`.
+- Direct and SharedApis WebSocket subscriptions return `WebSocketResult<UpdateSubscription>`.
+- SharedApis helper methods that do not perform HTTP/socket I/O can return `ExchangeCallResult<T>`.
 - Reuse clients. Do not instantiate a REST or socket client per request in production code.
 - Prefer dependency injection for long-running services.
 - Store WebSocket subscriptions and unsubscribe during shutdown.
@@ -395,7 +397,7 @@ if (!ticker.Success)
 Console.WriteLine(ticker.Data.LastPrice);
 ```
 
-Shared WebSocket subscriptions return an `UpdateSubscription` in `.Data`. For shared interface variables, unsubscribe through the concrete socket client:
+Shared WebSocket subscriptions return `WebSocketResult<UpdateSubscription>` with the subscription in `.Data`. For shared interface variables, unsubscribe through the concrete socket client:
 
 ```csharp
 var socketClient = new WhiteBitSocketClient();
@@ -417,6 +419,8 @@ await socketClient.UnsubscribeAsync(sub.Data);
 ```
 
 Do not call `tickerSocket.UnsubscribeAsync(...)` on `ITickerSocketClient`; that shared interface does not expose the method.
+
+Shared clients also expose `Discover()` for runtime capability discovery. Use it when tooling or exchange-agnostic code needs to inspect implemented shared interfaces and endpoint option metadata instead of hard-coding assumptions.
 
 ## Symbol And Quantity Handling
 
@@ -466,7 +470,7 @@ Examples/ai-friendly/03-websocket.cs
   Public ticker stream, kline stream, authenticated balance/order streams, success checks, teardown.
 
 Examples/ai-friendly/04-multi-exchange.cs
-  CryptoExchange.Net SharedApis REST and socket patterns.
+  CryptoExchange.Net SharedApis REST and socket patterns, including concrete socket-client teardown.
 
 Examples/ai-friendly/05-error-handling.cs
   HttpResult pattern, transient retry, WhiteBit validation examples, symbol metadata handling.
@@ -481,6 +485,7 @@ Before finalizing generated code:
 - Does it compile with the current package?
 - Does it include `using WhiteBit.Net;` when using credentials or environments?
 - Does every REST/socket result check `.Success` before `.Data`?
+- For socket request/response methods, does it expect `QueryResult<T>` rather than `HttpResult<T>`?
 - Does it use the correct API branch: `V4Api.ExchangeData`, `Account`, `Trading`, `CollateralTrading`, `Convert`, `Codes`, or `SubAccount`?
 - Does it avoid raw WhiteBit URLs and manual signing?
 - Does it avoid nonexistent `WhiteBitClient`, `SpotApi`, `FuturesApi`, and `GeneralApi` members?

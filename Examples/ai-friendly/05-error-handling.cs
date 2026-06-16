@@ -16,7 +16,9 @@ var client = new WhiteBitRestClient(options =>
 });
 
 // ---- 1. THE BASIC PATTERN ----
-// Every REST method returns HttpResult<T> or HttpResult.
+// Every direct and SharedApis REST method returns HttpResult<T> or HttpResult.
+// WebSocket request/response methods return QueryResult<T>.
+// WebSocket subscriptions return WebSocketResult<UpdateSubscription>.
 // .Success is true/false. .Data is valid only when .Success is true.
 // .Error contains structured error info when .Success is false.
 
