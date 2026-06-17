@@ -20,7 +20,6 @@ namespace WhiteBit.Net
             SpotUserDataTrackerConfig? config) : base(
                 logger,
                 restClient.V4Api.SharedClient,
-                null,
                 restClient.V4Api.SharedClient,
                 socketClient.V4Api.SharedClient,
                 restClient.V4Api.SharedClient,
@@ -48,7 +47,6 @@ namespace WhiteBit.Net
             string? userIdentifier,
             FuturesUserDataTrackerConfig? config) : base(logger,
                 restClient.V4Api.SharedClient,
-                null,
                 restClient.V4Api.SharedClient,
                 socketClient.V4Api.SharedClient,
                 restClient.V4Api.SharedClient,
