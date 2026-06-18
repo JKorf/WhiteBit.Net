@@ -426,7 +426,13 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(result.Data.Records, x => x.CreateTime, request.StartTime, request.EndTime, direction)
                        .Select(x => 
-                           new SharedWithdrawal(x.Asset, x.Address, x.Quantity, x.TransactionStatus == Enums.TransactionStatus.Success, x.CreateTime)
+                           new SharedWithdrawal(
+                               x.Asset,
+                               x.Address,
+                               x.Quantity,
+                               x.TransactionStatus == Enums.TransactionStatus.Success,
+                               x.CreateTime,
+                               GetWithdrawalStatus(x))
                            {
                                Confirmations = x.Confirmations?.Actual,
                                Network = x.Network,
@@ -438,6 +444,23 @@ namespace WhiteBit.Net.Clients.V4Api
                     .ToArray(), nextPageRequest);
         }
 
+        private SharedTransferStatus GetWithdrawalStatus(WhiteBitDepositWithdrawal x)
+        {
+            if (x.TransactionStatus == TransactionStatus.Canceled || x.TransactionStatus == TransactionStatus.UnconfirmedByUser)
+                return SharedTransferStatus.Failed;
+
+            if (x.TransactionStatus == TransactionStatus.Success || x.TransactionStatus == TransactionStatus.PartialSuccess)
+                return SharedTransferStatus.Completed;
+
+            if (x.TransactionStatus == TransactionStatus.AwaitingVerification
+                || x.TransactionStatus == TransactionStatus.ConfirmationInProgress
+                || x.TransactionStatus == TransactionStatus.Frozen
+                || x.TransactionStatus == TransactionStatus.Pending
+                || x.TransactionStatus == TransactionStatus.Uncredited)
+                return SharedTransferStatus.InProgress;
+
+            return SharedTransferStatus.Unknown;
+        }
         #endregion
 
         #region Withdraw client
