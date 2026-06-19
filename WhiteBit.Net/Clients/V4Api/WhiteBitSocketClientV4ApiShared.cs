@@ -25,7 +25,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public void SetDefaultExchangeParameter(string key, object value) => ExchangeParameters.SetStaticParameter(Exchange, key, value);
         public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
-        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(this);
+        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(WhiteBitExchange.Metadata, this);
 
         #region Balance client
         SubscribeBalanceOptions IBalanceSocketClient.SubscribeBalanceOptions { get; } = new SubscribeBalanceOptions(_exchange, true)
@@ -105,7 +105,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var result = await SubscribeToBookTickerUpdatesAsync(symbol, update =>
             {
                 handler(update.ToType(new SharedBookTicker(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol),
                     update.Data.Symbol,
                     update.Data.BestAskPrice,
                     update.Data.BestAskQuantity,
@@ -167,7 +167,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var symbols = request.Symbols?.Length > 0 ? request.Symbols.Select(x => x.GetSymbol(FormatSymbol)).ToArray() : [request.Symbol!.GetSymbol(FormatSymbol)];
             var result = await SubscribeToTickerUpdatesAsync(symbols, update => handler(update.ToType(
-                new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Symbol), update.Data.Symbol, update.Data.Ticker.LastPrice, update.Data.Ticker.HighPrice, update.Data.Ticker.LowPrice, update.Data.Ticker.Volume, update.Data.Ticker.OpenPrice == 0 ? null : Math.Round(update.Data.Ticker.ClosePrice / update.Data.Ticker.OpenPrice * 100 - 100, 2))
+                new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol), update.Data.Symbol, update.Data.Ticker.LastPrice, update.Data.Ticker.HighPrice, update.Data.Ticker.LowPrice, update.Data.Ticker.Volume, update.Data.Ticker.OpenPrice == 0 ? null : Math.Round(update.Data.Ticker.ClosePrice / update.Data.Ticker.OpenPrice * 100 - 100, 2))
                 {
                     QuoteVolume = update.Data.Ticker.QuoteVolume
                 })), ct).ConfigureAwait(false);
@@ -197,7 +197,7 @@ namespace WhiteBit.Net.Clients.V4Api
                         return;
 
                     handler(update.ToType<SharedTrade[]>(update.Data.Trades.Select(x => 
-                    new SharedTrade(ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Symbol), update.Data.Symbol, x.Quantity, x.Price, x.Timestamp)
+                    new SharedTrade(ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol), update.Data.Symbol, x.Quantity, x.Price, x.Timestamp)
                     {
                         Side = x.Side == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell
                     } ).ToArray()));
@@ -249,7 +249,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                     handler(update.ToType<SharedUserTrade[]>([
                         new SharedUserTrade(
-                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Symbol),
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol),
                             update.Data.Symbol,
                             update.Data.OrderId.ToString(),
                             update.Data.Id.ToString(),
@@ -313,7 +313,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                     handler(update.ToType<SharedSpotOrder[]>(new[] {
                         new SharedSpotOrder(
-                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, update.Data.Order.Symbol),
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Order.Symbol),
                             update.Data.Order.Symbol,
                             update.Data.Order.OrderId.ToString(),
                             ParseOrderType(update.Data.Order.OrderType, update.Data.Order.PostOnly),
@@ -355,7 +355,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     if (update.UpdateType == SocketUpdateType.Snapshot)
                         return;
 
-                    handler(update.ToType<SharedPosition[]>(update.Data.Records.Select(x => new SharedPosition(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
+                    handler(update.ToType<SharedPosition[]>(update.Data.Records.Select(x => new SharedPosition(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
                     {
                         AverageOpenPrice = x.BasePrice,
                         PositionMode = SharedPositionMode.OneWay,
@@ -417,7 +417,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                     handler(update.ToType<SharedFuturesOrder[]>(new[] {
                         new SharedFuturesOrder(
-                            ExchangeSymbolCache.ParseSymbol(_topicFuturesId, update.Data.Order.Symbol),
+                            ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Order.Symbol),
                             update.Data.Order.Symbol,
                             update.Data.Order.OrderId.ToString(),
                             ParseOrderType(update.Data.Order.OrderType, update.Data.Order.PostOnly),

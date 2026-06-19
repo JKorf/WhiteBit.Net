@@ -25,7 +25,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public void SetDefaultExchangeParameter(string key, object value) => ExchangeParameters.SetStaticParameter(Exchange, key, value);
         public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
-        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(this);
+        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(WhiteBitExchange.Metadata, this);
 
         #region Spot Symbol client
         GetSpotSymbolsOptions ISpotSymbolRestClient.GetSpotSymbolsOptions { get; } = new GetSpotSymbolsOptions(_exchange, false);
@@ -50,20 +50,20 @@ namespace WhiteBit.Net.Clients.V4Api
                 PriceDecimals = s.QuoteAssetPrecision
             }).ToArray());
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, response.Data!);
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, EnvironmentName, null, response.Data!);
             return response;
         }
 
         async Task<ExchangeCallResult<SharedSymbol[]>> ISpotSymbolRestClient.GetSpotSymbolsForBaseAssetAsync(string baseAsset)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicSpotId))
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId, EnvironmentName, null))
             {
                 var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<SharedSymbol[]>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicSpotId, baseAsset));
+            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicSpotId, EnvironmentName, null, baseAsset));
         }
 
         async Task<ExchangeCallResult<bool>> ISpotSymbolRestClient.SupportsSpotSymbolAsync(SharedSymbol symbol)
@@ -71,26 +71,26 @@ namespace WhiteBit.Net.Clients.V4Api
             if (symbol.TradingMode != TradingMode.Spot)
                 throw new ArgumentException(nameof(symbol), "Only Spot symbols allowed");
 
-            if (!ExchangeSymbolCache.HasCached(_topicSpotId))
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId, EnvironmentName, null))
             {
                 var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, symbol));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, EnvironmentName, null, symbol));
         }
 
         async Task<ExchangeCallResult<bool>> ISpotSymbolRestClient.SupportsSpotSymbolAsync(string symbolName)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicSpotId))
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId, EnvironmentName, null))
             {
                 var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, symbolName));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, EnvironmentName, null, symbolName));
         }
         #endregion
 
@@ -111,7 +111,14 @@ namespace WhiteBit.Net.Clients.V4Api
             if (ticker == null)
                 return HttpResult.Fail<SharedSpotTicker>(result, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
-            return HttpResult.Ok(result, new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, ticker.Symbol), ticker.Symbol, ticker.LastPrice, null, null, ticker.BaseVolume, ticker.ChangePercentage)
+            return HttpResult.Ok(result, new SharedSpotTicker(
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, ticker.Symbol), 
+                ticker.Symbol,
+                ticker.LastPrice,
+                null, 
+                null, 
+                ticker.BaseVolume, 
+                ticker.ChangePercentage)
             {
                 QuoteVolume = ticker.QuoteVolume
             });
@@ -129,7 +136,15 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedSpotTicker[]>(result);
 
             var data = result.Data.Where(x => !x.Symbol.EndsWith("_PERP"));
-            return HttpResult.Ok(result, data.Select(x => new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), x.Symbol, x.LastPrice, null, null, x.BaseVolume, x.ChangePercentage)
+            return HttpResult.Ok(result, data.Select(x => 
+            new SharedSpotTicker(
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
+                x.Symbol, 
+                x.LastPrice,
+                null,
+                null,
+                x.BaseVolume,
+                x.ChangePercentage)
             {
                 QuoteVolume = x.QuoteVolume
             }).ToArray());
@@ -151,7 +166,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedBookTicker>(resultTicker);
 
             return HttpResult.Ok(resultTicker, new SharedBookTicker(
-                ExchangeSymbolCache.ParseSymbol(request.Symbol.TradingMode == TradingMode.Spot ? _topicSpotId : _topicFuturesId, resultTicker.Data.Symbol),
+                ExchangeSymbolCache.ParseSymbol(request.Symbol.TradingMode == TradingMode.Spot ? _topicSpotId : _topicFuturesId, EnvironmentName, null, resultTicker.Data.Symbol),
                 resultTicker.Data.Symbol,
                 resultTicker.Data.Asks[0].Price,
                 resultTicker.Data.Asks[0].Quantity,
@@ -548,7 +563,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedSpotOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, openOrder.Symbol), 
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, openOrder.Symbol), 
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -581,7 +596,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
 
                 return HttpResult.Ok(closeOrders, new SharedSpotOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, closedOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, closedOrder.Symbol),
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),
@@ -618,7 +633,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var data = orders.Data.Where(x => !x.Symbol.EndsWith("_PERP"));
 
             return HttpResult.Ok(orders, data.Select(x => new SharedSpotOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -675,7 +690,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 TimeSpan.FromDays(180));
 
             var data = result.Data.Where(x => !x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedSpotOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
                 xk.Key,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -713,7 +728,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedUserTrade[]>(orders);
 
             return HttpResult.Ok(orders, orders.Data.Select(x => new SharedUserTrade(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
                 x.Id.ToString(),
@@ -765,7 +780,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(result.Data, x => x.Time, request.StartTime, request.EndTime, direction)
                        .Select(y => new SharedUserTrade(
-                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, y.Symbol),
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, y.Symbol),
                             y.Symbol,
                             y.OrderId.ToString(),
                             y.Id.ToString(),
@@ -851,20 +866,20 @@ namespace WhiteBit.Net.Clients.V4Api
                     };
                 }).ToArray());
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, response.Data!);
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, EnvironmentName, null, response.Data!);
             return response;
         }
 
         async Task<ExchangeCallResult<SharedSymbol[]>> IFuturesSymbolRestClient.GetFuturesSymbolsForBaseAssetAsync(string baseAsset)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicFuturesId))
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, EnvironmentName, null))
             {
                 var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<SharedSymbol[]>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicFuturesId, baseAsset));
+            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicFuturesId, EnvironmentName, null, baseAsset));
         }
 
         async Task<ExchangeCallResult<bool>> IFuturesSymbolRestClient.SupportsFuturesSymbolAsync(SharedSymbol symbol)
@@ -872,26 +887,26 @@ namespace WhiteBit.Net.Clients.V4Api
             if (symbol.TradingMode == TradingMode.Spot)
                 throw new ArgumentException(nameof(symbol), "Spot symbols not allowed");
 
-            if (!ExchangeSymbolCache.HasCached(_topicFuturesId))
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, EnvironmentName, null))
             {
                 var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, symbol));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, EnvironmentName, null, symbol));
         }
 
         async Task<ExchangeCallResult<bool>> IFuturesSymbolRestClient.SupportsFuturesSymbolAsync(string symbolName)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicFuturesId))
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, EnvironmentName, null))
             {
                 var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, symbolName));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, EnvironmentName, null, symbolName));
         }
 
         #endregion
@@ -914,7 +929,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (ticker == null)
                 return HttpResult.Fail<SharedFuturesTicker>(resultTicker, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
-            return HttpResult.Ok(resultTicker, new SharedFuturesTicker(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, ticker.Symbol), ticker.Symbol, ticker.LastPrice, ticker.HighPrice, ticker.LowPrice, ticker.BaseVolume, null)
+            return HttpResult.Ok(resultTicker, new SharedFuturesTicker(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, ticker.Symbol), ticker.Symbol, ticker.LastPrice, ticker.HighPrice, ticker.LowPrice, ticker.BaseVolume, null)
             {
                 IndexPrice = ticker.IndexPrice,
                 FundingRate = ticker.FundingRate,
@@ -935,7 +950,13 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(resultTickers, resultTickers.Data.Select(x =>
             {
-                return new SharedFuturesTicker(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), x.Symbol, x.LastPrice, x.HighPrice, x.LowPrice, x.BaseVolume, null)
+                return new SharedFuturesTicker(
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol),
+                    x.Symbol, 
+                    x.LastPrice,
+                    x.HighPrice,
+                    x.LowPrice,
+                    x.BaseVolume, null)
                 {
                     IndexPrice = x.IndexPrice,
                     FundingRate = x.FundingRate,
@@ -1043,7 +1064,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(result.Data, x => x.OpenTime, request.StartTime, request.EndTime, direction)
                        .Select(x => 
                            new SharedPositionHistory(
-                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
+                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), 
                                 x.Symbol,
                                 x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
                                 x.BasePrice,
@@ -1118,7 +1139,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedFuturesOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, openOrder.Symbol), 
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, openOrder.Symbol), 
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -1156,7 +1177,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     : SharedOrderStatus.Filled;
 
                 return HttpResult.Ok(closeOrders, new SharedFuturesOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, closedOrder.Symbol), 
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, closedOrder.Symbol), 
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),
@@ -1196,7 +1217,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var data = orders.Data.Where(x => x.Symbol.EndsWith("_PERP"));
 
             return HttpResult.Ok<SharedFuturesOrder[]>(orders, [.. data.Select(x => new SharedFuturesOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -1256,7 +1277,7 @@ namespace WhiteBit.Net.Clients.V4Api
                TimeSpan.FromDays(180));
 
             var data = result.Data.Where(x => x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedFuturesOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, xk.Key), 
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, xk.Key), 
                 xk.Key,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -1299,7 +1320,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedUserTrade[]>(orders);
 
             return HttpResult.Ok(orders, orders.Data.Select(x => new SharedUserTrade(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), 
                 request.Symbol!.GetSymbol(FormatSymbol),
                 x.OrderId.ToString(),
                 x.Id.ToString(),
@@ -1352,7 +1373,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(result.Data, x => x.Time, request.StartTime, request.EndTime, direction)
                        .Select(y => 
                            new SharedUserTrade(
-                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, y.Symbol), 
+                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, y.Symbol), 
                                 y.Symbol,
                                 y.OrderId.ToString(),
                                 y.Id.ToString(),
@@ -1400,7 +1421,11 @@ namespace WhiteBit.Net.Clients.V4Api
             var data = result.Data;
             var resultTypes = request.Symbol == null && request.TradingMode == null ? SupportedTradingModes : request.Symbol != null ? new[] { request.Symbol.TradingMode } : new[] { request.TradingMode!.Value };
             return HttpResult.Ok(result, data.Select(x =>
-            new SharedPosition(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, x.Symbol), x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
+            new SharedPosition(
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol),
+                x.Symbol,
+                Math.Abs(x.Quantity),
+                x.UpdateTime)
             {
                 UnrealizedPnl = x.Pnl,
                 LiquidationPrice = x.LiquidationPrice == 0 ? null : x.LiquidationPrice,
@@ -1513,7 +1538,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedSpotTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, openOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, openOrder.Symbol),
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -1544,7 +1569,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 return HttpResult.Ok(closeOrders, new SharedSpotTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, closedOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, closedOrder.Symbol),
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),
@@ -1645,7 +1670,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedFuturesTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, openOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, openOrder.Symbol),
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -1678,7 +1703,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 
                 return HttpResult.Ok(closeOrders, new SharedFuturesTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, closedOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, closedOrder.Symbol),
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),

@@ -27,7 +27,8 @@ namespace WhiteBit.Net
                 "https://www.whitebit.com",
                 ["https://docs.whitebit.com/"],
                 PlatformType.CryptoCurrencyExchange,
-                CentralizationType.Centralized
+                CentralizationType.Centralized,
+                WhiteBitEnvironment.All
                 );
 
         /// <summary>
