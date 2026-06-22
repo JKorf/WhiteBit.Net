@@ -19,6 +19,7 @@ namespace WhiteBit.Net.Converters
     [JsonSerializable(typeof(WhiteBitSocketResponse<Dictionary<string, WhiteBitTradeBalance>>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<Dictionary<string, WhiteBitMarginBalance>>))]
     [JsonSerializable(typeof(Parameters))]
+    [JsonSerializable(typeof(Parameters[]))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitOrders>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitClosedOrders>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitUserTrades>))]

@@ -241,7 +241,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (!result.Success)
                     return HttpResult.Fail<SharedBalance[]>(result);
 
-                return HttpResult.Ok(result, result.Data.Select(x => new SharedBalance(x.Asset, x.Available, x.Available + x.Frozen)).ToArray());
+                return HttpResult.Ok(result, result.Data.Select(x => 
+                    new SharedBalance(TradingMode.Spot, x.Asset, x.Available, x.Available + x.Frozen)).ToArray());
             }
             else if(request.AccountType == SharedAccountType.Funding)
             {
@@ -249,7 +250,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (!result.Success)
                     return HttpResult.Fail<SharedBalance[]>(result);
 
-                return HttpResult.Ok(result, result.Data.Select(x => new SharedBalance(x.Asset, x.MainBalance, x.MainBalance)).ToArray());
+                return HttpResult.Ok(result, result.Data.Select(x => 
+                    new SharedBalance([], x.Asset, x.MainBalance, x.MainBalance)).ToArray());
             }
             else
             {
@@ -257,7 +259,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (!result.Success)
                     return HttpResult.Fail<SharedBalance[]>(result);
 
-                return HttpResult.Ok(result, result.Data.Select(x => new SharedBalance(x.Key, x.Value, x.Value)).ToArray());
+                return HttpResult.Ok(result, result.Data.Select(x =>
+                    new SharedBalance(SupportedFuturesModes, x.Key, x.Value, x.Value)).ToArray());
             }
         }
 

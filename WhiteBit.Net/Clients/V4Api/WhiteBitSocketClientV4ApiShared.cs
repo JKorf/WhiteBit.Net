@@ -60,7 +60,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
                 var result = await SubscribeToSpotBalanceUpdatesAsync(
                     assets!,
-                    update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x => new SharedBalance(x.Key, x.Value.Available, x.Value.Available + x.Value.Frozen)).ToArray())),
+                    update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x =>
+                        new SharedBalance(TradingMode.Spot, x.Key, x.Value.Available, x.Value.Available + x.Value.Frozen)).ToArray())),
                     ct: ct).ConfigureAwait(false);
                 return result;
             }
@@ -84,7 +85,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
                 var result = await SubscribeToMarginBalanceUpdatesAsync(
                     assets,
-                    update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x => new SharedBalance(x.Asset, x.AvailableWithoutBorrow, x.Balance)).ToArray())),
+                    update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x => 
+                        new SharedBalance(
+                            SupportedFuturesModes, x.Asset, x.AvailableWithoutBorrow, x.Balance)).ToArray())),
                     ct: ct).ConfigureAwait(false);
                 return result;
             }
