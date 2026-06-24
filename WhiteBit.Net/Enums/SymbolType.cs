@@ -19,6 +19,11 @@ namespace WhiteBit.Net.Enums
         /// ["<c>futures</c>"] Futures symbol
         /// </summary>
         [Map("futures")]
-        Futures
+        Futures,
+        /// <summary>
+        /// ["<c>tradfiFutures</c>"] TradFi futures symbol
+        /// </summary>
+        [Map("tradfiFutures")]
+        TradFiFutures
     }
 }
