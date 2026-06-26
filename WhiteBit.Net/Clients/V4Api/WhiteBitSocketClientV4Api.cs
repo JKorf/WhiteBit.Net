@@ -55,7 +55,18 @@ namespace WhiteBit.Net.Clients.V4Api
             base(logger, options.Environment.SocketClientAddress!, options, options.V4Options)
         {
             RateLimiter = WhiteBitExchange.RateLimiter.WhiteBitSocket;
-            AllowTopicsOnTheSameConnection = false;
+            // WhiteBit lets many subscriptions of the same topic share one connection. Separate
+            // per-symbol depth_subscribe calls (sent with multiple_subscriptions = true, which this
+            // client always does) COEXIST on the connection — they do not override each other, so the
+            // "a new subscription replaces the previous one" note in WhiteBit's docs does not apply to
+            // depth subscriptions made this way. Verified against the live API: 200 markets stream on a
+            // single connection, and depth_unsubscribe removes only the named market. Leaving this false
+            // forced every order book subscription (all carry Topic "OrderBook") onto its own websocket,
+            // ignoring SocketSubscriptionsCombineTarget and sprawling to one connection per symbol.
+            // WhiteBit rate-limits depth_subscribe to ~200 requests per connection per burst, so the
+            // combine target must stay under that (defaulted to 150 in WhiteBitSocketOptions); a
+            // reconnect re-subscribes a connection's whole set in one burst.
+            AllowTopicsOnTheSameConnection = true;
 
             KeepAliveInterval = TimeSpan.Zero; // Server doesn't correctly respond to ping frames
 
