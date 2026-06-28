@@ -43,6 +43,7 @@ namespace WhiteBit.Net
          => name switch
          {
              TradeEnvironmentNames.Live => Live,
+             "Europe" => Europe,
              "" => Live,
              null => Live,
              _ => default
@@ -61,6 +62,14 @@ namespace WhiteBit.Net
             = new WhiteBitEnvironment(TradeEnvironmentNames.Live,
                                      WhiteBitApiAddresses.Default.RestClientAddress,
                                      WhiteBitApiAddresses.Default.SocketClientAddress);
+
+        /// <summary>
+        /// Europe environment
+        /// </summary>
+        public static WhiteBitEnvironment Europe { get; }
+            = new WhiteBitEnvironment("Europe",
+                                     WhiteBitApiAddresses.Europe.RestClientAddress,
+                                     WhiteBitApiAddresses.Europe.SocketClientAddress);
 
         /// <summary>
         /// Create a custom environment

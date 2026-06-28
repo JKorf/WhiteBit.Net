@@ -22,5 +22,14 @@ namespace WhiteBit.Net.Objects
             RestClientAddress = "https://whitebit.com",
             SocketClientAddress = "wss://api.whitebit.com"
         };
+
+        /// <summary>
+        /// The addresses to connect to the WhiteBit Europe API
+        /// </summary>
+        public static WhiteBitApiAddresses Europe = new WhiteBitApiAddresses
+        {
+            RestClientAddress = "https://whitebit.eu",
+            SocketClientAddress = "wss://api.whitebit.eu"
+        };
     }
 }
