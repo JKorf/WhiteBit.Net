@@ -2,7 +2,7 @@
 
 > Strongly typed .NET client library for the WhiteBit REST and WebSocket APIs. Supports V4 public market data, spot trading, collateral/futures trading, balances, deposits, withdrawals, convert, WhiteBit Codes, sub-accounts, private WebSocket streams, local order books, and CryptoExchange.Net shared APIs.
 
-WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `WebCallResult<T>` / `CallResult<T>` for error-aware results, supports client-side rate limiting, automatic WebSocket reconnection, dependency injection, native AOT, and shared API abstractions for multi-exchange applications. Current repository package version: 3.11.1. Targets netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
+WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `HttpResult<T>` for REST, `QueryResult<T>` for WebSocket request/response calls, and `WebSocketResult<UpdateSubscription>` for WebSocket subscriptions. Shared REST APIs use the same `HttpResult<T>` pattern. It supports client-side rate limiting, automatic WebSocket reconnection, dependency injection, native AOT, and shared API abstractions for multi-exchange applications. Current repository package version: 3.11.1. This branch targets CryptoExchange.Net 12.0.0-beta1. Targets netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
 
 ## Documentation
 
@@ -19,7 +19,7 @@ WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `WebCallResult
 - [Collateral/Futures Trading](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/02-collateral-futures.cs): Leverage, collateral order, positions, reduce-only close
 - [WebSocket Streams](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/03-websocket.cs): Public ticker/kline streams and private order/balance streams with teardown
 - [Multi-Exchange Pattern](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/04-multi-exchange.cs): CryptoExchange.Net SharedApis usage
-- [Error Handling](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/05-error-handling.cs): `WebCallResult` checks, transient retry, validation handling
+- [Error Handling](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/05-error-handling.cs): `HttpResult` checks, transient retry, validation handling
 
 ## Critical Rules
 
@@ -31,6 +31,7 @@ WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `WebCallResult
 - For spot orders use `restClient.V4Api.Trading.PlaceSpotOrderAsync`.
 - For collateral/futures orders use `restClient.V4Api.CollateralTrading.PlaceOrderAsync`.
 - For multi-exchange code use `CryptoExchange.Net.SharedApis` from `.V4Api.SharedClient`.
+- Use `SharedClient.Discover()` when code needs to inspect implemented shared interfaces and endpoint options at runtime.
 - Store WebSocket subscriptions and call `socketClient.UnsubscribeAsync(subscription.Data)`.
 
 ## Reference

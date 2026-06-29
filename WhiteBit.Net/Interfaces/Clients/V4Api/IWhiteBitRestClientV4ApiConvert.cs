@@ -25,7 +25,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="quantity">["<c>amount</c>"] Quantity</param>
         /// <param name="fromOrToQuantity">["<c>direction</c>"] Whether the quantity is specified in the fromAsset or toAsset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitConvertEstimate>> GetConvertEstimateAsync(string fromAsset, string toAsset, decimal quantity, string fromOrToQuantity, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitConvertEstimate>> GetConvertEstimateAsync(string fromAsset, string toAsset, decimal quantity, string fromOrToQuantity, CancellationToken ct = default);
 
         /// <summary>
         /// Accept/confirm a convert estimate
@@ -38,7 +38,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="estimateId">["<c>quoteId</c>"] Quote/estimate id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitConvertResult>> ConfirmConvertAsync(string estimateId, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitConvertResult>> ConfirmConvertAsync(string estimateId, CancellationToken ct = default);
 
         /// <summary>
         /// Get convert history
@@ -57,7 +57,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
-        Task<WebCallResult<WhiteBitConvertHistory>> GetConvertHistoryAsync(string? fromAsset = null, string? toAsset = null, string? quoteId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<HttpResult<WhiteBitConvertHistory>> GetConvertHistoryAsync(string? fromAsset = null, string? toAsset = null, string? quoteId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
     }
 }

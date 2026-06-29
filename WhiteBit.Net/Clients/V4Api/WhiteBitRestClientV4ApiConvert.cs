@@ -23,14 +23,14 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Convert Estimate
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitConvertEstimate>> GetConvertEstimateAsync(string fromAsset, string toAsset, decimal quantity, string fromOrToQuantity, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitConvertEstimate>> GetConvertEstimateAsync(string fromAsset, string toAsset, decimal quantity, string fromOrToQuantity, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("from", fromAsset);
             parameters.Add("to", toAsset);
-            parameters.AddString("amount", quantity);
+            parameters.Add("amount", quantity);
             parameters.Add("direction", fromOrToQuantity);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/convert/estimate", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/convert/estimate", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConvertEstimate>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -41,11 +41,11 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Confirm Convert
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitConvertResult>> ConfirmConvertAsync(string estimateId, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitConvertResult>> ConfirmConvertAsync(string estimateId, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("quoteId", estimateId);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/convert/confirm", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/convert/confirm", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConvertResult>(request, parameters, ct).ConfigureAwait(false);
             return result;
@@ -56,17 +56,17 @@ namespace WhiteBit.Net.Clients.V4Api
         #region Get Convert History
 
         /// <inheritdoc />
-        public async Task<WebCallResult<WhiteBitConvertHistory>> GetConvertHistoryAsync(string? fromAsset = null, string? toAsset = null, string? quoteId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default)
+        public async Task<HttpResult<WhiteBitConvertHistory>> GetConvertHistoryAsync(string? fromAsset = null, string? toAsset = null, string? quoteId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? offset = null, CancellationToken ct = default)
         {
-            var parameters = new ParameterCollection();
-            parameters.AddOptional("fromTicker", fromAsset);
-            parameters.AddOptional("toTicker", toAsset);
-            parameters.AddOptional("quoteId", quoteId);
-            parameters.AddOptionalSecondsString("from", startTime);
-            parameters.AddOptionalSecondsString("to", endTime);
-            parameters.AddOptional("limit", limit);
-            parameters.AddOptional("offset", offset);
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "/api/v4/convert/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("fromTicker", fromAsset);
+            parameters.Add("toTicker", toAsset);
+            parameters.Add("quoteId", quoteId);
+            parameters.Add("from", startTime);
+            parameters.Add("to", endTime);
+            parameters.Add("limit", limit);
+            parameters.Add("offset", offset);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/convert/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
                 limitGuard: new SingleLimitGuard(10000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
             var result = await _baseClient.SendAsync<WhiteBitConvertHistory>(request, parameters, ct).ConfigureAwait(false);
             return result;

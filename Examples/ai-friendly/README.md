@@ -15,7 +15,7 @@ These examples are optimized for AI coding assistants and quick onboarding. Each
 | `02-collateral-futures.cs` | Collateral/futures leverage, market order, open position retrieval, reduce-only close |
 | `03-websocket.cs` | Ticker updates, kline updates, private order and balance streams, proper teardown |
 | `04-multi-exchange.cs` | `CryptoExchange.Net.SharedApis` pattern for exchange-agnostic code |
-| `05-error-handling.cs` | `WebCallResult` patterns, retry, common validation and routing mistakes |
+| `05-error-handling.cs` | `HttpResult` patterns, retry, common validation and routing mistakes |
 
 ## Running
 

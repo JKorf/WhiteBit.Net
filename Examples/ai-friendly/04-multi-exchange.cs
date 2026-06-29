@@ -15,6 +15,7 @@ using WhiteBit.Net.Clients;
 // WhiteBit exposes a `.SharedClient` property on V4Api.
 // SharedClient implements interfaces like ISpotTickerRestClient, ISpotOrderRestClient,
 // IBalanceRestClient, and more: a common abstraction across exchange libraries.
+// Use SharedClient.Discover() when you need runtime capability metadata.
 
 ISpotTickerRestClient whiteBitShared = new WhiteBitRestClient().V4Api.SharedClient;
 
@@ -58,6 +59,7 @@ async Task PrintTicker(ISpotTickerRestClient client, SharedSymbol symbol)
 //   IPositionSocketClient
 
 // ---- WEBSOCKET EXAMPLE: SHARED SUBSCRIPTION ----
+// Shared socket subscriptions return WebSocketResult<UpdateSubscription>.
 var whiteBitSocket = new WhiteBitSocketClient();
 ITickerSocketClient whiteBitTickerSocket = whiteBitSocket.V4Api.SharedClient;
 

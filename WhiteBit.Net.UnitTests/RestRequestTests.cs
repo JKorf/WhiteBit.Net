@@ -101,7 +101,7 @@ namespace WhiteBit.Net.UnitTests
             await tester.ValidateAsync(client => client.V4Api.CollateralTrading.CancelOcoOrderAsync("123", 123), "CancelOcoOrder");
         }
 
-        private bool IsAuthenticated(WebCallResult result)
+        private bool IsAuthenticated(IHttpResult result)
         {
             return result.RequestHeaders?.Any(x => x.Key == "X-TXC-SIGNATURE") == true;
         }

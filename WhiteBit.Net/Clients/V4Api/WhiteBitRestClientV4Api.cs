@@ -53,16 +53,16 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region constructor/destructor
-        internal WhiteBitRestClientV4Api(ILogger logger, HttpClient? httpClient, WhiteBitRestOptions options)
-            : base(logger, httpClient, options.Environment.RestClientAddress, options, options.V4Options)
+        internal WhiteBitRestClientV4Api(ILoggerFactory? loggerFactory, HttpClient? httpClient, WhiteBitRestOptions options)
+            : base(loggerFactory, WhiteBitExchange.ExchangeName, httpClient, options.Environment.RestClientAddress, options, options.V4Options)
         {
             Account = new WhiteBitRestClientV4ApiAccount(this);
             Convert = new WhiteBitRestClientV4ApiConvert(this);
             Codes = new WhiteBitRestClientV4ApiCodes(this);
             SubAccount = new WhiteBitRestClientV4ApiSubAccount(this);
-            ExchangeData = new WhiteBitRestClientV4ApiExchangeData(logger, this);
-            Trading = new WhiteBitRestClientV4ApiTrading(logger, this);
-            CollateralTrading = new WhiteBitRestClientV4ApiCollateralTrading(logger, this);
+            ExchangeData = new WhiteBitRestClientV4ApiExchangeData(_logger, this);
+            Trading = new WhiteBitRestClientV4ApiTrading(_logger, this);
+            CollateralTrading = new WhiteBitRestClientV4ApiCollateralTrading(_logger, this);
         }
         #endregion
 
@@ -73,26 +73,23 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override WhiteBitAuthenticationProvider CreateAuthenticationProvider(WhiteBitCredentials credentials)
             => new WhiteBitAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new WhiteBitNonceProvider());
 
-        internal Task<WebCallResult> SendAsync(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)
-            => SendToAddressAsync(BaseAddress, definition, parameters, cancellationToken, weight);
-
-        internal async Task<WebCallResult> SendToAddressAsync(string baseAddress, RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)
+        internal async Task<HttpResult> SendAsync(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null)
         {
-            var result = await base.SendAsync(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            var result = await base.SendAsync<Unit>(definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            if (!result.Success && result.Error is DeserializeError)
+                return HttpResult.Ok(result); // Deserialize error without data expected is not an issue
+
             return result;
         }
 
-        internal Task<WebCallResult<T>> SendAsync<T>(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
-            => SendToAddressAsync<T>(BaseAddress, definition, parameters, cancellationToken, weight);
-
-        internal async Task<WebCallResult<T>> SendToAddressAsync<T>(string baseAddress, RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
+        internal async Task<HttpResult<T>> SendAsync<T>(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
         {
-            var result = await base.SendAsync<T>(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            var result = await base.SendAsync<T>(definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
             return result;
         }
 
         /// <inheritdoc />
-        protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
+        protected override Task<HttpResult<DateTime>> GetServerTimestampAsync()
             => ExchangeData.GetServerTimeAsync();
 
         /// <inheritdoc />

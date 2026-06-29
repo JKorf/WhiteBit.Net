@@ -24,12 +24,12 @@ namespace WhiteBit.Net
 
         public override void ProcessRequest(RestApiClient apiClient, RestRequestConfiguration request)
         {
-            if (!request.Authenticated)
+            if (!request.RequestDefinition.Authenticated)
                 return;
 
             var nonce = _nonceProvider.GetNonce().ToString();
-            request.BodyParameters ??= new Dictionary<string, object>();
-            request.BodyParameters.Add("request", request.Path);
+            request.BodyParameters ??= new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            request.BodyParameters.Add("request", request.RequestDefinition.Path);
             request.BodyParameters.Add("nonce", nonce);
             request.BodyParameters.Add("nonceWindow", ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow);
             request.Headers ??= new Dictionary<string, string>();

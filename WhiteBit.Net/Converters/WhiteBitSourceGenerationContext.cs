@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using CryptoExchange.Net.Objects;
 using WhiteBit.Net.Enums;
 using WhiteBit.Net.Objects.Internal;
 using WhiteBit.Net.Objects.Models;
@@ -17,6 +18,8 @@ namespace WhiteBit.Net.Converters
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitOrderBook>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<Dictionary<string, WhiteBitTradeBalance>>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<Dictionary<string, WhiteBitMarginBalance>>))]
+    [JsonSerializable(typeof(Parameters))]
+    [JsonSerializable(typeof(Parameters[]))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitOrders>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitClosedOrders>))]
     [JsonSerializable(typeof(WhiteBitSocketResponse<WhiteBitUserTrades>))]

@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             _orderFilter = orderFilter;
-            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>("depth_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>("depth_update", DoHandleMessage);
             Topic = "ClosedOrder";
         }
 
@@ -68,7 +68,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
                     .WithUpdateType(SocketUpdateType.Update)
                 );
 
-            return CallResult.SuccessResult;
+            return CallResult.Ok();
         }
     }
 }

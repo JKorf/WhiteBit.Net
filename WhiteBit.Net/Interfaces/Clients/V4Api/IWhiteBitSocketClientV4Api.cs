@@ -24,7 +24,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results</param>
         /// <param name="fromId">Filter by returning results later than the trade with this id</param>
         /// <param name="ct">Cancellation token</param>
-        Task<CallResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitSocketTrade[]>> GetTradeHistoryAsync(string symbol, int limit, long? fromId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to public trade updates
@@ -34,7 +34,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default);
         
         /// <summary>
         /// Subscribe to public trade updates
@@ -44,7 +44,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTradeUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to public book ticker updates
@@ -54,7 +54,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to public book ticker updates for all symbols
@@ -63,7 +63,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(Action<DataEvent<WhiteBitBookTickerUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get the last price for a symbol
@@ -71,7 +71,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="ct">Cancellation token</param>
-        Task<CallResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default);
+        Task<QueryResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
         /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-1" /></para>
@@ -80,7 +80,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(string symbol, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(string symbol, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
         /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-1" /></para>
@@ -89,7 +89,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get the ticker for a symbol
@@ -97,7 +97,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="ct">Cancellation token</param>
-        Task<CallResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
         /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-2" /></para>
@@ -106,7 +106,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
         /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-2" /></para>
@@ -115,7 +115,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get klines for a symbol
@@ -126,7 +126,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="ct">Cancellation token</param>
-        Task<CallResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitKlineUpdate[]>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime startTime, DateTime endTime, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to order book updates
@@ -137,7 +137,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<WhiteBitKlineUpdate[]>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get the ticker for a symbol
@@ -147,7 +147,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="depth">Order book depth, max 100</param>
         /// <param name="priceInterval">0 - no interval default. Available values: "0.00000001", "0.0000001", "0.000001", "0.00001", "0.0001", "0.001", "0.01", "0.1"</param>
         /// <param name="ct">Cancellation token</param>
-        Task<CallResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitOrderBook>> GetOrderBookAsync(string symbol, int depth, string? priceInterval = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to order book updates
@@ -158,7 +158,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth, Action<DataEvent<WhiteBitBookUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth, Action<DataEvent<WhiteBitBookUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get spot balances
@@ -166,7 +166,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        Task<CallResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default);
+        Task<QueryResult<WhiteBitTradeBalance[]>> GetSpotBalancesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to spot balance updates
@@ -176,7 +176,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSpotBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToSpotBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<Dictionary<string, WhiteBitTradeBalance>>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get margin balances
@@ -184,7 +184,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        Task<CallResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default);
+        Task<QueryResult<WhiteBitMarginBalance[]>> GetMarginBalancesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to margin balance updates
@@ -194,7 +194,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<WhiteBitMarginBalance[]>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToMarginBalanceUpdatesAsync(IEnumerable<string> assets, Action<DataEvent<WhiteBitMarginBalance[]>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get open orders
@@ -204,7 +204,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results, max 100</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
-        Task<CallResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitOrders>> GetOpenOrdersAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to open order updates
@@ -215,7 +215,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onOtoOrdersMessage">The event handler for handling an OTO order update</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onOrderMessage, Action<DataEvent<WhiteBitOtoOrderUpdate>>? onOtoOrdersMessage = null, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToOpenOrderUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitOrderUpdate>> onOrderMessage, Action<DataEvent<WhiteBitOtoOrderUpdate>>? onOtoOrdersMessage = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get closed orders
@@ -226,7 +226,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results, max 100</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
-        Task<CallResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes = null, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitClosedOrders>> GetClosedOrdersAsync(string symbol, IEnumerable<OrderType>? orderTypes = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to closed order updates
@@ -237,7 +237,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<WhiteBitClosedOrder[]>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToClosedOrderUpdatesAsync(IEnumerable<string> symbols, ClosedOrderFilter filter, Action<DataEvent<WhiteBitClosedOrder[]>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get user trades
@@ -247,7 +247,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="limit">Max number of results, max 100</param>
         /// <param name="offset">Result offset</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
-        Task<CallResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
+        Task<QueryResult<WhiteBitUserTrades>> GetUserTradesAsync(string symbol, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to user trade updates
@@ -257,7 +257,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<WhiteBitUserTradeUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to position updates
@@ -266,7 +266,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to borrow updates
@@ -275,7 +275,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToBorrowUpdatesAsync(Action<DataEvent<WhiteBitBorrow>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to user margin call and liquidation events
@@ -284,7 +284,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAccountBorrowEventUpdatesAsync(Action<DataEvent<WhiteBitAccountBorrowUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAccountBorrowEventUpdatesAsync(Action<DataEvent<WhiteBitAccountBorrowUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to position margin call and liquidation events
@@ -293,7 +293,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Get the shared socket requests client. This interface is shared with other exchanges to allow for a common implementation for different exchanges.

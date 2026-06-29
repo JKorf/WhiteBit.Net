@@ -43,7 +43,7 @@ namespace WhiteBit.Net.Clients
         {
             Initialize(options.Value);
 
-            V4Api = AddApiClient(new WhiteBitSocketClientV4Api(_logger, options.Value));
+            V4Api = AddApiClient(new WhiteBitSocketClientV4Api(loggerFactory, options.Value));
         }
         #endregion
 

@@ -16,15 +16,15 @@ namespace WhiteBit.Net.Objects.Sockets
         {
             _client = client;
 
-            MessageRouter = MessageRouter.CreateWithoutTopicFilter<WhiteBitSocketResponse<T>>(request.Id.ToString(), HandleMessage);
+            MessageRouter = MessageRouter.CreateForQuery<WhiteBitSocketResponse<T>>(request.Id.ToString(), HandleMessage);
         }
 
         public CallResult<WhiteBitSocketResponse<T>> HandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, WhiteBitSocketResponse<T> message)
         {
             if (message.Error != null)
-                return new CallResult<WhiteBitSocketResponse<T>>(new ServerError(message.Error.Code, _client.GetErrorInfo(message.Error.Code, message.Error.Message)));
+                return CallResult.Fail<WhiteBitSocketResponse<T>>(new ServerError(message.Error.Code, _client.GetErrorInfo(message.Error.Code, message.Error.Message)));
 
-            return new CallResult<WhiteBitSocketResponse<T>>(message, originalData, null);
+            return CallResult<WhiteBitSocketResponse<T>>.Ok(message, originalData);
         }
     }
 }

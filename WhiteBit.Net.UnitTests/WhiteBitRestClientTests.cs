@@ -34,13 +34,12 @@ namespace WhiteBit.Net.UnitTests
                     return headers["X-TXC-SIGNATURE"].ToString();
                 },
                 "e164832d38f40692420d44786f8dbc98a46af816ed6c30dbc5d6178e71e63f491a4b6dbfea93c887f50c570d4b403dd61fe2432908754f49f904d06c51c84680",
-                new Dictionary<string, object>
+                new Parameters(WhiteBitExchange._parameterSerializationSettings)
                 {
                     { "market", "ETH_USDT" },
                 },
                 DateTimeConverter.ParseFromDouble(1499827320559),
-                true,
-                false);
+                true);
         }
 
         [Test]
