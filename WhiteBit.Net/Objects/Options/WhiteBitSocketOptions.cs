@@ -15,7 +15,10 @@ namespace WhiteBit.Net.Objects.Options
         internal static WhiteBitSocketOptions Default { get; set; } = new WhiteBitSocketOptions()
         {
             Environment = WhiteBitEnvironment.Live,
-            SocketSubscriptionsCombineTarget = 10
+            // Pool up to 150 subscriptions per connection. WhiteBit rate-limits depth_subscribe to
+            // ~200 requests per connection per burst (a reconnect re-subscribes the whole set at once),
+            // so 150 stays safely under that ceiling while keeping the connection count low.
+            SocketSubscriptionsCombineTarget = 150
         };
 
         /// <summary>
