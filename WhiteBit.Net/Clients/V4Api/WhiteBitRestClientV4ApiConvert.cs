@@ -62,8 +62,8 @@ namespace WhiteBit.Net.Clients.V4Api
             parameters.Add("fromTicker", fromAsset);
             parameters.Add("toTicker", toAsset);
             parameters.Add("quoteId", quoteId);
-            parameters.Add("from", startTime);
-            parameters.Add("to", endTime);
+            parameters.Add("from", startTime, DateTimeSerialization.SecondsString);
+            parameters.Add("to", endTime, DateTimeSerialization.SecondsString);
             parameters.Add("limit", limit);
             parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/convert/history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
