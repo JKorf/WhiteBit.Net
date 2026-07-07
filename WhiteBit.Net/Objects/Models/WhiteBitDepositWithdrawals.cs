@@ -90,6 +90,11 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("fee")]
         public decimal Fee { get; set; }
         /// <summary>
+        /// ["<c>centralized</c>"] Centralized
+        /// </summary>
+        [JsonPropertyName("centralized")]
+        public bool Centralized { get; set; }
+        /// <summary>
         /// ["<c>status</c>"] Status
         /// </summary>
         [JsonPropertyName("status")]
