@@ -1,4 +1,5 @@
 using CryptoExchange.Net.Converters.SystemTextJson;
+using System;
 using System.Text.Json.Serialization;
 using WhiteBit.Net.Enums;
 
@@ -80,6 +81,16 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("type")]
         public SymbolType SymbolType { get; set; }
+        /// <summary>
+        /// ["<c>isTradFiFutures</c>"] Is TradFi futures symbol
+        /// </summary>
+        [JsonPropertyName("isTradFiFutures")]
+        public bool IsTradFiFutures { get; set; }
+        /// <summary>
+        /// ["<c>delistedAt</c>"] Delist time
+        /// </summary>
+        [JsonPropertyName("delistedAt")]
+        public DateTime? DelistTime { get; set; }
     }
 
 
