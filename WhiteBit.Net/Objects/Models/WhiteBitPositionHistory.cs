@@ -90,10 +90,10 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("tradeAmount")]
         public decimal TradeQuantity { get; set; }
         /// <summary>
-        /// ["<c>basePrice</c>"] Base price
+        /// ["<c>price</c>"] Price
         /// </summary>
-        [JsonPropertyName("basePrice")]
-        public decimal BasePrice { get; set; }
+        [JsonPropertyName("price")]
+        public decimal Price { get; set; }
         /// <summary>
         /// ["<c>tradeFee</c>"] Trade fee
         /// </summary>
