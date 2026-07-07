@@ -16,7 +16,7 @@ true
       "orderDetail": {                 
         "id": 97067934,            
         "tradeAmount": "0.1",         
-        "basePrice": "41507.59",     
+        "price": "41507.59",     
         "tradeFee": "415.07",          
         "fundingFee": null,            
         "realizedPnl": null            
