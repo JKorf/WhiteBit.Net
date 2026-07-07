@@ -17,7 +17,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get main account balances
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#main-balance" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/main-balance" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/balance
         /// </para>
@@ -29,7 +29,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get deposit address
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-cryptocurrency-deposit-address" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/get-cryptocurrency-deposit-address" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/address
         /// </para>
@@ -43,7 +43,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get spot trading balances
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#trading-balance" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/trading-balance" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/trade-account/balance
         /// </para>
@@ -56,7 +56,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get fiat deposit url, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-fiat-deposit-address" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/get-fiat-deposit-address" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/fiat-deposit-url
         /// </para>
@@ -83,8 +83,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Withdraw fiat or crypto
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-withdraw-request-with-the-specific-withdraw-amount-fee-is-not-included" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/create-withdraw-request" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/create-withdraw-request-with-specific-amount" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/withdraw<br />
         /// POST /api/v4/main-account/withdraw-pay
@@ -111,7 +111,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Transfer between accounts
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#transfer-between-balances" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/transfer-between-balances" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/transfer
         /// </para>
@@ -127,7 +127,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get deposit/withdrawal history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-depositwithdraw-history" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/get-deposit-withdraw-history" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/history
         /// </para>
@@ -147,7 +147,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Create a new deposit address, note that his endpoint is not available by default and has to be activated for you by WhiteBit support
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-new-address-for-deposit" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/create-new-address-for-deposit" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/create-new-address
         /// </para>
@@ -162,7 +162,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get deposit/withdrawal settings
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#fees" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/get-fees" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/fee
         /// </para>
@@ -174,7 +174,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get mining rewards history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-rewards" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/mining-pool/get-rewards" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/mining/rewards
         /// </para>
@@ -191,7 +191,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get collateral balances
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-account-balance" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/balance
         /// </para>
@@ -204,7 +204,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get collateral balance summary
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-balance-summary" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-account-balance-summary" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/balance-summary
         /// </para>
@@ -216,7 +216,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get collateral account summary
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-summary" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-account-summary" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/summary
         /// </para>
@@ -228,13 +228,12 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Asynchronously retrieves the account funding history for the specified trading pair.
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#funding-history" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/funding-history" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/funding-history
         /// </para>
         /// </summary>
-        /// <param name="symbol">["<c>market</c>"] The trading pair symbol for which to retrieve the funding history, such as "BTC_PERP". This value cannot be
-        /// null or empty.</param>
+        /// <param name="symbol">["<c>market</c>"] The trading pair symbol for which to retrieve the funding history, such as "BTC_PERP"</param>
         /// <param name="startTime">["<c>startDate</c>"] The optional UTC start time for the funding history retrieval. If specified, only records after this time
         /// are returned.</param>
         /// <param name="endTime">["<c>endDate</c>"] The optional UTC end time for the funding history retrieval. If specified, only records before this time are
@@ -245,7 +244,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <returns>A task that represents the asynchronous operation. The task result contains a HttpResult with the funding
         /// history records for the specified account and symbol.</returns>
         Task<HttpResult<WhiteBitAccountFundingHistories>> GetAccountFundingHistoryAsync(
-            string symbol,
+            string? symbol = null,
             DateTime? startTime = null,
             DateTime? endTime = null,
             int? limit = null,
@@ -256,7 +255,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Set leverage for the entire account, both spot margin and futures. Spot margin leverage is capped at x20.
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#change-collateral-account-leverage" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/change-collateral-account-leverage" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/leverage
         /// </para>
@@ -269,7 +268,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get the users trading fees
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-all-market-fees" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/query-all-market-fees" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/market/fee
         /// </para>
@@ -281,7 +280,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get current hedge mode status
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-account-hedge-mode" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/hedge-mode
         /// </para>
@@ -293,7 +292,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Set hedge mode
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-account-hedge-mode" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/update-collateral-account-hedge-mode" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/hedge-mode/update
         /// </para>

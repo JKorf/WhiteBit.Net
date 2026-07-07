@@ -287,18 +287,15 @@ namespace WhiteBit.Net.Clients.V4Api
 
         /// <inheritdoc />
         public async Task<HttpResult<WhiteBitAccountFundingHistories>> GetAccountFundingHistoryAsync(
-            string symbol,
+            string? symbol = null,
             DateTime? startTime = null,
             DateTime? endTime = null,
             int? limit = null,
             int? offset = null,
             CancellationToken ct = default)
         {
-            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings)
-            {
-                { "market", symbol }
-            };
-
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
             parameters.Add("startDate", startTime);
             parameters.Add("endDate", endTime);
             parameters.Add("limit", limit);
