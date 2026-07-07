@@ -49,6 +49,16 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("maintenanceMarginFraction")]
         public decimal MaintenanceMarginFraction { get; set; }
+        /// <summary>
+        /// ["<c>futuresEquity</c>"] Futures equity
+        /// </summary>
+        [JsonPropertyName("futuresEquity")]
+        public decimal FuturesEquity { get; set; }
+        /// <summary>
+        /// ["<c>futuresFreeMargin</c>"] Futures free margin
+        /// </summary>
+        [JsonPropertyName("futuresFreeMargin")]
+        public decimal FuturesFreeMargin { get; set; }
     }
 
 
