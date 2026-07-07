@@ -98,6 +98,11 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("next_funding_rate_timestamp")]
         public DateTime NextFundingRateTime { get; set; }
         /// <summary>
+        /// ["<c>funding_interval_minutes</c>"] Funding interval in minutes
+        /// </summary>
+        [JsonPropertyName("funding_interval_minutes")]
+        public int? FundingInterval { get; set; }
+        /// <summary>
         /// ["<c>brackets</c>"] Brackets
         /// </summary>
         [JsonPropertyName("brackets")]
