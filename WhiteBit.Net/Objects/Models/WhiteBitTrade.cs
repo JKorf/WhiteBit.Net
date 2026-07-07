@@ -44,6 +44,11 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("type")]
         public OrderSide Side { get; set; }
+        /// <summary>
+        /// ["<c>rpi</c>"] Is RPI trade
+        /// </summary>
+        [JsonPropertyName("rpi")]
+        public bool Rpi { get; set; }
     }
 
 
