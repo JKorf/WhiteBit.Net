@@ -18,7 +18,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     {
         /// <summary>
         /// Get trades for a symbol
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-16" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/trades" /></para>
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="limit">Max number of results</param>
@@ -28,7 +28,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to public trade updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#-update-events-5" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/trades" /></para>
         /// </summary>
         /// <param name="symbol">Symbol to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -38,7 +38,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         
         /// <summary>
         /// Subscribe to public trade updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#-update-events-5" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/trades" /></para>
         /// </summary>
         /// <param name="symbols">Symbols to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -48,7 +48,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to public book ticker updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#book-ticker" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/book-ticker" /></para>
         /// </summary>
         /// <param name="symbol">Symbol to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -58,7 +58,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to public book ticker updates for all symbols
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#book-ticker" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/book-ticker" /></para>
         /// </summary>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -67,14 +67,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get the last price for a symbol
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-7" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/lastprice" /></para>
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="ct">Cancellation token</param>
         Task<QueryResult<decimal>> GetLastPriceAsync(string symbol, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-1" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/lastprice" /></para>
         /// </summary>
         /// <param name="symbol">Symbol to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -83,7 +83,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebSocketResult<UpdateSubscription>> SubscribeToLastPriceUpdatesAsync(string symbol, Action<DataEvent<WhiteBitLastPriceUpdate>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-1" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/lastprice" /></para>
         /// </summary>
         /// <param name="symbols">Symbols to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -93,14 +93,14 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get the ticker for a symbol
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-10" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/market" /></para>
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="ct">Cancellation token</param>
         Task<QueryResult<WhiteBitSocketTicker>> GetTickerAsync(string symbol, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-2" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/market" /></para>
         /// </summary>
         /// <param name="symbol">Symbol to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -109,7 +109,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<WhiteBitTickerUpdate>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribe to order book updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe-2" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/market" /></para>
         /// </summary>
         /// <param name="symbols">Symbols to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -119,7 +119,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get klines for a symbol
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-4" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/kline" /></para>
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="interval">Interval</param>
@@ -130,7 +130,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to order book updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#subscribe" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/kline" /></para>
         /// </summary>
         /// <param name="symbol">Symbol to subscribe</param>
         /// <param name="interval">The interval</param>
@@ -141,7 +141,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get the ticker for a symbol
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#%EF%B8%8F-request-19" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/depth" /></para>
         /// </summary>
         /// <param name="symbol">Symbol name</param>
         /// <param name="depth">Order book depth, max 100</param>
@@ -151,7 +151,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to order book updates
-        /// <para><a href="https://docs.whitebit.com/public/websocket/#-update-events-6" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/depth" /></para>
         /// </summary>
         /// <param name="symbol">Symbol to subscribe</param>
         /// <param name="depth">The depth of the order book, 1, 5, 10, 20, 30, 50 or 100</param>
@@ -162,7 +162,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get spot balances
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#balance-spot" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/balance-spot" /></para>
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
@@ -170,7 +170,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to spot balance updates
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#balance-spot" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/balance-spot" /></para>
         /// </summary>
         /// <param name="assets">Assets to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -180,7 +180,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get margin balances
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#balance-margin" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/balance-margin" /></para>
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
@@ -188,7 +188,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to margin balance updates
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#balance-margin" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/balance-margin" /></para>
         /// </summary>
         /// <param name="assets">Assets to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -198,7 +198,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get open orders
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#orders-pending" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/orders-pending" /></para>
         /// </summary>
         /// <param name="symbol">Symbol</param>
         /// <param name="limit">Max number of results, max 100</param>
@@ -208,7 +208,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to open order updates
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#orders-pending" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/orders-pending" /></para>
         /// </summary>
         /// <param name="symbols"></param>
         /// <param name="onOrderMessage">The event handler for handling an order update</param>
@@ -219,7 +219,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get closed orders
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#orders-executed" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/orders-executed" /></para>
         /// </summary>
         /// <param name="symbol">Symbol</param>
         /// <param name="orderTypes">Order types filter</param>
@@ -230,7 +230,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to closed order updates
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#orders-executed" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/orders-executed" /></para>
         /// </summary>
         /// <param name="symbols">Symbols to subscribe</param>
         /// <param name="filter">Order type filter</param>
@@ -241,7 +241,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Get user trades
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#deals" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/deals" /></para>
         /// </summary>
         /// <param name="symbol">Symbol</param>
         /// <param name="limit">Max number of results, max 100</param>
@@ -251,7 +251,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to user trade updates
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#deals" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/deals" /></para>
         /// </summary>
         /// <param name="symbols">Symbols to subscribe</param>
         /// <param name="onMessage">The event handler for the received data</param>
@@ -261,7 +261,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to position updates
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#positions" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/positions" /></para>
         /// </summary>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -270,7 +270,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to borrow updates
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#borrows" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/borrows" /></para>
         /// </summary>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -279,7 +279,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to user margin call and liquidation events
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#account-borrows-events" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/borrows-events" /></para>
         /// </summary>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -288,7 +288,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
 
         /// <summary>
         /// Subscribe to position margin call and liquidation events
-        /// <para><a href="https://docs.whitebit.com/private/websocket/#account-borrows-events" /></para>
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/margin-positions-events" /></para>
         /// </summary>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>

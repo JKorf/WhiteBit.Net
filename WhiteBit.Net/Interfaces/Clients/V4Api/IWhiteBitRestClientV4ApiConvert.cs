@@ -15,7 +15,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get convert estimate
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#convert-estimate" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/convert/convert-estimate" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/convert/estimate
         /// </para>
@@ -31,7 +31,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Accept/confirm a convert estimate
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#convert-confirm" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/convert/convert-confirm" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/convert/confirm
         /// </para>
@@ -44,7 +44,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get convert history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#convert-history" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/convert/convert-history" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/convert/history
         /// </para>

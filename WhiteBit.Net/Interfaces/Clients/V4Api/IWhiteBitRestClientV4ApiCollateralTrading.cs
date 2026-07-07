@@ -16,10 +16,10 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Place a new order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-limit-order" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-market-order" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-stop-limit-order" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#collateral-trigger-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-stop-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/collateral-trigger-market-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/collateral/limit<br />
         /// POST /api/v4/order/collateral/market<br />
@@ -65,7 +65,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get open positions
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#open-positions" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/open-positions" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/positions/open
         /// </para>
@@ -78,7 +78,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get position history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#positions-history" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/positions-history" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/collateral-account/positions/history
         /// </para>
@@ -96,7 +96,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get open conditional orders
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-conditional-orders" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/query-unexecuted-conditional-orders" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/conditional-orders
         /// </para>
@@ -111,7 +111,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Place a new OCO order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-collateral-oco-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/create-collateral-oco-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/collateral/oco
         /// </para>
@@ -142,7 +142,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Cancel an OCO order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-oco-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/overview" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/oco-cancel
         /// </para>
@@ -156,7 +156,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Cancel a conditional order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/cancel-conditional-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/conditional-cancel
         /// </para>
@@ -170,7 +170,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Cancel an OTO order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-conditional-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/collateral-trading/cancel-conditional-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/oto-cancel
         /// </para>

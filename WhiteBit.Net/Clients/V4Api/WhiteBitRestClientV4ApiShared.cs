@@ -475,7 +475,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 || x.TransactionStatus == TransactionStatus.Frozen
                 || x.TransactionStatus == TransactionStatus.Pending
                 || x.TransactionStatus == TransactionStatus.Uncredited)
+            {
                 return SharedTransferStatus.InProgress;
+            }
 
             return SharedTransferStatus.Unknown;
         }
@@ -1071,7 +1073,7 @@ namespace WhiteBit.Net.Clients.V4Api
                                 x.Symbol,
                                 x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
                                 x.BasePrice,
-                                x.OrderDetail.BasePrice,
+                                x.OrderDetail.Price,
                                 x.OrderDetail.TradeQuantity,
                                 x.OrderDetail.RealizedPnl ?? 0,
                                 x.OpenTime)

@@ -17,11 +17,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Place a new order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-limit-order" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-market-order" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-buy-stock-market-order" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-limit-order" /><br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#create-stop-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/create-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/create-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/create-buy-stock-market-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/create-stop-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/create-stop-market-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/new<br />
         /// POST /api/v4/order/market<br />
@@ -63,7 +63,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Place multiple order in a single call. Only supports limit orders. Check the response data for individual order placement results
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#bulk-limit-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/bulk-limit-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/bulk
         /// </para>
@@ -78,7 +78,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Cancel an order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/cancel-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/cancel
         /// </para>
@@ -106,7 +106,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Cancel all orders
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#cancel-all-orders" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/cancel-all-orders" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/cancel/all
         /// </para>
@@ -120,7 +120,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get list of currently open orders
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-unexecutedactive-orders" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/query-unexecuted-orders" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/orders
         /// </para>
@@ -137,7 +137,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get list of closed orders per symbol
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-orders" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/query-executed-orders" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/trade-account/order/history
         /// </para>
@@ -166,7 +166,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get user trade history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-history" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/query-executed-order-history" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/trade-account/executed-history
         /// </para>
@@ -184,7 +184,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get trades for a specific order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#query-executed-order-deals" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/query-executed-order-deals" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/trade-account/order
         /// </para>
@@ -199,7 +199,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Edit an order
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#modify-order" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/modify-order" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/modify
         /// </para>
@@ -218,7 +218,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Set a kill switch. After the specified timeout all order fitting the parameters will be canceled unless the kill switch endpoint is called again to extend or cancel the timeout
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#sync-kill-switch-timer" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/sync-kill-switch-timer" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/kill-switch
         /// </para>
@@ -233,7 +233,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get the status of enabled kill switches
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-trade-v4/#status-kill-switch-timer" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/spot-trading/status-kill-switch-timer" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/order/kill-switch/status
         /// </para>

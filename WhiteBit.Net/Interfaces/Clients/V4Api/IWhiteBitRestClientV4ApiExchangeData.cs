@@ -16,7 +16,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get the current server time
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#server-time" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/server-time" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/time
         /// </para>
@@ -29,7 +29,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get symbols list
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#market-info" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/market-info" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/markets
         /// </para>
@@ -41,7 +41,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get system/platform status
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#maintenance-status" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/maintenance-status" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/platform/status
         /// </para>
@@ -53,7 +53,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get tickers
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#market-activity" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/market-activity" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/ticker
         /// </para>
@@ -65,7 +65,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get asset information
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#asset-status-list" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/asset-status-list" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/assets
         /// </para>
@@ -77,7 +77,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get the order book for a symbol
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#orderbook" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/orderbook" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/orderbook/{symbol}
         /// </para>
@@ -92,7 +92,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get the most recent 100 trades
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#recent-trades" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/recent-trades" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/trades/{symbol}
         /// </para>
@@ -106,7 +106,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get withdrawal/deposit limits and fees
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#fee" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/fee" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/fee
         /// </para>
@@ -118,7 +118,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get collateral symbols
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#collateral-markets-list" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/collateral-markets-list" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/collateral/markets
         /// </para>
@@ -130,7 +130,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get futures symbols
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/public/http-v4/#available-futures-markets-list" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/market-data/available-futures-markets-list" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/public/futures
         /// </para>

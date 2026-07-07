@@ -15,7 +15,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Create a new sub account
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-sub-account" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/create-sub-account" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/create
         /// </para>
@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Delete a sub account
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#delete-sub-account" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/delete-sub-account" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/delete
         /// </para>
@@ -45,7 +45,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Edit a sub account
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/edit-sub-account" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/edit
         /// </para>
@@ -61,7 +61,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get sub account list
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#edit-sub-account" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/edit-sub-account" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/list
         /// </para>
@@ -76,7 +76,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Transfer to or from sub account
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-transfer" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/sub-account-transfer" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/transfer
         /// </para>
@@ -92,7 +92,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Block a sub account
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#block-sub-account" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/block-sub-account" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/block
         /// </para>
@@ -105,7 +105,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Unblock a sub account
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#unblock-sub-account" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/unblock-sub-account" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/unblock
         /// </para>
@@ -118,7 +118,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get sub account balances
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#sub-account-balances" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/sub-account-balances" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/balances
         /// </para>
@@ -132,7 +132,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get sub account transfer history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-sub-account-transfer-history" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/sub-accounts/get-sub-account-transfer-history" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/sub-account/transfer/history
         /// </para>

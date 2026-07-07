@@ -14,7 +14,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Create a new WhiteBit Code for funds transfer
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#create-code" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/create-code" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/codes
         /// </para>
@@ -30,7 +30,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Apply a WhiteBit code
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#apply-code" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/apply-code" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/codes/apply
         /// </para>
@@ -44,7 +44,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get generated code history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-my-codes" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/get-my-codes" /><br />
         /// Endpoint:<br />
         /// GET /api/v4/main-account/codes/my
         /// </para>
@@ -58,7 +58,7 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// Get account code history
         /// <para>
         /// Docs:<br />
-        /// <a href="https://docs.whitebit.com/private/http-main-v4/#get-codes-history" /><br />
+        /// <a href="https://docs.whitebit.com/api-reference/account-wallet/get-codes-history" /><br />
         /// Endpoint:<br />
         /// POST /api/v4/main-account/codes/history
         /// </para>
