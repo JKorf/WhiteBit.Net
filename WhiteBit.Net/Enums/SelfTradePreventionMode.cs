@@ -18,17 +18,17 @@ namespace WhiteBit.Net.Enums
         /// <summary>
         /// ["<c>cancel_both</c>"] Cancel both pre-existing and new order
         /// </summary>
-        [Map("cancel_both")]
+        [Map("cb")]
         CancelBoth,
         /// <summary>
         /// ["<c>cancel_new</c>"] Cancel the new order
         /// </summary>
-        [Map("cancel_new")]
+        [Map("cn")]
         CancelNew,
         /// <summary>
         /// ["<c>cancel_old</c>"] Cancel the pre-exisiting order
         /// </summary>
-        [Map("cancel_old")]
+        [Map("co")]
         CancelOld
     }
 }
