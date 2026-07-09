@@ -188,6 +188,20 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 4.1.0 - 09 Jul 2026
+    * Updated CryptoExchange.Net to v12.1.0
+    * Added Rpi to WhiteBitTrade model
+    * Added FundingInterval to WhiteBitFuturesSymbol model
+    * Added Centralized to WhiteBitDepositWithdrawal model
+    * Added FuturesEquity and FuturesFreeMargin to WhiteBitCollateralAccountSummary model
+    * Added IsTradeFiFutures and DelistTime to WhiteBitSymbol model
+    * Added rpi and retail parameters to PlaceSpotOrderAsync endpoint
+    * Updated SelfTradePreventionMode enum mapping
+    * Updated restClient.V4Api.Account.GetAccountFundingHistoryAsync symbol parameter to optional
+    * Renamed BasePrice to Price, fixed deserialization on WhiteBitPositionHistoryOrder model
+    * Fixed GetConvertHistory startTime, endTime parameter conversion
+    * Fixed documentation links
+
 * Version 4.0.0 - 29 Jun 2026
     * Result types:
       * (Web)CallResult types are replaced by HttpResult, WebSocketResult and QueryResult with the same logic
