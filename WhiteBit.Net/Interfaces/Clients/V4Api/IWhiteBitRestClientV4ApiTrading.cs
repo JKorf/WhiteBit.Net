@@ -42,6 +42,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// <param name="triggerPrice">["<c>activation_price</c>"] Trigger price</param>
         /// <param name="clientOrderId">["<c>clientOrderId</c>"] Client order id</param>
         /// <param name="stpMode">["<c>stp</c>"] Self trade prevention mode</param>
+        /// <param name="rpi">["<c>rpi</c>"] Enables Retail Price Improvement (RPI) mode.</param>
+        /// <param name="retail">["<c>retail</c>"] When true, the order is eligible to match against orders submitted by RPI makers and may receive price improvement at execution</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<HttpResult<WhiteBitOrder>> PlaceSpotOrderAsync(
@@ -57,6 +59,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
             decimal? triggerPrice = null,
             string? clientOrderId = null,
             SelfTradePreventionMode? stpMode = null,
+            bool? rpi = null,
+            bool? retail = null,
             CancellationToken ct = default);
 
         /// <summary>
