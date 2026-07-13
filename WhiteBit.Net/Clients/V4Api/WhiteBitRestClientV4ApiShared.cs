@@ -631,11 +631,24 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedSpotOrder[]>(Exchange, validationError);
 
             var symbol = request.Symbol?.GetSymbol(FormatSymbol);
-            var orders = await Trading.GetOpenOrdersAsync(symbol, ct: ct).ConfigureAwait(false);
-            if (!orders.Success)
-                return HttpResult.Fail<SharedSpotOrder[]>(orders);
 
-            var data = orders.Data.Where(x => !x.Symbol.EndsWith("_PERP"));
+            var allOpenOrders = new List<WhiteBitOrder>();
+            int offset = 0;
+            HttpResult<WhiteBitOrder[]> orders;
+            while (true)
+            {
+                orders = await Trading.GetOpenOrdersAsync(symbol, limit: 100, offset: offset, ct: ct).ConfigureAwait(false);
+                if (!orders.Success)
+                    return HttpResult.Fail<SharedSpotOrder[]>(orders);
+
+                allOpenOrders.AddRange(orders.Data);
+                if (orders.Data.Length == 100)
+                    offset += 100;
+                else
+                    break;
+            }
+
+            var data = allOpenOrders.Where(x => !x.Symbol.EndsWith("_PERP"));
 
             return HttpResult.Ok(orders, data.Select(x => new SharedSpotOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
@@ -1215,11 +1228,23 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedFuturesOrder[]>(Exchange, validationError);
 
             var symbol = request.Symbol?.GetSymbol(FormatSymbol);
-            var orders = await Trading.GetOpenOrdersAsync(symbol, ct: ct).ConfigureAwait(false);
-            if (!orders.Success)
-                return HttpResult.Fail<SharedFuturesOrder[]>(orders);
+            var allOpenOrders = new List<WhiteBitOrder>();
+            int offset = 0;
+            HttpResult<WhiteBitOrder[]> orders;
+            while (true)
+            {
+                orders = await Trading.GetOpenOrdersAsync(symbol, limit: 100, offset: offset, ct: ct).ConfigureAwait(false);
+                if (!orders.Success)
+                    return HttpResult.Fail<SharedFuturesOrder[]>(orders);
 
-            var data = orders.Data.Where(x => x.Symbol.EndsWith("_PERP"));
+                allOpenOrders.AddRange(orders.Data);
+                if (orders.Data.Length == 100)
+                    offset += 100;
+                else
+                    break;
+            }
+
+            var data = allOpenOrders.Where(x => x.Symbol.EndsWith("_PERP"));
 
             return HttpResult.Ok<SharedFuturesOrder[]>(orders, [.. data.Select(x => new SharedFuturesOrder(
                 ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), 
