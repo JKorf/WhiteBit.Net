@@ -32,7 +32,7 @@ namespace WhiteBit.Net.Objects.Sockets.Subscriptions
             _handler = handler;
             _symbols = symbols.ToArray();
             _orderFilter = orderFilter;
-            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>("depth_update", DoHandleMessage);
+            MessageRouter = MessageRouter.CreateForEvent<WhiteBitSocketUpdate<WhiteBitClosedOrder[]>>("ordersExecuted_update", DoHandleMessage);
             Topic = "ClosedOrder";
         }
 
