@@ -29,9 +29,9 @@ namespace WhiteBit.Net
 
             var nonce = _nonceProvider.GetNonce().ToString();
             request.BodyParameters ??= new Parameters(WhiteBitExchange._parameterSerializationSettings);
-            request.BodyParameters.Add("request", request.RequestDefinition.Path);
-            request.BodyParameters.Add("nonce", nonce);
-            request.BodyParameters.Add("nonceWindow", ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow);
+            request.BodyParameters["request"] = request.RequestDefinition.Path;
+            request.BodyParameters["nonce"] = nonce;
+            request.BodyParameters["nonceWindow"] = ((WhiteBitRestOptions)apiClient.ClientOptions).EnableNonceWindow;
             request.Headers ??= new Dictionary<string, string>();
             request.Headers.Add("X-TXC-APIKEY", Credential.Key);
 
