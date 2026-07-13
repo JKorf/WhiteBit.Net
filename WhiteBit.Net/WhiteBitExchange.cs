@@ -67,6 +67,7 @@ namespace WhiteBit.Net
         internal static ParameterSerializationSettings _parameterSerializationSettings = new ParameterSerializationSettings
         {
             Decimal = DecimalSerialization.String,
+            DateTimes = DateTimeSerialization.SecondsNumber,
             Sort = false
         };
 
