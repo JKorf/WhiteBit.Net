@@ -27,7 +27,10 @@ namespace WhiteBit.Net.Clients.V4Api
         public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
         public SharedClientInfo Discover() => SharedUtils.GetClientInfo(WhiteBitExchange.Metadata, this);
 
+        private static readonly HashSet<string> _exchangeFiats = ["UAH", "EUR", "USD", "TRY", "GBP", "PLN", "BGN", "CZK", "KZT"];
+
         #region Spot Symbol client
+        SharedSymbolCatalog? ISpotSymbolRestClient.SpotSymbolCatalog => ExchangeSymbolCache.GetSymbolCatalog(_exchange, _topicSpotId, EnvironmentName, null);
         GetSpotSymbolsOptions ISpotSymbolRestClient.GetSpotSymbolsOptions { get; } = new GetSpotSymbolsOptions(_exchange, false);
 
         async Task<HttpResult<SharedSpotSymbol[]>> ISpotSymbolRestClient.GetSpotSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
@@ -40,18 +43,45 @@ namespace WhiteBit.Net.Clients.V4Api
             if (!result.Success)
                 return HttpResult.Fail<SharedSpotSymbol[]>(result);
 
-            var data = result.Data.Where(x => x.SymbolType == Enums.SymbolType.Spot);
+            var resultData =
+                 result.Data
+                 .Where(x => x.SymbolType == Enums.SymbolType.Spot)
+                 .Select(x => ParseSpotSymbol(x))
+                .ToArray();
 
-            var response = HttpResult.Ok(result, data.Select(s => new SharedSpotSymbol(s.BaseAsset, s.QuoteAsset, s.Name, s.TradingEnabled)
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, EnvironmentName, null, resultData);
+            return HttpResult.Ok(result, SharedUtils.ApplySymbolFilter(resultData, request));
+        }
+
+        private SharedSpotSymbol ParseSpotSymbol(WhiteBitSymbol s)
+        {
+            var result = new SharedSpotSymbol(s.BaseAsset, s.QuoteAsset, s.Name, s.TradingEnabled)
             {
                 MinTradeQuantity = s.MinOrderQuantity,
                 MinNotionalValue = s.MinOrderValue,
                 QuantityDecimals = s.BaseAssetPrecision,
-                PriceDecimals = s.QuoteAssetPrecision
-            }).ToArray());
+                PriceDecimals = s.QuoteAssetPrecision,
+                DisplayName = s.Name,
+                BaseAssetType = SharedAssetType.Crypto
+            };
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, EnvironmentName, null, response.Data!);
-            return response;
+            if (LibraryHelpers.IsStableCoin(result.BaseAsset))
+            {
+                result.BaseAssetSubType = SharedAssetSubType.StableCoin;
+            }
+
+            if (_exchangeFiats.Contains(s.QuoteAsset))
+            {
+                result.QuoteAssetType = SharedAssetType.Fiat;
+            }
+            else
+            {
+                result.QuoteAssetType = SharedAssetType.Crypto;
+                if (LibraryHelpers.IsStableCoin(result.QuoteAsset))
+                    result.QuoteAssetSubType = SharedAssetSubType.StableCoin;
+            }
+
+            return result;
         }
 
         async Task<ExchangeCallResult<SharedSymbol[]>> ISpotSymbolRestClient.GetSpotSymbolsForBaseAssetAsync(string baseAsset)
@@ -853,6 +883,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Futures Symbol client
 
+        SharedSymbolCatalog? IFuturesSymbolRestClient.FuturesSymbolCatalog => ExchangeSymbolCache.GetSymbolCatalog(_exchange, _topicFuturesId, EnvironmentName, null);
         GetFuturesSymbolsOptions IFuturesSymbolRestClient.GetFuturesSymbolsOptions { get; } = new GetFuturesSymbolsOptions(_exchange, false);
         async Task<HttpResult<SharedFuturesSymbol[]>> IFuturesSymbolRestClient.GetFuturesSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
         {
@@ -871,21 +902,44 @@ namespace WhiteBit.Net.Clients.V4Api
             if (!futuresSymbols.Success)
                 return HttpResult.Fail<SharedFuturesSymbol[]>(futuresSymbols);
 
-            var response = HttpResult.Ok(futuresSymbols, futuresSymbols.Data.Select(s =>
-                {
-                    var symbol = symbols.Data.SingleOrDefault(x => x.Name == s.Symbol);
-                    return new SharedFuturesSymbol(s.ProductType == ProductType.Perpetual ? TradingMode.PerpetualLinear : TradingMode.DeliveryLinear, s.BaseAsset, s.QuoteAsset, s.Symbol, true)
-                    {
-                        MinTradeQuantity = symbol?.MinOrderQuantity,
-                        MinNotionalValue = symbol?.MinOrderValue,
-                        QuantityDecimals = symbol?.BaseAssetPrecision,
-                        PriceDecimals = symbol?.QuoteAssetPrecision,
-                        ContractSize = 1,
-                    };
-                }).ToArray());
+            var resultData =
+                 futuresSymbols.Data
+                 .Select(x => ParseFuturesSymbol(x, symbols.Data))
+                .ToArray();
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, EnvironmentName, null, response.Data!);
-            return response;
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, EnvironmentName, null, resultData);
+            return HttpResult.Ok(symbols, SharedUtils.ApplySymbolFilter(resultData, request));
+        }
+
+        private SharedFuturesSymbol ParseFuturesSymbol(WhiteBitFuturesSymbol s, WhiteBitSymbol[] symbols)
+        {
+            var symbol = symbols.SingleOrDefault(x => x.Name == s.Symbol);
+            var result = new SharedFuturesSymbol(s.ProductType == ProductType.Perpetual ? TradingMode.PerpetualLinear : TradingMode.DeliveryLinear, s.BaseAsset, s.QuoteAsset, s.Symbol, true)
+            {
+                MinTradeQuantity = symbol?.MinOrderQuantity,
+                MinNotionalValue = symbol?.MinOrderValue,
+                QuantityDecimals = symbol?.BaseAssetPrecision,
+                PriceDecimals = symbol?.QuoteAssetPrecision,
+                ContractSize = 1,
+                DisplayName = s.Symbol,
+                QuoteAssetType = SharedAssetType.Crypto,
+                QuoteAssetSubType = SharedAssetSubType.StableCoin
+            };
+
+            if (symbol?.IsTradFiFutures == true)
+            {
+                result.BaseAssetType = SharedAssetType.TradFi;
+                if (LibraryHelpers.IsCommodity(result.BaseAsset))
+                    result.BaseAssetSubType = SharedAssetSubType.Commodity;
+                else
+                    result.BaseAssetSubType = SharedAssetSubType.Equity;
+            }
+            else if (symbol != null)
+            {
+                result.BaseAssetType = SharedAssetType.Crypto;
+            }
+
+            return result;
         }
 
         async Task<ExchangeCallResult<SharedSymbol[]>> IFuturesSymbolRestClient.GetFuturesSymbolsForBaseAssetAsync(string baseAsset)
