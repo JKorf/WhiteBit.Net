@@ -180,6 +180,8 @@ Console.WriteLine(ticker.Data.LastPrice);
 
 Shared REST interfaces implemented by WhiteBit include spot symbols, spot tickers, recent trades, order book, balances, assets, deposits, withdrawals, spot orders, futures symbols, futures tickers, leverage, open interest, position history, futures orders, fees, trigger orders, TP/SL, book ticker, funding rate, and transfers.
 
+Shared spot and futures symbol results include `DisplayName` plus `BaseAssetType`, `BaseAssetSubType`, `QuoteAssetType`, and `QuoteAssetSubType`. `GetSymbolsRequest` can filter on those asset classifications. `ISpotSymbolRestClient.SpotSymbolCatalog` and `IFuturesSymbolRestClient.FuturesSymbolCatalog` expose the cached symbol catalogs.
+
 Use `new WhiteBitRestClient().V4Api.SharedClient.Discover()` when code needs runtime metadata about supported shared interfaces and endpoint options.
 
 ## Dependency Injection

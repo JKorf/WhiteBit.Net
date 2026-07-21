@@ -154,6 +154,9 @@ Use this file to route common user intents to the correct WhiteBit.Net client me
 | Shared socket client | `new WhiteBitSocketClient().V4Api.SharedClient` |
 | Shared spot ticker REST | `ISpotTickerRestClient.GetSpotTickerAsync(new GetTickerRequest(symbol))` |
 | Shared spot symbol REST | `ISpotSymbolRestClient.GetSpotSymbolsAsync(...)` |
+| Filter shared symbols by asset classification | `GetSymbolsRequest` base/quote asset type and subtype fields |
+| Read cached shared spot symbol catalog | `ISpotSymbolRestClient.SpotSymbolCatalog` |
+| Read cached shared futures symbol catalog | `IFuturesSymbolRestClient.FuturesSymbolCatalog` |
 | Shared spot order REST | `ISpotOrderRestClient.PlaceSpotOrderAsync(...)` |
 | Shared futures order REST | `IFuturesOrderRestClient.PlaceFuturesOrderAsync(...)` |
 | Shared balances REST | `IBalanceRestClient.GetBalancesAsync(...)` |
@@ -164,6 +167,8 @@ Use this file to route common user intents to the correct WhiteBit.Net client me
 | Shared user trade socket | `IUserTradeSocketClient.SubscribeToUserTradeUpdatesAsync(...)` |
 | Shared position socket | `IPositionSocketClient.SubscribeToPositionUpdatesAsync(...)` |
 | Discover shared capabilities | `client.V4Api.SharedClient.Discover()` |
+
+Shared spot/futures symbol models include `DisplayName` plus base/quote asset type and subtype metadata.
 
 For shared socket subscriptions, keep the concrete socket client and unsubscribe with `await socketClient.UnsubscribeAsync(subscription.Data)`.
 

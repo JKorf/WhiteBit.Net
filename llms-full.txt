@@ -4,8 +4,8 @@
 
 WhiteBit.Net is a strongly typed .NET client library for the WhiteBit REST and WebSocket APIs. It is part of the CryptoExchange.Net ecosystem and uses the same result, shared API, logging, rate limiting, and socket patterns as other JKorf exchange libraries.
 
-Current package version in this repository: 4.1.0.
-CryptoExchange.Net dependency on this branch: 12.0.0-beta1.
+Current package version in this repository: 4.2.0.
+CryptoExchange.Net dependency on this branch: 12.2.0.
 Target frameworks: netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
 Native AOT: supported on compatible .NET targets.
 
@@ -421,6 +421,10 @@ await socketClient.UnsubscribeAsync(sub.Data);
 Do not call `tickerSocket.UnsubscribeAsync(...)` on `ITickerSocketClient`; that shared interface does not expose the method.
 
 Shared clients also expose `Discover()` for runtime capability discovery. Use it when tooling or exchange-agnostic code needs to inspect implemented shared interfaces and endpoint option metadata instead of hard-coding assumptions.
+
+Shared spot and futures symbol responses populate `DisplayName`, `BaseAssetType`, `BaseAssetSubType`, `QuoteAssetType`, and `QuoteAssetSubType`. Spot assets are classified as crypto, stablecoin, or fiat as applicable. Futures bases are classified as crypto or TradFi (commodity/equity), while futures quotes are classified as crypto stablecoins. Use the corresponding fields on `GetSymbolsRequest` to filter symbol responses by asset classification.
+
+`ISpotSymbolRestClient.SpotSymbolCatalog` and `IFuturesSymbolRestClient.FuturesSymbolCatalog` expose the cached shared symbol catalogs. Fetch the corresponding symbols when the catalog first needs to be populated.
 
 ## Symbol And Quantity Handling
 
