@@ -149,8 +149,19 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (update.UpdateType == SocketUpdateType.Snapshot)
                     return;
 
-                foreach(var item in update.Data)
-                    handler(update.ToType(new SharedKline(request.Symbol, symbol, item.OpenTime, item.ClosePrice, item.HighPrice, item.LowPrice, item.OpenPrice, item.Volume)));
+                foreach (var item in update.Data)
+                {
+                    handler(update.ToType(
+                        new SharedKline(
+                            request.Symbol, 
+                            symbol, 
+                            item.OpenTime, 
+                            item.ClosePrice,
+                            item.HighPrice,
+                            item.LowPrice,
+                            item.OpenPrice,
+                            new SharedOrderQuantity(item.Volume, item.QuoteVolume))));
+                }
             }, ct).ConfigureAwait(false);
 
             return result;
@@ -170,9 +181,15 @@ namespace WhiteBit.Net.Clients.V4Api
 
             var symbols = request.Symbols?.Length > 0 ? request.Symbols.Select(x => x.GetSymbol(FormatSymbol)).ToArray() : [request.Symbol!.GetSymbol(FormatSymbol)];
             var result = await SubscribeToTickerUpdatesAsync(symbols, update => handler(update.ToType(
-                new SharedSpotTicker(ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol), update.Data.Symbol, update.Data.Ticker.LastPrice, update.Data.Ticker.HighPrice, update.Data.Ticker.LowPrice, update.Data.Ticker.Volume, update.Data.Ticker.OpenPrice == 0 ? null : Math.Round(update.Data.Ticker.ClosePrice / update.Data.Ticker.OpenPrice * 100 - 100, 2))
+                new SharedSpotTicker(
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol),
+                    update.Data.Symbol, 
+                    update.Data.Ticker.LastPrice,
+                    update.Data.Ticker.HighPrice, 
+                    update.Data.Ticker.LowPrice, 
+                    new SharedOrderQuantity(update.Data.Ticker.Volume, update.Data.Ticker.QuoteVolume), 
+                    update.Data.Ticker.OpenPrice == 0 ? null : Math.Round(update.Data.Ticker.ClosePrice / update.Data.Ticker.OpenPrice * 100 - 100, 2))
                 {
-                    QuoteVolume = update.Data.Ticker.QuoteVolume
                 })), ct).ConfigureAwait(false);
 
             return result;
@@ -200,7 +217,12 @@ namespace WhiteBit.Net.Clients.V4Api
                         return;
 
                     handler(update.ToType<SharedTrade[]>(update.Data.Trades.Select(x => 
-                    new SharedTrade(ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol), update.Data.Symbol, x.Quantity, x.Price, x.Timestamp)
+                    new SharedTrade(
+                        ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol), 
+                        update.Data.Symbol,
+                        new SharedOrderQuantity(x.Quantity),
+                        x.Price,
+                        x.Timestamp)
                     {
                         Side = x.Side == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell
                     } ).ToArray()));

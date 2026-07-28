@@ -147,10 +147,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 ticker.LastPrice,
                 null, 
                 null, 
-                ticker.BaseVolume, 
+                new SharedOrderQuantity(ticker.BaseVolume, ticker.QuoteVolume), 
                 ticker.ChangePercentage)
             {
-                QuoteVolume = ticker.QuoteVolume
             });
         }
 
@@ -173,10 +172,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.LastPrice,
                 null,
                 null,
-                x.BaseVolume,
+                new SharedOrderQuantity(x.BaseVolume, x.QuoteVolume),
                 x.ChangePercentage)
             {
-                QuoteVolume = x.QuoteVolume
             }).ToArray());
         }
 
@@ -229,7 +227,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             // Return
             return HttpResult.Ok(result, data.Select(x =>
-                new SharedTrade(request.Symbol, symbol, x.BaseVolume, x.Price, x.Timestamp)
+                new SharedTrade(request.Symbol, symbol, new SharedOrderQuantity(x.BaseVolume, x.QuoteVolume), x.Price, x.Timestamp)
                 {
                     Side = x.Side == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell
                 }).ToArray());
@@ -1001,7 +999,15 @@ namespace WhiteBit.Net.Clients.V4Api
             if (ticker == null)
                 return HttpResult.Fail<SharedFuturesTicker>(resultTicker, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
-            return HttpResult.Ok(resultTicker, new SharedFuturesTicker(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, ticker.Symbol), ticker.Symbol, ticker.LastPrice, ticker.HighPrice, ticker.LowPrice, ticker.BaseVolume, null)
+            return HttpResult.Ok(resultTicker,
+                new SharedFuturesTicker(
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, ticker.Symbol),
+                    ticker.Symbol,
+                    ticker.LastPrice,
+                    ticker.HighPrice,
+                    ticker.LowPrice,
+                    new SharedOrderQuantity(ticker.BaseVolume, ticker.QuoteVolume), 
+                    null)
             {
                 IndexPrice = ticker.IndexPrice,
                 FundingRate = ticker.FundingRate,
@@ -1028,7 +1034,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     x.LastPrice,
                     x.HighPrice,
                     x.LowPrice,
-                    x.BaseVolume, null)
+                    new SharedOrderQuantity(x.BaseVolume, x.QuoteVolume),
+                    null)
                 {
                     IndexPrice = x.IndexPrice,
                     FundingRate = x.FundingRate,

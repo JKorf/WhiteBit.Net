@@ -58,6 +58,7 @@ namespace WhiteBit.Net
                 symbol,
                 limit,
                 period,
+                TradeQuantityType.BaseAsset,
                 exchangeParameters
                 );
         }

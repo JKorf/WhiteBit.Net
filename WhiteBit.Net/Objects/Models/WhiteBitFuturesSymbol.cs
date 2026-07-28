@@ -7,7 +7,7 @@ using WhiteBit.Net.Enums;
 namespace WhiteBit.Net.Objects.Models
 {
     /// <summary>
-    /// 
+    /// Futures symbol
     /// </summary>
     [SerializationModel]
     public record WhiteBitFuturesSymbol
