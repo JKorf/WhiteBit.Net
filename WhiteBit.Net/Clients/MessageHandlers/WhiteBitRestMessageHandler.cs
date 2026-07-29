@@ -35,9 +35,12 @@ namespace WhiteBit.Net.Clients.MessageHandlers
             if (msg == null)
                 msg = document!.RootElement.TryGetProperty("message", out var messageProp) ? messageProp.GetString() : null;
 
+            var hasErrorsProp = document.RootElement.TryGetProperty("errors", out var errorsProp);
+            Dictionary<string, string[]>? errors = null;
 #pragma warning disable IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
 #pragma warning disable IL3050 // Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.
-            var errors = document.RootElement.TryGetProperty("errors", out var errorsProp) ? errorsProp.Deserialize<Dictionary<string, string[]>>(Options) : null;
+            if (hasErrorsProp && errorsProp.ValueKind == JsonValueKind.Object)
+                errors = errorsProp.Deserialize<Dictionary<string, string[]>>(Options);
 #pragma warning restore IL3050 // Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.
 #pragma warning restore IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
             if (errors == null || !errors.Any())

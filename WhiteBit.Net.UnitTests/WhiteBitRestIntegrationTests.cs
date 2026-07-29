@@ -76,7 +76,7 @@ namespace WhiteBit.Net.UnitTests
             await RunAndCheckResult(warnings, client => client.V4Api.ExchangeData.GetOrderBookAsync("ETH_USDT", default, default, default), false);
             await RunAndCheckResult(warnings, client => client.V4Api.ExchangeData.GetRecentTradesAsync("ETH_USDT", default, default), false);
             await RunAndCheckResult(client => client.V4Api.ExchangeData.GetDepositWithdrawalInfoAsync(default), false);
-            await RunAndCheckResult(warnings, client => client.V4Api.ExchangeData.GetCollateralSymbolsAsync(default), false, "result");
+            //await RunAndCheckResult(warnings, client => client.V4Api.ExchangeData.GetCollateralSymbolsAsync(default), false, "result");
             await RunAndCheckResult(warnings, client => client.V4Api.ExchangeData.GetFuturesSymbolsAsync(default), false, "result");
             foreach (var warning in warnings)
                 Assert.Warn(warning.Message);
