@@ -112,5 +112,15 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("max_leverage")]
         public decimal MaxLeverage { get; set; }
+        /// <summary>
+        /// ["<c>funding_cap</c>"] Funding cap
+        /// </summary>
+        [JsonPropertyName("funding_cap")]
+        public decimal? FundingCap { get; set; }
+        /// <summary>
+        /// ["<c>funding_floor</c>"] Funding floor
+        /// </summary>
+        [JsonPropertyName("funding_floor")]
+        public decimal? FundingFloor { get; set; }
     }
 }
