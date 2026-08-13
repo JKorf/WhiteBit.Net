@@ -295,7 +295,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Asset client
-        GetAssetsOptions IAssetsRestClient.GetAssetsOptions { get; } = new GetAssetsOptions(_exchange, true);
+        GetAssetsOptions IAssetsRestClient.GetAssetsOptions { get; } = new GetAssetsOptions(_exchange, false);
 
         async Task<HttpResult<SharedAsset[]>> IAssetsRestClient.GetAssetsAsync(GetAssetsRequest request, CancellationToken ct)
         {
@@ -1080,7 +1080,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Open Interest client
 
-        GetOpenInterestOptions IOpenInterestRestClient.GetOpenInterestOptions { get; } = new GetOpenInterestOptions(_exchange, true);
+        GetOpenInterestOptions IOpenInterestRestClient.GetOpenInterestOptions { get; } = new GetOpenInterestOptions(_exchange, false);
         async Task<HttpResult<SharedOpenInterest>> IOpenInterestRestClient.GetOpenInterestAsync(GetOpenInterestRequest request, CancellationToken ct)
         {
             var validationError = SharedClient.GetOpenInterestOptions.ValidateRequest(request, this);
