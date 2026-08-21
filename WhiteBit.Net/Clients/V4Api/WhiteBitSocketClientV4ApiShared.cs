@@ -111,9 +111,9 @@ namespace WhiteBit.Net.Clients.V4Api
                     ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol),
                     update.Data.Symbol,
                     update.Data.BestAskPrice,
-                    update.Data.BestAskQuantity,
+                    new SharedOrderQuantity(update.Data.BestAskQuantity),
                     update.Data.BestBidPrice,
-                    update.Data.BestBidQuantity)));
+                    new SharedOrderQuantity(update.Data.BestBidQuantity))));
             }, ct).ConfigureAwait(false);
 
             return result;
@@ -279,7 +279,7 @@ namespace WhiteBit.Net.Clients.V4Api
                             update.Data.OrderId.ToString(),
                             update.Data.Id.ToString(),
                             update.Data.OrderSide == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                            update.Data.Quantity,
+                            new SharedOrderQuantity(update.Data.Quantity),
                             update.Data.Price,
                             update.Data.Time)
                     {
@@ -380,14 +380,19 @@ namespace WhiteBit.Net.Clients.V4Api
                     if (update.UpdateType == SocketUpdateType.Snapshot)
                         return;
 
-                    handler(update.ToType<SharedPosition[]>(update.Data.Records.Select(x => new SharedPosition(ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), x.Symbol, Math.Abs(x.Quantity), x.UpdateTime)
-                    {
-                        AverageOpenPrice = x.BasePrice,
-                        PositionMode = SharedPositionMode.OneWay,
-                        PositionSide = x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
-                        UnrealizedPnl = x.UnrealizedPnl,
-                        LiquidationPrice = x.LiquidationPrice,
-                    }).ToArray()));
+                    handler(update.ToType<SharedPosition[]>(update.Data.Records.Select(x =>
+                        new SharedPosition(
+                            ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol),
+                            x.Symbol, 
+                            new SharedOrderQuantity(Math.Abs(x.Quantity)),
+                            x.UpdateTime)
+                        {
+                            AverageOpenPrice = x.BasePrice,
+                            PositionMode = SharedPositionMode.OneWay,
+                            PositionSide = x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
+                            UnrealizedPnl = x.UnrealizedPnl,
+                            LiquidationPrice = x.LiquidationPrice,
+                        }).ToArray()));
                 },
                 ct: ct).ConfigureAwait(false);
 

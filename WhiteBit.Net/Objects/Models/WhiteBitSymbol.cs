@@ -42,6 +42,16 @@ namespace WhiteBit.Net.Objects.Models
         [JsonPropertyName("feePrec")]
         public decimal FeePrecision { get; set; }
         /// <summary>
+        /// ["<c>tickSize</c>"] Tick size, limit price has to be a multiple of this value
+        /// </summary>
+        [JsonPropertyName("tickSize")]
+        public decimal TickSize { get; set; }
+        /// <summary>
+        /// ["<c>stepSize</c>"] Step size, quantity has to be a multiple of this value
+        /// </summary>
+        [JsonPropertyName("stepSize")]
+        public decimal StepSize { get; set; }
+        /// <summary>
         /// ["<c>makerFee</c>"] Maker fee
         /// </summary>
         [JsonPropertyName("makerFee")]

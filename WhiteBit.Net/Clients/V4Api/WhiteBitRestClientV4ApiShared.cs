@@ -62,7 +62,11 @@ namespace WhiteBit.Net.Clients.V4Api
                 QuantityDecimals = s.BaseAssetPrecision,
                 PriceDecimals = s.QuoteAssetPrecision,
                 DisplayName = s.Name,
-                BaseAssetType = SharedAssetType.Crypto
+                BaseAssetType = SharedAssetType.Crypto,
+                MakerFeePercentage = s.MakerFee,
+                TakerFeePercentage = s.TakerFee,
+                PriceStep = s.TickSize,
+                QuantityStep = s.StepSize
             };
 
             if (LibraryHelpers.IsStableCoin(result.BaseAsset))
@@ -197,9 +201,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 ExchangeSymbolCache.ParseSymbol(request.Symbol.TradingMode == TradingMode.Spot ? _topicSpotId : _topicFuturesId, EnvironmentName, null, resultTicker.Data.Symbol),
                 resultTicker.Data.Symbol,
                 resultTicker.Data.Asks[0].Price,
-                resultTicker.Data.Asks[0].Quantity,
+                new SharedOrderQuantity(resultTicker.Data.Asks[0].Quantity),
                 resultTicker.Data.Bids[0].Price,
-                resultTicker.Data.Bids[0].Quantity));
+                new SharedOrderQuantity(resultTicker.Data.Bids[0].Quantity)));
         }
 
         #endregion
@@ -249,7 +253,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (!result.Success)
                 return HttpResult.Fail<SharedOrderBook>(result);
 
-            return HttpResult.Ok(result, new SharedOrderBook(result.Data.Asks, result.Data.Bids));
+            return HttpResult.Ok(result, new SharedOrderBook(SharedQuantityType.BaseAsset, result.Data.Asks, result.Data.Bids));
         }
 
         #endregion
@@ -779,7 +783,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.OrderId.ToString(),
                 x.Id.ToString(),
                 x.OrderSide == null ? (SharedOrderSide?)null : x.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                x.Quantity,
+                new SharedOrderQuantity(x.Quantity),
                 x.Price,
                 x.Time)
             {
@@ -831,7 +835,7 @@ namespace WhiteBit.Net.Clients.V4Api
                             y.OrderId.ToString(),
                             y.Id.ToString(),
                             y.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                            y.Quantity,
+                            new SharedOrderQuantity(y.Quantity),
                             y.Price,
                             y.Time)
                         {
@@ -921,7 +925,15 @@ namespace WhiteBit.Net.Clients.V4Api
                 ContractSize = 1,
                 DisplayName = s.Symbol,
                 QuoteAssetType = SharedAssetType.Crypto,
-                QuoteAssetSubType = SharedAssetSubType.StableCoin
+                QuoteAssetSubType = SharedAssetSubType.StableCoin,
+                MakerFeePercentage = symbol?.MakerFee,
+                TakerFeePercentage = symbol?.TakerFee,
+                UpperFundingCap = s.FundingCap,
+                LowerFundingCap = s.FundingFloor,
+                MaxShortLeverage = s.MaxLeverage,
+                MaxLongLeverage = s.MaxLeverage,
+                PriceStep = symbol?.TickSize,
+                QuantityStep = symbol?.StepSize
             };
 
             if (symbol?.IsTradFiFutures == true)
@@ -1096,7 +1108,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (ticker == null)
                 return HttpResult.Fail<SharedOpenInterest>(resultTicker, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
-            return HttpResult.Ok(resultTicker, new SharedOpenInterest(ticker.OpenInterest));
+            return HttpResult.Ok(resultTicker, new SharedOpenInterest(new SharedOrderQuantity(ticker.OpenInterest)));
         }
 
         #endregion
@@ -1148,7 +1160,7 @@ namespace WhiteBit.Net.Clients.V4Api
                                 x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
                                 x.BasePrice,
                                 x.OrderDetail.Price,
-                                x.OrderDetail.TradeQuantity,
+                                new SharedOrderQuantity(x.OrderDetail.TradeQuantity),
                                 x.OrderDetail.RealizedPnl ?? 0,
                                 x.OpenTime)
                             {
@@ -1416,7 +1428,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.OrderId.ToString(),
                 x.Id.ToString(),
                 x.OrderSide == null ? (SharedOrderSide?)null : x.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                x.Quantity,
+                new SharedOrderQuantity(x.Quantity),
                 x.Price,
                 x.Time)
             {
@@ -1469,7 +1481,7 @@ namespace WhiteBit.Net.Clients.V4Api
                                 y.OrderId.ToString(),
                                 y.Id.ToString(),
                                 y.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                                y.Quantity,
+                                new SharedOrderQuantity(y.Quantity),
                                 y.Price,
                                 y.Time)
                             {
@@ -1515,7 +1527,7 @@ namespace WhiteBit.Net.Clients.V4Api
             new SharedPosition(
                 ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol),
                 x.Symbol,
-                Math.Abs(x.Quantity),
+                new SharedOrderQuantity(Math.Abs(x.Quantity)),
                 x.UpdateTime)
             {
                 UnrealizedPnl = x.Pnl,
