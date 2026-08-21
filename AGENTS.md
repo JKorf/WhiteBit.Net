@@ -180,7 +180,7 @@ Console.WriteLine(ticker.Data.LastPrice);
 
 Shared REST interfaces implemented by WhiteBit include spot symbols, spot tickers, recent trades, order book, balances, assets, deposits, withdrawals, spot orders, futures symbols, futures tickers, leverage, open interest, position history, futures orders, fees, trigger orders, TP/SL, book ticker, funding rate, and transfers.
 
-Shared spot and futures symbol results include `DisplayName` plus `BaseAssetType`, `BaseAssetSubType`, `QuoteAssetType`, and `QuoteAssetSubType`. `GetSymbolsRequest` can filter on those asset classifications. `ISpotSymbolRestClient.SpotSymbolCatalog` and `IFuturesSymbolRestClient.FuturesSymbolCatalog` expose the cached symbol catalogs.
+Shared spot and futures symbol results include display names, asset classifications, maker/taker fees, and price/quantity steps. Futures symbols also include funding caps and maximum long/short leverage. `GetSymbolsRequest` can filter on asset classifications, while `ISpotSymbolRestClient.SpotSymbolCatalog` and `IFuturesSymbolRestClient.FuturesSymbolCatalog` expose the cached symbol catalogs.
 
 Use `new WhiteBitRestClient().V4Api.SharedClient.Discover()` when code needs runtime metadata about supported shared interfaces and endpoint options.
 
@@ -224,7 +224,7 @@ var live = new WhiteBitRestClient(options =>
 
 ## Reference
 
-- Full client reference: https://cryptoexchange.jkorf.dev/WhiteBit.Net/
+- Documentation and client reference: https://cryptoexchange.jkorf.dev/docs/exchange-clients?library=WhiteBit.Net
 - AI quick map: `docs/ai-api-map.md`
 - Short LLM index: `llms.txt`
 - Full LLM context: `llms-full.txt`

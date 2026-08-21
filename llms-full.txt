@@ -4,14 +4,14 @@
 
 WhiteBit.Net is a strongly typed .NET client library for the WhiteBit REST and WebSocket APIs. It is part of the CryptoExchange.Net ecosystem and uses the same result, shared API, logging, rate limiting, and socket patterns as other JKorf exchange libraries.
 
-Current package version in this repository: 4.3.0.
-CryptoExchange.Net dependency on this branch: 12.2.0.
+Current package version in this repository: 4.4.0.
+CryptoExchange.Net dependency on this branch: 12.5.0.
 Target frameworks: netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
 Native AOT: supported on compatible .NET targets.
 
 Primary documentation:
 - README.md: overview, installation, feature table, release notes, basic examples
-- docs site: https://cryptoexchange.jkorf.dev/WhiteBit.Net/
+- docs site: https://cryptoexchange.jkorf.dev/docs/exchange-clients?library=WhiteBit.Net
 - API quick map: `docs/ai-api-map.md`
 - source interfaces: `WhiteBit.Net/Interfaces/Clients/**`
 - AI examples: `Examples/ai-friendly/`
@@ -422,9 +422,11 @@ Do not call `tickerSocket.UnsubscribeAsync(...)` on `ITickerSocketClient`; that 
 
 Shared clients also expose `Discover()` for runtime capability discovery. Use it when tooling or exchange-agnostic code needs to inspect implemented shared interfaces and endpoint option metadata instead of hard-coding assumptions.
 
-Shared spot and futures symbol responses populate `DisplayName`, `BaseAssetType`, `BaseAssetSubType`, `QuoteAssetType`, and `QuoteAssetSubType`. Spot assets are classified as crypto, stablecoin, or fiat as applicable. Futures bases are classified as crypto or TradFi (commodity/equity), while futures quotes are classified as crypto stablecoins. Use the corresponding fields on `GetSymbolsRequest` to filter symbol responses by asset classification.
+Shared spot and futures symbol responses populate `DisplayName`, asset classifications, `MakerFeePercentage`, `TakerFeePercentage`, `PriceStep`, and `QuantityStep`. Futures symbols additionally populate `UpperFundingCap`, `LowerFundingCap`, `MaxLongLeverage`, and `MaxShortLeverage`. Spot assets are classified as crypto, stablecoin, or fiat as applicable; futures bases are crypto or TradFi (commodity/equity), and futures quotes are crypto stablecoins. Use the corresponding fields on `GetSymbolsRequest` to filter by asset classification.
 
 `ISpotSymbolRestClient.SpotSymbolCatalog` and `IFuturesSymbolRestClient.FuturesSymbolCatalog` expose the cached shared symbol catalogs. Fetch the corresponding symbols when the catalog first needs to be populated.
+
+Shared book tickers, trades, open interest, positions, position history, and order updates represent quantities with `SharedOrderQuantity`. Read `QuantityInBaseAsset`, `QuantityInQuoteAsset`, or `QuantityInContracts` as appropriate instead of assuming every quantity is a bare `decimal`; WhiteBit spot mappings use base-asset quantities where only one unit is available. Shared order books set `QuantityType` to `BaseAsset`, so interpret entry quantities in the base asset.
 
 ## Symbol And Quantity Handling
 

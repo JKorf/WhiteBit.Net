@@ -2,12 +2,12 @@
 
 > Strongly typed .NET client library for the WhiteBit REST and WebSocket APIs. Supports V4 public market data, spot trading, collateral/futures trading, balances, deposits, withdrawals, convert, WhiteBit Codes, sub-accounts, private WebSocket streams, local order books, and CryptoExchange.Net shared APIs.
 
-WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `HttpResult<T>` for REST, `QueryResult<T>` for WebSocket request/response calls, and `WebSocketResult<UpdateSubscription>` for WebSocket subscriptions. Shared REST APIs use the same `HttpResult<T>` pattern. It supports client-side rate limiting, automatic WebSocket reconnection, dependency injection, native AOT, and shared API abstractions for multi-exchange applications. Current repository package version: 4.3.0. This branch targets CryptoExchange.Net 12.2.0. Targets netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
+WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `HttpResult<T>` for REST, `QueryResult<T>` for WebSocket request/response calls, and `WebSocketResult<UpdateSubscription>` for WebSocket subscriptions. Shared REST APIs use the same `HttpResult<T>` pattern. It supports client-side rate limiting, automatic WebSocket reconnection, dependency injection, native AOT, and shared API abstractions for multi-exchange applications. Current repository package version: 4.4.0. This branch targets CryptoExchange.Net 12.5.0. Targets netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
 
 ## Documentation
 
 - [README](https://github.com/JKorf/WhiteBit.Net/blob/main/README.md): Overview, installation, examples, supported functionality, release notes
-- [Documentation Site](https://cryptoexchange.jkorf.dev/WhiteBit.Net/): Full documentation hub and client reference
+- [Documentation Site](https://cryptoexchange.jkorf.dev/docs/exchange-clients?library=WhiteBit.Net): Full documentation hub and client reference
 - [AI API Quick Map](https://github.com/JKorf/WhiteBit.Net/blob/main/docs/ai-api-map.md): Table-style intent-to-method routing for WhiteBit.Net members
 - [Full LLM Context](https://github.com/JKorf/WhiteBit.Net/blob/main/llms-full.txt): Detailed AI guide with code patterns, endpoint routing, and anti-hallucination rules
 - [Claude/Codex Skill](https://github.com/JKorf/WhiteBit.Net/blob/main/CLAUDE.md): Assistant-facing usage conventions and examples
@@ -31,7 +31,7 @@ WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `HttpResult<T>
 - For spot orders use `restClient.V4Api.Trading.PlaceSpotOrderAsync`.
 - For collateral/futures orders use `restClient.V4Api.CollateralTrading.PlaceOrderAsync`.
 - For multi-exchange code use `CryptoExchange.Net.SharedApis` from `.V4Api.SharedClient`.
-- Shared spot/futures symbols include display names and base/quote asset type metadata; use the symbol catalogs and `GetSymbolsRequest` asset-type filters when needed.
+- Shared spot/futures symbols include display names, asset types, fees, and price/quantity steps; futures symbols also expose funding caps and leverage limits.
 - Use `SharedClient.Discover()` when code needs to inspect implemented shared interfaces and endpoint options at runtime.
 - Store WebSocket subscriptions and call `socketClient.UnsubscribeAsync(subscription.Data)`.
 

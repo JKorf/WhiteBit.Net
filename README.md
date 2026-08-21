@@ -247,6 +247,13 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 4.4.0 - 21 Aug 2026
+    * Updated to CryptoExchange.Net v12.5.0
+    * Added FundingCap, FundingFloor to WhiteBitFuturesSymbol model
+    * Added TickSize, StepSize to WhiteBitSymbol model
+    * Added MakerFeePercentage, TakerFeePercentage, PriceStep, QuantityStep to SharedSpotSymbol mapping
+    * Added MakerFeePercentage, TakerFeePercentage, PriceStep, QuantityStep, UpperFundingCap, LowerFundingCap, MaxShortLeverage, MaxLongLeverage to SharedFuturesSymbol mapping
+
 * Version 4.3.0 - 29 Jul 2026
     * Updated CryptoExchange.Net to version 12.4.0
     * Added calculation of AveragePrice on Shared order models if data is available and AveragePrice is not set
