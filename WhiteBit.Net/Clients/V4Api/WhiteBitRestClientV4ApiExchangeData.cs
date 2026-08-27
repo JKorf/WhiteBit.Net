@@ -31,7 +31,9 @@ namespace WhiteBit.Net.Clients.V4Api
         public async Task<HttpResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
         {
             var request = _definitions.GetOrCreate(HttpMethod.Get, _baseClient.BaseAddress, "/api/v4/public/time", WhiteBitExchange.RateLimiter.WhiteBit, 1, false,
-                limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding));
+                limitGuard: new SingleLimitGuard(2000, TimeSpan.FromSeconds(10), RateLimitWindowType.Sliding),
+                preventCaching: true,
+                preventRequestCoalescing: true);
             var result = await _baseClient.SendAsync<WhiteBitTime>(request, null, ct).ConfigureAwait(false);
             return HttpResult.Ok(result, result.Data?.Timestamp ?? default);
         }

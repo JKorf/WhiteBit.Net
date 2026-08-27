@@ -1,13 +1,15 @@
-using System.Collections.Generic;
-using System.Net.Http;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Converters.SystemTextJson;
+using CryptoExchange.Net.Interfaces.Clients;
 using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Testing;
 using CryptoExchange.Net.Testing.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Net.Http;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Clients.V4Api;
 using WhiteBit.Net.Interfaces.Clients;
@@ -145,6 +147,24 @@ namespace WhiteBit.Net.UnitTests
             Assert.That(((BaseApiClient)restClient.V4Api).ClientOptions.Proxy.Port, Is.EqualTo(80));
             Assert.That(((BaseApiClient)socketClient.V4Api).ClientOptions.Proxy.Host, Is.EqualTo("host2"));
             Assert.That(((BaseApiClient)socketClient.V4Api).ClientOptions.Proxy.Port, Is.EqualTo(81));
+        }
+
+        [Test]
+        public void TestRestSharedApiDiscoveryMatchesAggregate()
+        {
+            var (missingOptions, missingInterfaces) = TestHelpers.ValidateSharedApi(new WhiteBitRestClient().V4Api.SharedApi);
+
+            Assert.That(missingOptions, Is.Empty);
+            Assert.That(missingInterfaces, Is.Empty);
+        }
+
+        [Test]
+        public void TestSocketSharedApiDiscoveryMatchesAggregate()
+        {
+            var (missingOptions, missingInterfaces) = TestHelpers.ValidateSharedApi(new WhiteBitSocketClient().V4Api.SharedApi);
+
+            Assert.That(missingOptions, Is.Empty);
+            Assert.That(missingInterfaces, Is.Empty);
         }
     }
 }

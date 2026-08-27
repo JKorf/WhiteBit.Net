@@ -37,6 +37,8 @@ namespace WhiteBit.Net.Clients.V4Api
     {
         #region fields
 
+        private readonly WhiteBitSocketClientV4SharedApi _sharedApi;
+
         /// <inheritdoc />
         public new WhiteBitSocketOptions ClientOptions => (WhiteBitSocketOptions)base.ClientOptions;
 
@@ -57,6 +59,8 @@ namespace WhiteBit.Net.Clients.V4Api
             AllowTopicsOnTheSameConnection = false;
 
             KeepAliveInterval = TimeSpan.Zero; // Server doesn't correctly respond to ping frames
+
+            _sharedApi = new WhiteBitSocketClientV4SharedApi(this);
 
             RegisterPeriodicQuery(
                 "Ping",
@@ -585,7 +589,9 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         /// <inheritdoc />
-        public IWhiteBitSocketClientV4ApiShared SharedClient => this;
+        public IWhiteBitSocketClientV4ApiShared SharedClient => _sharedApi;
+        /// <inheritdoc />
+        public IWhiteBitSocketClientV4SharedApi SharedApi => _sharedApi;
 
         /// <inheritdoc />
         public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverDate = null)

@@ -14,32 +14,90 @@ using WhiteBit.Net.Objects.Models;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
-    internal partial class WhiteBitRestClientV4Api : IWhiteBitRestClientV4ApiShared
+    internal class WhiteBitRestClientV4SharedApi :
+        SharedApiBase,
+        IWhiteBitRestClientV4ApiShared,
+        IWhiteBitRestClientV4SharedApi
     {
+        private readonly WhiteBitRestClientV4Api _api;
         private const string _exchange = "WhiteBit";
         private const string _topicSpotId = "WhiteBitSpot";
         private const string _topicFuturesId = "WhiteBitFutures";
-
-        public TradingMode[] SupportedTradingModes => new[] { TradingMode.Spot, TradingMode.PerpetualLinear };
-        public TradingMode[] SupportedFuturesModes => new[] { TradingMode.PerpetualLinear };
-
-        public void SetDefaultExchangeParameter(string key, object value) => ExchangeParameters.SetStaticParameter(Exchange, key, value);
-        public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
-        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(WhiteBitExchange.Metadata, this);
+        public override SharedClientInfo Discover() => SharedUtils.GetClientInfo(WhiteBitExchange.Metadata, this);
 
         private static readonly HashSet<string> _exchangeFiats = ["UAH", "EUR", "USD", "TRY", "GBP", "PLN", "BGN", "CZK", "KZT"];
 
-        #region Spot Symbol client
-        SharedSymbolCatalog? ISpotSymbolRestClient.SpotSymbolCatalog => ExchangeSymbolCache.GetSymbolCatalog(_exchange, _topicSpotId, EnvironmentName, null);
-        GetSpotSymbolsOptions ISpotSymbolRestClient.GetSpotSymbolsOptions { get; } = new GetSpotSymbolsOptions(_exchange, false);
-
-        async Task<HttpResult<SharedSpotSymbol[]>> ISpotSymbolRestClient.GetSpotSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
+        public WhiteBitRestClientV4SharedApi(WhiteBitRestClientV4Api api)
+            : base(
+                  api.Exchange,
+                  [TradingMode.Spot, TradingMode.PerpetualLinear],
+                  () => api.Authenticated,
+                  api.FormatSymbol)
         {
-            var validationError = SharedClient.GetSpotSymbolsOptions.ValidateRequest(request, this);
+            _api = api;
+
+            SetCapabilities(
+                GetSpotSymbolsOptions,
+                GetSpotTickerOptions,
+                GetAllSpotTickersOptions,
+                GetBookTickerOptions,
+                GetRecentTradesOptions,
+                GetOrderBookOptions,
+                GetBalancesOptions,
+                GetAssetOptions,
+                GetAssetsOptions,
+                GetDepositAddressesOptions,
+                GetDepositHistoryOptions,
+                GetWithdrawalHistoryOptions,
+                WithdrawOptions,
+                PlaceSpotOrderOptions,
+                GetSpotOrderOptions,
+                GetOpenSpotOrdersOptions,
+                GetClosedSpotOrdersOptions,
+                GetSpotOrderTradesOptions,
+                GetSpotUserTradeHistoryOptions,
+                CancelSpotOrderOptions,
+                GetFuturesSymbolsOptions,
+                GetFuturesTickerOptions,
+                GetAllFuturesTickersOptions,
+                GetLeverageOptions,
+                SetLeverageOptions,
+                GetOpenInterestOptions,
+                GetPositionHistoryOptions,
+                PlaceFuturesOrderOptions,
+                GetFuturesOrderOptions,
+                GetOpenFuturesOrdersOptions,
+                GetClosedFuturesOrdersOptions,
+                GetFuturesOrderTradesOptions,
+                GetFuturesUserTradeHistoryOptions,
+                CancelFuturesOrderOptions,
+                GetPositionsOptions,
+                ClosePositionOptions,
+                GetFeeOptions,
+                PlaceSpotTriggerOrderOptions,
+                GetSpotTriggerOrderOptions,
+                CancelSpotTriggerOrderOptions,
+                PlaceFuturesTriggerOrderOptions,
+                GetFuturesTriggerOrderOptions,
+                CancelFuturesTriggerOrderOptions,
+                SetFuturesTpSlOptions,
+                CancelFuturesTpSlOptions,
+                GetFundingRateHistoryOptions,
+                TransferOptions
+                );
+        }
+
+        #region Spot Symbol client
+        public SharedSymbolCatalog? SpotSymbolCatalog => ExchangeSymbolCache.GetSymbolCatalog(_exchange, _topicSpotId, _api.EnvironmentName, null);
+        public GetSpotSymbolsOptions GetSpotSymbolsOptions { get; } = new GetSpotSymbolsOptions(_exchange, false);
+
+        public async Task<HttpResult<SharedSpotSymbol[]>> GetSpotSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
+        {
+            var validationError = GetSpotSymbolsOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedSpotSymbol[]>(Exchange, validationError);
 
-            var result = await ExchangeData.GetSymbolsAsync(ct: ct).ConfigureAwait(false);
+            var result = await _api.ExchangeData.GetSymbolsAsync(ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedSpotSymbol[]>(result);
 
@@ -49,7 +107,7 @@ namespace WhiteBit.Net.Clients.V4Api
                  .Select(x => ParseSpotSymbol(x))
                 .ToArray();
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, EnvironmentName, null, resultData);
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, _api.EnvironmentName, null, resultData);
             return HttpResult.Ok(result, SharedUtils.ApplySymbolFilter(resultData, request));
         }
 
@@ -88,56 +146,59 @@ namespace WhiteBit.Net.Clients.V4Api
             return result;
         }
 
-        async Task<ExchangeCallResult<SharedSymbol[]>> ISpotSymbolRestClient.GetSpotSymbolsForBaseAssetAsync(string baseAsset)
+        public async Task<ExchangeCallResult<SharedSymbol[]>> GetSpotSymbolsForBaseAssetAsync(string baseAsset)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicSpotId, EnvironmentName, null))
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId, _api.EnvironmentName, null))
             {
-                var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                var symbols = await GetSpotSymbolsAsync(new GetSymbolsRequest(), default).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<SharedSymbol[]>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicSpotId, EnvironmentName, null, baseAsset));
+            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicSpotId, _api.EnvironmentName, null, baseAsset));
         }
 
-        async Task<ExchangeCallResult<bool>> ISpotSymbolRestClient.SupportsSpotSymbolAsync(SharedSymbol symbol)
+        public async Task<ExchangeCallResult<bool>> SupportsSpotSymbolAsync(SharedSymbol symbol)
         {
             if (symbol.TradingMode != TradingMode.Spot)
                 throw new ArgumentException(nameof(symbol), "Only Spot symbols allowed");
 
-            if (!ExchangeSymbolCache.HasCached(_topicSpotId, EnvironmentName, null))
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId, _api.EnvironmentName, null))
             {
-                var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                var symbols = await GetSpotSymbolsAsync(new GetSymbolsRequest(), default).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, EnvironmentName, null, symbol));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, _api.EnvironmentName, null, symbol));
         }
 
-        async Task<ExchangeCallResult<bool>> ISpotSymbolRestClient.SupportsSpotSymbolAsync(string symbolName)
+        public async Task<ExchangeCallResult<bool>> SupportsSpotSymbolAsync(string symbolName)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicSpotId, EnvironmentName, null))
+            if (!ExchangeSymbolCache.HasCached(_topicSpotId, _api.EnvironmentName, null))
             {
-                var symbols = await ((ISpotSymbolRestClient)this).GetSpotSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                var symbols = await GetSpotSymbolsAsync(new GetSymbolsRequest(), default).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, EnvironmentName, null, symbolName));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, _api.EnvironmentName, null, symbolName));
         }
         #endregion
 
         #region Ticker client
 
-        GetSpotTickerOptions ISpotTickerRestClient.GetSpotTickerOptions { get; } = new GetSpotTickerOptions(_exchange);
-        async Task<HttpResult<SharedSpotTicker>> ISpotTickerRestClient.GetSpotTickerAsync(GetTickerRequest request, CancellationToken ct)
+        Task<HttpResult<SharedSpotTicker[]>> ISpotTickerRestClient.GetSpotTickersAsync(GetTickersRequest request, CancellationToken ct)
+            => GetAllSpotTickersAsync(request, ct);
+        GetAllSpotTickersOptions ISpotTickerRestClient.GetSpotTickersOptions => GetAllSpotTickersOptions;
+        public GetSpotTickerOptions GetSpotTickerOptions { get; } = new GetSpotTickerOptions(_exchange);
+        public async Task<HttpResult<SharedSpotTicker>> GetSpotTickerAsync(GetTickerRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetSpotTickerOptions.ValidateRequest(request, this);
+            var validationError = GetSpotTickerOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedSpotTicker>(Exchange, validationError);
 
-            var result = await ExchangeData.GetTickersAsync(ct).ConfigureAwait(false);
+            var result = await _api.ExchangeData.GetTickersAsync(ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedSpotTicker>(result);
 
@@ -146,7 +207,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedSpotTicker>(result, new ServerError(new ErrorInfo(ErrorType.UnknownSymbol, "Symbol not found")));
 
             return HttpResult.Ok(result, new SharedSpotTicker(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, ticker.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, ticker.Symbol), 
                 ticker.Symbol,
                 ticker.LastPrice,
                 null, 
@@ -157,21 +218,21 @@ namespace WhiteBit.Net.Clients.V4Api
             });
         }
 
-        GetSpotTickersOptions ISpotTickerRestClient.GetSpotTickersOptions { get; } = new GetSpotTickersOptions(_exchange);
-        async Task<HttpResult<SharedSpotTicker[]>> ISpotTickerRestClient.GetSpotTickersAsync(GetTickersRequest request, CancellationToken ct)
+        public GetAllSpotTickersOptions GetAllSpotTickersOptions { get; } = new GetAllSpotTickersOptions(_exchange);
+        public async Task<HttpResult<SharedSpotTicker[]>> GetAllSpotTickersAsync(GetTickersRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetSpotTickersOptions.ValidateRequest(request, this);
+            var validationError = GetAllSpotTickersOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedSpotTicker[]>(Exchange, validationError);
 
-            var result = await ExchangeData.GetTickersAsync(ct: ct).ConfigureAwait(false);
+            var result = await _api.ExchangeData.GetTickersAsync(ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedSpotTicker[]>(result);
 
             var data = result.Data.Where(x => !x.Symbol.EndsWith("_PERP"));
             return HttpResult.Ok(result, data.Select(x => 
             new SharedSpotTicker(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, x.Symbol), 
                 x.Symbol, 
                 x.LastPrice,
                 null,
@@ -186,19 +247,19 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Book Ticker client
 
-        GetBookTickerOptions IBookTickerRestClient.GetBookTickerOptions { get; } = new GetBookTickerOptions(_exchange, false);
-        async Task<HttpResult<SharedBookTicker>> IBookTickerRestClient.GetBookTickerAsync(GetBookTickerRequest request, CancellationToken ct)
+        public GetBookTickerOptions GetBookTickerOptions { get; } = new GetBookTickerOptions(_exchange, false);
+        public async Task<HttpResult<SharedBookTicker>> GetBookTickerAsync(GetBookTickerRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetBookTickerOptions.ValidateRequest(request, this);
+            var validationError = GetBookTickerOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedBookTicker>(Exchange, validationError);
 
-            var resultTicker = await ExchangeData.GetOrderBookAsync(request.Symbol!.GetSymbol(FormatSymbol), 1, ct: ct).ConfigureAwait(false);
+            var resultTicker = await _api.ExchangeData.GetOrderBookAsync(request.Symbol!.GetSymbol(FormatSymbol), 1, ct: ct).ConfigureAwait(false);
             if (!resultTicker.Success)
                 return HttpResult.Fail<SharedBookTicker>(resultTicker);
 
             return HttpResult.Ok(resultTicker, new SharedBookTicker(
-                ExchangeSymbolCache.ParseSymbol(request.Symbol.TradingMode == TradingMode.Spot ? _topicSpotId : _topicFuturesId, EnvironmentName, null, resultTicker.Data.Symbol),
+                ExchangeSymbolCache.ParseSymbol(request.Symbol.TradingMode == TradingMode.Spot ? _topicSpotId : _topicFuturesId, _api.EnvironmentName, null, resultTicker.Data.Symbol),
                 resultTicker.Data.Symbol,
                 resultTicker.Data.Asks[0].Price,
                 new SharedOrderQuantity(resultTicker.Data.Asks[0].Quantity),
@@ -209,17 +270,17 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Recent Trades client
-        GetRecentTradesOptions IRecentTradeRestClient.GetRecentTradesOptions { get; } = new GetRecentTradesOptions(_exchange, 100, false);
+        public GetRecentTradesOptions GetRecentTradesOptions { get; } = new GetRecentTradesOptions(_exchange, 100, false);
 
-        async Task<HttpResult<SharedTrade[]>> IRecentTradeRestClient.GetRecentTradesAsync(GetRecentTradesRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedTrade[]>> GetRecentTradesAsync(GetRecentTradesRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetRecentTradesOptions.ValidateRequest(request, this);
+            var validationError = GetRecentTradesOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedTrade[]>(Exchange, validationError);
 
             // Get data
             var symbol = request.Symbol!.GetSymbol(FormatSymbol);
-            var result = await ExchangeData.GetRecentTradesAsync(
+            var result = await _api.ExchangeData.GetRecentTradesAsync(
                 symbol,
                 ct: ct).ConfigureAwait(false);
             if (!result.Success)
@@ -239,37 +300,37 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Order Book client
-        GetOrderBookOptions IOrderBookRestClient.GetOrderBookOptions { get; } = new GetOrderBookOptions(_exchange, 1, 100, false);
-        async Task<HttpResult<SharedOrderBook>> IOrderBookRestClient.GetOrderBookAsync(GetOrderBookRequest request, CancellationToken ct)
+        public GetOrderBookOptions GetOrderBookOptions { get; } = new GetOrderBookOptions(_exchange, 1, 100, false);
+        public async Task<HttpResult<SharedOrderBook>> GetOrderBookAsync(GetOrderBookRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetOrderBookOptions.ValidateRequest(request, this);
+            var validationError = GetOrderBookOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedOrderBook>(Exchange, validationError);
 
-            var result = await ExchangeData.GetOrderBookAsync(
+            var result = await _api.ExchangeData.GetOrderBookAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 limit: request.Limit,
                 ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedOrderBook>(result);
 
-            return HttpResult.Ok(result, new SharedOrderBook(SharedQuantityType.BaseAsset, result.Data.Asks, result.Data.Bids));
+            return HttpResult.Ok(result, new SharedOrderBook(SharedQuantityType.BaseAsset, null, result.Data.Asks, result.Data.Bids));
         }
 
         #endregion
 
         #region Balance Client
-        GetBalancesOptions IBalanceRestClient.GetBalancesOptions { get; } = new GetBalancesOptions(_exchange, AccountTypeFilter.Funding, AccountTypeFilter.Spot, AccountTypeFilter.Futures);
+        public GetBalancesOptions GetBalancesOptions { get; } = new GetBalancesOptions(_exchange, AccountTypeFilter.Funding, AccountTypeFilter.Spot, AccountTypeFilter.Futures);
 
-        async Task<HttpResult<SharedBalance[]>> IBalanceRestClient.GetBalancesAsync(GetBalancesRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedBalance[]>> GetBalancesAsync(GetBalancesRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetBalancesOptions.ValidateRequest(request, this);
+            var validationError = GetBalancesOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedBalance[]>(Exchange, validationError);
 
             if (request.AccountType == null || request.AccountType == SharedAccountType.Spot)
             {
-                var result = await Account.GetSpotBalancesAsync(ct: ct).ConfigureAwait(false);
+                var result = await _api.Account.GetSpotBalancesAsync(ct: ct).ConfigureAwait(false);
                 if (!result.Success)
                     return HttpResult.Fail<SharedBalance[]>(result);
 
@@ -278,7 +339,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             else if(request.AccountType == SharedAccountType.Funding)
             {
-                var result = await Account.GetMainBalancesAsync(ct: ct).ConfigureAwait(false);
+                var result = await _api.Account.GetMainBalancesAsync(ct: ct).ConfigureAwait(false);
                 if (!result.Success)
                     return HttpResult.Fail<SharedBalance[]>(result);
 
@@ -287,27 +348,27 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             else
             {
-                var result = await Account.GetCollateralBalancesAsync(ct: ct).ConfigureAwait(false);
+                var result = await _api.Account.GetCollateralBalancesAsync(ct: ct).ConfigureAwait(false);
                 if (!result.Success)
                     return HttpResult.Fail<SharedBalance[]>(result);
 
                 return HttpResult.Ok(result, result.Data.Select(x =>
-                    new SharedBalance(SupportedFuturesModes, x.Key, x.Value, x.Value)).ToArray());
+                    new SharedBalance([TradingMode.PerpetualLinear], x.Key, x.Value, x.Value)).ToArray());
             }
         }
 
         #endregion
 
         #region Asset client
-        GetAssetsOptions IAssetsRestClient.GetAssetsOptions { get; } = new GetAssetsOptions(_exchange, false);
+        public GetAssetsOptions GetAssetsOptions { get; } = new GetAssetsOptions(_exchange, false);
 
-        async Task<HttpResult<SharedAsset[]>> IAssetsRestClient.GetAssetsAsync(GetAssetsRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedAsset[]>> GetAssetsAsync(GetAssetsRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetAssetsOptions.ValidateRequest(request, this);
+            var validationError = GetAssetsOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedAsset[]>(Exchange, validationError);
 
-            var assets = await ExchangeData.GetAssetsAsync(ct: ct).ConfigureAwait(false);
+            var assets = await _api.ExchangeData.GetAssetsAsync(ct: ct).ConfigureAwait(false);
             if (!assets.Success)
                 return HttpResult.Fail<SharedAsset[]>(assets);
 
@@ -326,14 +387,14 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        GetAssetOptions IAssetsRestClient.GetAssetOptions { get; } = new GetAssetOptions(_exchange, false);
-        async Task<HttpResult<SharedAsset>> IAssetsRestClient.GetAssetAsync(GetAssetRequest request, CancellationToken ct)
+        public GetAssetOptions GetAssetOptions { get; } = new GetAssetOptions(_exchange, false);
+        public async Task<HttpResult<SharedAsset>> GetAssetAsync(GetAssetRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetAssetOptions.ValidateRequest(request, this);
+            var validationError = GetAssetOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedAsset>(Exchange, validationError);
 
-            var assets = await ExchangeData.GetAssetsAsync(ct: ct).ConfigureAwait(false);
+            var assets = await _api.ExchangeData.GetAssetsAsync(ct: ct).ConfigureAwait(false);
             if (!assets.Success)
                 return HttpResult.Fail<SharedAsset>(assets);
 
@@ -357,14 +418,14 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Deposit client
 
-        GetDepositAddressesOptions IDepositRestClient.GetDepositAddressesOptions { get; } = new GetDepositAddressesOptions(_exchange, true);
-        async Task<HttpResult<SharedDepositAddress[]>> IDepositRestClient.GetDepositAddressesAsync(GetDepositAddressesRequest request, CancellationToken ct)
+        public GetDepositAddressesOptions GetDepositAddressesOptions { get; } = new GetDepositAddressesOptions(_exchange, true);
+        public async Task<HttpResult<SharedDepositAddress[]>> GetDepositAddressesAsync(GetDepositAddressesRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetDepositAddressesOptions.ValidateRequest(request, this);
+            var validationError = GetDepositAddressesOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedDepositAddress[]>(Exchange, validationError);
 
-            var depositAddresses = await Account.GetDepositAddressAsync(request.Asset, request.Network, ct: ct).ConfigureAwait(false);
+            var depositAddresses = await _api.Account.GetDepositAddressAsync(request.Asset, request.Network, ct: ct).ConfigureAwait(false);
             if (!depositAddresses.Success)
                 return HttpResult.Fail<SharedDepositAddress[]>(depositAddresses);
 
@@ -375,10 +436,14 @@ namespace WhiteBit.Net.Clients.V4Api
             });
         }
 
-        GetDepositsOptions IDepositRestClient.GetDepositsOptions { get; } = new GetDepositsOptions(_exchange, false, true, false, 100);
-        async Task<HttpResult<SharedDeposit[]>> IDepositRestClient.GetDepositsAsync(GetDepositsRequest request, PageRequest? pageRequest, CancellationToken ct)
+        Task<HttpResult<SharedDeposit[]>> IDepositRestClient.GetDepositsAsync(GetDepositsRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => GetDepositHistoryAsync(request, pageRequest, ct);
+        GetDepositHistoryOptions IDepositRestClient.GetDepositsOptions => GetDepositHistoryOptions;
+
+        public GetDepositHistoryOptions GetDepositHistoryOptions { get; } = new GetDepositHistoryOptions(_exchange, false, true, false, 100);
+        public async Task<HttpResult<SharedDeposit[]>> GetDepositHistoryAsync(GetDepositsRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetDepositsOptions.ValidateRequest(request, this);
+            var validationError = GetDepositHistoryOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedDeposit[]>(Exchange, validationError);
 
@@ -387,7 +452,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var result = await Account.GetDepositWithdrawalHistoryAsync(
+            var result = await _api.Account.GetDepositWithdrawalHistoryAsync(
                 Enums.TransactionType.Deposit,
                 request.Asset,
                 limit: limit,
@@ -445,10 +510,14 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Withdrawal client
 
-        GetWithdrawalsOptions IWithdrawalRestClient.GetWithdrawalsOptions { get; } = new GetWithdrawalsOptions(_exchange, false, true, false, 100);
-        async Task<HttpResult<SharedWithdrawal[]>> IWithdrawalRestClient.GetWithdrawalsAsync(GetWithdrawalsRequest request, PageRequest? pageRequest, CancellationToken ct)
+        Task<HttpResult<SharedWithdrawal[]>> IWithdrawalRestClient.GetWithdrawalsAsync(GetWithdrawalsRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => GetWithdrawalHistoryAsync(request, pageRequest, ct);
+        GetWithdrawalHistoryOptions IWithdrawalRestClient.GetWithdrawalsOptions => GetWithdrawalHistoryOptions;
+
+        public GetWithdrawalHistoryOptions GetWithdrawalHistoryOptions { get; } = new GetWithdrawalHistoryOptions(_exchange, false, true, false, 100);
+        public async Task<HttpResult<SharedWithdrawal[]>> GetWithdrawalHistoryAsync(GetWithdrawalsRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetWithdrawalsOptions.ValidateRequest(request, this);
+            var validationError = GetWithdrawalHistoryOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedWithdrawal[]>(Exchange, validationError);
 
@@ -457,7 +526,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var result = await Account.GetDepositWithdrawalHistoryAsync(
+            var result = await _api.Account.GetDepositWithdrawalHistoryAsync(
                 Enums.TransactionType.Withdrawal,
                 request.Asset,
                 limit: limit,
@@ -517,16 +586,16 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Withdraw client
 
-        WithdrawOptions IWithdrawRestClient.WithdrawOptions { get; } = new WithdrawOptions(_exchange);
-        async Task<HttpResult<SharedId>> IWithdrawRestClient.WithdrawAsync(WithdrawRequest request, CancellationToken ct)
+        public WithdrawOptions WithdrawOptions { get; } = new WithdrawOptions(_exchange);
+        public async Task<HttpResult<SharedId>> WithdrawAsync(WithdrawRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.WithdrawOptions.ValidateRequest(request, this);
+            var validationError = WithdrawOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
             var id = Guid.NewGuid().ToString();
             // Get data
-            var withdrawal = await Account.WithdrawAsync(
+            var withdrawal = await _api.Account.WithdrawAsync(
                 request.Asset,
                 request.Quantity,
                 request.Address,
@@ -545,26 +614,26 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Spot Order Client
 
-        SharedFeeDeductionType ISpotOrderRestClient.SpotFeeDeductionType => SharedFeeDeductionType.AddToCost;
-        SharedFeeAssetType ISpotOrderRestClient.SpotFeeAssetType => SharedFeeAssetType.QuoteAsset;
-        SharedOrderType[] ISpotOrderRestClient.SpotSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.Market, SharedOrderType.LimitMaker };
-        SharedTimeInForce[] ISpotOrderRestClient.SpotSupportedTimeInForce { get; } = new[] { SharedTimeInForce.GoodTillCanceled, SharedTimeInForce.ImmediateOrCancel };
-        SharedQuantitySupport ISpotOrderRestClient.SpotSupportedOrderQuantity { get; } = new SharedQuantitySupport(
+        public SharedFeeDeductionType SpotFeeDeductionType => SharedFeeDeductionType.AddToCost;
+        public SharedFeeAssetType SpotFeeAssetType => SharedFeeAssetType.QuoteAsset;
+        public SharedOrderType[] SpotSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.Market, SharedOrderType.LimitMaker };
+        public SharedTimeInForce[] SpotSupportedTimeInForce { get; } = new[] { SharedTimeInForce.GoodTillCanceled, SharedTimeInForce.ImmediateOrCancel };
+        public SharedQuantitySupport SpotSupportedOrderQuantity { get; } = new SharedQuantitySupport(
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.QuoteAsset,
                 SharedQuantityType.BaseAsset);
 
-        string ISpotOrderRestClient.GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
+        public string GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
 
-        PlaceSpotOrderOptions ISpotOrderRestClient.PlaceSpotOrderOptions { get; } = new PlaceSpotOrderOptions(_exchange);
-        async Task<HttpResult<SharedId>> ISpotOrderRestClient.PlaceSpotOrderAsync(PlaceSpotOrderRequest request, CancellationToken ct)
+        public PlaceSpotOrderOptions PlaceSpotOrderOptions { get; } = new PlaceSpotOrderOptions(_exchange);
+        public async Task<HttpResult<SharedId>> PlaceSpotOrderAsync(PlaceSpotOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.PlaceSpotOrderOptions.ValidateRequest(request, this);
+            var validationError = PlaceSpotOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
-            var result = await Trading.PlaceSpotOrderAsync(
+            var result = await _api.Trading.PlaceSpotOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
                 request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.LimitMaker ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
@@ -582,17 +651,17 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        GetSpotOrderOptions ISpotOrderRestClient.GetSpotOrderOptions { get; } = new GetSpotOrderOptions(_exchange, true);
-        async Task<HttpResult<SharedSpotOrder>> ISpotOrderRestClient.GetSpotOrderAsync(GetOrderRequest request, CancellationToken ct)
+        public GetSpotOrderOptions GetSpotOrderOptions { get; } = new GetSpotOrderOptions(_exchange, true);
+        public async Task<HttpResult<SharedSpotOrder>> GetSpotOrderAsync(GetOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetSpotOrderOptions.ValidateRequest(request, this);
+            var validationError = GetSpotOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedSpotOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedSpotOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
-            var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            var openOrders = await _api.Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders.Success)
                 return HttpResult.Fail<SharedSpotOrder>(openOrders);
 
@@ -600,7 +669,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedSpotOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, openOrder.Symbol), 
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, openOrder.Symbol), 
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -614,15 +683,17 @@ namespace WhiteBit.Net.Clients.V4Api
                     OrderQuantity = new SharedOrderQuantity((openOrder.OrderType == OrderType.Market || openOrder.OrderType == OrderType.StopMarket) && openOrder.OrderSide == OrderSide.Buy ? null : openOrder.Quantity, (openOrder.OrderType == OrderType.Market || openOrder.OrderType == OrderType.StopMarket) && openOrder.OrderSide == OrderSide.Buy ? openOrder.Quantity : null),
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
+#pragma warning disable CS0618 // Type or member is obsolete
                     Fee = openOrder.Fee,
                     FeeAsset = openOrder.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                     TriggerPrice = openOrder.TriggerPrice,
                     IsTriggerOrder = openOrder.TriggerPrice > 0
                 });
             }
             else
             {
-                var closeOrders = await Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+                var closeOrders = await _api.Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
                 if (!closeOrders.Success)
                     return HttpResult.Fail<SharedSpotOrder>(closeOrders);
 
@@ -633,7 +704,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 var status = closedOrder.Status == OrderStatus.Canceled ? SharedOrderStatus.Canceled : SharedOrderStatus.Filled;
 
                 return HttpResult.Ok(closeOrders, new SharedSpotOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, closedOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, closedOrder.Symbol),
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),
@@ -647,18 +718,20 @@ namespace WhiteBit.Net.Clients.V4Api
                     OrderQuantity = new SharedOrderQuantity((closedOrder.OrderType == OrderType.Market || closedOrder.OrderType == OrderType.StopMarket) && closedOrder.OrderSide == OrderSide.Buy ? null : closedOrder.Quantity, (closedOrder.OrderType == OrderType.Market || closedOrder.OrderType == OrderType.StopMarket) && closedOrder.OrderSide == OrderSide.Buy ? closedOrder.Quantity : null),
                     QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled),
                     TimeInForce = ParseTimeInForce(closedOrder),
+#pragma warning disable CS0618 // Type or member is obsolete
                     Fee = closedOrder.Fee,
                     FeeAsset = closedOrder.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                     TriggerPrice = closedOrder.TriggerPrice,
                     IsTriggerOrder = closedOrder.TriggerPrice > 0
                 });
             }
         }
 
-        GetOpenSpotOrdersOptions ISpotOrderRestClient.GetOpenSpotOrdersOptions { get; } = new GetOpenSpotOrdersOptions(_exchange, true);
-        async Task<HttpResult<SharedSpotOrder[]>> ISpotOrderRestClient.GetOpenSpotOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
+        public GetOpenSpotOrdersOptions GetOpenSpotOrdersOptions { get; } = new GetOpenSpotOrdersOptions(_exchange, true);
+        public async Task<HttpResult<SharedSpotOrder[]>> GetOpenSpotOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetOpenSpotOrdersOptions.ValidateRequest(request, this);
+            var validationError = GetOpenSpotOrdersOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedSpotOrder[]>(Exchange, validationError);
 
@@ -669,7 +742,7 @@ namespace WhiteBit.Net.Clients.V4Api
             HttpResult<WhiteBitOrder[]> orders;
             while (true)
             {
-                orders = await Trading.GetOpenOrdersAsync(symbol, limit: 100, offset: offset, ct: ct).ConfigureAwait(false);
+                orders = await _api.Trading.GetOpenOrdersAsync(symbol, limit: 100, offset: offset, ct: ct).ConfigureAwait(false);
                 if (!orders.Success)
                     return HttpResult.Fail<SharedSpotOrder[]>(orders);
 
@@ -683,7 +756,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var data = allOpenOrders.Where(x => !x.Symbol.EndsWith("_PERP"));
 
             return HttpResult.Ok(orders, data.Select(x => new SharedSpotOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -697,20 +770,22 @@ namespace WhiteBit.Net.Clients.V4Api
                 OrderQuantity = new SharedOrderQuantity((x.OrderType == OrderType.Market || x.OrderType == OrderType.StopMarket) && x.OrderSide == OrderSide.Buy ? null : x.Quantity, (x.OrderType == OrderType.Market || x.OrderType == OrderType.StopMarket) && x.OrderSide == OrderSide.Buy ? x.Quantity : null),
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
+#pragma warning disable CS0618 // Type or member is obsolete
                 Fee = x.Fee,
                 FeeAsset = x.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                 TriggerPrice = x.TriggerPrice,
                 IsTriggerOrder = x.TriggerPrice > 0
             }).ToArray());
         }
 
-        GetSpotClosedOrdersOptions ISpotOrderRestClient.GetClosedSpotOrdersOptions { get; } = new GetSpotClosedOrdersOptions(_exchange, true, false, true, 100)
+        public GetSpotClosedOrdersOptions GetClosedSpotOrdersOptions { get; } = new GetSpotClosedOrdersOptions(_exchange, true, false, true, 100)
         {
             MaxAge = TimeSpan.FromDays(180)
         };
-        async Task<HttpResult<SharedSpotOrder[]>> ISpotOrderRestClient.GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
+        public async Task<HttpResult<SharedSpotOrder[]>> GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetClosedSpotOrdersOptions.ValidateRequest(request, this);
+            var validationError = GetClosedSpotOrdersOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedSpotOrder[]>(Exchange, validationError);
 
@@ -719,7 +794,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
 
             // Get data
-            var result = await Trading.GetClosedOrdersAsync(
+            var result = await _api.Trading.GetClosedOrdersAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 startTime: pageParams.StartTime,
                 endTime: pageParams.EndTime,
@@ -740,7 +815,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 TimeSpan.FromDays(180));
 
             var data = result.Data.Where(x => !x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedSpotOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, x.Symbol), 
                 xk.Key,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -754,8 +829,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 OrderQuantity = new SharedOrderQuantity((x.OrderType == OrderType.Market || x.OrderType == OrderType.StopMarket) && x.OrderSide == OrderSide.Buy ? null : x.Quantity, (x.OrderType == OrderType.Market || x.OrderType == OrderType.StopMarket) && x.OrderSide == OrderSide.Buy ? x.Quantity : null),
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
+#pragma warning disable CS0618 // Type or member is obsolete
                 Fee = x.Fee,
                 FeeAsset = x.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                 TriggerPrice = x.TriggerPrice,
                 IsTriggerOrder = x.TriggerPrice > 0
             }));
@@ -763,22 +840,22 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(data, x => x.CreateTime!.Value, request.StartTime, request.EndTime, direction).ToArray(), nextPageRequest);
         }
 
-        GetSpotOrderTradesOptions ISpotOrderRestClient.GetSpotOrderTradesOptions { get; } = new GetSpotOrderTradesOptions(_exchange, true);
-        async Task<HttpResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
+        public GetSpotOrderTradesOptions GetSpotOrderTradesOptions { get; } = new GetSpotOrderTradesOptions(_exchange, true);
+        public async Task<HttpResult<SharedUserTrade[]>> GetSpotOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetSpotOrderTradesOptions.ValidateRequest(request, this);
+            var validationError = GetSpotOrderTradesOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedUserTrade[]>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedUserTrade[]>(Exchange, ArgumentError.Invalid(nameof(GetOrderTradesRequest.OrderId), "Invalid order id"));
 
-            var orders = await Trading.GetOrderTradesAsync(orderId, ct: ct).ConfigureAwait(false);
+            var orders = await _api.Trading.GetOrderTradesAsync(orderId, ct: ct).ConfigureAwait(false);
             if (!orders.Success)
                 return HttpResult.Fail<SharedUserTrade[]>(orders);
 
             return HttpResult.Ok(orders, orders.Data.Select(x => new SharedUserTrade(
-                ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
                 x.Id.ToString(),
@@ -794,13 +871,17 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        GetSpotUserTradesOptions ISpotOrderRestClient.GetSpotUserTradesOptions { get; } = new GetSpotUserTradesOptions(_exchange, false, true, true, 100)
+        Task<HttpResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => GetSpotUserTradeHistoryAsync(request, pageRequest, ct);
+        GetSpotUserTradeHistoryOptions ISpotOrderRestClient.GetSpotUserTradesOptions => GetSpotUserTradeHistoryOptions;
+
+        public GetSpotUserTradeHistoryOptions GetSpotUserTradeHistoryOptions { get; } = new GetSpotUserTradeHistoryOptions(_exchange, false, true, true, 100)
         {
             MaxAge = TimeSpan.FromDays(180)
         };
-        async Task<HttpResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
+        public async Task<HttpResult<SharedUserTrade[]>> GetSpotUserTradeHistoryAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetSpotUserTradesOptions.ValidateRequest(request, this);
+            var validationError = GetSpotUserTradeHistoryOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedUserTrade[]>(Exchange, validationError);
 
@@ -809,7 +890,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var result = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
+            var result = await _api.Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
                 startTime: pageParams.StartTime,
                 endTime: pageParams.EndTime,
                 limit: limit,
@@ -830,7 +911,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(result.Data, x => x.Time, request.StartTime, request.EndTime, direction)
                        .Select(y => new SharedUserTrade(
-                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, y.Symbol),
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, y.Symbol),
                             y.Symbol,
                             y.OrderId.ToString(),
                             y.Id.ToString(),
@@ -846,17 +927,17 @@ namespace WhiteBit.Net.Clients.V4Api
                         }).ToArray(), nextPageRequest);
         }
 
-        CancelSpotOrderOptions ISpotOrderRestClient.CancelSpotOrderOptions { get; } = new CancelSpotOrderOptions(_exchange, true);
-        async Task<HttpResult<SharedId>> ISpotOrderRestClient.CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)
+        public CancelSpotOrderOptions CancelSpotOrderOptions { get; } = new CancelSpotOrderOptions(_exchange, true);
+        public async Task<HttpResult<SharedId>> CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.CancelSpotOrderOptions.ValidateRequest(request, this);
+            var validationError = CancelSpotOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
-            var order = await Trading.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            var order = await _api.Trading.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!order.Success)
                 return HttpResult.Fail<SharedId>(order);
 
@@ -885,16 +966,16 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Futures Symbol client
 
-        SharedSymbolCatalog? IFuturesSymbolRestClient.FuturesSymbolCatalog => ExchangeSymbolCache.GetSymbolCatalog(_exchange, _topicFuturesId, EnvironmentName, null);
-        GetFuturesSymbolsOptions IFuturesSymbolRestClient.GetFuturesSymbolsOptions { get; } = new GetFuturesSymbolsOptions(_exchange, false);
-        async Task<HttpResult<SharedFuturesSymbol[]>> IFuturesSymbolRestClient.GetFuturesSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
+        public SharedSymbolCatalog? FuturesSymbolCatalog => ExchangeSymbolCache.GetSymbolCatalog(_exchange, _topicFuturesId, _api.EnvironmentName, null);
+        public GetFuturesSymbolsOptions GetFuturesSymbolsOptions { get; } = new GetFuturesSymbolsOptions(_exchange, false);
+        public async Task<HttpResult<SharedFuturesSymbol[]>> GetFuturesSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFuturesSymbolsOptions.ValidateRequest(request, this);
+            var validationError = GetFuturesSymbolsOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFuturesSymbol[]>(Exchange, validationError);
 
-            var symbolsTask = ExchangeData.GetSymbolsAsync(ct);
-            var futuresSymbolsTask = ExchangeData.GetFuturesSymbolsAsync(ct);
+            var symbolsTask = _api.ExchangeData.GetSymbolsAsync(ct);
+            var futuresSymbolsTask = _api.ExchangeData.GetFuturesSymbolsAsync(ct);
             await Task.WhenAll(symbolsTask, futuresSymbolsTask).ConfigureAwait(false);
 
             var symbols = symbolsTask.Result;
@@ -909,7 +990,7 @@ namespace WhiteBit.Net.Clients.V4Api
                  .Select(x => ParseFuturesSymbol(x, symbols.Data))
                 .ToArray();
 
-            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, EnvironmentName, null, resultData);
+            ExchangeSymbolCache.UpdateSymbolInfo(_topicFuturesId, _api.EnvironmentName, null, resultData);
             return HttpResult.Ok(symbols, SharedUtils.ApplySymbolFilter(resultData, request));
         }
 
@@ -952,57 +1033,57 @@ namespace WhiteBit.Net.Clients.V4Api
             return result;
         }
 
-        async Task<ExchangeCallResult<SharedSymbol[]>> IFuturesSymbolRestClient.GetFuturesSymbolsForBaseAssetAsync(string baseAsset)
+        public async Task<ExchangeCallResult<SharedSymbol[]>> GetFuturesSymbolsForBaseAssetAsync(string baseAsset)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, EnvironmentName, null))
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, _api.EnvironmentName, null))
             {
-                var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                var symbols = await GetFuturesSymbolsAsync(new GetSymbolsRequest(), default).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<SharedSymbol[]>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicFuturesId, EnvironmentName, null, baseAsset));
+            return ExchangeCallResult<SharedSymbol[]>.Ok(Exchange, ExchangeSymbolCache.GetSymbolsForBaseAsset(_topicFuturesId, _api.EnvironmentName, null, baseAsset));
         }
 
-        async Task<ExchangeCallResult<bool>> IFuturesSymbolRestClient.SupportsFuturesSymbolAsync(SharedSymbol symbol)
+        public async Task<ExchangeCallResult<bool>> SupportsFuturesSymbolAsync(SharedSymbol symbol)
         {
             if (symbol.TradingMode == TradingMode.Spot)
                 throw new ArgumentException(nameof(symbol), "Spot symbols not allowed");
 
-            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, EnvironmentName, null))
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, _api.EnvironmentName, null))
             {
-                var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                var symbols = await GetFuturesSymbolsAsync(new GetSymbolsRequest(), default).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, EnvironmentName, null, symbol));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, _api.EnvironmentName, null, symbol));
         }
 
-        async Task<ExchangeCallResult<bool>> IFuturesSymbolRestClient.SupportsFuturesSymbolAsync(string symbolName)
+        public async Task<ExchangeCallResult<bool>> SupportsFuturesSymbolAsync(string symbolName)
         {
-            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, EnvironmentName, null))
+            if (!ExchangeSymbolCache.HasCached(_topicFuturesId, _api.EnvironmentName, null))
             {
-                var symbols = await ((IFuturesSymbolRestClient)this).GetFuturesSymbolsAsync(new GetSymbolsRequest()).ConfigureAwait(false);
+                var symbols = await GetFuturesSymbolsAsync(new GetSymbolsRequest(), default).ConfigureAwait(false);
                 if (!symbols.Success)
                     return ExchangeCallResult<bool>.Fail(Exchange, symbols.Error!);
             }
 
-            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, EnvironmentName, null, symbolName));
+            return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicFuturesId, _api.EnvironmentName, null, symbolName));
         }
 
         #endregion
 
         #region Futures Ticker client
 
-        GetFuturesTickerOptions IFuturesTickerRestClient.GetFuturesTickerOptions { get; } = new GetFuturesTickerOptions(_exchange);
-        async Task<HttpResult<SharedFuturesTicker>> IFuturesTickerRestClient.GetFuturesTickerAsync(GetTickerRequest request, CancellationToken ct)
+        public GetFuturesTickerOptions GetFuturesTickerOptions { get; } = new GetFuturesTickerOptions(_exchange);
+        public async Task<HttpResult<SharedFuturesTicker>> GetFuturesTickerAsync(GetTickerRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFuturesTickerOptions.ValidateRequest(request, this);
+            var validationError = GetFuturesTickerOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFuturesTicker>(Exchange, validationError);
 
-            var resultTicker = await ExchangeData.GetFuturesSymbolsAsync(ct).ConfigureAwait(false);
+            var resultTicker = await _api.ExchangeData.GetFuturesSymbolsAsync(ct).ConfigureAwait(false);
             if (!resultTicker.Success)
                 return HttpResult.Fail<SharedFuturesTicker>(resultTicker);
 
@@ -1013,7 +1094,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(resultTicker,
                 new SharedFuturesTicker(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, ticker.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, ticker.Symbol),
                     ticker.Symbol,
                     ticker.LastPrice,
                     ticker.HighPrice,
@@ -1027,21 +1108,24 @@ namespace WhiteBit.Net.Clients.V4Api
             });
         }
 
-        GetFuturesTickersOptions IFuturesTickerRestClient.GetFuturesTickersOptions { get; } = new GetFuturesTickersOptions(_exchange);
-        async Task<HttpResult<SharedFuturesTicker[]>> IFuturesTickerRestClient.GetFuturesTickersAsync(GetTickersRequest request, CancellationToken ct)
+        Task<HttpResult<SharedFuturesTicker[]>> IFuturesTickerRestClient.GetFuturesTickersAsync(GetTickersRequest request, CancellationToken ct)
+            => GetAllFuturesTickersAsync(request, ct);
+        GetAllFuturesTickersOptions IFuturesTickerRestClient.GetFuturesTickersOptions => GetAllFuturesTickersOptions;
+        public GetAllFuturesTickersOptions GetAllFuturesTickersOptions { get; } = new GetAllFuturesTickersOptions(_exchange);
+        public async Task<HttpResult<SharedFuturesTicker[]>> GetAllFuturesTickersAsync(GetTickersRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFuturesTickersOptions.ValidateRequest(request, this);
+            var validationError = GetAllFuturesTickersOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFuturesTicker[]>(Exchange, validationError);
 
-            var resultTickers = await ExchangeData.GetFuturesSymbolsAsync(ct).ConfigureAwait(false);
+            var resultTickers = await _api.ExchangeData.GetFuturesSymbolsAsync(ct).ConfigureAwait(false);
             if (!resultTickers.Success)
                 return HttpResult.Fail<SharedFuturesTicker[]>(resultTickers);
 
             return HttpResult.Ok(resultTickers, resultTickers.Data.Select(x =>
             {
                 return new SharedFuturesTicker(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, x.Symbol),
                     x.Symbol, 
                     x.LastPrice,
                     x.HighPrice,
@@ -1059,30 +1143,30 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Leverage client
-        SharedLeverageSettingMode ILeverageRestClient.LeverageSettingType => SharedLeverageSettingMode.PerAccount;
+        public SharedLeverageSettingMode LeverageSettingType => SharedLeverageSettingMode.PerAccount;
 
-        GetLeverageOptions ILeverageRestClient.GetLeverageOptions { get; } = new GetLeverageOptions(_exchange, true);
-        async Task<HttpResult<SharedLeverage>> ILeverageRestClient.GetLeverageAsync(GetLeverageRequest request, CancellationToken ct)
+        public GetLeverageOptions GetLeverageOptions { get; } = new GetLeverageOptions(_exchange, true);
+        public async Task<HttpResult<SharedLeverage>> GetLeverageAsync(GetLeverageRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetLeverageOptions.ValidateRequest(request, this);
+            var validationError = GetLeverageOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedLeverage>(Exchange, validationError);
 
-            var result = await Account.GetCollateralAccountSummaryAsync(ct: ct).ConfigureAwait(false);
+            var result = await _api.Account.GetCollateralAccountSummaryAsync(ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedLeverage>(result);
 
             return HttpResult.Ok(result, new SharedLeverage(result.Data.Leverage));
         }
 
-        SetLeverageOptions ILeverageRestClient.SetLeverageOptions { get; } = new SetLeverageOptions(_exchange);
-        async Task<HttpResult<SharedLeverage>> ILeverageRestClient.SetLeverageAsync(SetLeverageRequest request, CancellationToken ct)
+        public SetLeverageOptions SetLeverageOptions { get; } = new SetLeverageOptions(_exchange);
+        public async Task<HttpResult<SharedLeverage>> SetLeverageAsync(SetLeverageRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.SetLeverageOptions.ValidateRequest(request, this);
+            var validationError = SetLeverageOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedLeverage>(Exchange, validationError);
 
-            var result = await Account.SetAccountLeverageAsync((int)request.Leverage, ct: ct).ConfigureAwait(false);
+            var result = await _api.Account.SetAccountLeverageAsync((int)request.Leverage, ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedLeverage>(result);
 
@@ -1092,14 +1176,14 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Open Interest client
 
-        GetOpenInterestOptions IOpenInterestRestClient.GetOpenInterestOptions { get; } = new GetOpenInterestOptions(_exchange, false);
-        async Task<HttpResult<SharedOpenInterest>> IOpenInterestRestClient.GetOpenInterestAsync(GetOpenInterestRequest request, CancellationToken ct)
+        public GetOpenInterestOptions GetOpenInterestOptions { get; } = new GetOpenInterestOptions(_exchange, false);
+        public async Task<HttpResult<SharedOpenInterest>> GetOpenInterestAsync(GetOpenInterestRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetOpenInterestOptions.ValidateRequest(request, this);
+            var validationError = GetOpenInterestOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedOpenInterest>(Exchange, validationError);
 
-            var resultTicker = await ExchangeData.GetFuturesSymbolsAsync(ct).ConfigureAwait(false);
+            var resultTicker = await _api.ExchangeData.GetFuturesSymbolsAsync(ct).ConfigureAwait(false);
             if (!resultTicker.Success)
                 return HttpResult.Fail<SharedOpenInterest>(resultTicker);
 
@@ -1115,16 +1199,15 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Position History client
 
-        GetPositionHistoryOptions IPositionHistoryRestClient.GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(_exchange, false, true, true, 100)
+        public GetPositionHistoryOptions GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(_exchange, false, true, true, 100)
         {
-            RequiredOptionalParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription(nameof(GetPositionHistoryRequest.Symbol), typeof(SharedSymbol), "The symbol to get position history for", "ETH_PERP")
-            }
+            RequiredRequestParameters = [
+                RequestParameter<GetPositionHistoryRequest>.Required(x => x.Symbol, "The symbol to get position history for", new SharedSymbol(TradingMode.PerpetualLinear, "ETH", "USDT"))
+                ]
         };
-        async Task<HttpResult<SharedPositionHistory[]>> IPositionHistoryRestClient.GetPositionHistoryAsync(GetPositionHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
+        public async Task<HttpResult<SharedPositionHistory[]>> GetPositionHistoryAsync(GetPositionHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetPositionHistoryOptions.ValidateRequest(request, this);
+            var validationError = GetPositionHistoryOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedPositionHistory[]>(Exchange, validationError);
 
@@ -1133,7 +1216,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var result = await CollateralTrading.GetPositionHistoryAsync(
+            var result = await _api.CollateralTrading.GetPositionHistoryAsync(
                 symbol: request.Symbol!.GetSymbol(FormatSymbol),
                 startTime: pageParams.StartTime,
                 endTime: pageParams.EndTime,
@@ -1155,7 +1238,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(result.Data, x => x.OpenTime, request.StartTime, request.EndTime, direction)
                        .Select(x => 
                            new SharedPositionHistory(
-                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), 
+                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, x.Symbol), 
                                 x.Symbol,
                                 x.Quantity >= 0 ? SharedPositionSide.Long : SharedPositionSide.Short,
                                 x.BasePrice,
@@ -1171,27 +1254,25 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Futures Order Client
 
-        SharedFeeDeductionType IFuturesOrderRestClient.FuturesFeeDeductionType => SharedFeeDeductionType.AddToCost;
-        SharedFeeAssetType IFuturesOrderRestClient.FuturesFeeAssetType => SharedFeeAssetType.QuoteAsset;
+        public SharedFeeDeductionType FuturesFeeDeductionType => SharedFeeDeductionType.AddToCost;
+        public SharedFeeAssetType FuturesFeeAssetType => SharedFeeAssetType.QuoteAsset;
 
-        SharedOrderType[] IFuturesOrderRestClient.FuturesSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.LimitMaker, SharedOrderType.Market };
-        SharedTimeInForce[] IFuturesOrderRestClient.FuturesSupportedTimeInForce { get; } = new[] { SharedTimeInForce.GoodTillCanceled, SharedTimeInForce.ImmediateOrCancel, SharedTimeInForce.FillOrKill };
-        SharedQuantitySupport IFuturesOrderRestClient.FuturesSupportedOrderQuantity { get; } = new SharedQuantitySupport(
+        public SharedOrderType[] FuturesSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.LimitMaker, SharedOrderType.Market };
+        public SharedTimeInForce[] FuturesSupportedTimeInForce { get; } = new[] { SharedTimeInForce.GoodTillCanceled, SharedTimeInForce.ImmediateOrCancel, SharedTimeInForce.FillOrKill };
+        public SharedQuantitySupport FuturesSupportedOrderQuantity { get; } = new SharedQuantitySupport(
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset);
 
-        string IFuturesOrderRestClient.GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
-
-        PlaceFuturesOrderOptions IFuturesOrderRestClient.PlaceFuturesOrderOptions { get; } = new PlaceFuturesOrderOptions(_exchange, true);
-        async Task<HttpResult<SharedId>> IFuturesOrderRestClient.PlaceFuturesOrderAsync(PlaceFuturesOrderRequest request, CancellationToken ct)
+        public PlaceFuturesOrderOptions PlaceFuturesOrderOptions { get; } = new PlaceFuturesOrderOptions(_exchange, true);
+        public async Task<HttpResult<SharedId>> PlaceFuturesOrderAsync(PlaceFuturesOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.PlaceFuturesOrderOptions.ValidateRequest(request, this);
+            var validationError = PlaceFuturesOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
-            var result = await CollateralTrading.PlaceOrderAsync(
+            var result = await _api.CollateralTrading.PlaceOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
                 (request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.LimitMaker) ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
@@ -1212,17 +1293,17 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        GetFuturesOrderOptions IFuturesOrderRestClient.GetFuturesOrderOptions { get; } = new GetFuturesOrderOptions(_exchange, true);
-        async Task<HttpResult<SharedFuturesOrder>> IFuturesOrderRestClient.GetFuturesOrderAsync(GetOrderRequest request, CancellationToken ct)
+        public GetFuturesOrderOptions GetFuturesOrderOptions { get; } = new GetFuturesOrderOptions(_exchange, true);
+        public async Task<HttpResult<SharedFuturesOrder>> GetFuturesOrderAsync(GetOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFuturesOrderOptions.ValidateRequest(request, this);
+            var validationError = GetFuturesOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFuturesOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedFuturesOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
-            var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            var openOrders = await _api.Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders.Success)
                 return HttpResult.Fail<SharedFuturesOrder>(openOrders);
 
@@ -1230,7 +1311,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedFuturesOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, openOrder.Symbol), 
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, openOrder.Symbol), 
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -1244,8 +1325,10 @@ namespace WhiteBit.Net.Clients.V4Api
                     OrderQuantity = new SharedOrderQuantity(openOrder.Quantity, contractQuantity: openOrder.Quantity),
                     QuantityFilled = new SharedOrderQuantity(openOrder.QuantityFilled, openOrder.QuoteQuantityFilled, openOrder.QuantityFilled),
                     TimeInForce = ParseTimeInForce(openOrder),
+#pragma warning disable CS0618 // Type or member is obsolete
                     Fee = openOrder.Fee,
                     FeeAsset = openOrder.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                     TakeProfitPrice = openOrder.OtoData?.TakeProfit,
                     StopLossPrice = openOrder.OtoData?.StopLoss,
                     TriggerPrice = openOrder.TriggerPrice,
@@ -1255,7 +1338,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             else
             {
-                var closeOrders = await Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+                var closeOrders = await _api.Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
                 if (!closeOrders.Success)
                     return HttpResult.Fail<SharedFuturesOrder>(closeOrders);
 
@@ -1268,7 +1351,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     : SharedOrderStatus.Filled;
 
                 return HttpResult.Ok(closeOrders, new SharedFuturesOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, closedOrder.Symbol), 
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, closedOrder.Symbol), 
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),
@@ -1282,9 +1365,11 @@ namespace WhiteBit.Net.Clients.V4Api
                         OrderQuantity = new SharedOrderQuantity(closedOrder.Quantity, contractQuantity: closedOrder.Quantity),
                         QuantityFilled = new SharedOrderQuantity(closedOrder.QuantityFilled, closedOrder.QuoteQuantityFilled, closedOrder.QuantityFilled),
                         TimeInForce = ParseTimeInForce(closedOrder),
+#pragma warning disable CS0618 // Type or member is obsolete
                         Fee = closedOrder.Fee,
                         FeeAsset = closedOrder.FeeAsset,
-                        TakeProfitPrice = closedOrder.OtoData?.TakeProfit,
+#pragma warning restore CS0618 // Type or member is obsolete
+                    TakeProfitPrice = closedOrder.OtoData?.TakeProfit,
                         StopLossPrice = closedOrder.OtoData?.StopLoss,
                         TriggerPrice = closedOrder.TriggerPrice,
                         IsTriggerOrder = closedOrder.TriggerPrice > 0,
@@ -1293,10 +1378,10 @@ namespace WhiteBit.Net.Clients.V4Api
             }            
         }
 
-        GetOpenFuturesOrdersOptions IFuturesOrderRestClient.GetOpenFuturesOrdersOptions { get; } = new GetOpenFuturesOrdersOptions(_exchange, true);
-        async Task<HttpResult<SharedFuturesOrder[]>> IFuturesOrderRestClient.GetOpenFuturesOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
+        public GetOpenFuturesOrdersOptions GetOpenFuturesOrdersOptions { get; } = new GetOpenFuturesOrdersOptions(_exchange, true);
+        public async Task<HttpResult<SharedFuturesOrder[]>> GetOpenFuturesOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetOpenFuturesOrdersOptions.ValidateRequest(request, this);
+            var validationError = GetOpenFuturesOrdersOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFuturesOrder[]>(Exchange, validationError);
 
@@ -1306,7 +1391,7 @@ namespace WhiteBit.Net.Clients.V4Api
             HttpResult<WhiteBitOrder[]> orders;
             while (true)
             {
-                orders = await Trading.GetOpenOrdersAsync(symbol, limit: 100, offset: offset, ct: ct).ConfigureAwait(false);
+                orders = await _api.Trading.GetOpenOrdersAsync(symbol, limit: 100, offset: offset, ct: ct).ConfigureAwait(false);
                 if (!orders.Success)
                     return HttpResult.Fail<SharedFuturesOrder[]>(orders);
 
@@ -1320,7 +1405,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var data = allOpenOrders.Where(x => x.Symbol.EndsWith("_PERP"));
 
             return HttpResult.Ok<SharedFuturesOrder[]>(orders, [.. data.Select(x => new SharedFuturesOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, x.Symbol), 
                 x.Symbol,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -1334,8 +1419,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 OrderQuantity = new SharedOrderQuantity(x.Quantity, contractQuantity: x.Quantity),
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
+#pragma warning disable CS0618 // Type or member is obsolete
                 Fee = x.Fee,
                 FeeAsset = x.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
@@ -1344,13 +1431,13 @@ namespace WhiteBit.Net.Clients.V4Api
             })]);
         }
 
-        GetFuturesClosedOrdersOptions IFuturesOrderRestClient.GetClosedFuturesOrdersOptions { get; } = new GetFuturesClosedOrdersOptions(_exchange, false, true, true, 100)
+        public GetFuturesClosedOrdersOptions GetClosedFuturesOrdersOptions { get; } = new GetFuturesClosedOrdersOptions(_exchange, false, true, true, 100)
         {
             MaxAge = TimeSpan.FromDays(180)
         };
-        async Task<HttpResult<SharedFuturesOrder[]>> IFuturesOrderRestClient.GetClosedFuturesOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
+        public async Task<HttpResult<SharedFuturesOrder[]>> GetClosedFuturesOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetClosedFuturesOrdersOptions.ValidateRequest(request, this);
+            var validationError = GetClosedFuturesOrdersOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFuturesOrder[]>(Exchange, validationError);
 
@@ -1359,7 +1446,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest, maxPeriod: TimeSpan.FromDays(31));
 
             // Get data
-            var result = await Trading.GetClosedOrdersAsync(
+            var result = await _api.Trading.GetClosedOrdersAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 startTime: pageParams.StartTime,
                 endTime: pageParams.EndTime,
@@ -1380,7 +1467,7 @@ namespace WhiteBit.Net.Clients.V4Api
                TimeSpan.FromDays(180));
 
             var data = result.Data.Where(x => x.Key.EndsWith("_PERP")).SelectMany(xk => xk.Value.Select(x => new SharedFuturesOrder(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, xk.Key), 
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, xk.Key), 
                 xk.Key,
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
@@ -1396,8 +1483,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 OrderQuantity = new SharedOrderQuantity(x.Quantity, contractQuantity: x.Quantity),
                 QuantityFilled = new SharedOrderQuantity(x.QuantityFilled, x.QuoteQuantityFilled, x.QuantityFilled),
                 TimeInForce = ParseTimeInForce(x),
+#pragma warning disable CS0618 // Type or member is obsolete
                 Fee = x.Fee,
                 FeeAsset = x.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                 TakeProfitPrice = x.OtoData?.TakeProfit,
                 StopLossPrice = x.OtoData?.StopLoss,
                 TriggerPrice = x.TriggerPrice,
@@ -1408,22 +1497,22 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(data, x => x.CreateTime!.Value, request.StartTime, request.EndTime, direction).ToArray(), nextPageRequest);
         }
 
-        GetFuturesOrderTradesOptions IFuturesOrderRestClient.GetFuturesOrderTradesOptions { get; } = new GetFuturesOrderTradesOptions(_exchange, true);
-        async Task<HttpResult<SharedUserTrade[]>> IFuturesOrderRestClient.GetFuturesOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
+        public GetFuturesOrderTradesOptions GetFuturesOrderTradesOptions { get; } = new GetFuturesOrderTradesOptions(_exchange, true);
+        public async Task<HttpResult<SharedUserTrade[]>> GetFuturesOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFuturesOrderTradesOptions.ValidateRequest(request, this);
+            var validationError = GetFuturesOrderTradesOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedUserTrade[]>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedUserTrade[]>(Exchange, ArgumentError.Invalid(nameof(GetOrderTradesRequest.OrderId), "Invalid order id"));
 
-            var orders = await Trading.GetOrderTradesAsync(orderId, ct: ct).ConfigureAwait(false);
+            var orders = await _api.Trading.GetOrderTradesAsync(orderId, ct: ct).ConfigureAwait(false);
             if (!orders.Success)
                 return HttpResult.Fail<SharedUserTrade[]>(orders);
 
             return HttpResult.Ok(orders, orders.Data.Select(x => new SharedUserTrade(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol), 
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, x.Symbol), 
                 request.Symbol!.GetSymbol(FormatSymbol),
                 x.OrderId.ToString(),
                 x.Id.ToString(),
@@ -1439,13 +1528,17 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        GetFuturesUserTradesOptions IFuturesOrderRestClient.GetFuturesUserTradesOptions { get; } = new GetFuturesUserTradesOptions(_exchange, false, true, true, 100)
+        Task<HttpResult<SharedUserTrade[]>> IFuturesOrderRestClient.GetFuturesUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => GetFuturesUserTradeHistoryAsync(request, pageRequest, ct);
+        GetFuturesUserTradeHistoryOptions IFuturesOrderRestClient.GetFuturesUserTradesOptions => GetFuturesUserTradeHistoryOptions;
+
+        public GetFuturesUserTradeHistoryOptions GetFuturesUserTradeHistoryOptions { get; } = new GetFuturesUserTradeHistoryOptions(_exchange, false, true, true, 100)
         {
             MaxAge = TimeSpan.FromDays(180)
         };
-        async Task<HttpResult<SharedUserTrade[]>> IFuturesOrderRestClient.GetFuturesUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
+        public async Task<HttpResult<SharedUserTrade[]>> GetFuturesUserTradeHistoryAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFuturesUserTradesOptions.ValidateRequest(request, this);
+            var validationError = GetFuturesUserTradeHistoryOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedUserTrade[]>(Exchange, validationError);
 
@@ -1454,7 +1547,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var result = await Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
+            var result = await _api.Trading.GetUserTradesAsync(request.Symbol!.GetSymbol(FormatSymbol),
                 startTime: pageParams.StartTime,
                 endTime: pageParams.EndTime,
                 limit: limit,
@@ -1476,7 +1569,7 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(result.Data, x => x.Time, request.StartTime, request.EndTime, direction)
                        .Select(y => 
                            new SharedUserTrade(
-                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, y.Symbol), 
+                                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, y.Symbol), 
                                 y.Symbol,
                                 y.OrderId.ToString(),
                                 y.Id.ToString(),
@@ -1493,31 +1586,31 @@ namespace WhiteBit.Net.Clients.V4Api
                        .ToArray(), nextPageRequest);
         }
 
-        CancelFuturesOrderOptions IFuturesOrderRestClient.CancelFuturesOrderOptions { get; } = new CancelFuturesOrderOptions(_exchange, true);
-        async Task<HttpResult<SharedId>> IFuturesOrderRestClient.CancelFuturesOrderAsync(CancelOrderRequest request, CancellationToken ct)
+        public CancelFuturesOrderOptions CancelFuturesOrderOptions { get; } = new CancelFuturesOrderOptions(_exchange, true);
+        public async Task<HttpResult<SharedId>> CancelFuturesOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.CancelFuturesOrderOptions.ValidateRequest(request, this);
+            var validationError = CancelFuturesOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
-            var order = await Trading.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            var order = await _api.Trading.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!order.Success)
                 return HttpResult.Fail<SharedId>(order);
 
             return HttpResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
         }
 
-        GetPositionsOptions IFuturesOrderRestClient.GetPositionsOptions { get; } = new GetPositionsOptions(_exchange, true);
-        async Task<HttpResult<SharedPosition[]>> IFuturesOrderRestClient.GetPositionsAsync(GetPositionsRequest request, CancellationToken ct)
+        public GetPositionsOptions GetPositionsOptions { get; } = new GetPositionsOptions(_exchange, true);
+        public async Task<HttpResult<SharedPosition[]>> GetPositionsAsync(GetPositionsRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetPositionsOptions.ValidateRequest(request, this);
+            var validationError = GetPositionsOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedPosition[]>(Exchange, validationError);
 
-            var result = await CollateralTrading.GetOpenPositionsAsync(symbol: request.Symbol?.GetSymbol(FormatSymbol), ct: ct).ConfigureAwait(false);
+            var result = await _api.CollateralTrading.GetOpenPositionsAsync(symbol: request.Symbol?.GetSymbol(FormatSymbol), ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedPosition[]>(result);
 
@@ -1525,7 +1618,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var resultTypes = request.Symbol == null && request.TradingMode == null ? SupportedTradingModes : request.Symbol != null ? new[] { request.Symbol.TradingMode } : new[] { request.TradingMode!.Value };
             return HttpResult.Ok(result, data.Select(x =>
             new SharedPosition(
-                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol),
+                ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, x.Symbol),
                 x.Symbol,
                 new SharedOrderQuantity(Math.Abs(x.Quantity)),
                 x.UpdateTime)
@@ -1540,22 +1633,21 @@ namespace WhiteBit.Net.Clients.V4Api
             }).ToArray());
         }
 
-        ClosePositionOptions IFuturesOrderRestClient.ClosePositionOptions { get; } = new ClosePositionOptions(_exchange, true)
+        public ClosePositionOptions ClosePositionOptions { get; } = new ClosePositionOptions(_exchange, true)
         {
-            RequiredOptionalParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription(nameof(ClosePositionRequest.PositionSide), typeof(SharedPositionSide), "Current side of the position to close", SharedPositionSide.Long),
-                new ParameterDescription(nameof(ClosePositionRequest.Quantity), typeof(decimal), "Quantity of the position is required", 0.1m),
-            }
+            RequiredRequestParameters = [
+                RequestParameter<ClosePositionRequest>.Required(x => x.PositionSide, "Current side of the position to close", SharedPositionSide.Long),
+                RequestParameter<ClosePositionRequest>.Required(x => x.Quantity,"Quantity of the position is required", 0.1m)
+                ]
         };
-        async Task<HttpResult<SharedId>> IFuturesOrderRestClient.ClosePositionAsync(ClosePositionRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedId>> ClosePositionAsync(ClosePositionRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.ClosePositionOptions.ValidateRequest(request, this);
+            var validationError = ClosePositionOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
             var symbol = request.Symbol!.GetSymbol(FormatSymbol);
-            var result = await CollateralTrading.PlaceOrderAsync(
+            var result = await _api.CollateralTrading.PlaceOrderAsync(
                 symbol,
                 request.PositionSide == SharedPositionSide.Long ? OrderSide.Sell : OrderSide.Buy,
                 NewOrderType.Market,
@@ -1570,16 +1662,16 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Fee Client
-        GetFeeOptions IFeeRestClient.GetFeeOptions { get; } = new GetFeeOptions(_exchange, false);
+        public GetFeeOptions GetFeeOptions { get; } = new GetFeeOptions(_exchange, false);
 
-        async Task<HttpResult<SharedFee>> IFeeRestClient.GetFeesAsync(GetFeeRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedFee>> GetFeesAsync(GetFeeRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFeeOptions.ValidateRequest(request, this);
+            var validationError = GetFeeOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFee>(Exchange, validationError);
 
             // Get data
-            var result = await ExchangeData.GetSymbolsAsync(ct: ct).ConfigureAwait(false);
+            var result = await _api.ExchangeData.GetSymbolsAsync(ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedFee>(result);
 
@@ -1594,17 +1686,17 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Spot Trigger Order Client
 
-        PlaceSpotTriggerOrderOptions ISpotTriggerOrderRestClient.PlaceSpotTriggerOrderOptions { get; } = new PlaceSpotTriggerOrderOptions(_exchange, true)
+        public PlaceSpotTriggerOrderOptions PlaceSpotTriggerOrderOptions { get; } = new PlaceSpotTriggerOrderOptions(_exchange, true)
         {
         };
 
-        async Task<HttpResult<SharedId>> ISpotTriggerOrderRestClient.PlaceSpotTriggerOrderAsync(PlaceSpotTriggerOrderRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedId>> PlaceSpotTriggerOrderAsync(PlaceSpotTriggerOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.PlaceSpotTriggerOrderOptions.ValidateRequest(request, this);
+            var validationError = PlaceSpotTriggerOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
-            var result = await Trading.PlaceSpotOrderAsync(
+            var result = await _api.Trading.PlaceSpotOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 request.OrderSide == SharedOrderSide.Buy ? OrderSide.Buy : OrderSide.Sell,
                 request.OrderPrice == null ? NewOrderType.StopMarket : NewOrderType.StopLimit,
@@ -1621,19 +1713,19 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        GetSpotTriggerOrderOptions ISpotTriggerOrderRestClient.GetSpotTriggerOrderOptions { get; } = new GetSpotTriggerOrderOptions(_exchange, true)
+        public GetSpotTriggerOrderOptions GetSpotTriggerOrderOptions { get; } = new GetSpotTriggerOrderOptions(_exchange, true)
         {
         };
-        async Task<HttpResult<SharedSpotTriggerOrder>> ISpotTriggerOrderRestClient.GetSpotTriggerOrderAsync(GetOrderRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedSpotTriggerOrder>> GetSpotTriggerOrderAsync(GetOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetSpotTriggerOrderOptions.ValidateRequest(request, this);
+            var validationError = GetSpotTriggerOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedSpotTriggerOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedSpotTriggerOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
-            var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            var openOrders = await _api.Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders.Success)
                 return HttpResult.Fail<SharedSpotTriggerOrder>(openOrders);
 
@@ -1641,7 +1733,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedSpotTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, openOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, openOrder.Symbol),
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -1663,7 +1755,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             else
             {
-                var closeOrders = await Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+                var closeOrders = await _api.Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
                 if (!closeOrders.Success)
                     return HttpResult.Fail<SharedSpotTriggerOrder>(closeOrders);
 
@@ -1672,7 +1764,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 return HttpResult.Ok(closeOrders, new SharedSpotTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, closedOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, closedOrder.Symbol),
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),
@@ -1694,17 +1786,17 @@ namespace WhiteBit.Net.Clients.V4Api
             }
         }
 
-        CancelSpotTriggerOrderOptions ISpotTriggerOrderRestClient.CancelSpotTriggerOrderOptions { get; } = new CancelSpotTriggerOrderOptions(_exchange, true);
-        async Task<HttpResult<SharedId>> ISpotTriggerOrderRestClient.CancelSpotTriggerOrderAsync(CancelOrderRequest request, CancellationToken ct)
+        public CancelSpotTriggerOrderOptions CancelSpotTriggerOrderOptions { get; } = new CancelSpotTriggerOrderOptions(_exchange, true);
+        public async Task<HttpResult<SharedId>> CancelSpotTriggerOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.CancelSpotTriggerOrderOptions.ValidateRequest(request, this);
+            var validationError = CancelSpotTriggerOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
-            var order = await Trading.CancelOrderAsync(
+            var order = await _api.Trading.CancelOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 orderId,
                 ct: ct).ConfigureAwait(false);
@@ -1717,18 +1809,18 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Futures Trigger Order Client
-        PlaceFuturesTriggerOrderOptions IFuturesTriggerOrderRestClient.PlaceFuturesTriggerOrderOptions { get; } = new PlaceFuturesTriggerOrderOptions(_exchange, false)
+        public PlaceFuturesTriggerOrderOptions PlaceFuturesTriggerOrderOptions { get; } = new PlaceFuturesTriggerOrderOptions(_exchange, false)
         {
         };
 
-        async Task<HttpResult<SharedId>> IFuturesTriggerOrderRestClient.PlaceFuturesTriggerOrderAsync(PlaceFuturesTriggerOrderRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedId>> PlaceFuturesTriggerOrderAsync(PlaceFuturesTriggerOrderRequest request, CancellationToken ct)
         {
             var side = GetOrderSide(request);
-            var validationError = SharedClient.PlaceFuturesTriggerOrderOptions.ValidateRequest(request, this);
+            var validationError = PlaceFuturesTriggerOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
-            var result = await CollateralTrading.PlaceOrderAsync(
+            var result = await _api.CollateralTrading.PlaceOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 side,
                 request.OrderPrice == null ? NewOrderType.StopMarket : NewOrderType.StopLimit,
@@ -1753,19 +1845,19 @@ namespace WhiteBit.Net.Clients.V4Api
             return request.OrderDirection == SharedTriggerOrderDirection.Enter ? OrderSide.Sell : OrderSide.Buy;
         }
 
-        GetFuturesTriggerOrderOptions IFuturesTriggerOrderRestClient.GetFuturesTriggerOrderOptions { get; } = new GetFuturesTriggerOrderOptions(_exchange, true)
+        public GetFuturesTriggerOrderOptions GetFuturesTriggerOrderOptions { get; } = new GetFuturesTriggerOrderOptions(_exchange, true)
         {
         };
-        async Task<HttpResult<SharedFuturesTriggerOrder>> IFuturesTriggerOrderRestClient.GetFuturesTriggerOrderAsync(GetOrderRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedFuturesTriggerOrder>> GetFuturesTriggerOrderAsync(GetOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFuturesTriggerOrderOptions.ValidateRequest(request, this);
+            var validationError = GetFuturesTriggerOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFuturesTriggerOrder>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedFuturesTriggerOrder>(Exchange, ArgumentError.Invalid(nameof(GetOrderRequest.OrderId), "Invalid order id"));
 
-            var openOrders = await Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            var openOrders = await _api.Trading.GetOpenOrdersAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
             if (!openOrders.Success)
                 return HttpResult.Fail<SharedFuturesTriggerOrder>(openOrders);
 
@@ -1773,7 +1865,7 @@ namespace WhiteBit.Net.Clients.V4Api
             if (openOrder != null)
             {
                 return HttpResult.Ok(openOrders, new SharedFuturesTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, openOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, openOrder.Symbol),
                     openOrder.Symbol,
                     openOrder.OrderId.ToString(),
                     ParseOrderType(openOrder.OrderType, openOrder.PostOnly),
@@ -1796,7 +1888,7 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             else
             {
-                var closeOrders = await Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+                var closeOrders = await _api.Trading.GetClosedOrdersAsync(request.Symbol.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
                 if (!closeOrders.Success)
                     return HttpResult.Fail<SharedFuturesTriggerOrder>(closeOrders);
 
@@ -1806,7 +1898,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 var closedOrder = closeOrders.Data.Single().Value.Single();
                 
                 return HttpResult.Ok(closeOrders, new SharedFuturesTriggerOrder(
-                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, closedOrder.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, closedOrder.Symbol),
                     closedOrder.Symbol,
                     closedOrder.OrderId.ToString(),
                     ParseOrderType(closedOrder.OrderType, closedOrder.PostOnly),
@@ -1842,17 +1934,17 @@ namespace WhiteBit.Net.Clients.V4Api
             return SharedTriggerOrderStatus.Unknown;
         }
 
-        CancelFuturesTriggerOrderOptions IFuturesTriggerOrderRestClient.CancelFuturesTriggerOrderOptions { get; } = new CancelFuturesTriggerOrderOptions(_exchange, true);
-        async Task<HttpResult<SharedId>> IFuturesTriggerOrderRestClient.CancelFuturesTriggerOrderAsync(CancelOrderRequest request, CancellationToken ct)
+        public CancelFuturesTriggerOrderOptions CancelFuturesTriggerOrderOptions { get; } = new CancelFuturesTriggerOrderOptions(_exchange, true);
+        public async Task<HttpResult<SharedId>> CancelFuturesTriggerOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.CancelFuturesTriggerOrderOptions.ValidateRequest(request, this);
+            var validationError = CancelFuturesTriggerOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
 
-            var order = await Trading.CancelOrderAsync(
+            var order = await _api.Trading.CancelOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 orderId,
                 ct: ct).ConfigureAwait(false);
@@ -1865,21 +1957,20 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Tp/SL Client
-        SetFuturesTpSlOptions IFuturesTpSlRestClient.SetFuturesTpSlOptions { get; } = new SetFuturesTpSlOptions(_exchange, true)
+        public SetFuturesTpSlOptions SetFuturesTpSlOptions { get; } = new SetFuturesTpSlOptions(_exchange, true)
         {
-            RequiredOptionalParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription(nameof(SetTpSlRequest.Quantity), typeof(decimal), "Quantity of the position to close, required by API", 0.123m)
-            }
+            RequiredRequestParameters = [
+                RequestParameter<SetTpSlRequest>.Required(x => x.Quantity, "Quantity of the position to close, required by API", 0.123m)
+                ]
         };
 
-        async Task<HttpResult<SharedId>> IFuturesTpSlRestClient.SetFuturesTpSlAsync(SetTpSlRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedId>> SetFuturesTpSlAsync(SetTpSlRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.SetFuturesTpSlOptions.ValidateRequest(request, this);
+            var validationError = SetFuturesTpSlOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
-            var result = await CollateralTrading.PlaceOrderAsync(
+            var result = await _api.CollateralTrading.PlaceOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 request.PositionSide == SharedPositionSide.Long ? OrderSide.Sell : OrderSide.Buy,
                 NewOrderType.StopMarket,
@@ -1894,24 +1985,23 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
 
-        CancelFuturesTpSlOptions IFuturesTpSlRestClient.CancelFuturesTpSlOptions { get; } = new CancelFuturesTpSlOptions(_exchange, true)
+        public CancelFuturesTpSlOptions CancelFuturesTpSlOptions { get; } = new CancelFuturesTpSlOptions(_exchange, true)
         {
-            RequiredOptionalParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription(nameof(CancelTpSlRequest.OrderId), typeof(string), "Id of the tp/sl order", "123123")
-            }
+            RequiredRequestParameters = [
+                RequestParameter<CancelTpSlRequest>.Required(x => x.OrderId, "Id of the tp/sl order", "123123")
+                ]
         };
 
-        async Task<HttpResult<bool>> IFuturesTpSlRestClient.CancelFuturesTpSlAsync(CancelTpSlRequest request, CancellationToken ct)
+        public async Task<HttpResult<bool>> CancelFuturesTpSlAsync(CancelTpSlRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.CancelFuturesTpSlOptions.ValidateRequest(request, this);
+            var validationError = CancelFuturesTpSlOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<bool>(Exchange, validationError);
 
             if (!long.TryParse(request.OrderId, out var orderId))
                 return HttpResult.Fail<bool>(Exchange, ArgumentError.Invalid(nameof(CancelTpSlRequest.OrderId), "Invalid order id"));
 
-            var result = await Trading.CancelOrderAsync(
+            var result = await _api.Trading.CancelOrderAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 orderId,
                 ct: ct).ConfigureAwait(false);
@@ -1925,11 +2015,11 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Funding Rate client
-        GetFundingRateHistoryOptions IFundingRateRestClient.GetFundingRateHistoryOptions { get; } = new GetFundingRateHistoryOptions(_exchange, false, true, true, 100, false);
+        public GetFundingRateHistoryOptions GetFundingRateHistoryOptions { get; } = new GetFundingRateHistoryOptions(_exchange, false, true, true, 100, false);
 
-        async Task<HttpResult<SharedFundingRate[]>> IFundingRateRestClient.GetFundingRateHistoryAsync(GetFundingRateHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
+        public async Task<HttpResult<SharedFundingRate[]>> GetFundingRateHistoryAsync(GetFundingRateHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
         {
-            var validationError = SharedClient.GetFundingRateHistoryOptions.ValidateRequest(request, this);
+            var validationError = GetFundingRateHistoryOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedFundingRate[]>(Exchange, validationError);
 
@@ -1938,7 +2028,7 @@ namespace WhiteBit.Net.Clients.V4Api
             var pageParams = Pagination.GetPaginationParameters(direction, limit, request.StartTime, request.EndTime ?? DateTime.UtcNow, pageRequest);
 
             // Get data
-            var result = await ExchangeData.GetFundingHistoryAsync(
+            var result = await _api.ExchangeData.GetFundingHistoryAsync(
                 request.Symbol!.GetSymbol(FormatSymbol),
                 startTime: pageParams.StartTime,
                 endTime: pageParams.EndTime,
@@ -1965,16 +2055,16 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Transfer client
 
-        TransferOptions ITransferRestClient.TransferOptions { get; } = new TransferOptions(_exchange, [
+        public TransferOptions TransferOptions { get; } = new TransferOptions(_exchange, [
             SharedAccountType.Spot,
             SharedAccountType.PerpetualLinearFutures,
             SharedAccountType.PerpetualInverseFutures,
             SharedAccountType.DeliveryLinearFutures,
             SharedAccountType.DeliveryInverseFutures
             ]);
-        async Task<HttpResult<SharedId>> ITransferRestClient.TransferAsync(TransferRequest request, CancellationToken ct)
+        public async Task<HttpResult<SharedId>> TransferAsync(TransferRequest request, CancellationToken ct)
         {
-            var validationError = SharedClient.TransferOptions.ValidateRequest(request, this);
+            var validationError = TransferOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return HttpResult.Fail<SharedId>(Exchange, validationError);
 
@@ -1984,7 +2074,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 return HttpResult.Fail<SharedId>(Exchange, ArgumentError.Invalid("To/From AccountType", "invalid to/from account combination"));
 
             // Get data
-            var transfer = await Account.TransferAsync(
+            var transfer = await _api.Account.TransferAsync(
                 fromType.Value,
                 toType.Value,
                 request.Asset,

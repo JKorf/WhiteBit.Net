@@ -14,30 +14,52 @@ using CryptoExchange.Net.Authentication;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
-    internal partial class WhiteBitSocketClientV4Api : IWhiteBitSocketClientV4ApiShared
+    internal class WhiteBitSocketClientV4SharedApi : 
+        SharedApiBase,
+        IWhiteBitSocketClientV4ApiShared,
+        IWhiteBitSocketClientV4SharedApi
     {
+        private readonly WhiteBitSocketClientV4Api _api;
+
         private const string _exchange = "WhiteBit";
         private const string _topicSpotId = "WhiteBitSpot";
         private const string _topicFuturesId = "WhiteBitFutures";
 
-        public TradingMode[] SupportedTradingModes => new[] { TradingMode.Spot, TradingMode.PerpetualLinear };
-        public TradingMode[] SupportedFuturesModes => new[] { TradingMode.PerpetualLinear };
+        public override SharedClientInfo Discover() => SharedUtils.GetClientInfo(WhiteBitExchange.Metadata, this);
 
-        public void SetDefaultExchangeParameter(string key, object value) => ExchangeParameters.SetStaticParameter(Exchange, key, value);
-        public void ResetDefaultExchangeParameters() => ExchangeParameters.ResetStaticParameters();
-        public SharedClientInfo Discover() => SharedUtils.GetClientInfo(WhiteBitExchange.Metadata, this);
+        public WhiteBitSocketClientV4SharedApi(WhiteBitSocketClientV4Api api)
+            : base(
+                  api.Exchange,
+                  [TradingMode.Spot, TradingMode.PerpetualLinear],
+                  () => api.Authenticated,
+                  api.FormatSymbol)
+        {
+            _api = api;
+
+            SetCapabilities(
+                SubscribeBalanceOptions,
+                SubscribeBookTickerOptions,
+                SubscribeKlineOptions,
+                SubscribeTickerOptions,
+                SubscribeTradeOptions,
+                SubscribeUserTradeOptions,
+                SubscribeSpotOrderOptions,
+                SubscribeFuturesOrderOptions,
+                SubscribePositionOptions
+                );
+        }
 
         #region Balance client
-        SubscribeBalanceOptions IBalanceSocketClient.SubscribeBalanceOptions { get; } = new SubscribeBalanceOptions(_exchange, true)
+        public SubscribeBalanceOptions SubscribeBalanceOptions { get; } = new SubscribeBalanceOptions(_exchange, true)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("BalanceAssets", typeof(List<string>), "The assets to subscribe for updates", new List<string>{ "USDT", "ETH", "BTC" })
             }
         };
-        async Task<WebSocketResult<UpdateSubscription>> IBalanceSocketClient.SubscribeToBalanceUpdatesAsync(SubscribeBalancesRequest request, Action<DataEvent<SharedBalance[]>> handler, CancellationToken ct)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(SubscribeBalancesRequest request, Action<DataEvent<SharedBalance[]>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeBalanceOptions.ValidateRequest(request, this);
+            var validationError = SubscribeBalanceOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
@@ -49,7 +71,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     // request all assets
                     var client = new WhiteBitRestClient(x =>
                     {
-                        x.Environment = ClientOptions.Environment;
+                        x.Environment = _api.ClientOptions.Environment;
                     });
                     var assetsResult = await client.V4Api.ExchangeData.GetAssetsAsync().ConfigureAwait(false);
                     if (!assetsResult.Success)
@@ -58,7 +80,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     assets = assetsResult.Data.Where(x => x.CanDeposit).Select(x => x.Asset).ToList();
                 }
 
-                var result = await SubscribeToSpotBalanceUpdatesAsync(
+                var result = await _api.SubscribeToSpotBalanceUpdatesAsync(
                     assets!,
                     update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x =>
                         new SharedBalance(TradingMode.Spot, x.Key, x.Value.Available, x.Value.Available + x.Value.Frozen)).ToArray())),
@@ -73,8 +95,8 @@ namespace WhiteBit.Net.Clients.V4Api
                     // request all assets
                     var client = new WhiteBitRestClient(x =>
                     {
-                        x.Environment = ClientOptions.Environment;
-                        x.ApiCredentials = (WhiteBitCredentials?)AuthenticationProvider!.ApiCredentials.Copy();
+                        x.Environment = _api.ClientOptions.Environment;
+                        x.ApiCredentials = (WhiteBitCredentials?)_api.AuthenticationProvider!.ApiCredentials.Copy();
                     });
                     var assetsResult = await client.V4Api.Account.GetCollateralBalancesAsync().ConfigureAwait(false);
                     if (!assetsResult.Success)
@@ -83,11 +105,11 @@ namespace WhiteBit.Net.Clients.V4Api
                     assets = assetsResult.Data.Select(x => x.Key).Distinct().ToList();
                 }
 
-                var result = await SubscribeToMarginBalanceUpdatesAsync(
+                var result = await _api.SubscribeToMarginBalanceUpdatesAsync(
                     assets,
                     update => handler(update.ToType<SharedBalance[]>(update.Data.Select(x => 
                         new SharedBalance(
-                            SupportedFuturesModes, x.Asset, x.AvailableWithoutBorrow, x.Balance)).ToArray())),
+                            [TradingMode.PerpetualLinear], x.Asset, x.AvailableWithoutBorrow, x.Balance)).ToArray())),
                     ct: ct).ConfigureAwait(false);
                 return result;
             }
@@ -97,18 +119,18 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Book Ticker client
 
-        SubscribeBookTickerOptions IBookTickerSocketClient.SubscribeBookTickerOptions { get; } = new SubscribeBookTickerOptions(_exchange, false);
-        async Task<WebSocketResult<UpdateSubscription>> IBookTickerSocketClient.SubscribeToBookTickerUpdatesAsync(SubscribeBookTickerRequest request, Action<DataEvent<SharedBookTicker>> handler, CancellationToken ct)
+        public SubscribeBookTickerOptions SubscribeBookTickerOptions { get; } = new SubscribeBookTickerOptions(_exchange, false);
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(SubscribeBookTickerRequest request, Action<DataEvent<SharedBookTicker>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeBookTickerOptions.ValidateRequest(request, this);
+            var validationError = SubscribeBookTickerOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
             var symbol = request.Symbol!.GetSymbol(FormatSymbol);
-            var result = await SubscribeToBookTickerUpdatesAsync(symbol, update =>
+            var result = await _api.SubscribeToBookTickerUpdatesAsync(symbol, update =>
             {
                 handler(update.ToType(new SharedBookTicker(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, update.Data.Symbol),
                     update.Data.Symbol,
                     update.Data.BestAskPrice,
                     new SharedOrderQuantity(update.Data.BestAskQuantity),
@@ -122,7 +144,7 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Kline client
-        SubscribeKlineOptions IKlineSocketClient.SubscribeKlineOptions { get; } = new SubscribeKlineOptions(_exchange, false,
+        public SubscribeKlineOptions SubscribeKlineOptions { get; } = new SubscribeKlineOptions(_exchange, false,
             SharedKlineInterval.OneMinute,
             SharedKlineInterval.ThreeMinutes,
             SharedKlineInterval.FiveMinutes,
@@ -136,15 +158,15 @@ namespace WhiteBit.Net.Clients.V4Api
             SharedKlineInterval.OneDay,
             SharedKlineInterval.OneWeek,
             SharedKlineInterval.OneMonth);
-        async Task<WebSocketResult<UpdateSubscription>> IKlineSocketClient.SubscribeToKlineUpdatesAsync(SubscribeKlineRequest request, Action<DataEvent<SharedKline>> handler, CancellationToken ct)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(SubscribeKlineRequest request, Action<DataEvent<SharedKline>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeKlineOptions.ValidateRequest(request, this);
+            var validationError = SubscribeKlineOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
             var interval = (Enums.KlineInterval)request.Interval;
             var symbol = request.Symbol!.GetSymbol(FormatSymbol);
-            var result = await SubscribeToKlineUpdatesAsync(symbol, interval, update =>
+            var result = await _api.SubscribeToKlineUpdatesAsync(symbol, interval, update =>
             {
                 if (update.UpdateType == SocketUpdateType.Snapshot)
                     return;
@@ -169,20 +191,23 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Ticker client
-        SubscribeTickerOptions ITickerSocketClient.SubscribeTickerOptions { get; } = new SubscribeTickerOptions(_exchange)
+        async Task<WebSocketResult<UpdateSubscription>> ISubscribeTickerOperation.SubscribeToTickerUpdatesAsync(SubscribeTickerRequest request, Action<DataEvent<SharedTicker>> handler, CancellationToken ct)
+            => await SubscribeToTickerUpdatesAsync(request, x => handler(x.ToType<SharedTicker>(x.Data)), ct).ConfigureAwait(false);
+
+        public SubscribeTickerOptions SubscribeTickerOptions { get; } = new SubscribeTickerOptions(_exchange)
         {
             SupportsMultipleSymbols = true
         };
-        async Task<WebSocketResult<UpdateSubscription>> ITickerSocketClient.SubscribeToTickerUpdatesAsync(SubscribeTickerRequest request, Action<DataEvent<SharedSpotTicker>> handler, CancellationToken ct)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(SubscribeTickerRequest request, Action<DataEvent<SharedSpotTicker>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeTickerOptions.ValidateRequest(request, this);
+            var validationError = SubscribeTickerOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
             var symbols = request.Symbols?.Length > 0 ? request.Symbols.Select(x => x.GetSymbol(FormatSymbol)).ToArray() : [request.Symbol!.GetSymbol(FormatSymbol)];
-            var result = await SubscribeToTickerUpdatesAsync(symbols, update => handler(update.ToType(
+            var result = await _api.SubscribeToTickerUpdatesAsync(symbols, update => handler(update.ToType(
                 new SharedSpotTicker(
-                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol),
+                    ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, update.Data.Symbol),
                     update.Data.Symbol, 
                     update.Data.Ticker.LastPrice,
                     update.Data.Ticker.HighPrice, 
@@ -198,19 +223,19 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Trade client
 
-        SubscribeTradeOptions ITradeSocketClient.SubscribeTradeOptions { get; } = new SubscribeTradeOptions(_exchange, false)
+        public SubscribeTradeOptions SubscribeTradeOptions { get; } = new SubscribeTradeOptions(_exchange, false)
         {
             SupportsMultipleSymbols = true,
             MaxSymbolCount = 100
         };
-        async Task<WebSocketResult<UpdateSubscription>> ITradeSocketClient.SubscribeToTradeUpdatesAsync(SubscribeTradeRequest request, Action<DataEvent<SharedTrade[]>> handler, CancellationToken ct)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(SubscribeTradeRequest request, Action<DataEvent<SharedTrade[]>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeTradeOptions.ValidateRequest(request, this);
+            var validationError = SubscribeTradeOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
             var symbols = request.Symbols?.Length > 0 ? request.Symbols.Select(x => x.GetSymbol(FormatSymbol)).ToArray() : [request.Symbol!.GetSymbol(FormatSymbol)];
-            var result = await SubscribeToTradeUpdatesAsync(symbols, 
+            var result = await _api.SubscribeToTradeUpdatesAsync(symbols, 
                 update =>
                 {
                     if (update.UpdateType == SocketUpdateType.Snapshot)
@@ -218,7 +243,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                     handler(update.ToType<SharedTrade[]>(update.Data.Trades.Select(x => 
                     new SharedTrade(
-                        ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol), 
+                        ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, update.Data.Symbol), 
                         update.Data.Symbol,
                         new SharedOrderQuantity(x.Quantity),
                         x.Price,
@@ -235,16 +260,16 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region User Trade client
 
-        SubscribeUserTradeOptions IUserTradeSocketClient.SubscribeUserTradeOptions { get; } = new SubscribeUserTradeOptions(_exchange, true)
+        public SubscribeUserTradeOptions SubscribeUserTradeOptions { get; } = new SubscribeUserTradeOptions(_exchange, true)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("UserTradeSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT", "ETH_PERP" })
             }
         };
-        async Task<WebSocketResult<UpdateSubscription>> IUserTradeSocketClient.SubscribeToUserTradeUpdatesAsync(SubscribeUserTradeRequest request, Action<DataEvent<SharedUserTrade[]>> handler, CancellationToken ct)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(SubscribeUserTradeRequest request, Action<DataEvent<SharedUserTrade[]>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeUserTradeOptions.ValidateRequest(request, this);
+            var validationError = SubscribeUserTradeOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
@@ -254,7 +279,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 // request all symbols
                 var client = new WhiteBitRestClient(x =>
                 {
-                    x.Environment = ClientOptions.Environment;
+                    x.Environment = _api.ClientOptions.Environment;
                 });
                 var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
                 if (!symbolsResult.Success)
@@ -263,7 +288,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 symbols = symbolsResult.Data.Select(x => x.Name).ToList();
             }
 
-            var result = await SubscribeToUserTradeUpdatesAsync(symbols!,
+            var result = await _api.SubscribeToUserTradeUpdatesAsync(symbols!,
                 update =>
                 {
                     if (request.TradingMode != null)
@@ -274,7 +299,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                     handler(update.ToType<SharedUserTrade[]>([
                         new SharedUserTrade(
-                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Symbol),
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, update.Data.Symbol) ?? ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, update.Data.Symbol),
                             update.Data.Symbol,
                             update.Data.OrderId.ToString(),
                             update.Data.Id.ToString(),
@@ -295,16 +320,19 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Spot Order client
 
-        SubscribeSpotOrderOptions ISpotOrderSocketClient.SubscribeSpotOrderOptions { get; } = new SubscribeSpotOrderOptions(_exchange, false)
+        async Task<WebSocketResult<UpdateSubscription>> ISpotOrderSocketClient.SubscribeToSpotOrderUpdatesAsync(SubscribeSpotOrderRequest request, Action<DataEvent<SharedSpotOrder[]>> handler, CancellationToken ct)
+            => await SubscribeToSpotOrderUpdatesAsync(request, x => handler(x.ToType<SharedSpotOrder[]>(x.Data)), ct).ConfigureAwait(false);
+
+        public SubscribeSpotOrderOptions SubscribeSpotOrderOptions { get; } = new SubscribeSpotOrderOptions(_exchange, false)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT" })
             }
         };
-        async Task<WebSocketResult<UpdateSubscription>> ISpotOrderSocketClient.SubscribeToSpotOrderUpdatesAsync(SubscribeSpotOrderRequest request, Action<DataEvent<SharedSpotOrder[]>> handler, CancellationToken ct)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToSpotOrderUpdatesAsync(SubscribeSpotOrderRequest request, Action<DataEvent<SharedSpotOrderUpdate[]>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeSpotOrderOptions.ValidateRequest(request, this);
+            var validationError = SubscribeSpotOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
@@ -314,7 +342,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 // request all symbols
                 var client = new WhiteBitRestClient(x =>
                 {
-                    x.Environment = ClientOptions.Environment;
+                    x.Environment = _api.ClientOptions.Environment;
                 });
                 var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
                 if (!symbolsResult.Success)
@@ -323,7 +351,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 symbols = symbolsResult.Data.Where(x => x.SymbolType == SymbolType.Spot).Select(x => x.Name).ToList();
             }
 
-            var result = await SubscribeToOpenOrderUpdatesAsync(symbols!,
+            var result = await _api.SubscribeToOpenOrderUpdatesAsync(symbols!,
                 update =>
                 {
                     if (update.Data.Order.OrderType != Enums.OrderType.Market
@@ -336,9 +364,9 @@ namespace WhiteBit.Net.Clients.V4Api
                         return;
                     }
 
-                    handler(update.ToType<SharedSpotOrder[]>(new[] {
-                        new SharedSpotOrder(
-                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, EnvironmentName, null, update.Data.Order.Symbol),
+                    handler(update.ToType<SharedSpotOrderUpdate[]>(new[] {
+                        new SharedSpotOrderUpdate(
+                            ExchangeSymbolCache.ParseSymbol(_topicSpotId, _api.EnvironmentName, null, update.Data.Order.Symbol),
                             update.Data.Order.Symbol,
                             update.Data.Order.OrderId.ToString(),
                             ParseOrderType(update.Data.Order.OrderType, update.Data.Order.PostOnly),
@@ -350,8 +378,10 @@ namespace WhiteBit.Net.Clients.V4Api
                             OrderPrice = update.Data.Order.Price == 0 ? null : update.Data.Order.Price,
                             OrderQuantity = new SharedOrderQuantity((update.Data.Order.OrderType == OrderType.Market || update.Data.Order.OrderType == OrderType.StopMarket) && update.Data.Order.OrderSide == OrderSide.Buy ? null : update.Data.Order.Quantity, (update.Data.Order.OrderType == OrderType.Market || update.Data.Order.OrderType == OrderType.StopMarket) && update.Data.Order.OrderSide == OrderSide.Buy ? update.Data.Order.Quantity : null),
                             QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled),                            
+#pragma warning disable CS0618 // Type or member is obsolete
                             Fee = update.Data.Order.Fee,
                             FeeAsset = update.Data.Order.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                             TimeInForce = ParseTimeInForce(update.Data.Order),
                             AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled,
                             TriggerPrice = update.Data.Order.TriggerPrice,
@@ -367,14 +397,14 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Position client
-        SubscribePositionOptions IPositionSocketClient.SubscribePositionOptions { get; } = new SubscribePositionOptions(_exchange, false);
-        async Task<WebSocketResult<UpdateSubscription>> IPositionSocketClient.SubscribeToPositionUpdatesAsync(SubscribePositionRequest request, Action<DataEvent<SharedPosition[]>> handler, CancellationToken ct)
+        public SubscribePositionOptions SubscribePositionOptions { get; } = new SubscribePositionOptions(_exchange, false);
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(SubscribePositionRequest request, Action<DataEvent<SharedPosition[]>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribePositionOptions.ValidateRequest(request, this);
+            var validationError = SubscribePositionOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
-            var result = await SubscribeToPositionUpdatesAsync(
+            var result = await _api.SubscribeToPositionUpdatesAsync(
                 update =>
                 {
                     if (update.UpdateType == SocketUpdateType.Snapshot)
@@ -382,7 +412,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
                     handler(update.ToType<SharedPosition[]>(update.Data.Records.Select(x =>
                         new SharedPosition(
-                            ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, x.Symbol),
+                            ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, x.Symbol),
                             x.Symbol, 
                             new SharedOrderQuantity(Math.Abs(x.Quantity)),
                             x.UpdateTime)
@@ -403,16 +433,19 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Futures Order client
 
-        SubscribeFuturesOrderOptions IFuturesOrderSocketClient.SubscribeFuturesOrderOptions { get; } = new SubscribeFuturesOrderOptions(_exchange, false)
+        async Task<WebSocketResult<UpdateSubscription>> IFuturesOrderSocketClient.SubscribeToFuturesOrderUpdatesAsync(SubscribeFuturesOrderRequest request, Action<DataEvent<SharedFuturesOrder[]>> handler, CancellationToken ct)
+            => await SubscribeToFuturesOrderUpdatesAsync(request, x => handler(x.ToType<SharedFuturesOrder[]>(x.Data)), ct).ConfigureAwait(false);
+
+        public SubscribeFuturesOrderOptions SubscribeFuturesOrderOptions { get; } = new SubscribeFuturesOrderOptions(_exchange, false)
         {
             OptionalExchangeParameters = new List<ParameterDescription>
             {
                 new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_PERP" })
             }
         };
-        async Task<WebSocketResult<UpdateSubscription>> IFuturesOrderSocketClient.SubscribeToFuturesOrderUpdatesAsync(SubscribeFuturesOrderRequest request, Action<DataEvent<SharedFuturesOrder[]>> handler, CancellationToken ct)
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToFuturesOrderUpdatesAsync(SubscribeFuturesOrderRequest request, Action<DataEvent<SharedFuturesOrderUpdate[]>> handler, CancellationToken ct)
         {
-            var validationError = SharedClient.SubscribeFuturesOrderOptions.ValidateRequest(request, this);
+            var validationError = SubscribeFuturesOrderOptions.ValidateRequest(request, this);
             if (validationError != null)
                 return WebSocketResult.Fail<UpdateSubscription>(Exchange, validationError);
 
@@ -422,7 +455,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 // request all symbols
                 var client = new WhiteBitRestClient(x =>
                 {
-                    x.Environment = ClientOptions.Environment;
+                    x.Environment = _api.ClientOptions.Environment;
                 });
                 var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
                 if (!symbolsResult.Success)
@@ -431,7 +464,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 symbols = symbolsResult.Data.Where(x => x.SymbolType == SymbolType.Futures).Select(x => x.Name).ToList();
             }
 
-            var result = await SubscribeToOpenOrderUpdatesAsync(symbols!,
+            var result = await _api.SubscribeToOpenOrderUpdatesAsync(symbols!,
                 update =>
                 {
                     if (update.Data.Order.OrderType == Enums.OrderType.Market
@@ -445,9 +478,9 @@ namespace WhiteBit.Net.Clients.V4Api
                         return;
                     }
 
-                    handler(update.ToType<SharedFuturesOrder[]>(new[] {
-                        new SharedFuturesOrder(
-                            ExchangeSymbolCache.ParseSymbol(_topicFuturesId, EnvironmentName, null, update.Data.Order.Symbol),
+                    handler(update.ToType<SharedFuturesOrderUpdate[]>(new[] {
+                        new SharedFuturesOrderUpdate(
+                            ExchangeSymbolCache.ParseSymbol(_topicFuturesId, _api.EnvironmentName, null, update.Data.Order.Symbol),
                             update.Data.Order.Symbol,
                             update.Data.Order.OrderId.ToString(),
                             ParseOrderType(update.Data.Order.OrderType, update.Data.Order.PostOnly),
@@ -459,8 +492,10 @@ namespace WhiteBit.Net.Clients.V4Api
                             OrderPrice = update.Data.Order.Price == 0 ? null : update.Data.Order.Price,
                             OrderQuantity = new SharedOrderQuantity(update.Data.Order.Quantity, contractQuantity: update.Data.Order.Quantity),
                             QuantityFilled = new SharedOrderQuantity(update.Data.Order.QuantityFilled, update.Data.Order.QuoteQuantityFilled, update.Data.Order.QuantityFilled),
+#pragma warning disable CS0618 // Type or member is obsolete
                             Fee = update.Data.Order.Fee,
                             FeeAsset = update.Data.Order.FeeAsset,
+#pragma warning restore CS0618 // Type or member is obsolete
                             TimeInForce = ParseTimeInForce(update.Data.Order),
                             AveragePrice = update.Data.Order.QuantityFilled == 0 ? null : update.Data.Order.QuoteQuantityFilled / update.Data.Order.QuantityFilled,
                             TriggerPrice = update.Data.Order.TriggerPrice,

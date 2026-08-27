@@ -17,4 +17,23 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         IFuturesOrderSocketClient
     {
     }
+
+    /// <summary>
+    /// Shared API interface. Shared APIs provide a common,
+    /// exchange-independent contract for accessing functionality across different
+    /// exchange client libraries.
+    /// </summary>
+    public interface IWhiteBitSocketClientV4SharedApi :
+        ISubscribeBalancesOperation,
+        ISubscribeBookTickerOperation,
+        ISubscribeKlinesOperation,
+        ISubscribeTickerOperation,
+        ISubscribeTradesOperation,
+        ISubscribeUserTradesOperation,
+        ISubscribeSpotOrdersOperation,
+        ISubscribePositionsOperation,
+        ISubscribeFuturesOrdersOperation
+    {
+
+    }
 }
