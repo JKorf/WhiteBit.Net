@@ -360,6 +360,10 @@ namespace WhiteBit.Net.Clients.V4Api
         #endregion
 
         #region Asset client
+        Task<HttpResult<SharedAsset[]>> IAssetsRestClient.GetAssetsAsync(GetAssetsRequest request, CancellationToken ct)
+            => GetAllAssetsAsync(request, ct);
+        GetAllAssetsOptions IAssetsRestClient.GetAssetsOptions => GetAllAssetsOptions;
+
         public GetAllAssetsOptions GetAllAssetsOptions { get; } = new GetAllAssetsOptions(_exchange, false);
 
         public async Task<HttpResult<SharedAsset[]>> GetAllAssetsAsync(GetAssetsRequest request, CancellationToken ct)
