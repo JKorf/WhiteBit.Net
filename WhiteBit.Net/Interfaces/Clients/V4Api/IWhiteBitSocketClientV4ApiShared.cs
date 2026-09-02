@@ -24,15 +24,15 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     /// exchange client libraries.
     /// </summary>
     public interface IWhiteBitSocketClientV4SharedApi :
-        ISubscribeBalancesOperation,
-        ISubscribeBookTickerOperation,
-        ISubscribeKlinesOperation,
-        ISubscribeTickerOperation,
-        ISubscribeTradesOperation,
-        ISubscribeUserTradesOperation,
-        ISubscribeSpotOrdersOperation,
-        ISubscribePositionsOperation,
-        ISubscribeFuturesOrdersOperation
+        ISubscribeBalancesSocket,
+        ISubscribeBookTickerSocket,
+        ISubscribeKlinesSocket,
+        ISubscribeTickerSocket,
+        ISubscribeTradesSocket,
+        ISubscribeUserTradesSocket,
+        ISubscribeSpotOrdersSocket,
+        ISubscribePositionsSocket,
+        ISubscribeFuturesOrdersSocket
     {
 
     }

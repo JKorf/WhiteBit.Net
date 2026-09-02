@@ -296,11 +296,11 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebSocketResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
-        /// Get the shared socket requests client. For new implementations prefer <see cref="SharedApi"/>
+        /// [V1] Get the shared socket requests client. For new implementations prefer <see cref="SharedApi"/>
         /// </summary>
         public IWhiteBitSocketClientV4ApiShared SharedClient { get; }
         /// <summary>
-        /// Gets the aggregate Shared API interface. Shared APIs provide a common,
+        /// [V2] Gets the aggregate Shared API interface. Shared APIs provide a common,
         /// exchange-independent contract for accessing functionality across different
         /// exchange client libraries.
         /// </summary>
