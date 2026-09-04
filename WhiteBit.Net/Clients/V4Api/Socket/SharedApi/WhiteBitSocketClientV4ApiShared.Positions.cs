@@ -16,7 +16,8 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitSocketClientV4SharedApi
     {
-        #region Position client
+        #region Subscribe Positions
+
         public SubscribePositionOptions SubscribePositionOptions { get; } = new SubscribePositionOptions(_exchange, false);
         public async Task<WebSocketResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(SubscribePositionRequest request, Action<DataEvent<SharedPosition[]>> handler, CancellationToken ct)
         {

@@ -16,8 +16,11 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Leverage client
         public SharedLeverageSettingMode LeverageSettingType => SharedLeverageSettingMode.PerAccount;
+        #region Get Leverage
+
+        async Task<ICallResult<SharedLeverage>> IGetLeverage.GetLeverageAsync(GetLeverageRequest request, CancellationToken ct)
+            => await GetLeverageAsync(request, ct).ConfigureAwait(false);
 
         public GetLeverageOptions GetLeverageOptions { get; } = new GetLeverageOptions(_exchange, true);
         public async Task<HttpResult<SharedLeverage>> GetLeverageAsync(GetLeverageRequest request, CancellationToken ct)
@@ -33,6 +36,12 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, new SharedLeverage(result.Data.Leverage));
         }
 
+        #endregion
+        #region Set Leverage
+
+        async Task<ICallResult<SharedLeverage>> ISetLeverage.SetLeverageAsync(SetLeverageRequest request, CancellationToken ct)
+            => await SetLeverageAsync(request, ct).ConfigureAwait(false);
+
         public SetLeverageOptions SetLeverageOptions { get; } = new SetLeverageOptions(_exchange);
         public async Task<HttpResult<SharedLeverage>> SetLeverageAsync(SetLeverageRequest request, CancellationToken ct)
         {
@@ -46,6 +55,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(result, new SharedLeverage(result.Data.Leverage));
         }
+
         #endregion
     }
 }

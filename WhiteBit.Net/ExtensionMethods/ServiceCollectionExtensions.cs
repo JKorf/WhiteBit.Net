@@ -58,7 +58,6 @@ namespace Microsoft.Extensions.DependencyInjection
             options.Socket.Environment = WhiteBitEnvironment.GetEnvironmentByName(socketEnvName) ?? options.Socket.Environment!;
             options.Socket.ApiCredentials = options.Socket.ApiCredentials ?? options.ApiCredentials;
 
-
             services.AddSingleton(x => Options.Options.Create(options.Rest));
             services.AddSingleton(x => Options.Options.Create(options.Socket));
 
@@ -119,6 +118,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 x.GetRequiredService<ILoggerFactory>(),
                 x.GetRequiredService<IOptions<WhiteBitRestOptions>>(),
                 x.GetRequiredService<IOptions<WhiteBitSocketOptions>>()));
+
+            services.AddTransient<IWhiteBitSharedApiClient, WhiteBitSharedApiClient>();
+
+            services.RegisterSharedApi(x => x.GetRequiredService<IWhiteBitRestClient>().V4Api.SharedApi);
+            services.RegisterSharedApi(x => x.GetRequiredService<IWhiteBitSocketClient>().V4Api.SharedApi);
 
             services.RegisterSharedRestInterfaces(x => x.GetRequiredService<IWhiteBitRestClient>().V4Api.SharedClient);
             services.RegisterSharedSocketInterfaces(x => x.GetRequiredService<IWhiteBitSocketClient>().V4Api.SharedClient);

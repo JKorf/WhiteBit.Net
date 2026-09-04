@@ -16,7 +16,10 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Transfer client
+        #region Transfer
+
+        async Task<ICallResult<SharedId>> ITransfer.TransferAsync(TransferRequest request, CancellationToken ct)
+            => await TransferAsync(request, ct).ConfigureAwait(false);
 
         public TransferOptions TransferOptions { get; } = new TransferOptions(_exchange, [
             SharedAccountType.Spot,
@@ -49,6 +52,8 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(transfer, new SharedId(""));
         }
 
+        #endregion
+
         private AccountType? GetTransferType(SharedAccountType type)
         {
             if (type == SharedAccountType.Funding) return AccountType.Main;
@@ -56,7 +61,5 @@ namespace WhiteBit.Net.Clients.V4Api
             if (type.IsFuturesAccount()) return AccountType.Collateral;
             return null;
         }
-
-        #endregion
     }
 }

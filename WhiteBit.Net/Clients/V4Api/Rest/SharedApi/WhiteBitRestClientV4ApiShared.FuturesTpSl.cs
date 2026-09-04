@@ -16,7 +16,11 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Tp/SL Client
+        #region Set Futures Tp Sl
+
+        async Task<ICallResult<SharedId>> ISetFuturesTpSl.SetFuturesTpSlAsync(SetTpSlRequest request, CancellationToken ct)
+            => await SetFuturesTpSlAsync(request, ct).ConfigureAwait(false);
+
         public SetFuturesTpSlOptions SetFuturesTpSlOptions { get; } = new SetFuturesTpSlOptions(_exchange, true)
         {
             RequiredRequestParameters = [
@@ -44,6 +48,12 @@ namespace WhiteBit.Net.Clients.V4Api
             // Return
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
+
+        #endregion
+        #region Cancel Futures Tp Sl
+
+        async Task<ICallResult<bool>> ICancelFuturesTpSl.CancelFuturesTpSlAsync(CancelTpSlRequest request, CancellationToken ct)
+            => await CancelFuturesTpSlAsync(request, ct).ConfigureAwait(false);
 
         public CancelFuturesTpSlOptions CancelFuturesTpSlOptions { get; } = new CancelFuturesTpSlOptions(_exchange, true)
         {

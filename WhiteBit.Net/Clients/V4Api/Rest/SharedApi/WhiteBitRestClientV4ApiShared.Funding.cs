@@ -16,7 +16,11 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Funding Rate client
+        #region Get Funding Rate History
+
+        async Task<ICallResult<SharedFundingRate[]>> IGetFundingRateHistory.GetFundingRateHistoryAsync(GetFundingRateHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => await GetFundingRateHistoryAsync(request, pageRequest, ct).ConfigureAwait(false);
+
         public GetFundingRateHistoryOptions GetFundingRateHistoryOptions { get; } = new GetFundingRateHistoryOptions(_exchange, false, true, true, 100, false);
 
         public async Task<HttpResult<SharedFundingRate[]>> GetFundingRateHistoryAsync(GetFundingRateHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
@@ -53,6 +57,7 @@ namespace WhiteBit.Net.Clients.V4Api
                            new SharedFundingRate(x.FundingRate, x.FundingTime))
                        .ToArray(), nextPageRequest);
         }
+
         #endregion
     }
 }

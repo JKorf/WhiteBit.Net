@@ -16,7 +16,8 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitSocketClientV4SharedApi
     {
-        #region Balance client
+        #region Subscribe Balances
+
         public SubscribeBalanceOptions SubscribeBalanceOptions { get; } = new SubscribeBalanceOptions(_exchange, true)
         {
             OptionalExchangeParameters = new List<ParameterDescription>

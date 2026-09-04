@@ -16,7 +16,11 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Spot Symbol client
+        #region Get Spot Symbols
+
+        async Task<ICallResult<SharedSpotSymbol[]>> IGetSpotSymbols.GetSpotSymbolsAsync(GetSymbolsRequest request, CancellationToken ct)
+            => await GetSpotSymbolsAsync(request, ct).ConfigureAwait(false);
+
         public SharedSymbolCatalog? SpotSymbolCatalog => ExchangeSymbolCache.GetSymbolCatalog(_exchange, _topicSpotId, _api.EnvironmentName, null);
         public GetSpotSymbolsOptions GetSpotSymbolsOptions { get; } = new GetSpotSymbolsOptions(_exchange, false);
 
@@ -39,6 +43,8 @@ namespace WhiteBit.Net.Clients.V4Api
             ExchangeSymbolCache.UpdateSymbolInfo(_topicSpotId, _api.EnvironmentName, null, resultData);
             return HttpResult.Ok(result, SharedUtils.ApplySymbolFilter(resultData, request));
         }
+
+        #endregion
 
         private SharedSpotSymbol ParseSpotSymbol(WhiteBitSymbol s)
         {
@@ -113,6 +119,5 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return ExchangeCallResult<bool>.Ok(Exchange, ExchangeSymbolCache.SupportsSymbol(_topicSpotId, _api.EnvironmentName, null, symbolName));
         }
-        #endregion
     }
 }

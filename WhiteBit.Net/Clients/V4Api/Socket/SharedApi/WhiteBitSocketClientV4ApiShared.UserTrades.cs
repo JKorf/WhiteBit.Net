@@ -16,7 +16,7 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitSocketClientV4SharedApi
     {
-        #region User Trade client
+        #region Subscribe User Trades
 
         public SubscribeUserTradeOptions SubscribeUserTradeOptions { get; } = new SubscribeUserTradeOptions(_exchange, true)
         {

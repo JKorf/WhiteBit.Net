@@ -16,7 +16,8 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitSocketClientV4SharedApi
     {
-        #region Kline client
+        #region Subscribe Klines
+
         public SubscribeKlineOptions SubscribeKlineOptions { get; } = new SubscribeKlineOptions(_exchange, false,
             SharedKlineInterval.OneMinute,
             SharedKlineInterval.ThreeMinutes,
@@ -61,6 +62,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return result;
         }
+
         #endregion
     }
 }

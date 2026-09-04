@@ -29,6 +29,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public WhiteBitSocketClientV4SharedApi(WhiteBitSocketClientV4Api api)
             : base(
+                  SharedTransport.Socket,
                   api.Exchange,
                   [TradingMode.Spot, TradingMode.PerpetualLinear],
                   () => api.Authenticated,

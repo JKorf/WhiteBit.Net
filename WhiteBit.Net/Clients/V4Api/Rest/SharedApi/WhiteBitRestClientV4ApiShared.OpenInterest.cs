@@ -16,7 +16,10 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Open Interest client
+        #region Get Open Interest
+
+        async Task<ICallResult<SharedOpenInterest>> IGetOpenInterest.GetOpenInterestAsync(GetOpenInterestRequest request, CancellationToken ct)
+            => await GetOpenInterestAsync(request, ct).ConfigureAwait(false);
 
         public GetOpenInterestOptions GetOpenInterestOptions { get; } = new GetOpenInterestOptions(_exchange, false);
         public async Task<HttpResult<SharedOpenInterest>> GetOpenInterestAsync(GetOpenInterestRequest request, CancellationToken ct)

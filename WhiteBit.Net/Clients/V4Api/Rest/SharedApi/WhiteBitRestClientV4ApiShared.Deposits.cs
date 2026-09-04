@@ -16,7 +16,10 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Deposit client
+        #region Get Deposit Addresses
+
+        async Task<ICallResult<SharedDepositAddress[]>> IGetDepositAddresses.GetDepositAddressesAsync(GetDepositAddressesRequest request, CancellationToken ct)
+            => await GetDepositAddressesAsync(request, ct).ConfigureAwait(false);
 
         public GetDepositAddressesOptions GetDepositAddressesOptions { get; } = new GetDepositAddressesOptions(_exchange, true);
         public async Task<HttpResult<SharedDepositAddress[]>> GetDepositAddressesAsync(GetDepositAddressesRequest request, CancellationToken ct)
@@ -35,6 +38,13 @@ namespace WhiteBit.Net.Clients.V4Api
             }
             });
         }
+
+        #endregion
+
+        #region Get Deposit History
+
+        async Task<ICallResult<SharedDeposit[]>> IGetDepositHistory.GetDepositHistoryAsync(GetDepositsRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => await GetDepositHistoryAsync(request, pageRequest, ct).ConfigureAwait(false);
 
         Task<HttpResult<SharedDeposit[]>> IDepositRestClient.GetDepositsAsync(GetDepositsRequest request, PageRequest? pageRequest, CancellationToken ct)
             => GetDepositHistoryAsync(request, pageRequest, ct);
@@ -87,6 +97,8 @@ namespace WhiteBit.Net.Clients.V4Api
                        .ToArray(), nextPageRequest);
         }
 
+        #endregion
+
         private SharedTransferStatus ParseTransferStatus(TransactionStatus? transactionStatus)
         {
             if (transactionStatus == TransactionStatus.Success)
@@ -105,7 +117,5 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return SharedTransferStatus.Unknown;
         }
-
-        #endregion
     }
 }

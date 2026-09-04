@@ -16,7 +16,6 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Spot Order Client
 
         public SharedFeeDeductionType SpotFeeDeductionType => SharedFeeDeductionType.AddToCost;
         public SharedFeeAssetType SpotFeeAssetType => SharedFeeAssetType.QuoteAsset;
@@ -29,6 +28,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 SharedQuantityType.BaseAsset);
 
         public string GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
+        #region Place Spot Order
+
+        async Task<ICallResult<SharedId>> IPlaceSpotOrder.PlaceSpotOrderAsync(PlaceSpotOrderRequest request, CancellationToken ct)
+            => await PlaceSpotOrderAsync(request, ct).ConfigureAwait(false);
 
         public PlaceSpotOrderOptions PlaceSpotOrderOptions { get; } = new PlaceSpotOrderOptions(_exchange);
         public async Task<HttpResult<SharedId>> PlaceSpotOrderAsync(PlaceSpotOrderRequest request, CancellationToken ct)
@@ -54,6 +57,12 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
         }
+
+        #endregion
+        #region Get Spot Order
+
+        async Task<ICallResult<SharedSpotOrder>> IGetSpotOrder.GetSpotOrderAsync(GetOrderRequest request, CancellationToken ct)
+            => await GetSpotOrderAsync(request, ct).ConfigureAwait(false);
 
         public GetSpotOrderOptions GetSpotOrderOptions { get; } = new GetSpotOrderOptions(_exchange, true);
         public async Task<HttpResult<SharedSpotOrder>> GetSpotOrderAsync(GetOrderRequest request, CancellationToken ct)
@@ -132,6 +141,12 @@ namespace WhiteBit.Net.Clients.V4Api
             }
         }
 
+        #endregion
+        #region Get Open Spot Orders
+
+        async Task<ICallResult<SharedSpotOrder[]>> IGetOpenSpotOrders.GetOpenSpotOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
+            => await GetOpenSpotOrdersAsync(request, ct).ConfigureAwait(false);
+
         public GetOpenSpotOrdersOptions GetOpenSpotOrdersOptions { get; } = new GetOpenSpotOrdersOptions(_exchange, true);
         public async Task<HttpResult<SharedSpotOrder[]>> GetOpenSpotOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
         {
@@ -182,6 +197,12 @@ namespace WhiteBit.Net.Clients.V4Api
                 IsTriggerOrder = x.TriggerPrice > 0
             }).ToArray());
         }
+
+        #endregion
+        #region Get Closed Spot Orders
+
+        async Task<ICallResult<SharedSpotOrder[]>> IGetClosedSpotOrders.GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => await GetClosedSpotOrdersAsync(request, pageRequest, ct).ConfigureAwait(false);
 
         public GetSpotClosedOrdersOptions GetClosedSpotOrdersOptions { get; } = new GetSpotClosedOrdersOptions(_exchange, true, false, true, 100)
         {
@@ -244,6 +265,12 @@ namespace WhiteBit.Net.Clients.V4Api
             return HttpResult.Ok(result, ExchangeHelpers.ApplyFilter(data, x => x.CreateTime!.Value, request.StartTime, request.EndTime, direction).ToArray(), nextPageRequest);
         }
 
+        #endregion
+        #region Get Spot Order Trades
+
+        async Task<ICallResult<SharedUserTrade[]>> IGetSpotOrderTrades.GetSpotOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
+            => await GetSpotOrderTradesAsync(request, ct).ConfigureAwait(false);
+
         public GetSpotOrderTradesOptions GetSpotOrderTradesOptions { get; } = new GetSpotOrderTradesOptions(_exchange, true);
         public async Task<HttpResult<SharedUserTrade[]>> GetSpotOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
         {
@@ -274,6 +301,13 @@ namespace WhiteBit.Net.Clients.V4Api
                 Role = x.TradeRole == TradeRole.Maker ? SharedRole.Maker : SharedRole.Taker
             }).ToArray());
         }
+
+        #endregion
+
+        #region Get Spot User Trade History
+
+        async Task<ICallResult<SharedUserTrade[]>> IGetSpotUserTradeHistory.GetSpotUserTradeHistoryAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => await GetSpotUserTradeHistoryAsync(request, pageRequest, ct).ConfigureAwait(false);
 
         Task<HttpResult<SharedUserTrade[]>> ISpotOrderRestClient.GetSpotUserTradesAsync(GetUserTradesRequest request, PageRequest? pageRequest, CancellationToken ct)
             => GetSpotUserTradeHistoryAsync(request, pageRequest, ct);
@@ -331,6 +365,12 @@ namespace WhiteBit.Net.Clients.V4Api
                         }).ToArray(), nextPageRequest);
         }
 
+        #endregion
+        #region Cancel Spot Order
+
+        async Task<ICallResult<SharedId>> ICancelSpotOrder.CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)
+            => await CancelSpotOrderAsync(request, ct).ConfigureAwait(false);
+
         public CancelSpotOrderOptions CancelSpotOrderOptions { get; } = new CancelSpotOrderOptions(_exchange, true);
         public async Task<HttpResult<SharedId>> CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)
         {
@@ -347,6 +387,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return HttpResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
         }
+
+        #endregion
 
         private SharedOrderType ParseOrderType(OrderType type, bool postOnly)
         {
@@ -365,7 +407,5 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return null;
         }
-
-        #endregion
     }
 }

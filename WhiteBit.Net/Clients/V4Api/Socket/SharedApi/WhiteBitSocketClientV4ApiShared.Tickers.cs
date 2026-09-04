@@ -16,7 +16,8 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitSocketClientV4SharedApi
     {
-        #region Ticker client
+        #region Subscribe Ticker
+
         async Task<WebSocketResult<UpdateSubscription>> ISubscribeTickerSocket.SubscribeToTickerUpdatesAsync(SubscribeTickerRequest request, Action<DataEvent<SharedTicker>> handler, CancellationToken ct)
             => await SubscribeToTickerUpdatesAsync(request, x => handler(x.ToType<SharedTicker>(x.Data)), ct).ConfigureAwait(false);
 
@@ -45,6 +46,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
             return result;
         }
+
         #endregion
     }
 }

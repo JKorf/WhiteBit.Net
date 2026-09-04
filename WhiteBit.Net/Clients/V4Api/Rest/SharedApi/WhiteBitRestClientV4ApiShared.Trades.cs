@@ -16,7 +16,11 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Recent Trades client
+        #region Get Recent Trades
+
+        async Task<ICallResult<SharedTrade[]>> IGetRecentTrades.GetRecentTradesAsync(GetRecentTradesRequest request, CancellationToken ct)
+            => await GetRecentTradesAsync(request, ct).ConfigureAwait(false);
+
         public GetRecentTradesOptions GetRecentTradesOptions { get; } = new GetRecentTradesOptions(_exchange, 100, false);
 
         public async Task<HttpResult<SharedTrade[]>> GetRecentTradesAsync(GetRecentTradesRequest request, CancellationToken ct)
@@ -44,6 +48,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     Side = x.Side == Enums.OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell
                 }).ToArray());
         }
+
         #endregion
     }
 }

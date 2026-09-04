@@ -16,7 +16,10 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Position History client
+        #region Get Position History
+
+        async Task<ICallResult<SharedPositionHistory[]>> IGetPositionHistory.GetPositionHistoryAsync(GetPositionHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)
+            => await GetPositionHistoryAsync(request, pageRequest, ct).ConfigureAwait(false);
 
         public GetPositionHistoryOptions GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(_exchange, false, true, true, 100)
         {
@@ -69,6 +72,7 @@ namespace WhiteBit.Net.Clients.V4Api
                                 PositionId = x.PositionId.ToString()
                             }).ToArray(), nextPageRequest);
         }
+
         #endregion
     }
 }

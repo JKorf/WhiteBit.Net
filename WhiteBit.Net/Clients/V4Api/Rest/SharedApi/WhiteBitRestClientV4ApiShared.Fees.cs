@@ -16,7 +16,11 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-        #region Fee Client
+        #region Get Fees
+
+        async Task<ICallResult<SharedFee>> IGetFees.GetFeesAsync(GetFeeRequest request, CancellationToken ct)
+            => await GetFeesAsync(request, ct).ConfigureAwait(false);
+
         public GetFeeOptions GetFeeOptions { get; } = new GetFeeOptions(_exchange, false);
 
         public async Task<HttpResult<SharedFee>> GetFeesAsync(GetFeeRequest request, CancellationToken ct)
@@ -37,6 +41,7 @@ namespace WhiteBit.Net.Clients.V4Api
             // Return
             return HttpResult.Ok(result, new SharedFee(symbol.MakerFee, symbol.TakerFee));
         }
+
         #endregion
     }
 }
