@@ -452,8 +452,8 @@ namespace WhiteBit.Net.Clients.V4Api
         public ClosePositionOptions ClosePositionOptions { get; } = new ClosePositionOptions(_exchange, true)
         {
             RequiredRequestParameters = [
-                RequestParameter<ClosePositionRequest>.Required(x => x.PositionSide, "Current side of the position to close", SharedPositionSide.Long),
-                RequestParameter<ClosePositionRequest>.Required(x => x.Quantity,"Quantity of the position is required", 0.1m)
+                RequestParameterRule<ClosePositionRequest>.Required(x => x.PositionSide, "Current side of the position to close", SharedPositionSide.Long),
+                RequestParameterRule<ClosePositionRequest>.Required(x => x.Quantity,"Quantity of the position is required", 0.1m)
                 ]
         };
         public async Task<HttpResult<SharedId>> ClosePositionAsync(ClosePositionRequest request, CancellationToken ct)
