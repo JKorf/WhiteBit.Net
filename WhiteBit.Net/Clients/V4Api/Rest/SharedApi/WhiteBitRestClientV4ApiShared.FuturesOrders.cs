@@ -16,7 +16,6 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
-
         public SharedFeeDeductionType FuturesFeeDeductionType => SharedFeeDeductionType.AddToCost;
         public SharedFeeAssetType FuturesFeeAssetType => SharedFeeAssetType.QuoteAsset;
 
@@ -27,6 +26,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset);
+
         #region Place Futures Order
 
         async Task<ICallResult<SharedId>> IPlaceFuturesOrder.PlaceFuturesOrderAsync(PlaceFuturesOrderRequest request, CancellationToken ct)
@@ -61,6 +61,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Futures Order
 
         async Task<ICallResult<SharedFuturesOrder>> IGetFuturesOrder.GetFuturesOrderAsync(GetOrderRequest request, CancellationToken ct)
@@ -152,6 +153,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Open Futures Orders
 
         async Task<ICallResult<SharedFuturesOrder[]>> IGetOpenFuturesOrders.GetOpenFuturesOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
@@ -211,6 +213,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Closed Futures Orders
 
         async Task<ICallResult<SharedFuturesOrder[]>> IGetClosedFuturesOrders.GetClosedFuturesOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
@@ -283,6 +286,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Futures Order Trades
 
         async Task<ICallResult<SharedUserTrade[]>> IGetFuturesOrderTrades.GetFuturesOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
@@ -385,6 +389,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Cancel Futures Order
 
         async Task<ICallResult<SharedId>> ICancelFuturesOrder.CancelFuturesOrderAsync(CancelOrderRequest request, CancellationToken ct)
@@ -408,6 +413,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Positions
 
         async Task<ICallResult<SharedPosition[]>> IGetPositions.GetPositionsAsync(GetPositionsRequest request, CancellationToken ct)
@@ -444,6 +450,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Close Position
 
         async Task<ICallResult<SharedId>> IClosePosition.ClosePositionAsync(ClosePositionRequest request, CancellationToken ct)
@@ -451,9 +458,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public ClosePositionOptions ClosePositionOptions { get; } = new ClosePositionOptions(_exchange, true)
         {
-            RequiredRequestParameters = [
-                RequestParameterRule<ClosePositionRequest>.Required(x => x.PositionSide, "Current side of the position to close", SharedPositionSide.Long),
-                RequestParameterRule<ClosePositionRequest>.Required(x => x.Quantity,"Quantity of the position is required", 0.1m)
+            ParameterRuleOverwrites = [
+                RequestParameterRuleOverride<ClosePositionRequest>.Required(x => x.PositionSide),
+                RequestParameterRuleOverride<ClosePositionRequest>.Required(x => x.Quantity)
                 ]
         };
         public async Task<HttpResult<SharedId>> ClosePositionAsync(ClosePositionRequest request, CancellationToken ct)
@@ -476,5 +483,6 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
     }
 }

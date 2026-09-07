@@ -24,10 +24,10 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public SubscribeSpotOrderOptions SubscribeSpotOrderOptions { get; } = new SubscribeSpotOrderOptions(_exchange, false)
         {
-            OptionalExchangeParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT" })
-            }
+            ExchangeParameterRules =
+            [
+                ExchangeParameterRule.Optional("OrderSymbols", "The symbols to subscribe for updates", new List<string>{ "ETH_USDT" })
+            ]
         };
         public async Task<WebSocketResult<UpdateSubscription>> SubscribeToSpotOrderUpdatesAsync(SubscribeSpotOrderRequest request, Action<DataEvent<SharedSpotOrderUpdate[]>> handler, CancellationToken ct)
         {

@@ -84,7 +84,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 SetFuturesTpSlOptions,
                 CancelFuturesTpSlOptions,
                 GetFundingRateHistoryOptions,
-                TransferOptions
+                TransferOptions,
+                PlaceMultipleSpotOrdersOptions
                 );
         }
 

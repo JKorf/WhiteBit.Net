@@ -23,8 +23,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public GetPositionHistoryOptions GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(_exchange, false, true, true, 100)
         {
-            RequiredRequestParameters = [
-                RequestParameterRule<GetPositionHistoryRequest>.Required(x => x.Symbol, "The symbol to get position history for", new SharedSymbol(TradingMode.PerpetualLinear, "ETH", "USDT"))
+            ParameterRuleOverwrites = [
+                RequestParameterRuleOverride<GetPositionHistoryRequest>.Required(x => x.Symbol)
                 ]
         };
         public async Task<HttpResult<SharedPositionHistory[]>> GetPositionHistoryAsync(GetPositionHistoryRequest request, PageRequest? pageRequest, CancellationToken ct)

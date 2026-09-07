@@ -20,10 +20,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public SubscribeUserTradeOptions SubscribeUserTradeOptions { get; } = new SubscribeUserTradeOptions(_exchange, true)
         {
-            OptionalExchangeParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription("UserTradeSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_USDT", "ETH_PERP" })
-            }
+            ExchangeParameterRules = [
+                ExchangeParameterRule.Optional("UserTradeSymbols", "The symbols to subscribe for updates", new List<string>{ "ETH_USDT", "ETH_PERP" })
+            ]
         };
         public async Task<WebSocketResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(SubscribeUserTradeRequest request, Action<DataEvent<SharedUserTrade[]>> handler, CancellationToken ct)
         {

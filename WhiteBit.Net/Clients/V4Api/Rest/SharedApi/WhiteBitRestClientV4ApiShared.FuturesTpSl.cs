@@ -23,8 +23,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public SetFuturesTpSlOptions SetFuturesTpSlOptions { get; } = new SetFuturesTpSlOptions(_exchange, true)
         {
-            RequiredRequestParameters = [
-                RequestParameterRule<SetTpSlRequest>.Required(x => x.Quantity, "Quantity of the position to close, required by API", 0.123m)
+            ParameterRuleOverwrites = [
+                RequestParameterRuleOverride<SetTpSlRequest>.Required(x => x.Quantity)
                 ]
         };
 
@@ -57,8 +57,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public CancelFuturesTpSlOptions CancelFuturesTpSlOptions { get; } = new CancelFuturesTpSlOptions(_exchange, true)
         {
-            RequiredRequestParameters = [
-                RequestParameterRule<CancelTpSlRequest>.Required(x => x.OrderId, "Id of the tp/sl order", "123123")
+            ParameterRuleOverwrites = [
+                RequestParameterRuleOverride<CancelTpSlRequest>.Required(x => x.OrderId)
                 ]
         };
 

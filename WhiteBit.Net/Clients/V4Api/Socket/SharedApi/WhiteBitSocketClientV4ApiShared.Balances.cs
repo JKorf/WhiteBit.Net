@@ -20,10 +20,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public SubscribeBalanceOptions SubscribeBalanceOptions { get; } = new SubscribeBalanceOptions(_exchange, true)
         {
-            OptionalExchangeParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription("BalanceAssets", typeof(List<string>), "The assets to subscribe for updates", new List<string>{ "USDT", "ETH", "BTC" })
-            }
+            ExchangeParameterRules = [
+                ExchangeParameterRule.Optional("BalanceAssets", "The assets to subscribe for updates", new List<string>{ "USDT", "ETH", "BTC" })
+            ]
         };
         public async Task<WebSocketResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(SubscribeBalancesRequest request, Action<DataEvent<SharedBalance[]>> handler, CancellationToken ct)
         {

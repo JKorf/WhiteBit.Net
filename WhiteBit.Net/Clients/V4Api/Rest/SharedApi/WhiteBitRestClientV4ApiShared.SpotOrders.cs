@@ -390,6 +390,52 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
+        #region Place Multiple Spot Orders
+
+        /// <inheritdoc />
+        public bool PlaceMultipleSpotOrdersAllowsMultipleSymbols => true;
+        public int? MaxSpotOrdersPerRequest => null;
+
+        async Task<ICallResult<CallResult<SharedId>[]>> IPlaceMultipleSpotOrders.PlaceMultipleSpotOrdersAsync(PlaceMultipleSpotOrdersRequest request, CancellationToken ct)
+            => await PlaceMultipleSpotOrdersAsync(request, ct).ConfigureAwait(false);
+
+        public PlaceMultipleSpotOrdersOptions PlaceMultipleSpotOrdersOptions { get; } = new PlaceMultipleSpotOrdersOptions(_exchange);
+        public async Task<HttpResult<CallResult<SharedId>[]>> PlaceMultipleSpotOrdersAsync(PlaceMultipleSpotOrdersRequest request, CancellationToken ct)
+        {
+            var validationError = PlaceMultipleSpotOrdersOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return HttpResult.Fail<CallResult<SharedId>[]>(Exchange, validationError);
+
+            var result = await _api.Trading.PlaceSpotMultipleOrdersAsync(
+                request.Orders.Select(x => new WhiteBitOrderRequest
+                {
+                    Symbol = x.Symbol!.GetSymbol(FormatSymbol),
+                    OrderSide = x.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
+                    Quantity = x.Quantity?.QuantityInBaseAsset ?? 0,
+                    Price = x.Price ?? 0,
+                    PostOnly = x.OrderType == SharedOrderType.LimitMaker ? true : null,
+                    ImmediateOrCancel = x.TimeInForce == SharedTimeInForce.ImmediateOrCancel ? true : null,
+                    ClientOrderId = x.ClientOrderId,
+                }), 
+                ct: ct
+                ).ConfigureAwait(false);
+
+
+            var resultData = result.Data?.Select(x => new CallResult<SharedId>()
+            {
+                Data = x.Success ? new SharedId(x.Data.Result!.OrderId.ToString()) : null,
+                Error = x.Error,
+                OriginalData = x.OriginalData
+            }).ToArray();
+
+            if (!result.Success)
+                return HttpResult.Fail<CallResult<SharedId>[]>(result, data: resultData);
+
+            return HttpResult.Ok(result, resultData!);
+        }
+
+        #endregion
+
         private SharedOrderType ParseOrderType(OrderType type, bool postOnly)
         {
             if (type == OrderType.Market || type == OrderType.CollateralMarket || type == OrderType.StopMarket) return SharedOrderType.Market;

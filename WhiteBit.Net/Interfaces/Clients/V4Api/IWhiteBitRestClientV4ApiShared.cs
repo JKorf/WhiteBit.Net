@@ -84,7 +84,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         ICancelFuturesTpSlRest,
         IGetBookTickerRest,
         IGetFundingRateHistoryRest,
-        ITransferRest
+        ITransferRest,
+        IPlaceMultipleSpotOrdersRest
     {
     }
 }

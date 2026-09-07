@@ -24,10 +24,9 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public SubscribeFuturesOrderOptions SubscribeFuturesOrderOptions { get; } = new SubscribeFuturesOrderOptions(_exchange, false)
         {
-            OptionalExchangeParameters = new List<ParameterDescription>
-            {
-                new ParameterDescription("OrderSymbols", typeof(List<string>), "The symbols to subscribe for updates", new List<string>{ "ETH_PERP" })
-            }
+            ExchangeParameterRules = [            
+                ExchangeParameterRule.Optional("OrderSymbols", "The symbols to subscribe for updates", new List<string>{ "ETH_PERP" })
+            ]
         };
         public async Task<WebSocketResult<UpdateSubscription>> SubscribeToFuturesOrderUpdatesAsync(SubscribeFuturesOrderRequest request, Action<DataEvent<SharedFuturesOrderUpdate[]>> handler, CancellationToken ct)
         {
