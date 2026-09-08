@@ -453,9 +453,6 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #region Close Position
 
-        async Task<ICallResult<SharedId>> IClosePosition.ClosePositionAsync(ClosePositionRequest request, CancellationToken ct)
-            => await ClosePositionAsync(request, ct).ConfigureAwait(false);
-
         public ClosePositionOptions ClosePositionOptions { get; } = new ClosePositionOptions(_exchange, true)
         {
             ParameterRuleOverwrites = [

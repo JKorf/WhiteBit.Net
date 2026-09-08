@@ -41,6 +41,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 price: request.OrderPrice,
                 clientOrderId: request.ClientOrderId,
                 positionSide: request.PositionSide.ToPositionSide(),
+                reduceOnly: request.ReduceOnly,
                 ct: ct).ConfigureAwait(false);
             if (!result.Success)
                 return HttpResult.Fail<SharedId>(result);

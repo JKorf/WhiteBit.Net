@@ -39,8 +39,8 @@ namespace WhiteBit.Net.Clients.V4Api
 
             SetCapabilities(
                 GetSpotSymbolsOptions,
-                GetSpotTickerOptions,
-                GetAllSpotTickersOptions,
+                GetTickerOptions,
+                GetAllTickersOptions,
                 GetBookTickerOptions,
                 GetRecentTradesOptions,
                 GetOrderBookOptions,
@@ -59,8 +59,6 @@ namespace WhiteBit.Net.Clients.V4Api
                 GetSpotUserTradeHistoryOptions,
                 CancelSpotOrderOptions,
                 GetFuturesSymbolsOptions,
-                GetFuturesTickerOptions,
-                GetAllFuturesTickersOptions,
                 GetLeverageOptions,
                 SetLeverageOptions,
                 GetOpenInterestOptions,
@@ -73,7 +71,6 @@ namespace WhiteBit.Net.Clients.V4Api
                 GetFuturesUserTradeHistoryOptions,
                 CancelFuturesOrderOptions,
                 GetPositionsOptions,
-                ClosePositionOptions,
                 GetFeeOptions,
                 PlaceSpotTriggerOrderOptions,
                 GetSpotTriggerOrderOptions,

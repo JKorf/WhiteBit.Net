@@ -39,8 +39,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
     /// </summary>
     public interface IWhiteBitRestClientV4SharedApi :
         IGetSpotSymbolsRest,
-        IGetSpotTickerRest,
-        IGetAllSpotTickersRest,
+        IGetTickerRest,
+        IGetAllTickersRest,
         IGetRecentTradesRest,
         IGetOrderBookRest,
         IGetBalancesRest,
@@ -58,8 +58,6 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         IGetSpotUserTradeHistoryRest,
         ICancelSpotOrderRest,
         IGetFuturesSymbolsRest,
-        IGetFuturesTickerRest,
-        IGetAllFuturesTickersRest,
         IGetLeverageRest,
         ISetLeverageRest,
         IGetOpenInterestRest,
@@ -72,7 +70,6 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         IGetFuturesUserTradeHistoryRest,
         ICancelFuturesOrderRest,
         IGetPositionsRest,
-        IClosePositionRest,
         IGetFeesRest,
         IPlaceSpotTriggerOrderRest,
         IGetSpotTriggerOrderRest,
