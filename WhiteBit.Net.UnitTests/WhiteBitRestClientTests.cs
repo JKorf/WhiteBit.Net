@@ -7,6 +7,7 @@ using CryptoExchange.Net.Testing;
 using CryptoExchange.Net.Testing.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -165,6 +166,22 @@ namespace WhiteBit.Net.UnitTests
 
             Assert.That(missingOptions, Is.Empty);
             Assert.That(missingInterfaces, Is.Empty);
+        }
+
+        [Test]
+        public void TestRestSharedApiDoesntHaveUnsupportedCapabilities()
+        {
+            var unsupported = TestHelpers.ValidateUnsupportedCapabilities(new WhiteBitRestClient().V4Api.SharedApi);
+
+            Assert.That(unsupported, Is.Empty);
+        }
+
+        [Test]
+        public void TestSocketSharedApiDoesntHaveUnsupportedCapabilities()
+        {
+            var unsupported = TestHelpers.ValidateUnsupportedCapabilities(new WhiteBitSocketClient().V4Api.SharedApi);
+
+            Assert.That(unsupported, Is.Empty);
         }
     }
 }
