@@ -28,7 +28,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public GetWithdrawalHistoryOptions GetWithdrawalHistoryOptions { get; } = new GetWithdrawalHistoryOptions(_exchange, false, true, false, 100)
         {
-            ParameterRuleOverwrites = [
+            ParameterRuleOverrides = [
                 RequestParameterRuleOverride<GetWithdrawalsRequest>.NotSupported(x => x.StartTime),
                 RequestParameterRuleOverride<GetWithdrawalsRequest>.NotSupported(x => x.EndTime),
                 ]

@@ -142,7 +142,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public GetAllTickersOptions GetAllTickersOptions { get; } = new GetAllTickersOptions(_exchange)
         {
-            ParameterRuleOverwrites = [
+            ParameterRuleOverrides = [
                 RequestParameterRuleOverride<GetTickersRequest>.Required(x => x.TradingMode)
                 ]
         };

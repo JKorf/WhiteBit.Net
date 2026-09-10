@@ -29,7 +29,7 @@ namespace WhiteBit.Net.Clients.V4Api
             SharedAccountType.DeliveryInverseFutures
             ])
         {
-            ParameterRuleOverwrites = [
+            ParameterRuleOverrides = [
                 RequestParameterRuleOverride<TransferRequest>.NotSupported(x => x.FromSymbol),
                 RequestParameterRuleOverride<TransferRequest>.NotSupported(x => x.ToSymbol),
                 ]

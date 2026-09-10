@@ -52,7 +52,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public GetDepositHistoryOptions GetDepositHistoryOptions { get; } = new GetDepositHistoryOptions(_exchange, false, true, false, 100)
         {
-            ParameterRuleOverwrites = [
+            ParameterRuleOverrides = [
                 RequestParameterRuleOverride<GetDepositsRequest>.NotSupported(x => x.StartTime),
                 RequestParameterRuleOverride<GetDepositsRequest>.NotSupported(x => x.EndTime)
                 ]

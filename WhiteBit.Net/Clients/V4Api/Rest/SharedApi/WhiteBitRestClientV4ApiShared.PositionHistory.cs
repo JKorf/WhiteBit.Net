@@ -23,7 +23,7 @@ namespace WhiteBit.Net.Clients.V4Api
 
         public GetPositionHistoryOptions GetPositionHistoryOptions { get; } = new GetPositionHistoryOptions(_exchange, false, true, true, 100)
         {
-            ParameterRuleOverwrites = [
+            ParameterRuleOverrides = [
                 RequestParameterRuleOverride<GetPositionHistoryRequest>.Required(x => x.Symbol)
                 ]
         };
