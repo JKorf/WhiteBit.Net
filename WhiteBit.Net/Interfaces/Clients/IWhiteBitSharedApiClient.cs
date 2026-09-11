@@ -1,3 +1,4 @@
+using CryptoExchange.Net.SharedApis;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
 
 namespace WhiteBit.Net.Interfaces.Clients
@@ -5,7 +6,7 @@ namespace WhiteBit.Net.Interfaces.Clients
     /// <summary>
     /// Client for the shared REST and WebSocket API implementations of WhiteBit
     /// </summary>
-    public interface IWhiteBitSharedApiClient
+    public interface IWhiteBitSharedApiClient : ISharedApiClientBase
     {
         /// <summary>
         /// REST shared API implementations
