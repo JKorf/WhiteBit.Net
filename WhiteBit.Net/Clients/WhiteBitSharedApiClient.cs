@@ -10,9 +10,9 @@ namespace WhiteBit.Net.Clients
     public class WhiteBitSharedApiClient : SharedApiClientBase, IWhiteBitSharedApiClient
     {
         /// <inheritdoc />
-        public IWhiteBitRestClientV4SharedApi Rest { get; }
+        public IWhiteBitRestClientV4SharedApi V4Rest { get; }
         /// <inheritdoc />
-        public IWhiteBitSocketClientV4SharedApi Socket { get; }
+        public IWhiteBitSocketClientV4SharedApi V4Socket { get; }
 
         /// <summary>
         /// ctor
@@ -26,8 +26,8 @@ namespace WhiteBit.Net.Clients
                     socketClient.V4Api.SharedApi
                   )
         {
-            Rest = restClient.V4Api.SharedApi;
-            Socket = socketClient.V4Api.SharedApi;
+            V4Rest = restClient.V4Api.SharedApi;
+            V4Socket = socketClient.V4Api.SharedApi;
         }
     }
 }

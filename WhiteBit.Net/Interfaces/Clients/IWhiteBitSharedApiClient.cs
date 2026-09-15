@@ -11,11 +11,11 @@ namespace WhiteBit.Net.Interfaces.Clients
         /// <summary>
         /// REST shared API implementations
         /// </summary>
-        IWhiteBitRestClientV4SharedApi Rest { get; }
+        IWhiteBitRestClientV4SharedApi V4Rest { get; }
 
         /// <summary>
         /// WebSocket shared API implementations
         /// </summary>
-        IWhiteBitSocketClientV4SharedApi Socket { get; }
+        IWhiteBitSocketClientV4SharedApi V4Socket { get; }
     }
 }

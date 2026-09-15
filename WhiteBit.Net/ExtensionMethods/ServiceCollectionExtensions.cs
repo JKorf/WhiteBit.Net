@@ -2,6 +2,7 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Interfaces.Clients;
+using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -121,15 +122,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 x.GetRequiredService<IOptions<WhiteBitRestOptions>>(),
                 x.GetRequiredService<IOptions<WhiteBitSocketOptions>>()));
 
-            services.AddTransient<IWhiteBitSharedApiClient, WhiteBitSharedApiClient>();
-
-            services.RegisterSharedApi(x => x.GetRequiredService<IWhiteBitRestClient>().V4Api.SharedApi);
-            services.RegisterSharedApi(x => x.GetRequiredService<IWhiteBitSocketClient>().V4Api.SharedApi);
-
-            services.RegisterSharedApiClientCapabilities<IWhiteBitSharedApiClient>();
-
             services.RegisterSharedRestInterfaces(x => x.GetRequiredService<IWhiteBitRestClient>().V4Api.SharedClient);
             services.RegisterSharedSocketInterfaces(x => x.GetRequiredService<IWhiteBitSocketClient>().V4Api.SharedClient);
+
+            services.RegisterSharedApiClient<
+                IWhiteBitSharedApiClient,
+                WhiteBitSharedApiClient>(sharedApis => sharedApis
+                    .Add(client => client.V4Rest)
+                    .Add(client => client.V4Socket)
+                    );
+
             return services;
         }
     }
