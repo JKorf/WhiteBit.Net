@@ -177,8 +177,8 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         /// </summary>
         /// <param name="symbol">["<c>market</c>"] Filter by symbol, for example `ETH_USDT`</param>
         /// <param name="clientOrderId">["<c>clientOrderId</c>"] Filter by client order id</param>
-        /// <param name="startTime">["<c>startTime</c>"] Filter by start time</param>
-        /// <param name="endTime">["<c>endTime</c>"] Filter by end time</param>
+        /// <param name="startTime">["<c>startDate</c>"] Filter by start time</param>
+        /// <param name="endTime">["<c>endDate</c>"] Filter by end time</param>
         /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="offset">["<c>offset</c>"] Result offset</param>
         /// <param name="ct">Cancellation token</param>
