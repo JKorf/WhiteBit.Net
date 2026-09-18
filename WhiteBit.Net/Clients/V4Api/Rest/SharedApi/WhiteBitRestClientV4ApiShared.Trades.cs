@@ -18,7 +18,7 @@ namespace WhiteBit.Net.Clients.V4Api
     {
         #region Get Recent Trades
 
-        async Task<ICallResult<SharedTrade[]>> IGetRecentTrades.GetRecentTradesAsync(GetRecentTradesRequest request, CancellationToken ct)
+        async Task<IExchangeCallResult<SharedTrade[]>> IGetRecentTrades.GetRecentTradesAsync(GetRecentTradesRequest request, CancellationToken ct)
             => await GetRecentTradesAsync(request, ct).ConfigureAwait(false);
 
         public GetRecentTradesOptions GetRecentTradesOptions { get; } = new GetRecentTradesOptions(_exchange, 100, false);
