@@ -262,8 +262,8 @@ namespace WhiteBit.Net.Clients.V4Api
             var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
             parameters.Add("market", symbol);
             parameters.Add("clientOrderId", clientOrderId);
-            parameters.Add("startTime", startDate);
-            parameters.Add("endTime", endDate);
+            parameters.Add("startDate", startDate);
+            parameters.Add("endDate", endDate);
             parameters.Add("limit", limit);
             parameters.Add("offset", offset);
             var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/trade-account/executed-history", WhiteBitExchange.RateLimiter.WhiteBit, 1, true,
