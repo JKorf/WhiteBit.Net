@@ -47,9 +47,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (assets == null)
                 {
                     // request all assets
-                    var client = new WhiteBitRestClient(x =>
+                    using var client = new WhiteBitRestClient(x =>
                     {
                         x.Environment = ClientOptions.Environment;
+                        x.Proxy = ClientOptions.Proxy;
                     });
                     var assetsResult = await client.V4Api.ExchangeData.GetAssetsAsync().ConfigureAwait(false);
                     if (!assetsResult.Success)
@@ -71,9 +72,10 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (assets == null)
                 {
                     // request all assets
-                    var client = new WhiteBitRestClient(x =>
+                    using var client = new WhiteBitRestClient(x =>
                     {
                         x.Environment = ClientOptions.Environment;
+                        x.Proxy = ClientOptions.Proxy;
                         x.ApiCredentials = (WhiteBitCredentials?)AuthenticationProvider!.ApiCredentials.Copy();
                     });
                     var assetsResult = await client.V4Api.Account.GetCollateralBalancesAsync().ConfigureAwait(false);
@@ -252,9 +254,10 @@ namespace WhiteBit.Net.Clients.V4Api
             if (symbols == null)
             {
                 // request all symbols
-                var client = new WhiteBitRestClient(x =>
+                using var client = new WhiteBitRestClient(x =>
                 {
                     x.Environment = ClientOptions.Environment;
+                    x.Proxy = ClientOptions.Proxy;
                 });
                 var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
                 if (!symbolsResult.Success)
@@ -312,9 +315,10 @@ namespace WhiteBit.Net.Clients.V4Api
             if (symbols == null)
             {
                 // request all symbols
-                var client = new WhiteBitRestClient(x =>
+                using var client = new WhiteBitRestClient(x =>
                 {
                     x.Environment = ClientOptions.Environment;
+                    x.Proxy = ClientOptions.Proxy;
                 });
                 var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
                 if (!symbolsResult.Success)
@@ -420,9 +424,10 @@ namespace WhiteBit.Net.Clients.V4Api
             if (symbols == null)
             {
                 // request all symbols
-                var client = new WhiteBitRestClient(x =>
+                using var client = new WhiteBitRestClient(x =>
                 {
                     x.Environment = ClientOptions.Environment;
+                    x.Proxy = ClientOptions.Proxy;
                 });
                 var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
                 if (!symbolsResult.Success)
