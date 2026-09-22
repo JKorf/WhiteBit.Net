@@ -561,10 +561,11 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new WebSocketResult<string>(Exchange, "123", null);
 
             _logger.LogDebug("Requesting websocket token");
-            var restClient = new WhiteBitRestClient(x =>
+            using var restClient = new WhiteBitRestClient(x =>
             {
                 x.ApiCredentials = ApiCredentials;
                 x.Environment = ClientOptions.Environment;
+                x.Proxy = ClientOptions.Proxy;
             });
 
             var result = await ((WhiteBitRestClientV4ApiAccount)restClient.V4Api.Account).GetWebsocketTokenAsync().ConfigureAwait(false);
