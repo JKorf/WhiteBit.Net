@@ -13,8 +13,8 @@ Use this file to route common user intents to the correct WhiteBit.Net client me
 | Custom environment | `WhiteBitEnvironment.CreateCustom(name, restAddress, socketAddress)` |
 | Dependency injection | `services.AddWhiteBit(options => { ... })` |
 | Direct API root | `client.V4Api` |
-| Shared REST client | `new WhiteBitRestClient().V4Api.SharedClient` |
-| Shared socket client | `new WhiteBitSocketClient().V4Api.SharedClient` |
+| Shared REST client | `new WhiteBitRestClient().V4Api.SharedApi` |
+| Shared socket client | `new WhiteBitSocketClient().V4Api.SharedApi` |
 
 ## V4 REST: Exchange Data
 
@@ -150,25 +150,25 @@ Use this file to route common user intents to the correct WhiteBit.Net client me
 
 | User intent | WhiteBit.Net member or interface |
 |---|---|
-| Shared REST client | `new WhiteBitRestClient().V4Api.SharedClient` |
-| Shared socket client | `new WhiteBitSocketClient().V4Api.SharedClient` |
-| Shared spot ticker REST | `ISpotTickerRestClient.GetSpotTickerAsync(new GetTickerRequest(symbol))` |
-| Shared spot symbol REST | `ISpotSymbolRestClient.GetSpotSymbolsAsync(...)` |
+| Shared REST client | `new WhiteBitRestClient().V4Api.SharedApi` |
+| Shared socket client | `new WhiteBitSocketClient().V4Api.SharedApi` |
+| Shared spot ticker REST | `IGetTickerRest.GetTickerAsync(new GetTickerRequest(symbol))` |
+| Shared spot symbol REST | `IGetSpotSymbolsRest.GetSpotSymbolsAsync(...)` |
 | Filter shared symbols by asset classification | `GetSymbolsRequest` base/quote asset type and subtype fields |
 | Read shared trading fees and increments | `SharedSpotSymbol` / `SharedFuturesSymbol`: `MakerFeePercentage`, `TakerFeePercentage`, `PriceStep`, `QuantityStep` |
 | Read shared futures risk limits | `SharedFuturesSymbol`: `UpperFundingCap`, `LowerFundingCap`, `MaxLongLeverage`, `MaxShortLeverage` |
-| Read cached shared spot symbol catalog | `ISpotSymbolRestClient.SpotSymbolCatalog` |
-| Read cached shared futures symbol catalog | `IFuturesSymbolRestClient.FuturesSymbolCatalog` |
-| Shared spot order REST | `ISpotOrderRestClient.PlaceSpotOrderAsync(...)` |
-| Shared futures order REST | `IFuturesOrderRestClient.PlaceFuturesOrderAsync(...)` |
-| Shared balances REST | `IBalanceRestClient.GetBalancesAsync(...)` |
-| Shared fees REST | `IFeeRestClient.GetFeesAsync(...)` |
-| Shared ticker socket | `ITickerSocketClient.SubscribeToTickerUpdatesAsync(...)` |
-| Shared book ticker socket | `IBookTickerSocketClient.SubscribeToBookTickerUpdatesAsync(...)` |
-| Shared order book socket | `IOrderBookSocketClient.SubscribeToOrderBookUpdatesAsync(...)` |
-| Shared user trade socket | `IUserTradeSocketClient.SubscribeToUserTradeUpdatesAsync(...)` |
-| Shared position socket | `IPositionSocketClient.SubscribeToPositionUpdatesAsync(...)` |
-| Discover shared capabilities | `client.V4Api.SharedClient.Discover()` |
+| Read cached shared spot symbol catalog | `IGetSpotSymbolsRest.SpotSymbolCatalog` |
+| Read cached shared futures symbol catalog | `IGetFuturesSymbolsRest.FuturesSymbolCatalog` |
+| Shared spot order REST | `IPlaceSpotOrderRest.PlaceSpotOrderAsync(...)` |
+| Shared futures order REST | `IPlaceFuturesOrderRest.PlaceFuturesOrderAsync(...)` |
+| Shared balances REST | `IGetBalancesRest.GetBalancesAsync(...)` |
+| Shared fees REST | `IGetFeesRest.GetFeesAsync(...)` |
+| Shared ticker socket | `ISubscribeTickerSocket.SubscribeToTickerUpdatesAsync(...)` |
+| Shared book ticker socket | `ISubscribeBookTickerSocket.SubscribeToBookTickerUpdatesAsync(...)` |
+| Shared order book socket | `ISubscribeOrderBookSocket.SubscribeToOrderBookUpdatesAsync(...)` |
+| Shared user trade socket | `ISubscribeUserTradesSocket.SubscribeToUserTradeUpdatesAsync(...)` |
+| Shared position socket | `ISubscribePositionsSocket.SubscribeToPositionUpdatesAsync(...)` |
+| Resolve a runtime-selected Shared API capability | `IWhiteBitSharedApiClient.GetCapability(...)` |
 
 Shared spot/futures symbol models include `DisplayName`, asset classification, fee, and order-increment metadata.
 
@@ -198,4 +198,4 @@ For shared socket subscriptions, keep the concrete socket client and unsubscribe
 | `ETHUSDT` in direct WhiteBit calls | `ETH_USDT` |
 | `ETHUSDT` for WhiteBit perpetual examples | `ETH_PERP` |
 | `.Data` without `.Success` check | Check `.Success` first |
-| `ITickerSocketClient.UnsubscribeAsync(...)` | Keep the concrete socket client and call `socketClient.UnsubscribeAsync(subscription.Data)` |
+| Unsubscribe from a shared subscription | Keep the concrete socket client and call `socketClient.UnsubscribeAsync(subscription.Data)` |

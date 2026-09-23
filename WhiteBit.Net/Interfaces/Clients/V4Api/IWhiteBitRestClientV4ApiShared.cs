@@ -31,4 +31,58 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         ITransferRestClient
     {
     }
+
+    /// <summary>
+    /// Shared API interface. Shared APIs provide a common,
+    /// exchange-independent contract for accessing functionality across different
+    /// exchange client libraries.
+    /// </summary>
+    public interface IWhiteBitRestClientV4SharedApi :
+        IGetSpotSymbolsRest,
+        IGetTickerRest,
+        IGetAllTickersRest,
+        IGetRecentTradesRest,
+        IGetOrderBookRest,
+        IGetBalancesRest,
+        IGetAssetRest,
+        IGetAllAssetsRest,
+        IGetDepositAddressesRest,
+        IGetDepositHistoryRest,
+        IGetWithdrawalHistoryRest,
+        IWithdrawRest,
+        IPlaceSpotOrderRest,
+        IGetSpotOrderRest,
+        IGetOpenSpotOrdersRest,
+        IGetClosedSpotOrdersRest,
+        IGetSpotOrderTradesRest,
+        IGetSpotUserTradeHistoryRest,
+        ICancelSpotOrderRest,
+        IGetFuturesSymbolsRest,
+        IGetLeverageRest,
+        ISetLeverageRest,
+        IGetOpenInterestRest,
+        IGetPositionHistoryRest,
+        IPlaceFuturesOrderRest,
+        IGetFuturesOrderRest,
+        IGetOpenFuturesOrdersRest,
+        IGetClosedFuturesOrdersRest,
+        IGetFuturesOrderTradesRest,
+        IGetFuturesUserTradeHistoryRest,
+        ICancelFuturesOrderRest,
+        IGetPositionsRest,
+        IGetFeesRest,
+        IPlaceSpotTriggerOrderRest,
+        IGetSpotTriggerOrderRest,
+        ICancelSpotTriggerOrderRest,
+        IPlaceFuturesTriggerOrderRest,
+        IGetFuturesTriggerOrderRest,
+        ICancelFuturesTriggerOrderRest,
+        ISetFuturesTpSlRest,
+        ICancelFuturesTpSlRest,
+        IGetBookTickerRest,
+        IGetFundingRateHistoryRest,
+        ITransferRest,
+        IPlaceMultipleSpotOrdersRest
+    {
+    }
 }

@@ -43,9 +43,9 @@ var eth = tickers.Data.Single(x => x.Symbol == "ETH_USDT");
 - `restClient.V4Api.Convert`
 - `restClient.V4Api.Codes`
 - `restClient.V4Api.SubAccount`
-- `restClient.V4Api.SharedClient`
+- `restClient.V4Api.SharedApi`
 - `socketClient.V4Api`
-- `socketClient.V4Api.SharedClient`
+- `socketClient.V4Api.SharedApi`
 
 ## Spot Orders
 
@@ -83,7 +83,7 @@ await socketClient.UnsubscribeAsync(sub.Data);
 
 ## Multi-Exchange Code
 
-Use `CryptoExchange.Net.SharedApis` through `new WhiteBitRestClient().V4Api.SharedClient` or `new WhiteBitSocketClient().V4Api.SharedClient`.
+Use `CryptoExchange.Net.SharedApis` through `new WhiteBitRestClient().V4Api.SharedApi` or `new WhiteBitSocketClient().V4Api.SharedApi`.
 
 ## Hard Rules
 

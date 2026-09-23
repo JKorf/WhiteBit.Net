@@ -26,6 +26,8 @@ namespace WhiteBit.Net.Clients.V4Api
     internal partial class WhiteBitRestClientV4Api : RestApiClient<WhiteBitEnvironment, WhiteBitAuthenticationProvider, WhiteBitCredentials>, IWhiteBitRestClientV4Api
     {
         #region fields 
+        private readonly WhiteBitRestClientV4SharedApi _sharedApi;
+
         /// <inheritdoc />
         public new WhiteBitRestOptions ClientOptions => (WhiteBitRestOptions)base.ClientOptions;
 
@@ -63,6 +65,9 @@ namespace WhiteBit.Net.Clients.V4Api
             ExchangeData = new WhiteBitRestClientV4ApiExchangeData(_logger, this);
             Trading = new WhiteBitRestClientV4ApiTrading(_logger, this);
             CollateralTrading = new WhiteBitRestClientV4ApiCollateralTrading(_logger, this);
+
+            _sharedApi = new WhiteBitRestClientV4SharedApi(this);
+
         }
         #endregion
 
@@ -97,7 +102,9 @@ namespace WhiteBit.Net.Clients.V4Api
             => WhiteBitExchange.FormatSymbol(baseAsset, quoteAsset, tradingMode, deliverDate);
 
         /// <inheritdoc />
-        public IWhiteBitRestClientV4ApiShared SharedClient => this;
+        public IWhiteBitRestClientV4ApiShared SharedClient => _sharedApi;
+        /// <inheritdoc />
+        public IWhiteBitRestClientV4SharedApi SharedApi => _sharedApi;
 
     }
 }

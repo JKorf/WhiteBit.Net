@@ -19,12 +19,18 @@ namespace WhiteBit.Net
             string? userIdentifier,
             SpotUserDataTrackerConfig? config) : base(
                 logger,
-                restClient.V4Api.SharedClient,
-                restClient.V4Api.SharedClient,
-                socketClient.V4Api.SharedClient,
-                restClient.V4Api.SharedClient,
-                socketClient.V4Api.SharedClient,
-                socketClient.V4Api.SharedClient,
+                restClient.V4Api.SharedApi,
+
+                restClient.V4Api.SharedApi,
+                socketClient.V4Api.SharedApi,
+
+                restClient.V4Api.SharedApi,
+                restClient.V4Api.SharedApi,
+                socketClient.V4Api.SharedApi,
+
+                restClient.V4Api.SharedApi,
+                socketClient.V4Api.SharedApi,
+
                 userIdentifier,
                 config ?? new SpotUserDataTrackerConfig())
         {
@@ -46,13 +52,20 @@ namespace WhiteBit.Net
             IWhiteBitSocketClient socketClient,
             string? userIdentifier,
             FuturesUserDataTrackerConfig? config) : base(logger,
-                restClient.V4Api.SharedClient,
-                restClient.V4Api.SharedClient,
-                socketClient.V4Api.SharedClient,
-                restClient.V4Api.SharedClient,
-                socketClient.V4Api.SharedClient,
-                socketClient.V4Api.SharedClient,
-                socketClient.V4Api.SharedClient,
+                restClient.V4Api.SharedApi,
+
+                restClient.V4Api.SharedApi,
+                socketClient.V4Api.SharedApi,
+
+                restClient.V4Api.SharedApi,
+                restClient.V4Api.SharedApi,
+                socketClient.V4Api.SharedApi,
+
+                restClient.V4Api.SharedApi,
+                socketClient.V4Api.SharedApi,
+
+                restClient.V4Api.SharedApi,
+                socketClient.V4Api.SharedApi,
                 userIdentifier,
                 config ?? new FuturesUserDataTrackerConfig())
         {

@@ -30,9 +30,9 @@ WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `HttpResult<T>
 - Always check `.Success` before `.Data`.
 - For spot orders use `restClient.V4Api.Trading.PlaceSpotOrderAsync`.
 - For collateral/futures orders use `restClient.V4Api.CollateralTrading.PlaceOrderAsync`.
-- For multi-exchange code use `CryptoExchange.Net.SharedApis` from `.V4Api.SharedClient`.
+- For multi-exchange code use `CryptoExchange.Net.SharedApis` from `.V4Api.SharedApi`.
 - Shared spot/futures symbols include display names, asset types, fees, and price/quantity steps; futures symbols also expose funding caps and leverage limits.
-- Use `SharedClient.Discover()` when code needs to inspect implemented shared interfaces and endpoint options at runtime.
+- Use the exchange-level `IWhiteBitSharedApiClient` aggregate's `GetCapability(...)` or `GetCapabilities(...)` methods for runtime capability lookup; use an API surface's `.SharedApi` property when the transport and API are known.
 - Store WebSocket subscriptions and call `socketClient.UnsubscribeAsync(subscription.Data)`.
 
 ## Reference

@@ -9,7 +9,7 @@ description: Use WhiteBit.Net when generating C#/.NET code that interacts with t
 
 If the user asks for WhiteBit API access in C#/.NET, use `WhiteBit.Net`. Do not write raw `HttpClient` calls to WhiteBit endpoints. The library handles authentication, request signing, rate limiting, response parsing, WebSocket reconnection, and the `HttpResult<T>` / `QueryResult<T>` / `WebSocketResult<UpdateSubscription>` error model.
 
-For multi-exchange code, use `CryptoExchange.Net.SharedApis` through `client.V4Api.SharedClient`.
+For multi-exchange code, use `CryptoExchange.Net.SharedApis` through `client.V4Api.SharedApi`.
 
 ## Installation
 
@@ -69,10 +69,10 @@ restClient.V4Api.CollateralTrading  // collateral, futures, spot margin orders a
 restClient.V4Api.Convert            // convert estimate, confirm, history
 restClient.V4Api.Codes              // WhiteBit Code create/apply/history
 restClient.V4Api.SubAccount         // sub-account management and transfers
-restClient.V4Api.SharedClient       // CryptoExchange.Net shared REST interfaces
+restClient.V4Api.SharedApi       // CryptoExchange.Net shared REST interfaces
 
 socketClient.V4Api                  // public and private WebSocket requests/subscriptions
-socketClient.V4Api.SharedClient     // CryptoExchange.Net shared socket interfaces
+socketClient.V4Api.SharedApi     // CryptoExchange.Net shared socket interfaces
 ```
 
 ## Core Pattern: Symbols
@@ -165,10 +165,10 @@ Use the shared client for exchange-agnostic code:
 using CryptoExchange.Net.SharedApis;
 using WhiteBit.Net.Clients;
 
-ISpotTickerRestClient tickerClient = new WhiteBitRestClient().V4Api.SharedClient;
+IGetTickerRest tickerClient = new WhiteBitRestClient().V4Api.SharedApi;
 var symbol = new SharedSymbol(TradingMode.Spot, "ETH", "USDT");
 
-var ticker = await tickerClient.GetSpotTickerAsync(new GetTickerRequest(symbol));
+var ticker = await tickerClient.GetTickerAsync(new GetTickerRequest(symbol));
 if (!ticker.Success)
 {
     Console.WriteLine(ticker.Error);
@@ -180,9 +180,9 @@ Console.WriteLine(ticker.Data.LastPrice);
 
 Shared REST interfaces implemented by WhiteBit include spot symbols, spot tickers, recent trades, order book, balances, assets, deposits, withdrawals, spot orders, futures symbols, futures tickers, leverage, open interest, position history, futures orders, fees, trigger orders, TP/SL, book ticker, funding rate, and transfers.
 
-Shared spot and futures symbol results include display names, asset classifications, maker/taker fees, and price/quantity steps. Futures symbols also include funding caps and maximum long/short leverage. `GetSymbolsRequest` can filter on asset classifications, while `ISpotSymbolRestClient.SpotSymbolCatalog` and `IFuturesSymbolRestClient.FuturesSymbolCatalog` expose the cached symbol catalogs.
+Shared spot and futures symbol results include display names, asset classifications, maker/taker fees, and price/quantity steps. Futures symbols also include funding caps and maximum long/short leverage. `GetSymbolsRequest` can filter on asset classifications, while `IGetSpotSymbolsRest.SpotSymbolCatalog` and `IGetFuturesSymbolsRest.FuturesSymbolCatalog` expose the cached symbol catalogs.
 
-Use `new WhiteBitRestClient().V4Api.SharedClient.Discover()` when code needs runtime metadata about supported shared interfaces and endpoint options.
+Use the exchange-level `IWhiteBitSharedApiClient` aggregate's `GetCapability(...)` or `GetCapabilities(...)` methods for runtime capability lookup; use an API surface's `.SharedApi` property when the transport and API are known.
 
 ## Dependency Injection
 
