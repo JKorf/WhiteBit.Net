@@ -35,9 +35,9 @@ REST methods return `WebCallResult<T>` or `WebCallResult`. WebSocket methods ret
 - `restClient.V4Api.Convert`: convert estimate, confirm, history
 - `restClient.V4Api.Codes`: WhiteBit Code operations
 - `restClient.V4Api.SubAccount`: sub-account operations
-- `restClient.V4Api.SharedClient`: shared REST interfaces
+- `restClient.V4Api.SharedApi`: shared REST interfaces
 - `socketClient.V4Api`: public and private WebSocket requests/subscriptions
-- `socketClient.V4Api.SharedClient`: shared socket interfaces
+- `socketClient.V4Api.SharedApi`: shared socket interfaces
 
 ## Symbols
 
@@ -60,7 +60,7 @@ await socketClient.UnsubscribeAsync(sub.Data);
 
 ## Cross-Exchange
 
-For exchange-agnostic code, use `CryptoExchange.Net.SharedApis` from `.V4Api.SharedClient`, for example `ISpotTickerRestClient`, `ISpotOrderRestClient`, `IFuturesOrderRestClient`, `IBalanceRestClient`, `ITickerSocketClient`, and related interfaces.
+For exchange-agnostic code, use `CryptoExchange.Net.SharedApis` from `.V4Api.SharedApi`, for example `IGetTickerRest`, `IPlaceSpotOrderRest`, `IPlaceFuturesOrderRest`, `IGetBalancesRest`, `ISubscribeTickerSocket`, and related interfaces.
 
 Shared spot/futures symbol results include display names, asset classifications, maker/taker fees, and price/quantity steps; futures symbols also include funding caps and maximum leverage. Use `GetSymbolsRequest` asset-classification filters and the cached `SpotSymbolCatalog` / `FuturesSymbolCatalog` properties when symbol discovery needs them.
 
