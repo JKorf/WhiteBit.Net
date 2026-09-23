@@ -34,8 +34,9 @@ namespace WhiteBit.Net.Clients.V4Api
             if (symbols == null)
             {
                 // request all symbols
-                var client = new WhiteBitRestClient(x =>
+                using var client = new WhiteBitRestClient(x =>
                 {
+                    x.Proxy = _api.ClientOptions.Proxy;
                     x.Environment = _api.ClientOptions.Environment;
                 });
                 var symbolsResult = await client.V4Api.ExchangeData.GetSymbolsAsync().ConfigureAwait(false);

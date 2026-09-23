@@ -36,8 +36,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (assets == null)
                 {
                     // request all assets
-                    var client = new WhiteBitRestClient(x =>
+                    using var client = new WhiteBitRestClient(x =>
                     {
+                        x.Proxy = _api.ClientOptions.Proxy;
                         x.Environment = _api.ClientOptions.Environment;
                     });
                     var assetsResult = await client.V4Api.ExchangeData.GetAssetsAsync().ConfigureAwait(false);
@@ -60,8 +61,9 @@ namespace WhiteBit.Net.Clients.V4Api
                 if (assets == null)
                 {
                     // request all assets
-                    var client = new WhiteBitRestClient(x =>
+                    using var client = new WhiteBitRestClient(x =>
                     {
+                        x.Proxy = _api.ClientOptions.Proxy;
                         x.Environment = _api.ClientOptions.Environment;
                         x.ApiCredentials = (WhiteBitCredentials?)_api.AuthenticationProvider!.ApiCredentials.Copy();
                     });
