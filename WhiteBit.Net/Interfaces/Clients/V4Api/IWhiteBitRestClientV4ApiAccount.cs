@@ -265,6 +265,19 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<HttpResult<WhiteBitLeverage>> SetAccountLeverageAsync(int leverage, CancellationToken ct = default);
 
         /// <summary>
+        /// Get the users trading fees for a specific symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://docs.whitebit.com/api-reference/trading/query-market-fee-single" /><br />
+        /// Endpoint:<br />
+        /// POST /api/v4/market/fee/single
+        /// </para>
+        /// </summary>
+        /// <param name="symbol">["<c>market</c>"] The symbol, for example `ETH_USDT`</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<HttpResult<WhiteBitTradingFee>> GetTradingFeeAsync(string symbol, CancellationToken ct = default);
+
+        /// <summary>
         /// Get the users trading fees
         /// <para>
         /// Docs:<br />

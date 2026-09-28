@@ -324,19 +324,18 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
-        // Doesn't seem to respect the provided market parameter
-        //#region Get Trading Fee
+        #region Get Trading Fee
 
-        ///// <inheritdoc />
-        //public async Task<HttpResult<WhiteBitTradingFee>> GetTradingFeeAsync(string symbol, CancellationToken ct = default)
-        //{
-        //    var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
-        //    parameters.Add("market", symbol);
-        //    var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/market/fee", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
-        //    return await _baseClient.SendAsync<WhiteBitTradingFee>(request, parameters, null, ct).ConfigureAwait(false);
-        //}
+        /// <inheritdoc />
+        public async Task<HttpResult<WhiteBitTradingFee>> GetTradingFeeAsync(string symbol, CancellationToken ct = default)
+        {
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, _baseClient.BaseAddress, "/api/v4/market/fee/single", WhiteBitExchange.RateLimiter.WhiteBit, 1, true);
+            return await _baseClient.SendAsync<WhiteBitTradingFee>(request, parameters, ct).ConfigureAwait(false);
+        }
 
-        //#endregion
+        #endregion
 
         #region Get Trading Fees
 
