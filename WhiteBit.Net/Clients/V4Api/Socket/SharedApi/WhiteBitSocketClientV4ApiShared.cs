@@ -50,5 +50,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 );
         }
 
+        /// <inheritdoc />
+        public Task UnsubscribeAllAsync() => _api.UnsubscribeAllAsync();
     }
 }
