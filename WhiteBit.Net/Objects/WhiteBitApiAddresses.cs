@@ -20,7 +20,7 @@ namespace WhiteBit.Net.Objects
         public static WhiteBitApiAddresses Default = new WhiteBitApiAddresses
         {
             RestClientAddress = "https://whitebit.com",
-            SocketClientAddress = "wss://api.whitebit.com"
+            SocketClientAddress = "wss://wss.whitebit.com"
         };
 
         /// <summary>
