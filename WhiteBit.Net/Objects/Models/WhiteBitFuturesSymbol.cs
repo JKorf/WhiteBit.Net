@@ -122,5 +122,10 @@ namespace WhiteBit.Net.Objects.Models
         /// </summary>
         [JsonPropertyName("funding_floor")]
         public decimal? FundingFloor { get; set; }
+        /// <summary>
+        /// ["<c>mark_price</c>"] Mark price
+        /// </summary>
+        [JsonPropertyName("mark_price")]
+        public decimal? MarkPrice { get; set; }
     }
 }
