@@ -539,6 +539,25 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
+        #region ADL Quantile
+
+        /// <inheritdoc />
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToAdlQuantileUpdatesAsync(Action<DataEvent<WhiteBitAdlQuantileUpdate[]>> onMessage, CancellationToken ct = default)
+        {
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitAdlQuantileUpdate[]>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitAdlQuantileUpdate[]>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(SocketUpdateType.Update)
+                        .WithStreamId("ADLQuantile")
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitAdlQuantileUpdate[]>(_logger, this, "ADLQuantile", [], internalHandler, true);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
+        }
+        #endregion
+
         private async Task<QueryResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
         {
             var query = new WhiteBitQuery<T>(this, new WhiteBitSocketRequest

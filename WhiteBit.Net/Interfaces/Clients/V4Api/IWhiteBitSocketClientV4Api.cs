@@ -278,6 +278,15 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebSocketResult<UpdateSubscription>> SubscribeToPositionUpdatesAsync(Action<DataEvent<WhiteBitPositionsUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
+        /// Subscribe to user position ADL quantile updates
+        /// <para><a href="https://docs.whitebit.com/websocket/account-streams/adl-quantile" /></para>
+        /// </summary>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAdlQuantileUpdatesAsync(Action<DataEvent<WhiteBitAdlQuantileUpdate[]>> onMessage, CancellationToken ct = default);
+
+        /// <summary>
         /// Subscribe to borrow updates
         /// <para><a href="https://docs.whitebit.com/websocket/account-streams/borrows" /></para>
         /// </summary>
