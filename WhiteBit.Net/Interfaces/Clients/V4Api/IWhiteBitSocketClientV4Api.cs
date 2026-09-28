@@ -161,6 +161,15 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         Task<WebSocketResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth, Action<DataEvent<WhiteBitBookUpdate>> onMessage, CancellationToken ct = default);
 
         /// <summary>
+        /// Subscribe to premium index updates for all symbols
+        /// <para><a href="https://docs.whitebit.com/websocket/market-streams/premium-index" /></para>
+        /// </summary>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToPremiumIndexUpdatesAsync(Action<DataEvent<WhiteBitPremiumIndexUpdate[]>> onMessage, CancellationToken ct = default);
+
+        /// <summary>
         /// Get spot balances
         /// <para><a href="https://docs.whitebit.com/websocket/account-streams/balance-spot" /></para>
         /// </summary>

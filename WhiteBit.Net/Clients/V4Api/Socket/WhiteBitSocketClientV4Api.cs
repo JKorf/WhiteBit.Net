@@ -303,6 +303,26 @@ namespace WhiteBit.Net.Clients.V4Api
 
         #endregion
 
+        #region Premium Index
+
+        /// <inheritdoc />
+        public async Task<WebSocketResult<UpdateSubscription>> SubscribeToPremiumIndexUpdatesAsync(Action<DataEvent<WhiteBitPremiumIndexUpdate[]>> onMessage, CancellationToken ct = default)
+        {
+            var internalHandler = new Action<DateTime, string?, int, WhiteBitSocketUpdate<WhiteBitPremiumIndexUpdate[]>>((receiveTime, originalData, invocations, data) =>
+            {
+                onMessage(
+                    new DataEvent<WhiteBitPremiumIndexUpdate[]>(WhiteBitExchange.ExchangeName, data.Data!, receiveTime, originalData)
+                        .WithUpdateType(SocketUpdateType.Update)
+                        .WithStreamId("premiumIndex")
+                    );
+            });
+
+            var subscription = new WhiteBitSubscription<WhiteBitPremiumIndexUpdate[]>(_logger, this, "premiumIndex", [], internalHandler, false);
+            return await SubscribeAsync(BaseAddress.AppendPath("ws"), subscription, ct).ConfigureAwait(false);
+        }
+
+        #endregion
+
         #region Spot Balances
 
         /// <inheritdoc />
@@ -474,7 +494,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
-        #region Account Borrow Events
+        #region Account Margin Position Events
 
         /// <inheritdoc />
         public async Task<WebSocketResult<UpdateSubscription>> SubscribeToAccountMarginPositionEventUpdatesAsync(Action<DataEvent<WhiteBitAccountMarginPositionUpdate>> onMessage, CancellationToken ct = default)
