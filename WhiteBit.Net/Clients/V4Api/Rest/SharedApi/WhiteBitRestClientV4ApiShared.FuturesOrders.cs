@@ -126,7 +126,7 @@ namespace WhiteBit.Net.Clients.V4Api
                     return HttpResult.Fail<SharedFuturesOrder>(closeOrders, new ServerError(new ErrorInfo(ErrorType.UnknownOrder, "Order not found")));
 
                 var closedOrder = closeOrders.Data.Single().Value.Single();
-                var status = closedOrder.Status is OrderStatus.Canceled or OrderStatus.AutoCanceledUserMargin 
+                var status = closedOrder.Status is OrderStatus.Canceled or OrderStatus.AutoCanceledUserMargin or OrderStatus.Maintenance
                     ? SharedOrderStatus.Canceled 
                     : SharedOrderStatus.Filled;
 
@@ -266,7 +266,7 @@ namespace WhiteBit.Net.Clients.V4Api
                 x.OrderId.ToString(),
                 ParseOrderType(x.OrderType, x.PostOnly),
                 x.OrderSide == OrderSide.Buy ? SharedOrderSide.Buy : SharedOrderSide.Sell,
-                x.Status is OrderStatus.Canceled or OrderStatus.AutoCanceledUserMargin
+                x.Status is OrderStatus.Canceled or OrderStatus.AutoCanceledUserMargin or OrderStatus.Maintenance
                     ? SharedOrderStatus.Canceled
                     : SharedOrderStatus.Filled,
                 x.CreateTime)

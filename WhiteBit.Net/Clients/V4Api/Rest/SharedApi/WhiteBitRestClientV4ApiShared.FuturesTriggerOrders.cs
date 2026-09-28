@@ -153,7 +153,9 @@ namespace WhiteBit.Net.Clients.V4Api
             if (closedOrder.Status == OrderStatus.Filled)
                 return SharedTriggerOrderStatus.Filled;
 
-            if (closedOrder.Status == OrderStatus.Canceled || closedOrder.Status == OrderStatus.AutoCanceledUserMargin)
+            if (closedOrder.Status == OrderStatus.Canceled 
+                || closedOrder.Status == OrderStatus.AutoCanceledUserMargin
+                || closedOrder.Status == OrderStatus.Maintenance)
                 return SharedTriggerOrderStatus.CanceledOrRejected;
 
             return SharedTriggerOrderStatus.Unknown;

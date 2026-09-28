@@ -34,6 +34,11 @@ namespace WhiteBit.Net.Enums
         /// ["<c>AUTO_CANCELED_USER_MARGIN</c>"] Auto canceled due to insufficient margin
         /// </summary>
         [Map("AUTO_CANCELED_USER_MARGIN")]
-        AutoCanceledUserMargin
+        AutoCanceledUserMargin,
+        /// <summary>
+        /// ["<c>MAINTENANCE</c>"] Canceled due to system maintenance
+        /// </summary>
+        [Map("MAINTENANCE")]
+        Maintenance
     }
 }
