@@ -43,10 +43,13 @@ namespace WhiteBit.Net.Clients.V4Api
                 return new SharedAsset(x.Asset)
                 {
                     FullName = x.Name,
-                    Networks = networks.Select(n => new SharedAssetNetwork(n)
-                    {
-                        MinWithdrawQuantity = x.Limits.Withdraw[n].Min,
-                        MinConfirmations = x.Confirmations?[n]
+                    Networks = networks.Select(n => {
+
+                        return new SharedAssetNetwork(n)
+                        {
+                            MinWithdrawQuantity = x.Limits.Withdraw.TryGetValue(n, out var with) == true ? with.Min : null,
+                            MinConfirmations = x.Confirmations?.TryGetValue(n, out var conf) == true ? conf : null
+                        };
                     }).ToArray()
                 };
             }).ToArray());
@@ -79,8 +82,8 @@ namespace WhiteBit.Net.Clients.V4Api
                 FullName = asset.Name,
                 Networks = networks.Select(n => new SharedAssetNetwork(n)
                 {
-                    MinWithdrawQuantity = asset.Limits.Withdraw[n].Min,
-                    MinConfirmations = asset.Confirmations[n]
+                    MinWithdrawQuantity = asset.Limits.Withdraw.TryGetValue(n, out var with) == true ? with.Min : null,
+                    MinConfirmations = asset.Confirmations?.TryGetValue(n, out var conf) == true ? conf : null
                 }).ToArray()
             });
         }
