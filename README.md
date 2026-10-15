@@ -232,6 +232,11 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 4.7.0 - 15 Oct 2026
+    * Added WebSocket order operations support
+    * Added Shared API WebSocket order operation implementations
+    * Fixed check for socket failed authentication
+
 * Version 4.6.1 - 12 Oct 2026
     * Fixed Shared API GetAllAssetsAsync, GetAssetAsync parsing
 
