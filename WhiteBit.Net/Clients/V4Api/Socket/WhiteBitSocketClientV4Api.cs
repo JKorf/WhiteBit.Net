@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Threading;
-using System.Threading.Tasks;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Clients;
@@ -15,10 +8,19 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Objects.Errors;
 using CryptoExchange.Net.Objects.Sockets;
+using CryptoExchange.Net.RateLimiting.Guards;
 using CryptoExchange.Net.SharedApis;
 using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Sockets.Default;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.WebSockets;
+using System.Threading;
+using System.Threading.Tasks;
 using WhiteBit.Net.Clients.MessageHandlers;
 using WhiteBit.Net.Enums;
 using WhiteBit.Net.Interfaces.Clients.V4Api;
@@ -558,6 +560,263 @@ namespace WhiteBit.Net.Clients.V4Api
         }
         #endregion
 
+        #region Place Spot Order
+        public async Task<QueryResult<WhiteBitOrder>> PlaceSpotOrderAsync(
+            string symbol,
+            OrderSide side,
+            NewOrderType type,
+            decimal? quantity = null,
+            decimal? quoteQuantity = null,
+            decimal? price = null,
+            bool? postOnly = null,
+            bool? immediateOrCancel = null,
+            decimal? triggerPrice = null,
+            string? clientOrderId = null,
+            SelfTradePreventionMode? stpMode = null,
+            bool? rpi = null,
+            CancellationToken ct = default
+            )
+        {
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("side", side);
+            parameters.Add("amount", quantity ?? quoteQuantity ?? 0);
+            parameters.Add("price", price);
+            parameters.Add("client_order_id", clientOrderId);
+            parameters.Add("post_only", postOnly);
+            parameters.Add("rpi", rpi);
+            parameters.Add("activation_price", triggerPrice);
+            parameters.Add("stp", stpMode);
+            parameters.Add("rpi", rpi);
+
+            string method;
+            if (type == NewOrderType.Limit)
+            {
+                method = "order_limit_place";
+            }
+            else if (type == NewOrderType.Market)
+            {
+                // Buy market orders with base asset, stock endpoint
+                // Buy market orders with quote asset, normal endpoint
+                // Sell market orders with base asset, normal endpoint
+                // Sell market orders with quote asset, normal endpoint
+                if (side == OrderSide.Buy && quantity != null)
+                    method = "order_market_stock_place";
+                else
+                    method = "order_market_place";
+            }
+            else if (type == NewOrderType.StopLimit)
+            {
+                method = "order_stop_limit_place";
+            }
+            else if (type == NewOrderType.StopMarket)
+            {
+                method = "order_stop_market_place";
+            }
+            else
+            {
+                throw new ArgumentException("Unknown path for order type");
+            }
+
+            var query = new WhiteBitQuery<WhiteBitOrder>(this, new WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = method,
+                Request = [parameters]
+            }, true);
+
+            var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
+            if (!result.Success)
+                return QueryResult.Fail<WhiteBitOrder>(result);
+
+            return QueryResult.Ok(result, result.Data.Result);
+        }
+
+        #endregion
+
+        #region Place Collateral Order
+
+        /// <inheritdoc />
+        public async Task<QueryResult<WhiteBitCollateralOrder>> PlaceCollateralOrderAsync(
+            string symbol,
+            OrderSide side,
+            NewOrderType type,
+            decimal? quantity = null,
+            decimal? price = null,
+            bool? postOnly = null,
+            bool? immediateOrCancel = null,
+            decimal? triggerPrice = null,
+            string? clientOrderId = null,
+            SelfTradePreventionMode? stpMode = null,
+            PositionSide? positionSide = null,
+            bool? reduceOnly = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("side", side);
+            parameters.Add("amount", quantity);
+            parameters.Add("price", price);
+            parameters.Add("client_order_id", clientOrderId);
+            parameters.Add("post_only", postOnly);
+            parameters.Add("ioc", immediateOrCancel);
+            parameters.Add("activation_price", triggerPrice);
+            parameters.Add("stp", stpMode);
+            parameters.Add("position_side", positionSide);
+            parameters.Add("reduce_only", reduceOnly);
+
+            string method;
+            if (type == NewOrderType.Limit)
+                method = "collateral_order_limit_place";
+            else if (type == NewOrderType.Market)
+                method = "collateral_order_market_place";
+            else if (type == NewOrderType.StopLimit)
+                method = "collateral_order_stop_limit_place";
+            else if (type == NewOrderType.StopMarket)
+                method = "collateral_order_stop_market_place";
+            else
+                throw new ArgumentException("Unknown path for order type");
+
+
+            var query = new WhiteBitQuery<WhiteBitCollateralOrder>(this, new WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = method,
+                Request = [parameters]
+            }, true);
+
+            var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
+            if (!result.Success)
+                return QueryResult.Fail<WhiteBitCollateralOrder>(result);
+
+            return QueryResult.Ok(result, result.Data.Result);
+        }
+
+        #endregion
+
+        #region Set Collateral Tp Sl
+
+        /// <inheritdoc />
+        public async Task<QueryResult<WhiteBitTpSl>> SetCollateralTpSlAsync(
+            string symbol,
+            decimal? takeProfitPrice = null,
+            decimal? stopLossPrice = null,
+            PositionSide? positionSide = null,
+            SelfTradePreventionMode? stpMode = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("take_profit_activation_price", takeProfitPrice);
+            parameters.Add("stop_loss_activation_price", stopLossPrice);
+            parameters.Add("stp", stpMode);
+            parameters.Add("position_side", positionSide);
+
+            var query = new WhiteBitQuery<WhiteBitTpSl>(this, new WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = "collateral_order_tpsl_place",
+                Request = [parameters]
+            }, true);
+
+            var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
+            if (!result.Success)
+                return QueryResult.Fail<WhiteBitTpSl>(result);
+
+            return QueryResult.Ok(result, result.Data.Result);
+        }
+
+        #endregion
+
+        #region Cancel Order
+
+        /// <inheritdoc />
+        public async Task<QueryResult<WhiteBitOrder>> CancelOrderAsync(string symbol, long? orderId = null, string? clientOrderId = null, CancellationToken ct = default)
+        {
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.Add("order_id", orderId);
+            parameters.Add("client_order_id", clientOrderId);
+
+            var query = new WhiteBitQuery<WhiteBitOrder>(this, new WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = "order_cancel",
+                Request = [parameters]
+            }, true);
+
+            var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
+            if (!result.Success)
+                return QueryResult.Fail<WhiteBitOrder>(result);
+
+            return QueryResult.Ok(result, result.Data.Result);
+        }
+
+        #endregion
+
+        #region Cancel All Orders
+
+        /// <inheritdoc />
+        public async Task<QueryResult> CancelAllOrdersAsync(string? symbol = null, IEnumerable<OrderProductType>? orderProductTypes = null, CancellationToken ct = default)
+        {
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("market", symbol);
+            parameters.AddRaw("type", orderProductTypes?.Select(EnumConverter.GetString).ToArray());
+
+            var query = new WhiteBitQuery<WhiteBitOrder>(this, new WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = "order_cancel_all",
+                Request = [parameters]
+            }, true);
+
+            var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
+            if (!result.Success)
+                return QueryResult.Fail(result);
+
+            return QueryResult.Ok(result, result.Data.Result);
+        }
+
+        #endregion
+
+        #region Edit Order
+
+        /// <inheritdoc />
+        public async Task<QueryResult<WhiteBitOrder>> EditOrderAsync(
+            string symbol,
+            long? orderId = null,
+            string? clientOrderId = null,
+            decimal? quantity = null,
+            decimal? quoteQuantity = null,
+            decimal? price = null, 
+            decimal? triggerPrice = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Parameters(WhiteBitExchange._parameterSerializationSettings);
+            parameters.Add("order_id", orderId);
+            parameters.Add("client_order_id", clientOrderId);
+            parameters.Add("market", symbol);
+            parameters.Add("amount", quantity);
+            parameters.Add("total", quoteQuantity);
+            parameters.Add("price", price);
+            parameters.Add("activation_price", triggerPrice);
+            var query = new WhiteBitQuery<WhiteBitOrder>(this, new WhiteBitSocketRequest
+            {
+                Id = ExchangeHelpers.NextId(),
+                Method = "order_modify",
+                Request = [parameters]
+            }, true);
+
+            var result = await QueryAsync(BaseAddress.AppendPath("ws"), query, ct).ConfigureAwait(false);
+            if (!result.Success)
+                return QueryResult.Fail<WhiteBitOrder>(result);
+
+            return QueryResult.Ok(result, result.Data.Result);
+        }
+
+        #endregion
+
+
         private async Task<QueryResult<T>> QueryAsync<T>(string method, bool auth, CancellationToken ct, params object[] parameters)
         {
             var query = new WhiteBitQuery<T>(this, new WhiteBitSocketRequest
@@ -578,15 +837,21 @@ namespace WhiteBit.Net.Clients.V4Api
         protected override async Task<Query?> GetAuthenticationRequestAsync(SocketConnection connection)
         {
             var token = await GetTokenAsync().ConfigureAwait(false);
-            if (!token.Success)
-                return null;
+            // Returning null here would assume the connection is authenticated without request
+            // If token retrieval fails the next query will fail and correctly assume authentication failed,
+            // which is what is expected.
+            // Would be better to be able to return a fail response from this method without having to send a query
+            // but that needs to updated in CryptoExchange.Net and would be a breaking change.
+            // 
+            //if (!token.Success)
+            //    return null;
 
             return new WhiteBitQuery<WhiteBitSubscribeResponse>(this, new WhiteBitSocketRequest
             {
                 Id = ExchangeHelpers.NextId(),
                 Method = "authorize",
                 Request = [
-                    token.Data,
+                    token.Data ?? string.Empty,
                     "public"
                     ]
             }, false);
