@@ -46,7 +46,17 @@ namespace WhiteBit.Net.Clients.V4Api
                 SubscribeUserTradeOptions,
                 SubscribeSpotOrderOptions,
                 SubscribeFuturesOrderOptions,
-                SubscribePositionOptions
+                SubscribePositionOptions,
+                PlaceSpotOrderOptions,
+                EditSpotOrderOptions,
+                EditSpotOrderByClientOrderIdOptions,
+                CancelSpotOrderOptions,
+                CancelSpotOrderByClientOrderIdOptions,
+                PlaceFuturesOrderOptions,
+                EditFuturesOrderOptions,
+                EditFuturesOrderByClientOrderIdOptions,
+                CancelFuturesOrderOptions,
+                CancelFuturesOrderByClientOrderIdOptions
                 );
         }
 

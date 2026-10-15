@@ -16,6 +16,7 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
+        #region Place Spot Order
 
         public SharedFeeDeductionType SpotFeeDeductionType => SharedFeeDeductionType.AddToCost;
         public SharedFeeAssetType SpotFeeAssetType => SharedFeeAssetType.QuoteAsset;
@@ -28,7 +29,6 @@ namespace WhiteBit.Net.Clients.V4Api
                 SharedQuantityType.BaseAsset);
 
         public string GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
-        #region Place Spot Order
 
         async Task<IExchangeCallResult<SharedId>> IPlaceSpotOrder.PlaceSpotOrderAsync(PlaceSpotOrderRequest request, CancellationToken ct)
             => await PlaceSpotOrderAsync(request, ct).ConfigureAwait(false);
@@ -59,6 +59,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Spot Order
 
         async Task<IExchangeCallResult<SharedSpotOrder>> IGetSpotOrder.GetSpotOrderAsync(GetOrderRequest request, CancellationToken ct)
@@ -142,6 +143,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Open Spot Orders
 
         async Task<IExchangeCallResult<SharedSpotOrder[]>> IGetOpenSpotOrders.GetOpenSpotOrdersAsync(GetOpenOrdersRequest request, CancellationToken ct)
@@ -199,6 +201,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Closed Spot Orders
 
         async Task<IExchangeCallResult<SharedSpotOrder[]>> IGetClosedSpotOrders.GetClosedSpotOrdersAsync(GetClosedOrdersRequest request, PageRequest? pageRequest, CancellationToken ct)
@@ -266,6 +269,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Get Spot Order Trades
 
         async Task<IExchangeCallResult<SharedUserTrade[]>> IGetSpotOrderTrades.GetSpotOrderTradesAsync(GetOrderTradesRequest request, CancellationToken ct)
@@ -366,6 +370,7 @@ namespace WhiteBit.Net.Clients.V4Api
         }
 
         #endregion
+
         #region Cancel Spot Order
 
         async Task<IExchangeCallResult<SharedId>> ICancelSpotOrder.CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)

@@ -16,6 +16,150 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitSocketClientV4SharedApi
     {
+        #region Place Spot Order
+
+        public SharedFeeDeductionType SpotFeeDeductionType => SharedFeeDeductionType.AddToCost;
+        public SharedFeeAssetType SpotFeeAssetType => SharedFeeAssetType.QuoteAsset;
+        public SharedOrderType[] SpotSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.Market, SharedOrderType.LimitMaker };
+        public SharedTimeInForce[] SpotSupportedTimeInForce { get; } = new[] { SharedTimeInForce.GoodTillCanceled, SharedTimeInForce.ImmediateOrCancel };
+        public SharedQuantitySupport SpotSupportedOrderQuantity { get; } = new SharedQuantitySupport(
+                SharedQuantityType.BaseAsset,
+                SharedQuantityType.BaseAsset,
+                SharedQuantityType.QuoteAsset,
+                SharedQuantityType.BaseAsset);
+
+        public string GenerateClientOrderId() => ExchangeHelpers.RandomString(32);
+
+        async Task<IExchangeCallResult<SharedId>> IPlaceSpotOrder.PlaceSpotOrderAsync(PlaceSpotOrderRequest request, CancellationToken ct)
+            => await PlaceSpotOrderAsync(request, ct).ConfigureAwait(false);
+
+        public PlaceSpotOrderOptions PlaceSpotOrderOptions { get; } = new PlaceSpotOrderOptions(_exchange);
+        public async Task<QueryResult<SharedId>> PlaceSpotOrderAsync(PlaceSpotOrderRequest request, CancellationToken ct)
+        {
+            var validationError = PlaceSpotOrderOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            var result = await _api.PlaceSpotOrderAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
+                request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.LimitMaker ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
+                quantity: request.Quantity?.QuantityInBaseAsset,
+                quoteQuantity: request.Quantity?.QuantityInQuoteAsset,
+                price: request.Price,
+                postOnly: request.OrderType == SharedOrderType.LimitMaker ? true : null,
+                immediateOrCancel: request.TimeInForce == SharedTimeInForce.ImmediateOrCancel ? true : null,
+                clientOrderId: request.ClientOrderId,
+                ct: ct).ConfigureAwait(false);
+
+            if (!result.Success)
+                return QueryResult.Fail<SharedId>(result);
+
+            return QueryResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+        #region Edit Spot Order
+
+        async Task<IExchangeCallResult<SharedId>> IEditSpotOrder.EditSpotOrderAsync(EditOrderRequest request, CancellationToken ct)
+            => await EditSpotOrderAsync(request, ct).ConfigureAwait(false);
+
+        public EditSpotOrderOptions EditSpotOrderOptions { get; } = new EditSpotOrderOptions(_exchange);
+        public async Task<QueryResult<SharedId>> EditSpotOrderAsync(EditOrderRequest request, CancellationToken ct)
+        {
+            var validationError = EditSpotOrderOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            if (!long.TryParse(request.OrderId, out var orderId))
+                return QueryResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(EditOrderRequest.OrderId), "Invalid order id"));
+
+            var order = await _api.EditOrderAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                orderId,
+                quantity: request.Quantity?.QuantityInBaseAsset,
+                price: request.Price,
+                ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+
+        #region Edit Spot Order By Client Order Id
+
+        async Task<IExchangeCallResult<SharedId>> IEditSpotOrderByClientOrderId.EditSpotOrderByClientOrderIdAsync(EditOrderRequest request, CancellationToken ct)
+            => await EditSpotOrderByClientOrderIdAsync(request, ct).ConfigureAwait(false);
+
+        public EditSpotOrderByClientOrderIdOptions EditSpotOrderByClientOrderIdOptions { get; } = new EditSpotOrderByClientOrderIdOptions(_exchange, true);
+        public async Task<QueryResult<SharedId>> EditSpotOrderByClientOrderIdAsync(EditOrderRequest request, CancellationToken ct)
+        {
+            var validationError = EditSpotOrderByClientOrderIdOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            var order = await _api.EditOrderAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                clientOrderId: request.OrderId,
+                quantity: request.Quantity?.QuantityInBaseAsset,
+                price: request.Price,
+                ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+        #region Cancel Spot Order
+
+        async Task<IExchangeCallResult<SharedId>> ICancelSpotOrder.CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)
+            => await CancelSpotOrderAsync(request, ct).ConfigureAwait(false);
+
+        public CancelSpotOrderOptions CancelSpotOrderOptions { get; } = new CancelSpotOrderOptions(_exchange, true);
+        public async Task<QueryResult<SharedId>> CancelSpotOrderAsync(CancelOrderRequest request, CancellationToken ct)
+        {
+            var validationError = CancelSpotOrderOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            if (!long.TryParse(request.OrderId, out var orderId))
+                return QueryResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
+
+            var order = await _api.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+        #region Cancel Spot Order By Client Order Id
+
+        async Task<IExchangeCallResult<SharedId>> ICancelSpotOrderByClientOrderId.CancelSpotOrderByClientOrderIdAsync(CancelOrderRequest request, CancellationToken ct)
+            => await CancelSpotOrderByClientOrderIdAsync(request, ct).ConfigureAwait(false);
+
+        public CancelSpotOrderByClientOrderIdOptions CancelSpotOrderByClientOrderIdOptions { get; } = new CancelSpotOrderByClientOrderIdOptions(_exchange, true);
+        public async Task<QueryResult<SharedId>> CancelSpotOrderByClientOrderIdAsync(CancelOrderRequest request, CancellationToken ct)
+        {
+            var validationError = CancelSpotOrderByClientOrderIdOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            var order = await _api.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), clientOrderId: request.OrderId, ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
 
         #region Subscribe Spot Orders
 

@@ -32,7 +32,17 @@ namespace WhiteBit.Net.Interfaces.Clients.V4Api
         ISubscribeUserTradesSocket,
         ISubscribeSpotOrdersSocket,
         ISubscribePositionsSocket,
-        ISubscribeFuturesOrdersSocket
+        ISubscribeFuturesOrdersSocket,
+        IPlaceSpotOrderSocket,
+        IEditSpotOrderSocket,
+        IEditSpotOrderByClientOrderIdSocket,
+        ICancelSpotOrderSocket,
+        ICancelSpotOrderByClientOrderIdSocket,
+        IPlaceFuturesOrderSocket,
+        IEditFuturesOrderSocket,
+        IEditFuturesOrderByClientOrderIdSocket,
+        ICancelFuturesOrderSocket,
+        ICancelFuturesOrderByClientOrderIdSocket
     {
 
     }

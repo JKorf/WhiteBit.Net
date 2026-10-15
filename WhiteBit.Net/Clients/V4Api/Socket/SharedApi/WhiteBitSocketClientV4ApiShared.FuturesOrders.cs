@@ -1,21 +1,171 @@
+using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.SharedApis;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using WhiteBit.Net.Interfaces.Clients.V4Api;
-using CryptoExchange.Net.Objects.Sockets;
 using System.Linq;
-using CryptoExchange.Net.Objects;
+using System.Threading;
+using System.Threading.Tasks;
 using WhiteBit.Net.Enums;
+using WhiteBit.Net.ExtensionMethods;
+using WhiteBit.Net.Interfaces.Clients.V4Api;
 using WhiteBit.Net.Objects.Models;
-using CryptoExchange.Net;
-using CryptoExchange.Net.Authentication;
 
 namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitSocketClientV4SharedApi
     {
+
+        #region Place Futures Order
+        public SharedFeeDeductionType FuturesFeeDeductionType => SharedFeeDeductionType.AddToCost;
+        public SharedFeeAssetType FuturesFeeAssetType => SharedFeeAssetType.QuoteAsset;
+
+        public SharedOrderType[] FuturesSupportedOrderTypes { get; } = new[] { SharedOrderType.Limit, SharedOrderType.LimitMaker, SharedOrderType.Market };
+        public SharedTimeInForce[] FuturesSupportedTimeInForce { get; } = new[] { SharedTimeInForce.GoodTillCanceled, SharedTimeInForce.ImmediateOrCancel, SharedTimeInForce.FillOrKill };
+        public SharedQuantitySupport FuturesSupportedOrderQuantity { get; } = new SharedQuantitySupport(
+                SharedQuantityType.BaseAsset,
+                SharedQuantityType.BaseAsset,
+                SharedQuantityType.BaseAsset,
+                SharedQuantityType.BaseAsset);
+
+        async Task<IExchangeCallResult<SharedId>> IPlaceFuturesOrder.PlaceFuturesOrderAsync(PlaceFuturesOrderRequest request, CancellationToken ct)
+            => await PlaceFuturesOrderAsync(request, ct).ConfigureAwait(false);
+
+        public PlaceFuturesOrderOptions PlaceFuturesOrderOptions { get; } = new PlaceFuturesOrderOptions(_exchange, false)
+        {
+            ParameterRuleOverrides = [
+                RequestParameterRuleOverride<PlaceFuturesOrderRequest>.NotSupported(x => x.Leverage),
+                RequestParameterRuleOverride<PlaceFuturesOrderRequest>.NotSupported(x => x.MarginMode),
+                ]
+        };
+        public async Task<QueryResult<SharedId>> PlaceFuturesOrderAsync(PlaceFuturesOrderRequest request, CancellationToken ct)
+        {
+            var validationError = PlaceFuturesOrderOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            var result = await _api.PlaceCollateralOrderAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                request.Side == SharedOrderSide.Buy ? Enums.OrderSide.Buy : Enums.OrderSide.Sell,
+                (request.OrderType == SharedOrderType.Limit || request.OrderType == SharedOrderType.LimitMaker) ? Enums.NewOrderType.Limit : Enums.NewOrderType.Market,
+                quantity: request.Quantity?.QuantityInBaseAsset ?? request.Quantity?.QuantityInContracts,
+                price: request.Price,
+                postOnly: request.OrderType == SharedOrderType.LimitMaker ? true : null,
+                immediateOrCancel: request.TimeInForce == SharedTimeInForce.ImmediateOrCancel ? true : null,
+                clientOrderId: request.ClientOrderId,
+                positionSide: request.PositionSide.HasValue ? request.PositionSide.Value.ToPositionSide() : null,
+                reduceOnly: request.ReduceOnly,
+                ct: ct).ConfigureAwait(false);
+
+            if (!result.Success)
+                return QueryResult.Fail<SharedId>(result);
+
+            return QueryResult.Ok(result, new SharedId(result.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+        #region Edit Futures Order
+
+        async Task<IExchangeCallResult<SharedId>> IEditFuturesOrder.EditFuturesOrderAsync(EditOrderRequest request, CancellationToken ct)
+            => await EditFuturesOrderAsync(request, ct).ConfigureAwait(false);
+
+        public EditFuturesOrderOptions EditFuturesOrderOptions { get; } = new EditFuturesOrderOptions(_exchange);
+        public async Task<QueryResult<SharedId>> EditFuturesOrderAsync(EditOrderRequest request, CancellationToken ct)
+        {
+            var validationError = EditFuturesOrderOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            if (!long.TryParse(request.OrderId, out var orderId))
+                return QueryResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(EditOrderRequest.OrderId), "Invalid order id"));
+
+            var order = await _api.EditOrderAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                orderId,
+                quantity: request.Quantity?.QuantityInBaseAsset,
+                price: request.Price,
+                ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+        #region Edit Futures Order By Client Order Id
+
+        async Task<IExchangeCallResult<SharedId>> IEditFuturesOrderByClientOrderId.EditFuturesOrderByClientOrderIdAsync(EditOrderRequest request, CancellationToken ct)
+            => await EditFuturesOrderByClientOrderIdAsync(request, ct).ConfigureAwait(false);
+
+        public EditFuturesOrderByClientOrderIdOptions EditFuturesOrderByClientOrderIdOptions { get; } = new EditFuturesOrderByClientOrderIdOptions(_exchange, true);
+        public async Task<QueryResult<SharedId>> EditFuturesOrderByClientOrderIdAsync(EditOrderRequest request, CancellationToken ct)
+        {
+            var validationError = EditFuturesOrderByClientOrderIdOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            var order = await _api.EditOrderAsync(
+                request.Symbol!.GetSymbol(FormatSymbol),
+                clientOrderId: request.OrderId,
+                quantity: request.Quantity?.QuantityInBaseAsset,
+                price: request.Price,
+                ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+        #region Cancel Futures Order
+
+        async Task<IExchangeCallResult<SharedId>> ICancelFuturesOrder.CancelFuturesOrderAsync(CancelOrderRequest request, CancellationToken ct)
+            => await CancelFuturesOrderAsync(request, ct).ConfigureAwait(false);
+
+        public CancelFuturesOrderOptions CancelFuturesOrderOptions { get; } = new CancelFuturesOrderOptions(_exchange, true);
+        public async Task<QueryResult<SharedId>> CancelFuturesOrderAsync(CancelOrderRequest request, CancellationToken ct)
+        {
+            var validationError = CancelFuturesOrderOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            if (!long.TryParse(request.OrderId, out var orderId))
+                return QueryResult.Fail<SharedId>(Exchange, ArgumentError.Invalid(nameof(CancelOrderRequest.OrderId), "Invalid order id"));
+
+            var order = await _api.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), orderId, ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
+
+        #region Cancel Futures Order By Client Order Id
+
+        async Task<IExchangeCallResult<SharedId>> ICancelFuturesOrderByClientOrderId.CancelFuturesOrderByClientOrderIdAsync(CancelOrderRequest request, CancellationToken ct)
+            => await CancelFuturesOrderByClientOrderIdAsync(request, ct).ConfigureAwait(false);
+
+        public CancelFuturesOrderByClientOrderIdOptions CancelFuturesOrderByClientOrderIdOptions { get; } = new CancelFuturesOrderByClientOrderIdOptions(_exchange, true);
+        public async Task<QueryResult<SharedId>> CancelFuturesOrderByClientOrderIdAsync(CancelOrderRequest request, CancellationToken ct)
+        {
+            var validationError = CancelFuturesOrderByClientOrderIdOptions.ValidateRequest(request, this);
+            if (validationError != null)
+                return QueryResult.Fail<SharedId>(Exchange, validationError);
+
+            var order = await _api.CancelOrderAsync(request.Symbol!.GetSymbol(FormatSymbol), clientOrderId: request.OrderId, ct: ct).ConfigureAwait(false);
+            if (!order.Success)
+                return QueryResult.Fail<SharedId>(order);
+
+            return QueryResult.Ok(order, new SharedId(order.Data.OrderId.ToString()));
+        }
+
+        #endregion
 
         #region Subscribe Futures Orders
 

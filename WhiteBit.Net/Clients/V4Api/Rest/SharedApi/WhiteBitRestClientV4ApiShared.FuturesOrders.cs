@@ -16,6 +16,7 @@ namespace WhiteBit.Net.Clients.V4Api
 {
     internal partial class WhiteBitRestClientV4SharedApi
     {
+        #region Place Futures Order
         public SharedFeeDeductionType FuturesFeeDeductionType => SharedFeeDeductionType.AddToCost;
         public SharedFeeAssetType FuturesFeeAssetType => SharedFeeAssetType.QuoteAsset;
 
@@ -26,8 +27,6 @@ namespace WhiteBit.Net.Clients.V4Api
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset,
                 SharedQuantityType.BaseAsset);
-
-        #region Place Futures Order
 
         async Task<IExchangeCallResult<SharedId>> IPlaceFuturesOrder.PlaceFuturesOrderAsync(PlaceFuturesOrderRequest request, CancellationToken ct)
             => await PlaceFuturesOrderAsync(request, ct).ConfigureAwait(false);
