@@ -1,29 +1,23 @@
-# AI-Friendly Examples
+# Standalone examples
 
-These examples are optimized for AI coding assistants and quick onboarding. Each file is:
+Each file is an independent top-level console program. Copy one into `Program.cs` at a time.
 
-- **Compilable**: copy into a console project with `dotnet add package WhiteBit.Net`.
-- **Self-contained**: single file, no shared helpers.
-- **Commented**: explains why the important calls are shaped this way.
-- **Idiomatic**: follows current WhiteBit.Net 3.x patterns.
+| File | Purpose |
+| --- | --- |
+| [01-spot-quickstart.cs](01-spot-quickstart.cs) | Public data, balances, and spot orders |
+| [02-collateral-futures.cs](02-collateral-futures.cs) | Collateral configuration, orders, and positions |
+| [03-websocket.cs](03-websocket.cs) | Socket query, public streams, optional private streams, and cleanup |
+| [04-multi-exchange.cs](04-multi-exchange.cs) | Shared API V2 market data and subscriptions |
+| [05-error-handling.cs](05-error-handling.cs) | Result handling and bounded public-read retries |
 
-## Files
-
-| File | What it shows |
-|---|---|
-| `01-spot-quickstart.cs` | Client setup, public ticker lookup, authenticated spot balances, spot limit order, open order query, cancellation |
-| `02-collateral-futures.cs` | Collateral/futures leverage, market order, open position retrieval, reduce-only close |
-| `03-websocket.cs` | Ticker updates, kline updates, private order and balance streams, proper teardown |
-| `04-multi-exchange.cs` | `CryptoExchange.Net.SharedApis` pattern for exchange-agnostic code |
-| `05-error-handling.cs` | `HttpResult` patterns, retry, common validation and routing mistakes |
-
-## Running
-
-```bash
+```shell
 dotnet new console -n MyWhiteBitApp
 cd MyWhiteBitApp
 dotnet add package WhiteBit.Net
-# Copy the example .cs file content into Program.cs
-# Replace API_KEY / API_SECRET placeholders with your own for private endpoints
-dotnet run
+# Copy ONE example into Program.cs
+dotnet build
 ```
+
+Compilation performs no exchange operations. Running trading examples with valid credentials changes live account state; these are not sandbox programs. The socket example reads `WHITEBIT_API_KEY` and `WHITEBIT_API_SECRET` for optional private subscriptions. Other authenticated walkthroughs use placeholders that require explicit configuration.
+
+See the [consumer skill](../../.claude/skills/whitebit-net/SKILL.md), [operational considerations](../../.claude/skills/whitebit-net/references/safety.md), and [complete projects](../README.md).

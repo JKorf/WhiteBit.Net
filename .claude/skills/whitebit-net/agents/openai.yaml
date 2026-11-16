@@ -1,0 +1,4 @@
+interface:
+  display_name: "WhiteBit.Net"
+  short_description: "Build C# WhiteBit spot and collateral integrations."
+  default_prompt: "Use $whitebit-net to implement a WhiteBit.Net REST, websocket, account, or trading workflow."

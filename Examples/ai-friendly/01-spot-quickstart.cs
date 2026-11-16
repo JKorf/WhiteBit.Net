@@ -16,7 +16,7 @@ using WhiteBit.Net.Enums;
 
 // ---- 1. PUBLIC CLIENT (no credentials needed for market data) ----
 // Reuse this client across the application; do not create a new client per request.
-var publicClient = new WhiteBitRestClient();
+using var publicClient = new WhiteBitRestClient();
 
 var tickers = await publicClient.V4Api.ExchangeData.GetTickersAsync();
 if (!tickers.Success)
@@ -36,7 +36,7 @@ Console.WriteLine($"ETH/USDT last price: {ethTicker.LastPrice}");
 Console.WriteLine($"24h quote volume: {ethTicker.QuoteVolume} USDT");
 
 // ---- 2. AUTHENTICATED CLIENT (for account / trading) ----
-var tradingClient = new WhiteBitRestClient(options =>
+using var tradingClient = new WhiteBitRestClient(options =>
 {
     options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
 });
@@ -56,15 +56,15 @@ foreach (var balance in balances.Data.Where(b => b.Available + b.Frozen > 0))
 
 // ---- 3. PLACE A LIMIT BUY ORDER ----
 // Direct WhiteBit spot symbols use underscores, for example ETH_USDT.
-// Limit order price below the last price is less likely to fill immediately.
-var safePrice = Math.Round(ethTicker.LastPrice * 0.95m, 2);
+// A limit order can execute immediately; validate exchange filters and intended exposure.
+var limitPrice = Math.Round(ethTicker.LastPrice * 0.95m, 2);
 
 var order = await tradingClient.V4Api.Trading.PlaceSpotOrderAsync(
     symbol: "ETH_USDT",
     side: OrderSide.Buy,
     type: NewOrderType.Limit,
     quantity: 0.01m,
-    price: safePrice);
+    price: limitPrice);
 
 if (!order.Success)
 {
@@ -72,7 +72,7 @@ if (!order.Success)
     return;
 }
 
-Console.WriteLine($"Placed order {order.Data.OrderId} at {safePrice}, status: {order.Data.Status}");
+Console.WriteLine($"Placed order {order.Data.OrderId} at {limitPrice}, status: {order.Data.Status}");
 
 // ---- 4. QUERY OPEN ORDERS ----
 // WhiteBit.Net exposes open-order lookup as a filtered list endpoint.

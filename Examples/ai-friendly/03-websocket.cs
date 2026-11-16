@@ -1,105 +1,63 @@
-// 03-websocket.cs
-//
-// Demonstrates: WebSocket subscriptions: public ticker, klines,
-// authenticated open orders and spot balances. Includes proper teardown.
-//
-// Setup: dotnet add package WhiteBit.Net
-
+// Install WhiteBit.Net. Private streams are enabled only when both credential variables exist.
 using WhiteBit.Net;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Enums;
 
-// ---- 1. PUBLIC SOCKET CLIENT ----
-// Reuse a single client instance across subscriptions.
-var publicSocket = new WhiteBitSocketClient();
-
-var tickerSub = await publicSocket.V4Api.SubscribeToTickerUpdatesAsync(
-    "ETH_USDT",
-    update =>
-    {
-        // Keep handlers fast; queue heavy work elsewhere.
-        Console.WriteLine($"ETH: {update.Data.Ticker.LastPrice} (quote volume {update.Data.Ticker.QuoteVolume})");
-    });
-
-if (!tickerSub.Success)
+using var publicSocket = new WhiteBitSocketClient();
+var key = Environment.GetEnvironmentVariable("WHITEBIT_API_KEY");
+var secret = Environment.GetEnvironmentVariable("WHITEBIT_API_SECRET");
+using var authSocket = new WhiteBitSocketClient(options =>
 {
-    Console.WriteLine($"Failed to subscribe ticker: {tickerSub.Error}");
-    return;
-}
-
-var klineSub = await publicSocket.V4Api.SubscribeToKlineUpdatesAsync(
-    "ETH_USDT",
-    KlineInterval.OneMinute,
-    update =>
-    {
-        foreach (var kline in update.Data)
-        {
-            Console.WriteLine($"ETH 1m: O={kline.OpenPrice} H={kline.HighPrice} L={kline.LowPrice} C={kline.ClosePrice}");
-        }
-    });
-
-if (!klineSub.Success)
-{
-    Console.WriteLine($"Failed to subscribe klines: {klineSub.Error}");
-    await publicSocket.UnsubscribeAsync(tickerSub.Data);
-    return;
-}
-
-// ---- 2. AUTHENTICATED SOCKET CLIENT ----
-// Private subscriptions require credentials and permissions.
-var authSocket = new WhiteBitSocketClient(options =>
-{
-    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
+    if (key is not null && secret is not null)
+        options.ApiCredentials = new WhiteBitCredentials(key, secret);
 });
-
-var orderSub = await authSocket.V4Api.SubscribeToOpenOrderUpdatesAsync(
-    new[] { "ETH_USDT" },
-    update =>
-    {
-        var order = update.Data.Order;
-        Console.WriteLine($"Order {order.OrderId} {order.Symbol}: {order.Status} ({order.QuantityFilled}/{order.Quantity})");
-    });
-
-if (!orderSub.Success)
+try
 {
-    Console.WriteLine($"Failed to subscribe orders: {orderSub.Error}");
-    await publicSocket.UnsubscribeAsync(tickerSub.Data);
-    await publicSocket.UnsubscribeAsync(klineSub.Data);
-    return;
-}
-
-var balanceSub = await authSocket.V4Api.SubscribeToSpotBalanceUpdatesAsync(
-    new[] { "ETH", "USDT" },
-    update =>
+    var query = await publicSocket.V4Api.GetTickerAsync("ETH_USDT");
+    if (!query.Success)
+        Console.WriteLine(query.Error);
+    else
+        Console.WriteLine(query.Data);
+    var ticker = await publicSocket.V4Api.SubscribeToTickerUpdatesAsync(
+        "ETH_USDT", update => Console.WriteLine(update.Data.Ticker.LastPrice));
+    if (!ticker.Success)
     {
-        foreach (var balance in update.Data)
-            Console.WriteLine($"{balance.Key}: {balance.Value.Available} available, {balance.Value.Frozen} frozen");
-    });
-
-if (!balanceSub.Success)
-{
-    Console.WriteLine($"Failed to subscribe balances: {balanceSub.Error}");
-    await publicSocket.UnsubscribeAsync(tickerSub.Data);
-    await publicSocket.UnsubscribeAsync(klineSub.Data);
-    await authSocket.UnsubscribeAsync(orderSub.Data);
-    return;
+        Console.WriteLine(ticker.Error);
+        return;
+    }
+    var klines = await publicSocket.V4Api.SubscribeToKlineUpdatesAsync(
+        "ETH_USDT", KlineInterval.OneMinute, update =>
+        {
+            foreach (var kline in update.Data)
+                Console.WriteLine(kline.ClosePrice);
+        });
+    if (!klines.Success)
+    {
+        Console.WriteLine(klines.Error);
+        return;
+    }
+    if (key is not null && secret is not null)
+    {
+        var orders = await authSocket.V4Api.SubscribeToOpenOrderUpdatesAsync(
+            new[] { "ETH_USDT" }, update => Console.WriteLine(update.Data.Order.Status));
+        if (!orders.Success)
+        {
+            Console.WriteLine(orders.Error);
+            return;
+        }
+        var balances = await authSocket.V4Api.SubscribeToSpotBalanceUpdatesAsync(
+            new[] { "ETH", "USDT" }, update => Console.WriteLine($"Updated balances: {update.Data.Count}"));
+        if (!balances.Success)
+        {
+            Console.WriteLine(balances.Error);
+            return;
+        }
+    }
+    Console.WriteLine("Press Enter to unsubscribe");
+    Console.ReadLine();
 }
-
-Console.WriteLine("All subscriptions active. Press Enter to teardown...");
-Console.ReadLine();
-
-// ---- 3. TEARDOWN ----
-// Always unsubscribe on shutdown to release resources cleanly.
-await publicSocket.UnsubscribeAsync(tickerSub.Data);
-await publicSocket.UnsubscribeAsync(klineSub.Data);
-await authSocket.UnsubscribeAsync(orderSub.Data);
-await authSocket.UnsubscribeAsync(balanceSub.Data);
-
-Console.WriteLine("Clean shutdown complete.");
-
-// Common variations:
-//   Multiple symbols:      SubscribeToTickerUpdatesAsync(new[] { "BTC_USDT", "ETH_USDT" }, handler)
-//   Order book stream:     SubscribeToOrderBookUpdatesAsync("ETH_USDT", depth: 20, handler)
-//   Trade stream:          SubscribeToTradeUpdatesAsync("ETH_USDT", handler)
-//   Position stream:       SubscribeToPositionUpdatesAsync(handler)
-//   User trade stream:     SubscribeToUserTradeUpdatesAsync(new[] { "ETH_USDT" }, handler)
+finally
+{
+    // Both clients belong exclusively to this example, including any partially completed setup.
+    await Task.WhenAll(publicSocket.UnsubscribeAllAsync(), authSocket.UnsubscribeAllAsync());
+}

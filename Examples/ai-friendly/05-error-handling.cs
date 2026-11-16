@@ -10,7 +10,7 @@ using WhiteBit.Net;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Enums;
 
-var client = new WhiteBitRestClient(options =>
+using var client = new WhiteBitRestClient(options =>
 {
     options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
 });
@@ -41,10 +41,12 @@ else
 // Retry only on transient errors: network blips, temporary server errors, rate limits.
 // Do not retry validation errors, permission errors, or insufficient balance.
 
+// Public-read retry helper; do not apply automatically to account-changing requests.
 async Task<HttpResult<T>> WithRetry<T>(
     Func<Task<HttpResult<T>>> call,
     int maxAttempts = 3)
 {
+    ArgumentOutOfRangeException.ThrowIfLessThan(maxAttempts, 1);
     HttpResult<T> last = default!;
     for (var attempt = 1; attempt <= maxAttempts; attempt++)
     {
@@ -55,7 +57,8 @@ async Task<HttpResult<T>> WithRetry<T>(
         if (last.Error?.IsTransient != true)
             return last;
 
-        await Task.Delay(TimeSpan.FromMilliseconds(250 * Math.Pow(2, attempt)));
+        if (attempt < maxAttempts)
+            await Task.Delay(TimeSpan.FromMilliseconds(250 * Math.Pow(2, attempt)));
     }
 
     return last;
@@ -129,7 +132,7 @@ var order = await client.V4Api.Trading.PlaceSpotOrderAsync(
 if (!order.Success)
 {
     var category = order.Error?.IsTransient == true
-        ? "Transient; retry with backoff"
+        ? "Transient; consider bounded retries for reads, reconcile mutations first"
         : "Permanent; surface to user";
 
     Console.WriteLine($"{category}: {order.Error?.Code} {order.Error?.Message}");

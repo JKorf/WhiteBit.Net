@@ -1,43 +1,13 @@
 # WhiteBit.Net
 
-> Strongly typed .NET client library for the WhiteBit REST and WebSocket APIs. Supports V4 public market data, spot trading, collateral/futures trading, balances, deposits, withdrawals, convert, WhiteBit Codes, sub-accounts, private WebSocket streams, local order books, and CryptoExchange.Net shared APIs.
+Typed .NET clients for WhiteBit V4 REST and WebSocket APIs, including spot and collateral trading.
 
-WhiteBit.Net is part of the CryptoExchange.Net ecosystem. It uses `HttpResult<T>` for REST, `QueryResult<T>` for WebSocket request/response calls, and `WebSocketResult<UpdateSubscription>` for WebSocket subscriptions. Shared REST APIs use the same `HttpResult<T>` pattern. It supports client-side rate limiting, automatic WebSocket reconnection, dependency injection, native AOT, and shared API abstractions for multi-exchange applications. Current repository package version: 4.7.0. This branch targets CryptoExchange.Net 12.5.0. Targets netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0.
-
-## Documentation
-
-- [README](https://github.com/JKorf/WhiteBit.Net/blob/main/README.md): Overview, installation, examples, supported functionality, release notes
-- [Documentation Site](https://cryptoexchange.jkorf.dev/docs/exchange-clients?library=WhiteBit.Net): Full documentation hub and client reference
-- [AI API Quick Map](https://github.com/JKorf/WhiteBit.Net/blob/main/docs/ai-api-map.md): Table-style intent-to-method routing for WhiteBit.Net members
-- [Full LLM Context](https://github.com/JKorf/WhiteBit.Net/blob/main/llms-full.txt): Detailed AI guide with code patterns, endpoint routing, and anti-hallucination rules
-- [Claude/Codex Skill](https://github.com/JKorf/WhiteBit.Net/blob/main/CLAUDE.md): Assistant-facing usage conventions and examples
-
-## Examples
-
-- [AI-friendly examples directory](https://github.com/JKorf/WhiteBit.Net/tree/main/Examples/ai-friendly): Compilable single-file examples optimized for AI assistants
-- [Spot Quickstart](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/01-spot-quickstart.cs): Client setup, ticker lookup, balances, spot order, cancel order
-- [Collateral/Futures Trading](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/02-collateral-futures.cs): Leverage, collateral order, positions, reduce-only close
-- [WebSocket Streams](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/03-websocket.cs): Public ticker/kline streams and private order/balance streams with teardown
-- [Multi-Exchange Pattern](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/04-multi-exchange.cs): CryptoExchange.Net SharedApis usage
-- [Error Handling](https://github.com/JKorf/WhiteBit.Net/blob/main/Examples/ai-friendly/05-error-handling.cs): `HttpResult` checks, transient retry, validation handling
-
-## Critical Rules
-
-- Use `WhiteBitRestClient` and `WhiteBitSocketClient`; do not generate raw HTTP.
-- Use `WhiteBitCredentials("key", "secret")`; do not use generic `ApiCredentials`.
-- Direct client calls use `V4Api`, not `SpotApi`, `FuturesApi`, or `GeneralApi`.
-- Direct spot symbols use WhiteBit format such as `ETH_USDT`; collateral/futures examples use `ETH_PERP`.
-- Always check `.Success` before `.Data`.
-- For spot orders use `restClient.V4Api.Trading.PlaceSpotOrderAsync`.
-- For collateral/futures orders use `restClient.V4Api.CollateralTrading.PlaceOrderAsync`.
-- For multi-exchange code use `CryptoExchange.Net.SharedApis` from `.V4Api.SharedApi`.
-- Shared spot/futures symbols include display names, asset types, fees, and price/quantity steps; futures symbols also expose funding caps and leverage limits.
-- Use the exchange-level `IWhiteBitSharedApiClient` aggregate's `GetCapability(...)` or `GetCapabilities(...)` methods for runtime capability lookup; use an API surface's `.SharedApi` property when the transport and API are known.
-- Store WebSocket subscriptions and call `socketClient.UnsubscribeAsync(subscription.Data)`.
-
-## Reference
-
-- [CryptoExchange.Net](https://github.com/JKorf/CryptoExchange.Net): Base library
-- [CryptoClients.Net](https://github.com/JKorf/CryptoClients.Net): Bundle package for all supported exchange clients
-- [NuGet Package](https://www.nuget.org/packages/WhiteBit.Net): Stable package
-- [Discord Community](https://discord.gg/MSpeEtSY8t): Maintainer-supported Discord
+- [Consumer skill](.claude/skills/whitebit-net/SKILL.md)
+- [API routing](.claude/skills/whitebit-net/references/api-surfaces.md)
+- [Usage examples](.claude/skills/whitebit-net/references/usage.md)
+- [Operational considerations](.claude/skills/whitebit-net/references/safety.md)
+- [Overview](README.md)
+- [Repository development](AGENTS.md)
+- [Public client interfaces](WhiteBit.Net/Interfaces/Clients)
+- [Library project](WhiteBit.Net/WhiteBit.Net.csproj)
+- [Complete examples](Examples/README.md)

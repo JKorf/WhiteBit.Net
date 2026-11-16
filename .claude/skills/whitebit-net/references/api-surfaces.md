@@ -1,20 +1,10 @@
-# WhiteBit.Net AI API Quick Map
+# API surfaces
 
-Use this file to route common user intents to the correct WhiteBit.Net client member. If a method name or parameter is not listed here, inspect `WhiteBit.Net/Interfaces/Clients/**` before generating code.
+## Clients and scope
 
-## Client Roots
+`WhiteBitRestClient` / `IWhiteBitRestClient` expose `V4Api` with `ExchangeData`, `Account`, `Trading`, `CollateralTrading`, `SubAccount`, `Convert`, `Codes`, and `SharedApi`. `WhiteBitSocketClient` / `IWhiteBitSocketClient` expose queries, subscriptions, and `SharedApi` on `V4Api`. There are no `SpotApi` or `FuturesApi` roots.
 
-| Intent | Use |
-|---|---|
-| REST calls | `new WhiteBitRestClient()` |
-| WebSocket streams and socket API requests | `new WhiteBitSocketClient()` |
-| API key authentication | `options.ApiCredentials = new WhiteBitCredentials("key", "secret")` |
-| Live environment | `WhiteBitEnvironment.Live` |
-| Custom environment | `WhiteBitEnvironment.CreateCustom(name, restAddress, socketAddress)` |
-| Dependency injection | `services.AddWhiteBit(options => { ... })` |
-| Direct API root | `client.V4Api` |
-| Shared REST client | `new WhiteBitRestClient().V4Api.SharedApi` |
-| Shared socket client | `new WhiteBitSocketClient().V4Api.SharedApi` |
+Private access uses `WhiteBitCredentials(key, secret)`. `WhiteBitEnvironment.Live` is built in; `CreateCustom` supplies custom endpoints without promising a sandbox. Native spot symbols use `ETH_USDT`, perpetuals `ETH_PERP`. Discover market metadata before choosing product, quantity, or price.
 
 ## V4 REST: Exchange Data
 
@@ -146,56 +136,32 @@ Use this file to route common user intents to the correct WhiteBit.Net client me
 | Subscribe account borrow events | `socketClient.V4Api.SubscribeToAccountBorrowEventUpdatesAsync(handler)` |
 | Subscribe margin position events | `socketClient.V4Api.SubscribeToAccountMarginPositionEventUpdatesAsync(handler)` |
 
-## SharedApis
 
-| User intent | WhiteBit.Net member or interface |
-|---|---|
-| Shared REST client | `new WhiteBitRestClient().V4Api.SharedApi` |
-| Shared socket client | `new WhiteBitSocketClient().V4Api.SharedApi` |
-| Shared spot ticker REST | `IGetTickerRest.GetTickerAsync(new GetTickerRequest(symbol))` |
-| Shared spot symbol REST | `IGetSpotSymbolsRest.GetSpotSymbolsAsync(...)` |
-| Filter shared symbols by asset classification | `GetSymbolsRequest` base/quote asset type and subtype fields |
-| Read shared trading fees and increments | `SharedSpotSymbol` / `SharedFuturesSymbol`: `MakerFeePercentage`, `TakerFeePercentage`, `PriceStep`, `QuantityStep` |
-| Read shared futures risk limits | `SharedFuturesSymbol`: `UpperFundingCap`, `LowerFundingCap`, `MaxLongLeverage`, `MaxShortLeverage` |
-| Read cached shared spot symbol catalog | `IGetSpotSymbolsRest.SpotSymbolCatalog` |
-| Read cached shared futures symbol catalog | `IGetFuturesSymbolsRest.FuturesSymbolCatalog` |
-| Shared spot order REST | `IPlaceSpotOrderRest.PlaceSpotOrderAsync(...)` |
-| Shared futures order REST | `IPlaceFuturesOrderRest.PlaceFuturesOrderAsync(...)` |
-| Shared balances REST | `IGetBalancesRest.GetBalancesAsync(...)` |
-| Shared fees REST | `IGetFeesRest.GetFeesAsync(...)` |
-| Shared ticker socket | `ISubscribeTickerSocket.SubscribeToTickerUpdatesAsync(...)` |
-| Shared book ticker socket | `ISubscribeBookTickerSocket.SubscribeToBookTickerUpdatesAsync(...)` |
-| Shared order book socket | `ISubscribeOrderBookSocket.SubscribeToOrderBookUpdatesAsync(...)` |
-| Shared user trade socket | `ISubscribeUserTradesSocket.SubscribeToUserTradeUpdatesAsync(...)` |
-| Shared position socket | `ISubscribePositionsSocket.SubscribeToPositionUpdatesAsync(...)` |
-| Resolve a runtime-selected Shared API capability | `IWhiteBitSharedApiClient.GetCapability(...)` |
+## Shared API V2
 
-Shared spot/futures symbol models include `DisplayName`, asset classification, fee, and order-increment metadata.
+`IWhiteBitSharedApiClient` implements `ISharedApiClientBase`, with `V4Rest` and `V4Socket` exposing these actual contracts:
 
-For shared socket subscriptions, keep the concrete socket client and unsubscribe with `await socketClient.UnsubscribeAsync(subscription.Data)`.
+| Surface type | Supported capabilities |
+| --- | --- |
+| `IWhiteBitRestClientV4SharedApi` | `IGetSpotSymbolsRest`, `IGetTickerRest`, `IGetAllTickersRest`, `IGetRecentTradesRest`, `IGetOrderBookRest`, `IGetBalancesRest`, `IGetAssetRest`, `IGetAllAssetsRest`, `IGetDepositAddressesRest`, `IGetDepositHistoryRest`, `IGetWithdrawalHistoryRest`, `IWithdrawRest`, `IPlaceSpotOrderRest`, `IGetSpotOrderRest`, `IGetOpenSpotOrdersRest`, `IGetClosedSpotOrdersRest`, `IGetSpotOrderTradesRest`, `IGetSpotUserTradeHistoryRest`, `ICancelSpotOrderRest`, `IGetFuturesSymbolsRest`, `IGetLeverageRest`, `ISetLeverageRest`, `IGetOpenInterestRest`, `IGetPositionHistoryRest`, `IPlaceFuturesOrderRest`, `IGetFuturesOrderRest`, `IGetOpenFuturesOrdersRest`, `IGetClosedFuturesOrdersRest`, `IGetFuturesOrderTradesRest`, `IGetFuturesUserTradeHistoryRest`, `ICancelFuturesOrderRest`, `IGetPositionsRest`, `IGetFeesRest`, `IPlaceSpotTriggerOrderRest`, `IGetSpotTriggerOrderRest`, `ICancelSpotTriggerOrderRest`, `IPlaceFuturesTriggerOrderRest`, `IGetFuturesTriggerOrderRest`, `ICancelFuturesTriggerOrderRest`, `ISetFuturesTpSlRest`, `ICancelFuturesTpSlRest`, `IGetBookTickerRest`, `IGetFundingRateHistoryRest`, `ITransferRest`, `IPlaceMultipleSpotOrdersRest` |
+| `IWhiteBitSocketClientV4SharedApi` | `ISubscribeBalancesSocket`, `ISubscribeBookTickerSocket`, `ISubscribeKlinesSocket`, `ISubscribeTickerSocket`, `ISubscribeTradesSocket`, `ISubscribeUserTradesSocket`, `ISubscribeSpotOrdersSocket`, `ISubscribePositionsSocket`, `ISubscribeFuturesOrdersSocket`, `IPlaceSpotOrderSocket`, `IEditSpotOrderSocket`, `IEditSpotOrderByClientOrderIdSocket`, `ICancelSpotOrderSocket`, `ICancelSpotOrderByClientOrderIdSocket`, `IPlaceFuturesOrderSocket`, `IEditFuturesOrderSocket`, `IEditFuturesOrderByClientOrderIdSocket`, `ICancelFuturesOrderSocket`, `ICancelFuturesOrderByClientOrderIdSocket` |
 
-## Result Handling
+For a known operation, assign the typed `.SharedApi` to the required narrow interface. For dynamic code, resolve `GetCapability(SharedCapabilities.Tickers.GetTicker.Rest, TradingMode.Spot)` or use `GetCapabilities(...)` for all matches. Futures selection uses `TradingMode.PerpetualLinear`. Handle a nullable `SharedCapabilityResolution<T>` and inspect `Capability` and `Options`. `Discover()` supplies summary metadata. `PreferredTransport` affects generic selection; `.Rest` requires REST. A descriptor identifies a contract, not guaranteed support.
 
-| Situation | Pattern |
-|---|---|
-| REST success check | Direct and shared REST methods return `HttpResult<T>` / `HttpResult` |
-| Socket request success check | WebSocket request/response calls return `QueryResult<T>` |
-| Socket subscription success check | Direct and shared subscriptions return `WebSocketResult<UpdateSubscription>` |
-| Generic success check | `if (!result.Success) { Console.WriteLine(result.Error); return; }` |
-| Read result data | Read `result.Data` only after `result.Success` |
-| Retry decision | Retry only when `result.Error?.IsTransient == true` |
-| Cancellation | Pass `ct: cancellationToken` |
+Inspect supported trading modes, request/exchange parameter rules, limits, and notes before generating dynamic requests. Native APIs retain detailed convert, codes, subaccount, hedge-mode, OCO/OTO, and kill-switch workflows. V1 `.SharedClient` facades remain for compatibility.
 
-## Common Routing Pitfalls
+## Symbols, catalogs, and quantities
 
-| Do not use | Use instead |
-|---|---|
-| `WhiteBitClient` | `WhiteBitRestClient` |
-| `ApiCredentials` | `WhiteBitCredentials` |
-| `client.SpotApi` | `client.V4Api` |
-| `client.FuturesApi` | `client.V4Api.CollateralTrading` and `client.V4Api.Account` |
-| `client.GeneralApi` | `client.V4Api.Account`, `Codes`, or `SubAccount` |
-| `ETHUSDT` in direct WhiteBit calls | `ETH_USDT` |
-| `ETHUSDT` for WhiteBit perpetual examples | `ETH_PERP` |
-| `.Data` without `.Success` check | Check `.Success` first |
-| Unsubscribe from a shared subscription | Keep the concrete socket client and call `socketClient.UnsubscribeAsync(subscription.Data)` |
+Portable symbols use `SharedSymbol(TradingMode.Spot, "ETH", "USDT")` or the appropriate futures trading mode, rather than native underscore/perpetual names. Successful shared symbol queries apply `GetSymbolsRequest` filters and refresh `SpotSymbolCatalog` or `FuturesSymbolCatalog` for that API/environment.
+
+Returned symbols include `DisplayName`, asset classifications, `MakerFeePercentage`, `TakerFeePercentage`, `PriceStep`, and `QuantityStep` where available. Futures metadata additionally includes `UpperFundingCap`, `LowerFundingCap`, `MaxLongLeverage`, and `MaxShortLeverage`. Missing metadata does not imply unrestricted support or a listed market.
+
+Shared order requests use `SharedQuantity.Base`, `.Quote`, or `.Contracts` only where the operation supports the unit. Response `SharedOrderQuantity` values have nullable base/quote/contracts quantities; absent units are not zero. Ticker volume uses `Volumes`; book-ticker quantities use `BestBidQuantities`/`BestAskQuantities`. Inspect `SharedOrderBook.QuantityType` before interpreting depth quantities.
+
+Native spot market buys can use `quoteQuantity` to specify quote-asset spend. Spot and collateral placement use `NewOrderType`; collateral orders additionally expose `positionSide` and `reduceOnly`. Do not silently translate quote spend into base quantity or assume spot and collateral account settings are interchangeable.
+
+## Services and factories
+
+`services.AddWhiteBit(...)` registers native clients, supported V2 capabilities, `IWhiteBitSharedApiClient`, `IWhiteBitOrderBookFactory`, `IWhiteBitTrackerFactory`, and `IWhiteBitUserClientProvider`. Select the exchange aggregate when several exchanges are registered. The order-book factory exposes `V4`, `Create(SharedSymbol, ...)`, and `CreateV4(nativeSymbol, ...)`; check startup success and stop/dispose owned books and trackers. Multi-user clients require deliberate account and credential selection.
+
+Checkout-only: [public contracts](../../../../WhiteBit.Net/Interfaces/Clients), [Shared API adapters](../../../../WhiteBit.Net/Clients), and [DI registration](../../../../WhiteBit.Net/ExtensionMethods).

@@ -1,11 +1,14 @@
 # Examples
 
-| Project | Topic |
-|---|---|
-| `WhiteBit.Examples.Api` | Minimal ASP.NET Core API integration, dependency injection, public ticker endpoint, private balances endpoint |
-| `WhiteBit.Examples.Console` | Basic REST ticker request and WebSocket ticker subscription |
-| `WhiteBit.Examples.V4OrderPlacement` | Spot and futures V4 order placement, order status lookup, and cancellation |
-| `WhiteBit.Examples.OrderBook` | Client-side order book implementation with live console display |
-| `WhiteBit.Examples.Tracker` | Trade tracker with rolling market statistics |
+| Project | Purpose |
+| --- | --- |
+| [API](WhiteBit.Examples.Api/WhiteBit.Examples.Api.csproj) | Inject clients into a web API |
+| [Console](WhiteBit.Examples.Console/WhiteBit.Examples.Console.csproj) | Basic client use |
+| [Order book](WhiteBit.Examples.OrderBook/WhiteBit.Examples.OrderBook.csproj) | Maintained local order book |
+| [Tracker](WhiteBit.Examples.Tracker/WhiteBit.Examples.Tracker.csproj) | Trade tracking |
+| [V4 order placement](WhiteBit.Examples.V4OrderPlacement/WhiteBit.Examples.V4OrderPlacement.csproj) | Spot and collateral order submissions |
+| [Standalone programs](ai-friendly/README.md) | Focused REST, socket, V2, and error-handling examples |
 
-The `ai-friendly` folder contains standalone copy/paste examples intended for quick onboarding and AI coding assistant context.
+From the repository root, compile with `dotnet build Examples/Examples.sln`. Builds do not execute exchange calls. Running examples can contact live markets or change account state when credentials are configured.
+
+See the [consumer skill](../.claude/skills/whitebit-net/SKILL.md) and [repository instructions](../AGENTS.md).

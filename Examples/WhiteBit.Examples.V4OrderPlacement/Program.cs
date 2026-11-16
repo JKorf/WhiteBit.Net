@@ -14,7 +14,7 @@ Console.WriteLine();
 Console.WriteLine("This example can place real orders when valid credentials are configured.");
 Console.WriteLine();
 
-var client = new WhiteBitRestClient(options =>
+using var client = new WhiteBitRestClient(options =>
 {
     options.ApiCredentials = new WhiteBitCredentials()
         .WithHMAC(apiKey, apiSecret);
@@ -32,13 +32,13 @@ static async Task PlaceSpotLimitOrderAsync(WhiteBitRestClient client)
     if (ticker == null)
         return;
 
-    var safePrice = Math.Round(ticker.Value * 0.95m, 2);
+    var limitPrice = Math.Round(ticker.Value * 0.95m, 2);
     var order = await client.V4Api.Trading.PlaceSpotOrderAsync(
         symbol: spotSymbol,
         side: OrderSide.Buy,
         type: NewOrderType.Limit,
         quantity: 0.001m,
-        price: safePrice);
+        price: limitPrice);
 
     if (!order.Success)
     {
@@ -75,13 +75,13 @@ static async Task PlaceFuturesReduceOnlyOrderExampleAsync(WhiteBitRestClient cli
     if (ticker == null)
         return;
 
-    var safePrice = Math.Round(ticker.Value * 1.05m, 2);
+    var limitPrice = Math.Round(ticker.Value * 1.05m, 2);
     var order = await client.V4Api.CollateralTrading.PlaceOrderAsync(
         symbol: futuresSymbol,
         side: OrderSide.Sell,
         type: NewOrderType.Limit,
         quantity: 0.001m,
-        price: safePrice,
+        price: limitPrice,
         reduceOnly: true);
 
     if (!order.Success)

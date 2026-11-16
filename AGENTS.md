@@ -1,233 +1,38 @@
----
-name: whitebit-net
-description: Use WhiteBit.Net when generating C#/.NET code that interacts with the WhiteBit cryptocurrency exchange, including V4 REST endpoints, WebSocket subscriptions, spot trading, collateral/futures trading, balances, deposits, withdrawals, convert, WhiteBit Codes, sub-accounts, and CryptoExchange.Net shared APIs.
----
+# Working on WhiteBit.Net
 
-# WhiteBit.Net Skill
+Consumer guidance belongs to the [WhiteBit.Net skill](.claude/skills/whitebit-net/SKILL.md); [llms.txt](llms.txt) indexes its references. This file describes repository development.
 
-## Quick Decision
+## Layout and implementation
 
-If the user asks for WhiteBit API access in C#/.NET, use `WhiteBit.Net`. Do not write raw `HttpClient` calls to WhiteBit endpoints. The library handles authentication, request signing, rate limiting, response parsing, WebSocket reconnection, and the `HttpResult<T>` / `QueryResult<T>` / `WebSocketResult<UpdateSubscription>` error model.
+- [Public contracts](WhiteBit.Net/Interfaces/Clients) and [clients](WhiteBit.Net/Clients): V4 REST groups, socket queries/subscriptions, V1 compatibility, and V2 adapters.
+- [Models/options](WhiteBit.Net/Objects), [enums](WhiteBit.Net/Enums), and [converters](WhiteBit.Net/Converters): wire models, configuration, enum mappings, and JSON serialization metadata.
+- [DI extensions](WhiteBit.Net/ExtensionMethods), [order books](WhiteBit.Net/SymbolOrderBooks), [tests](WhiteBit.Net.UnitTests), and [examples](Examples/README.md).
 
-For multi-exchange code, use `CryptoExchange.Net.SharedApis` through `client.V4Api.SharedApi`.
+Follow neighboring implementations for request construction, signing, validation, nullable annotations, cancellation, XML documentation, and result handling. Use `ConfigureAwait(false)` on library awaits as required by the analyzer. Update interfaces with implementations, models with their serialization metadata, and Shared API adapters with accurate capabilities and parameter options. Keep spot orders, collateral orders, socket requests, and subscriptions distinct. Preserve per-item errors in batch results. Update relevant request/response fixtures when endpoint behavior changes.
 
-## Installation
+Preserve public compatibility across all declared target frameworks. Keep unrelated dependencies, release settings, and generated output outside focused changes.
 
-```bash
-dotnet add package WhiteBit.Net
+## Build and test
+
+Use the SDK selected by [CI](.github/workflows/dotnet.yml). From the repository root:
+
+```powershell
+dotnet restore WhiteBit.Net.sln
+dotnet build WhiteBit.Net.sln --no-restore
+dotnet test WhiteBit.Net.UnitTests/WhiteBit.Net.UnitTests.csproj --no-build --filter "FullyQualifiedName~AiExampleCompileTests"
 ```
 
-Targets: netstandard2.0, netstandard2.1, net8.0, net9.0, net10.0. Native AOT is supported.
+Debug normally builds only `netstandard2.0` and `net11.0`. Validate every declared framework and the package with:
 
-## Core Pattern: REST Client Setup
-
-Use `WhiteBitRestClient`. Public market data does not require credentials.
-
-```csharp
-using WhiteBit.Net.Clients;
-
-var publicClient = new WhiteBitRestClient();
+```powershell
+dotnet build WhiteBit.Net/WhiteBit.Net.csproj -c Release -p:BuildAllFrameworks=true
+dotnet pack WhiteBit.Net/WhiteBit.Net.csproj -c Release --no-build
 ```
 
-Private account and trading endpoints require `WhiteBitCredentials`.
+`Documentation/AiExampleCompileTests.cs` compiles the standalone examples without executing their exchange operations. Run relevant fixture tests for implementation changes. Live REST/socket integration fixtures have their own execution gates; shared REST integration uses `ManualRun` or `INTEGRATION=1`. Do not enable live tests for documentation validation. Build [complete examples](Examples/Examples.sln) without running them; order-placement examples can change live account state when executed.
 
-```csharp
-using WhiteBit.Net;
-using WhiteBit.Net.Clients;
+## Documentation ownership
 
-var restClient = new WhiteBitRestClient(options =>
-{
-    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
-});
-```
+Keep API routing in `.claude/skills/whitebit-net/references/api-surfaces.md`, focused snippets in `references/usage.md`, and distinct operational considerations in `references/safety.md`. `SKILL.md` routes to those references, `CLAUDE.md` imports this file, and `llms.txt` is a concise link index.
 
-## Core Pattern: Result Handling
-
-REST methods return `HttpResult<T>` or `HttpResult`. WebSocket request/response methods return `QueryResult<T>`. WebSocket subscriptions return `WebSocketResult<UpdateSubscription>`. Always check `.Success` before reading `.Data`.
-
-```csharp
-var tickers = await publicClient.V4Api.ExchangeData.GetTickersAsync();
-if (!tickers.Success)
-{
-    Console.WriteLine($"WhiteBit error: {tickers.Error}");
-    return;
-}
-
-var eth = tickers.Data.Single(x => x.Symbol == "ETH_USDT");
-Console.WriteLine(eth.LastPrice);
-```
-
-## Core Pattern: API Surface
-
-WhiteBit.Net exposes the current API through a single V4 root:
-
-```csharp
-restClient.V4Api.ExchangeData       // public market/system data
-restClient.V4Api.Account            // balances, deposits, withdrawals, collateral account settings
-restClient.V4Api.Trading            // spot orders and spot trade history
-restClient.V4Api.CollateralTrading  // collateral, futures, spot margin orders and positions
-restClient.V4Api.Convert            // convert estimate, confirm, history
-restClient.V4Api.Codes              // WhiteBit Code create/apply/history
-restClient.V4Api.SubAccount         // sub-account management and transfers
-restClient.V4Api.SharedApi       // CryptoExchange.Net shared REST interfaces
-
-socketClient.V4Api                  // public and private WebSocket requests/subscriptions
-socketClient.V4Api.SharedApi     // CryptoExchange.Net shared socket interfaces
-```
-
-## Core Pattern: Symbols
-
-WhiteBit spot symbols use underscores, for example `ETH_USDT` and `BTC_USDT`. Futures/collateral symbols use names such as `ETH_PERP` and `BTC_PERP`. Do not change these to Binance-style `ETHUSDT` unless the shared API layer is explicitly being used.
-
-## Spot Order Pattern
-
-Spot order placement is under `restClient.V4Api.Trading.PlaceSpotOrderAsync`.
-
-```csharp
-using WhiteBit.Net.Enums;
-
-var order = await restClient.V4Api.Trading.PlaceSpotOrderAsync(
-    symbol: "ETH_USDT",
-    side: OrderSide.Buy,
-    type: NewOrderType.Limit,
-    quantity: 0.1m,
-    price: 2000m);
-
-if (!order.Success)
-{
-    Console.WriteLine(order.Error);
-    return;
-}
-
-Console.WriteLine(order.Data.OrderId);
-```
-
-Market buy orders can use `quoteQuantity` instead of base `quantity` when the desired spend amount is in the quote asset.
-
-## Collateral / Futures Pattern
-
-Collateral and futures trading use `restClient.V4Api.CollateralTrading`. Account-level collateral settings and balances are under `restClient.V4Api.Account`.
-
-```csharp
-using WhiteBit.Net.Enums;
-
-await restClient.V4Api.Account.SetAccountLeverageAsync(5);
-
-var order = await restClient.V4Api.CollateralTrading.PlaceOrderAsync(
-    symbol: "ETH_PERP",
-    side: OrderSide.Buy,
-    type: NewOrderType.Market,
-    quantity: 0.1m);
-```
-
-If hedge mode is enabled, provide `positionSide: PositionSide.Long` or `PositionSide.Short`. To close a position without flipping exposure, use the opposite side and `reduceOnly: true`.
-
-## WebSocket Pattern
-
-Use `WhiteBitSocketClient`. Store the returned `UpdateSubscription` and unsubscribe on shutdown.
-
-```csharp
-using WhiteBit.Net.Clients;
-
-var socketClient = new WhiteBitSocketClient();
-
-var sub = await socketClient.V4Api.SubscribeToTickerUpdatesAsync(
-    "ETH_USDT",
-    update => Console.WriteLine(update.Data.Ticker.LastPrice));
-
-if (!sub.Success)
-{
-    Console.WriteLine(sub.Error);
-    return;
-}
-
-await socketClient.UnsubscribeAsync(sub.Data);
-```
-
-Private WebSocket subscriptions require credentials on the socket client:
-
-```csharp
-var socketClient = new WhiteBitSocketClient(options =>
-{
-    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
-});
-
-await socketClient.V4Api.SubscribeToOpenOrderUpdatesAsync(
-    new[] { "ETH_USDT" },
-    update => Console.WriteLine(update.Data.Status));
-```
-
-## Multi-Exchange via CryptoExchange.Net.SharedApis
-
-Use the shared client for exchange-agnostic code:
-
-```csharp
-using CryptoExchange.Net.SharedApis;
-using WhiteBit.Net.Clients;
-
-IGetTickerRest tickerClient = new WhiteBitRestClient().V4Api.SharedApi;
-var symbol = new SharedSymbol(TradingMode.Spot, "ETH", "USDT");
-
-var ticker = await tickerClient.GetTickerAsync(new GetTickerRequest(symbol));
-if (!ticker.Success)
-{
-    Console.WriteLine(ticker.Error);
-    return;
-}
-
-Console.WriteLine(ticker.Data.LastPrice);
-```
-
-Shared REST interfaces implemented by WhiteBit include spot symbols, spot tickers, recent trades, order book, balances, assets, deposits, withdrawals, spot orders, futures symbols, futures tickers, leverage, open interest, position history, futures orders, fees, trigger orders, TP/SL, book ticker, funding rate, and transfers.
-
-Shared spot and futures symbol results include display names, asset classifications, maker/taker fees, and price/quantity steps. Futures symbols also include funding caps and maximum long/short leverage. `GetSymbolsRequest` can filter on asset classifications, while `IGetSpotSymbolsRest.SpotSymbolCatalog` and `IGetFuturesSymbolsRest.FuturesSymbolCatalog` expose the cached symbol catalogs.
-
-Use the exchange-level `IWhiteBitSharedApiClient` aggregate's `GetCapability(...)` or `GetCapabilities(...)` methods for runtime capability lookup; use an API surface's `.SharedApi` property when the transport and API are known.
-
-## Dependency Injection
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-using WhiteBit.Net;
-
-services.AddWhiteBit(options =>
-{
-    options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
-});
-```
-
-Inject `IWhiteBitRestClient` and `IWhiteBitSocketClient` from `WhiteBit.Net.Interfaces.Clients`.
-
-## Environments
-
-WhiteBit.Net currently exposes the live environment. Use `WhiteBitEnvironment.Live` or create a custom environment for tests/proxies.
-
-```csharp
-var live = new WhiteBitRestClient(options =>
-{
-    options.Environment = WhiteBitEnvironment.Live;
-});
-```
-
-## Common Pitfalls: Avoid
-
-- Do not use raw `HttpClient` or manually sign WhiteBit requests.
-- Do not use generic `ApiCredentials`; use `WhiteBitCredentials`.
-- Do not look for `SpotApi` or `FuturesApi` roots. WhiteBit.Net uses `V4Api`.
-- Do not put spot orders under `CollateralTrading`; use `V4Api.Trading.PlaceSpotOrderAsync`.
-- Do not put futures/collateral orders under `Trading`; use `V4Api.CollateralTrading.PlaceOrderAsync`.
-- Do not assume Binance-style symbols. Use `ETH_USDT` for spot and `ETH_PERP` for perpetual futures/collateral examples.
-- Do not read `.Data` before checking `.Success`.
-- Do not block async code with `.Result` or `.Wait()`.
-- Do not create clients per request in production. Reuse clients or use dependency injection.
-- Do not forget to unsubscribe WebSocket subscriptions on shutdown.
-
-## Reference
-
-- Documentation and client reference: https://cryptoexchange.jkorf.dev/docs/exchange-clients?library=WhiteBit.Net
-- AI quick map: `docs/ai-api-map.md`
-- Short LLM index: `llms.txt`
-- Full LLM context: `llms-full.txt`
-- Compilable examples: `Examples/ai-friendly/`
-- Source: https://github.com/JKorf/WhiteBit.Net
-- NuGet: https://www.nuget.org/packages/WhiteBit.Net
+The [project](WhiteBit.Net/WhiteBit.Net.csproj) packs `.claude/skills/**` under `skills/`, without appending `%(RecursiveDir)`. Validate local links/anchors and compile changed snippets/examples. Inspect the archive for exactly five skill files under `skills/whitebit-net/`, matching source bytes. Label repository-source/example links within the skill as checkout-only so packaged guidance remains usable independently.

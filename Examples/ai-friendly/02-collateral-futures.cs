@@ -10,7 +10,7 @@ using WhiteBit.Net;
 using WhiteBit.Net.Clients;
 using WhiteBit.Net.Enums;
 
-var client = new WhiteBitRestClient(options =>
+using var client = new WhiteBitRestClient(options =>
 {
     options.ApiCredentials = new WhiteBitCredentials("API_KEY", "API_SECRET");
 });
