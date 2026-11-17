@@ -52,9 +52,9 @@ namespace WhiteBit.Net
 
             return new TradeTracker(
                 _serviceProvider?.GetRequiredService<ILoggerFactory>().CreateLogger(restClient.Exchange),
-                restClient.V4Api.SharedClient,
+                restClient.V4Api.SharedApi,
                 null,
-                socketClient.V4Api.SharedClient,
+                socketClient.V4Api.SharedApi,
                 symbol,
                 limit,
                 period,
