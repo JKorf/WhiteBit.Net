@@ -58,7 +58,6 @@ namespace WhiteBit.Net.Clients.V4Api
             base(loggerFactory, WhiteBitExchange.ExchangeName, options.Environment.SocketClientAddress!, options, options.V4Options)
         {
             RateLimiter = WhiteBitExchange.RateLimiter.WhiteBitSocket;
-            AllowTopicsOnTheSameConnection = false;
 
             KeepAliveInterval = TimeSpan.Zero; // Server doesn't correctly respond to ping frames
 
@@ -79,6 +78,20 @@ namespace WhiteBit.Net.Clients.V4Api
                 });
         }
         #endregion
+
+        private readonly HashSet<string> _preventMultipleSubscriptions = ["trades", "lastprice", "market", "bookTicker", "candles_update", "premiumIndex"];
+        protected override bool RouteIsCompatible(string route1, string route2)
+        {
+            // Prevent multiple trade, ticker, etc subscriptions on the same connection
+            // Allow different subscription types
+            foreach(var item in _preventMultipleSubscriptions)
+            {
+                if (route1.StartsWith(item) && route2.StartsWith(item))
+                    return false;
+            }
+
+            return true;
+        }
 
         /// <inheritdoc />
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(WhiteBitExchange._serializerContext);
